@@ -43,16 +43,4 @@ public class Owner extends Staff
   {
     return sportCenter;
   }
-
-  public void delete()
-  {
-    SportCenter existingSportCenter = sportCenter;
-    sportCenter = null;
-    if (existingSportCenter != null)
-    {
-      existingSportCenter.delete();
-    }
-    super.delete();
-  }
-
 }
