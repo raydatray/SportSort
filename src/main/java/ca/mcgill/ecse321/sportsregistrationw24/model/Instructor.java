@@ -4,7 +4,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 
-// line 35 "SportsCenter.ump"
+// line 34 "SportsCenter.ump"
 public class Instructor extends Staff
 {
 
@@ -19,9 +19,9 @@ public class Instructor extends Staff
   // CONSTRUCTOR
   //------------------------
 
-  public Instructor(int aId, String aEmail, String aPassword, SportCenter aSportCenter)
+  public Instructor(String aEmail, String aPassword, SportCenter aSportCenter)
   {
-    super(aId, aEmail, aPassword);
+    super(aEmail, aPassword);
     boolean didAddSportCenter = setSportCenter(aSportCenter);
     if (!didAddSportCenter)
     {

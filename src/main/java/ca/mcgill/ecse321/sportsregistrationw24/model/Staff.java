@@ -4,8 +4,8 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 
-// line 26 "SportsCenter.ump"
-public abstract class Staff extends User
+// line 25 "SportsCenter.ump"
+public abstract class Staff extends UserAccount
 {
 
   //------------------------
@@ -16,12 +16,13 @@ public abstract class Staff extends User
   // CONSTRUCTOR
   //------------------------
 
-  public Staff(int aId, String aEmail, String aPassword)
+  public Staff(String aEmail, String aPassword)
   {
-    super(aId, aEmail, aPassword);
+    super(aEmail, aPassword);
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+
 }

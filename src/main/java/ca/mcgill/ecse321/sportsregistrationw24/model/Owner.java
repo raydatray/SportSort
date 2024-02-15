@@ -4,7 +4,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 
-// line 31 "SportsCenter.ump"
+// line 30 "SportsCenter.ump"
 public class Owner extends Staff
 {
 
@@ -19,9 +19,9 @@ public class Owner extends Staff
   // CONSTRUCTOR
   //------------------------
 
-  public Owner(int aId, String aEmail, String aPassword, SportCenter aSportCenter)
+  public Owner(String aEmail, String aPassword, SportCenter aSportCenter)
   {
-    super(aId, aEmail, aPassword);
+    super(aEmail, aPassword);
     if (aSportCenter == null || aSportCenter.getOwner() != null)
     {
       throw new RuntimeException("Unable to create Owner due to aSportCenter. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
@@ -29,9 +29,9 @@ public class Owner extends Staff
     sportCenter = aSportCenter;
   }
 
-  public Owner(int aId, String aEmail, String aPassword, String aNameForSportCenter, int aOpeningHourForSportCenter, int aClosingHourForSportCenter)
+  public Owner(String aEmail, String aPassword, String aNameForSportCenter, Integer aOpeningHourForSportCenter, Integer aClosingHourForSportCenter)
   {
-    super(aId, aEmail, aPassword);
+    super(aEmail, aPassword);
     sportCenter = new SportCenter(aNameForSportCenter, aOpeningHourForSportCenter, aClosingHourForSportCenter, this);
   }
 

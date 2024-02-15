@@ -5,7 +5,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 import java.sql.Date;
 
-// line 53 "SportsCenter.ump"
+// line 52 "SportsCenter.ump"
 public class Registration
 {
 
@@ -18,22 +18,22 @@ public class Registration
 
   //Registration Associations
   private Customer customer;
-  private SpecificSession specificSession;
+  private SportSession sportSession;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Registration(Date aDate, Customer aCustomer, SpecificSession aSpecificSession)
+  public Registration(Date aDate, Customer aCustomer, SportSession aSportSession)
   {
     date = aDate;
     if (!setCustomer(aCustomer))
     {
       throw new RuntimeException("Unable to create Registration due to aCustomer. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    if (!setSpecificSession(aSpecificSession))
+    if (!setSportSession(aSportSession))
     {
-      throw new RuntimeException("Unable to create Registration due to aSpecificSession. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create Registration due to aSportSession. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
@@ -59,9 +59,9 @@ public class Registration
     return customer;
   }
   /* Code from template association_GetOne */
-  public SpecificSession getSpecificSession()
+  public SportSession getSportSession()
   {
-    return specificSession;
+    return sportSession;
   }
   /* Code from template association_SetUnidirectionalOne */
   public boolean setCustomer(Customer aNewCustomer)
@@ -75,12 +75,12 @@ public class Registration
     return wasSet;
   }
   /* Code from template association_SetUnidirectionalOne */
-  public boolean setSpecificSession(SpecificSession aNewSpecificSession)
+  public boolean setSportSession(SportSession aNewSportSession)
   {
     boolean wasSet = false;
-    if (aNewSpecificSession != null)
+    if (aNewSportSession != null)
     {
-      specificSession = aNewSpecificSession;
+      sportSession = aNewSportSession;
       wasSet = true;
     }
     return wasSet;

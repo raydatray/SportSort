@@ -6,8 +6,8 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 import java.sql.Date;
 import java.sql.Time;
 
-// line 43 "SportsCenter.ump"
-public class SpecificSession
+// line 42 "SportsCenter.ump"
+public class SportSession
 {
 
   //------------------------
@@ -20,23 +20,23 @@ public class SpecificSession
   // MEMBER VARIABLES
   //------------------------
 
-  //SpecificSession Attributes
+  //SportSession Attributes
   private SessionType sessionType;
   private Date date;
   private Time startTime;
   private Time endTime;
-  private int floorNumber;
-  private int roomNumber;
+  private Integer floorNumber;
+  private Integer roomNumber;
 
-  //SpecificSession Associations
+  //SportSession Associations
   private SportCenter sportCenter;
-  private Session session;
+  private SportClass sportClass;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public SpecificSession(SessionType aSessionType, Date aDate, Time aStartTime, Time aEndTime, int aFloorNumber, int aRoomNumber, SportCenter aSportCenter, Session aSession)
+  public SportSession(SessionType aSessionType, Date aDate, Time aStartTime, Time aEndTime, Integer aFloorNumber, Integer aRoomNumber, SportCenter aSportCenter, SportClass aSportClass)
   {
     sessionType = aSessionType;
     date = aDate;
@@ -47,11 +47,11 @@ public class SpecificSession
     boolean didAddSportCenter = setSportCenter(aSportCenter);
     if (!didAddSportCenter)
     {
-      throw new RuntimeException("Unable to create specificSession due to sportCenter. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create sportSession due to sportCenter. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    if (!setSession(aSession))
+    if (!setSportClass(aSportClass))
     {
-      throw new RuntimeException("Unable to create SpecificSession due to aSession. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create SportSession due to aSportClass. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
@@ -91,7 +91,7 @@ public class SpecificSession
     return wasSet;
   }
 
-  public boolean setFloorNumber(int aFloorNumber)
+  public boolean setFloorNumber(Integer aFloorNumber)
   {
     boolean wasSet = false;
     floorNumber = aFloorNumber;
@@ -99,7 +99,7 @@ public class SpecificSession
     return wasSet;
   }
 
-  public boolean setRoomNumber(int aRoomNumber)
+  public boolean setRoomNumber(Integer aRoomNumber)
   {
     boolean wasSet = false;
     roomNumber = aRoomNumber;
@@ -127,12 +127,12 @@ public class SpecificSession
     return endTime;
   }
 
-  public int getFloorNumber()
+  public Integer getFloorNumber()
   {
     return floorNumber;
   }
 
-  public int getRoomNumber()
+  public Integer getRoomNumber()
   {
     return roomNumber;
   }
@@ -142,9 +142,9 @@ public class SpecificSession
     return sportCenter;
   }
   /* Code from template association_GetOne */
-  public Session getSession()
+  public SportClass getSportClass()
   {
-    return session;
+    return sportClass;
   }
   /* Code from template association_SetOneToMany */
   public boolean setSportCenter(SportCenter aSportCenter)
@@ -159,19 +159,19 @@ public class SpecificSession
     sportCenter = aSportCenter;
     if (existingSportCenter != null && !existingSportCenter.equals(aSportCenter))
     {
-      existingSportCenter.removeSpecificSession(this);
+      existingSportCenter.removeSportSession(this);
     }
-    sportCenter.addSpecificSession(this);
+    sportCenter.addSportSession(this);
     wasSet = true;
     return wasSet;
   }
   /* Code from template association_SetUnidirectionalOne */
-  public boolean setSession(Session aNewSession)
+  public boolean setSportClass(SportClass aNewSportClass)
   {
     boolean wasSet = false;
-    if (aNewSession != null)
+    if (aNewSportClass != null)
     {
-      session = aNewSession;
+      sportClass = aNewSportClass;
       wasSet = true;
     }
     return wasSet;

@@ -1,31 +1,30 @@
 class SportCenter {
-  1 <@>- * SpecificSession;
+  1 <@>- * SportSession;
   1 <@>- * Customer;
   1 <@>- * Instructor;
   1 <@>- 1 Owner;
-  1 <@>- * Session;
-  String name;
+  1 <@>- * SportClass;
+	String name;
   Integer openingHour;
   Integer closingHour;
 }
 
-class User {
+class UserAccount {
   abstract;
-  Integer id;
   String email;
   String password;
 }
 
-class Session {
+class SportClass {
   Integer id;
-  String sessionName;
+  String className;
   boolean isApproved;
-  1 <- * SpecificSession;
+  1 <- * SportSession;
 }
 
 class Staff {
   abstract;
-  isA User;
+  isA UserAccount;
 }
 
 class Owner {
@@ -37,10 +36,10 @@ class Instructor {
 }
 
 class Customer {
-  isA User;
+  isA UserAccount;
 }
 
-class SpecificSession {
+class SportSession {
   enum SessionType {cardio, stretching, strengthTraining}
   SessionType sessionType;
   Date date;
@@ -53,7 +52,7 @@ class SpecificSession {
 class Registration {
   Date date;
   * -> 1 Customer;
-  * -> 1 SpecificSession;
+  * -> 1 SportSession;
 }
 
 class PaymentInfo {
@@ -63,5 +62,5 @@ class PaymentInfo {
   Integer cvv;
   Integer expirationYear;
   Integer expirationMonth;
-  * <- 1 Customer;
+  * -> 1 Customer;
 }
