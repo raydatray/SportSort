@@ -27,4 +27,4 @@ This is the repository of Group 15 which consists of Leon Song, Raymond Liu, Hou
 
 ## Key Design Decisions and Meeting Minutes <a name="key-design-decisions"></a>
 
-For key design decisions and meeting minutes, please refer to our [Project Wiki](../Wiki).
+For key design decisions and meeting minutes, please refer to our [Project Wiki](../../Wiki).
