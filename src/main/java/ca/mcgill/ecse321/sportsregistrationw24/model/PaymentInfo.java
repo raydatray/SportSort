@@ -4,7 +4,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 
-// line 59 "SportsCenter.ump"
+// line 58 "SportsCenter.ump"
 public class PaymentInfo
 {
 
@@ -20,22 +20,29 @@ public class PaymentInfo
 
   //PaymentInfo Attributes
   private PaymentType paymentType;
-  private int cardNumber;
-  private int cvv;
-  private int expirationYear;
-  private int expirationMonth;
+  private Integer cardNumber;
+  private Integer cvv;
+  private Integer expirationYear;
+  private Integer expirationMonth;
+
+  //PaymentInfo Associations
+  private Customer customer;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public PaymentInfo(PaymentType aPaymentType, int aCardNumber, int aCvv, int aExpirationYear, int aExpirationMonth)
+  public PaymentInfo(PaymentType aPaymentType, Integer aCardNumber, Integer aCvv, Integer aExpirationYear, Integer aExpirationMonth, Customer aCustomer)
   {
     paymentType = aPaymentType;
     cardNumber = aCardNumber;
     cvv = aCvv;
     expirationYear = aExpirationYear;
     expirationMonth = aExpirationMonth;
+    if (!setCustomer(aCustomer))
+    {
+      throw new RuntimeException("Unable to create PaymentInfo due to aCustomer. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
   }
 
   //------------------------
@@ -50,7 +57,7 @@ public class PaymentInfo
     return wasSet;
   }
 
-  public boolean setCardNumber(int aCardNumber)
+  public boolean setCardNumber(Integer aCardNumber)
   {
     boolean wasSet = false;
     cardNumber = aCardNumber;
@@ -58,7 +65,7 @@ public class PaymentInfo
     return wasSet;
   }
 
-  public boolean setCvv(int aCvv)
+  public boolean setCvv(Integer aCvv)
   {
     boolean wasSet = false;
     cvv = aCvv;
@@ -66,7 +73,7 @@ public class PaymentInfo
     return wasSet;
   }
 
-  public boolean setExpirationYear(int aExpirationYear)
+  public boolean setExpirationYear(Integer aExpirationYear)
   {
     boolean wasSet = false;
     expirationYear = aExpirationYear;
@@ -74,7 +81,7 @@ public class PaymentInfo
     return wasSet;
   }
 
-  public boolean setExpirationMonth(int aExpirationMonth)
+  public boolean setExpirationMonth(Integer aExpirationMonth)
   {
     boolean wasSet = false;
     expirationMonth = aExpirationMonth;
@@ -87,23 +94,39 @@ public class PaymentInfo
     return paymentType;
   }
 
-  public int getCardNumber()
+  public Integer getCardNumber()
   {
     return cardNumber;
   }
 
-  public int getCvv()
+  public Integer getCvv()
   {
     return cvv;
   }
 
-  public int getExpirationYear()
+  public Integer getExpirationYear()
   {
     return expirationYear;
   }
 
-  public int getExpirationMonth()
+  public Integer getExpirationMonth()
   {
     return expirationMonth;
+  }
+  /* Code from template association_GetOne */
+  public Customer getCustomer()
+  {
+    return customer;
+  }
+  /* Code from template association_SetUnidirectionalOne */
+  public boolean setCustomer(Customer aNewCustomer)
+  {
+    boolean wasSet = false;
+    if (aNewCustomer != null)
+    {
+      customer = aNewCustomer;
+      wasSet = true;
+    }
+    return wasSet;
   }
 }

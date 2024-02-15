@@ -4,35 +4,35 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 
-// line 19 "SportsCenter.ump"
-public class Session
+// line 18 "SportsCenter.ump"
+public class SportClass
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //Session Attributes
-  private int id;
-  private String sessionName;
+  //SportClass Attributes
+  private Integer id;
+  private String className;
   private boolean isApproved;
 
-  //Session Associations
+  //SportClass Associations
   private SportCenter sportCenter;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Session(int aId, String aSessionName, boolean aIsApproved, SportCenter aSportCenter)
+  public SportClass(Integer aId, String aClassName, boolean aIsApproved, SportCenter aSportCenter)
   {
     id = aId;
-    sessionName = aSessionName;
+    className = aClassName;
     isApproved = aIsApproved;
     boolean didAddSportCenter = setSportCenter(aSportCenter);
     if (!didAddSportCenter)
     {
-      throw new RuntimeException("Unable to create session due to sportCenter. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create sportClass due to sportCenter. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
@@ -40,7 +40,7 @@ public class Session
   // INTERFACE
   //------------------------
 
-  public boolean setId(int aId)
+  public boolean setId(Integer aId)
   {
     boolean wasSet = false;
     id = aId;
@@ -48,10 +48,10 @@ public class Session
     return wasSet;
   }
 
-  public boolean setSessionName(String aSessionName)
+  public boolean setClassName(String aClassName)
   {
     boolean wasSet = false;
-    sessionName = aSessionName;
+    className = aClassName;
     wasSet = true;
     return wasSet;
   }
@@ -64,14 +64,14 @@ public class Session
     return wasSet;
   }
 
-  public int getId()
+  public Integer getId()
   {
     return id;
   }
 
-  public String getSessionName()
+  public String getClassName()
   {
-    return sessionName;
+    return className;
   }
 
   public boolean getIsApproved()
@@ -96,9 +96,9 @@ public class Session
     sportCenter = aSportCenter;
     if (existingSportCenter != null && !existingSportCenter.equals(aSportCenter))
     {
-      existingSportCenter.removeSession(this);
+      existingSportCenter.removeSportClass(this);
     }
-    sportCenter.addSession(this);
+    sportCenter.addSportClass(this);
     wasSet = true;
     return wasSet;
   }

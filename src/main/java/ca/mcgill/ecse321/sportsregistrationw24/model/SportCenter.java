@@ -17,26 +17,26 @@ public class SportCenter
 
   //SportCenter Attributes
   private String name;
-  private int openingHour;
-  private int closingHour;
+  private Integer openingHour;
+  private Integer closingHour;
 
   //SportCenter Associations
-  private List<SpecificSession> specificSessions;
+  private List<SportSession> sportSessions;
   private List<Customer> customers;
   private List<Instructor> instructors;
   private Owner owner;
-  private List<Session> sessions;
+  private List<SportClass> sportClasses;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public SportCenter(String aName, int aOpeningHour, int aClosingHour, Owner aOwner)
+  public SportCenter(String aName, Integer aOpeningHour, Integer aClosingHour, Owner aOwner)
   {
     name = aName;
     openingHour = aOpeningHour;
     closingHour = aClosingHour;
-    specificSessions = new ArrayList<SpecificSession>();
+    sportSessions = new ArrayList<SportSession>();
     customers = new ArrayList<Customer>();
     instructors = new ArrayList<Instructor>();
     if (aOwner == null || aOwner.getSportCenter() != null)
@@ -44,19 +44,19 @@ public class SportCenter
       throw new RuntimeException("Unable to create SportCenter due to aOwner. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
     owner = aOwner;
-    sessions = new ArrayList<Session>();
+    sportClasses = new ArrayList<SportClass>();
   }
 
-  public SportCenter(String aName, int aOpeningHour, int aClosingHour, int aIdForOwner, String aEmailForOwner, String aPasswordForOwner)
+  public SportCenter(String aName, Integer aOpeningHour, Integer aClosingHour, String aEmailForOwner, String aPasswordForOwner)
   {
     name = aName;
     openingHour = aOpeningHour;
     closingHour = aClosingHour;
-    specificSessions = new ArrayList<SpecificSession>();
+    sportSessions = new ArrayList<SportSession>();
     customers = new ArrayList<Customer>();
     instructors = new ArrayList<Instructor>();
-    owner = new Owner(aIdForOwner, aEmailForOwner, aPasswordForOwner, this);
-    sessions = new ArrayList<Session>();
+    owner = new Owner(aEmailForOwner, aPasswordForOwner, this);
+    sportClasses = new ArrayList<SportClass>();
   }
 
   //------------------------
@@ -71,7 +71,7 @@ public class SportCenter
     return wasSet;
   }
 
-  public boolean setOpeningHour(int aOpeningHour)
+  public boolean setOpeningHour(Integer aOpeningHour)
   {
     boolean wasSet = false;
     openingHour = aOpeningHour;
@@ -79,7 +79,7 @@ public class SportCenter
     return wasSet;
   }
 
-  public boolean setClosingHour(int aClosingHour)
+  public boolean setClosingHour(Integer aClosingHour)
   {
     boolean wasSet = false;
     closingHour = aClosingHour;
@@ -92,47 +92,47 @@ public class SportCenter
     return name;
   }
 
-  public int getOpeningHour()
+  public Integer getOpeningHour()
   {
     return openingHour;
   }
 
-  public int getClosingHour()
+  public Integer getClosingHour()
   {
     return closingHour;
   }
   /* Code from template association_GetMany */
-  public SpecificSession getSpecificSession(int index)
+  public SportSession getSportSession(Integer index)
   {
-    SpecificSession aSpecificSession = specificSessions.get(index);
-    return aSpecificSession;
+    SportSession aSportSession = sportSessions.get(index);
+    return aSportSession;
   }
 
-  public List<SpecificSession> getSpecificSessions()
+  public List<SportSession> getSportSessions()
   {
-    List<SpecificSession> newSpecificSessions = Collections.unmodifiableList(specificSessions);
-    return newSpecificSessions;
+    List<SportSession> newSportSessions = Collections.unmodifiableList(sportSessions);
+    return newSportSessions;
   }
 
-  public int numberOfSpecificSessions()
+  public Integer numberOfSportSessions()
   {
-    int number = specificSessions.size();
+    Integer number = sportSessions.size();
     return number;
   }
 
-  public boolean hasSpecificSessions()
+  public boolean hasSportSessions()
   {
-    boolean has = specificSessions.size() > 0;
+    boolean has = sportSessions.size() > 0;
     return has;
   }
 
-  public int indexOfSpecificSession(SpecificSession aSpecificSession)
+  public Integer indexOfSportSession(SportSession aSportSession)
   {
-    int index = specificSessions.indexOf(aSpecificSession);
+    Integer index = sportSessions.indexOf(aSportSession);
     return index;
   }
   /* Code from template association_GetMany */
-  public Customer getCustomer(int index)
+  public Customer getCustomer(Integer index)
   {
     Customer aCustomer = customers.get(index);
     return aCustomer;
@@ -144,9 +144,9 @@ public class SportCenter
     return newCustomers;
   }
 
-  public int numberOfCustomers()
+  public Integer numberOfCustomers()
   {
-    int number = customers.size();
+    Integer number = customers.size();
     return number;
   }
 
@@ -156,13 +156,13 @@ public class SportCenter
     return has;
   }
 
-  public int indexOfCustomer(Customer aCustomer)
+  public Integer indexOfCustomer(Customer aCustomer)
   {
-    int index = customers.indexOf(aCustomer);
+    Integer index = customers.indexOf(aCustomer);
     return index;
   }
   /* Code from template association_GetMany */
-  public Instructor getInstructor(int index)
+  public Instructor getInstructor(Integer index)
   {
     Instructor aInstructor = instructors.get(index);
     return aInstructor;
@@ -174,9 +174,9 @@ public class SportCenter
     return newInstructors;
   }
 
-  public int numberOfInstructors()
+  public Integer numberOfInstructors()
   {
-    int number = instructors.size();
+    Integer number = instructors.size();
     return number;
   }
 
@@ -186,9 +186,9 @@ public class SportCenter
     return has;
   }
 
-  public int indexOfInstructor(Instructor aInstructor)
+  public Integer indexOfInstructor(Instructor aInstructor)
   {
-    int index = instructors.indexOf(aInstructor);
+    Integer index = instructors.indexOf(aInstructor);
     return index;
   }
   /* Code from template association_GetOne */
@@ -197,116 +197,116 @@ public class SportCenter
     return owner;
   }
   /* Code from template association_GetMany */
-  public Session getSession(int index)
+  public SportClass getSportClass(Integer index)
   {
-    Session aSession = sessions.get(index);
-    return aSession;
+    SportClass aSportClass = sportClasses.get(index);
+    return aSportClass;
   }
 
-  public List<Session> getSessions()
+  public List<SportClass> getSportClasses()
   {
-    List<Session> newSessions = Collections.unmodifiableList(sessions);
-    return newSessions;
+    List<SportClass> newSportClasses = Collections.unmodifiableList(sportClasses);
+    return newSportClasses;
   }
 
-  public int numberOfSessions()
+  public Integer numberOfSportClasses()
   {
-    int number = sessions.size();
+    Integer number = sportClasses.size();
     return number;
   }
 
-  public boolean hasSessions()
+  public boolean hasSportClasses()
   {
-    boolean has = sessions.size() > 0;
+    boolean has = sportClasses.size() > 0;
     return has;
   }
 
-  public int indexOfSession(Session aSession)
+  public Integer indexOfSportClass(SportClass aSportClass)
   {
-    int index = sessions.indexOf(aSession);
+    Integer index = sportClasses.indexOf(aSportClass);
     return index;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfSpecificSessions()
+  public static Integer minimumNumberOfSportSessions()
   {
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public SpecificSession addSpecificSession(SpecificSession.SessionType aSessionType, Date aDate, Time aStartTime, Time aEndTime, int aFloorNumber, int aRoomNumber, Session aSession)
+  public SportSession addSportSession(SportSession.SessionType aSessionType, Date aDate, Time aStartTime, Time aEndTime, Integer aFloorNumber, Integer aRoomNumber, SportClass aSportClass)
   {
-    return new SpecificSession(aSessionType, aDate, aStartTime, aEndTime, aFloorNumber, aRoomNumber, this, aSession);
+    return new SportSession(aSessionType, aDate, aStartTime, aEndTime, aFloorNumber, aRoomNumber, this, aSportClass);
   }
 
-  public boolean addSpecificSession(SpecificSession aSpecificSession)
+  public boolean addSportSession(SportSession aSportSession)
   {
     boolean wasAdded = false;
-    if (specificSessions.contains(aSpecificSession)) { return false; }
-    SportCenter existingSportCenter = aSpecificSession.getSportCenter();
+    if (sportSessions.contains(aSportSession)) { return false; }
+    SportCenter existingSportCenter = aSportSession.getSportCenter();
     boolean isNewSportCenter = existingSportCenter != null && !this.equals(existingSportCenter);
     if (isNewSportCenter)
     {
-      aSpecificSession.setSportCenter(this);
+      aSportSession.setSportCenter(this);
     }
     else
     {
-      specificSessions.add(aSpecificSession);
+      sportSessions.add(aSportSession);
     }
     wasAdded = true;
     return wasAdded;
   }
 
-  public boolean removeSpecificSession(SpecificSession aSpecificSession)
+  public boolean removeSportSession(SportSession aSportSession)
   {
     boolean wasRemoved = false;
-    //Unable to remove aSpecificSession, as it must always have a sportCenter
-    if (!this.equals(aSpecificSession.getSportCenter()))
+    //Unable to remove aSportSession, as it must always have a sportCenter
+    if (!this.equals(aSportSession.getSportCenter()))
     {
-      specificSessions.remove(aSpecificSession);
+      sportSessions.remove(aSportSession);
       wasRemoved = true;
     }
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addSpecificSessionAt(SpecificSession aSpecificSession, int index)
-  {  
+  public boolean addSportSessionAt(SportSession aSportSession, Integer index)
+  {
     boolean wasAdded = false;
-    if(addSpecificSession(aSpecificSession))
+    if(addSportSession(aSportSession))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfSpecificSessions()) { index = numberOfSpecificSessions() - 1; }
-      specificSessions.remove(aSpecificSession);
-      specificSessions.add(index, aSpecificSession);
+      if(index > numberOfSportSessions()) { index = numberOfSportSessions() - 1; }
+      sportSessions.remove(aSportSession);
+      sportSessions.add(index, aSportSession);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMoveSpecificSessionAt(SpecificSession aSpecificSession, int index)
+  public boolean addOrMoveSportSessionAt(SportSession aSportSession, Integer index)
   {
     boolean wasAdded = false;
-    if(specificSessions.contains(aSpecificSession))
+    if(sportSessions.contains(aSportSession))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfSpecificSessions()) { index = numberOfSpecificSessions() - 1; }
-      specificSessions.remove(aSpecificSession);
-      specificSessions.add(index, aSpecificSession);
+      if(index > numberOfSportSessions()) { index = numberOfSportSessions() - 1; }
+      sportSessions.remove(aSportSession);
+      sportSessions.add(index, aSportSession);
       wasAdded = true;
-    } 
-    else 
+    }
+    else
     {
-      wasAdded = addSpecificSessionAt(aSpecificSession, index);
+      wasAdded = addSportSessionAt(aSportSession, index);
     }
     return wasAdded;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfCustomers()
+  public static Integer minimumNumberOfCustomers()
   {
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Customer addCustomer(int aId, String aEmail, String aPassword)
+  public Customer addCustomer(String aEmail, String aPassword)
   {
-    return new Customer(aId, aEmail, aPassword, this);
+    return new Customer(aEmail, aPassword, this);
   }
 
   public boolean addCustomer(Customer aCustomer)
@@ -339,8 +339,8 @@ public class SportCenter
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addCustomerAt(Customer aCustomer, int index)
-  {  
+  public boolean addCustomerAt(Customer aCustomer, Integer index)
+  {
     boolean wasAdded = false;
     if(addCustomer(aCustomer))
     {
@@ -353,7 +353,7 @@ public class SportCenter
     return wasAdded;
   }
 
-  public boolean addOrMoveCustomerAt(Customer aCustomer, int index)
+  public boolean addOrMoveCustomerAt(Customer aCustomer, Integer index)
   {
     boolean wasAdded = false;
     if(customers.contains(aCustomer))
@@ -363,22 +363,22 @@ public class SportCenter
       customers.remove(aCustomer);
       customers.add(index, aCustomer);
       wasAdded = true;
-    } 
-    else 
+    }
+    else
     {
       wasAdded = addCustomerAt(aCustomer, index);
     }
     return wasAdded;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfInstructors()
+  public static Integer minimumNumberOfInstructors()
   {
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Instructor addInstructor(int aId, String aEmail, String aPassword)
+  public Instructor addInstructor(String aEmail, String aPassword)
   {
-    return new Instructor(aId, aEmail, aPassword, this);
+    return new Instructor(aEmail, aPassword, this);
   }
 
   public boolean addInstructor(Instructor aInstructor)
@@ -411,8 +411,8 @@ public class SportCenter
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addInstructorAt(Instructor aInstructor, int index)
-  {  
+  public boolean addInstructorAt(Instructor aInstructor, Integer index)
+  {
     boolean wasAdded = false;
     if(addInstructor(aInstructor))
     {
@@ -425,7 +425,7 @@ public class SportCenter
     return wasAdded;
   }
 
-  public boolean addOrMoveInstructorAt(Instructor aInstructor, int index)
+  public boolean addOrMoveInstructorAt(Instructor aInstructor, Integer index)
   {
     boolean wasAdded = false;
     if(instructors.contains(aInstructor))
@@ -435,82 +435,82 @@ public class SportCenter
       instructors.remove(aInstructor);
       instructors.add(index, aInstructor);
       wasAdded = true;
-    } 
-    else 
+    }
+    else
     {
       wasAdded = addInstructorAt(aInstructor, index);
     }
     return wasAdded;
   }
   /* Code from template association_MinimumNumberOfMethod */
-  public static int minimumNumberOfSessions()
+  public static Integer minimumNumberOfSportClasses()
   {
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Session addSession(int aId, String aSessionName, boolean aIsApproved)
+  public SportClass addSportClass(Integer aId, String aClassName, boolean aIsApproved)
   {
-    return new Session(aId, aSessionName, aIsApproved, this);
+    return new SportClass(aId, aClassName, aIsApproved, this);
   }
 
-  public boolean addSession(Session aSession)
+  public boolean addSportClass(SportClass aSportClass)
   {
     boolean wasAdded = false;
-    if (sessions.contains(aSession)) { return false; }
-    SportCenter existingSportCenter = aSession.getSportCenter();
+    if (sportClasses.contains(aSportClass)) { return false; }
+    SportCenter existingSportCenter = aSportClass.getSportCenter();
     boolean isNewSportCenter = existingSportCenter != null && !this.equals(existingSportCenter);
     if (isNewSportCenter)
     {
-      aSession.setSportCenter(this);
+      aSportClass.setSportCenter(this);
     }
     else
     {
-      sessions.add(aSession);
+      sportClasses.add(aSportClass);
     }
     wasAdded = true;
     return wasAdded;
   }
 
-  public boolean removeSession(Session aSession)
+  public boolean removeSportClass(SportClass aSportClass)
   {
     boolean wasRemoved = false;
-    //Unable to remove aSession, as it must always have a sportCenter
-    if (!this.equals(aSession.getSportCenter()))
+    //Unable to remove aSportClass, as it must always have a sportCenter
+    if (!this.equals(aSportClass.getSportCenter()))
     {
-      sessions.remove(aSession);
+      sportClasses.remove(aSportClass);
       wasRemoved = true;
     }
     return wasRemoved;
   }
   /* Code from template association_AddIndexControlFunctions */
-  public boolean addSessionAt(Session aSession, int index)
-  {  
+  public boolean addSportClassAt(SportClass aSportClass, Integer index)
+  {
     boolean wasAdded = false;
-    if(addSession(aSession))
+    if(addSportClass(aSportClass))
     {
       if(index < 0 ) { index = 0; }
-      if(index > numberOfSessions()) { index = numberOfSessions() - 1; }
-      sessions.remove(aSession);
-      sessions.add(index, aSession);
+      if(index > numberOfSportClasses()) { index = numberOfSportClasses() - 1; }
+      sportClasses.remove(aSportClass);
+      sportClasses.add(index, aSportClass);
       wasAdded = true;
     }
     return wasAdded;
   }
 
-  public boolean addOrMoveSessionAt(Session aSession, int index)
-  {
+  public boolean addOrMoveSportClassAt(SportClass aSportClass, Integer index) {
     boolean wasAdded = false;
-    if(sessions.contains(aSession))
-    {
-      if(index < 0 ) { index = 0; }
-      if(index > numberOfSessions()) { index = numberOfSessions() - 1; }
-      sessions.remove(aSession);
-      sessions.add(index, aSession);
+    if (sportClasses.contains(aSportClass)) {
+      if (index < 0) {
+        index = 0;
+      }
+      if (index > numberOfSportClasses()) {
+        index = numberOfSportClasses() - 1;
+      }
+      sportClasses.remove(aSportClass);
+      sportClasses.add(index, aSportClass);
       wasAdded = true;
-    } 
-    else 
-    {
-      wasAdded = addSessionAt(aSession, index);
+    } else {
+      wasAdded = addSportClassAt(aSportClass, index);
     }
     return wasAdded;
   }

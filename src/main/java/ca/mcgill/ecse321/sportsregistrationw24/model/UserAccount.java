@@ -5,15 +5,14 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 // line 12 "SportsCenter.ump"
-public abstract class User
+public abstract class UserAccount
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //User Attributes
-  private int id;
+  //UserAccount Attributes
   private String email;
   private String password;
 
@@ -21,9 +20,8 @@ public abstract class User
   // CONSTRUCTOR
   //------------------------
 
-  public User(int aId, String aEmail, String aPassword)
+  public UserAccount(String aEmail, String aPassword)
   {
-    id = aId;
     email = aEmail;
     password = aPassword;
   }
@@ -31,14 +29,6 @@ public abstract class User
   //------------------------
   // INTERFACE
   //------------------------
-
-  public boolean setId(int aId)
-  {
-    boolean wasSet = false;
-    id = aId;
-    wasSet = true;
-    return wasSet;
-  }
 
   public boolean setEmail(String aEmail)
   {
@@ -54,11 +44,6 @@ public abstract class User
     password = aPassword;
     wasSet = true;
     return wasSet;
-  }
-
-  public int getId()
-  {
-    return id;
   }
 
   public String getEmail()
