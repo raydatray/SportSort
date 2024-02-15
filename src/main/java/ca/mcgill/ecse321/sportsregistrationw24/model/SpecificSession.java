@@ -176,29 +176,4 @@ public class SpecificSession
     }
     return wasSet;
   }
-
-  public void delete()
-  {
-    SportCenter placeholderSportCenter = sportCenter;
-    this.sportCenter = null;
-    if(placeholderSportCenter != null)
-    {
-      placeholderSportCenter.removeSpecificSession(this);
-    }
-    session = null;
-  }
-
-
-  public String toString()
-  {
-    return super.toString() + "["+
-            "floorNumber" + ":" + getFloorNumber()+ "," +
-            "roomNumber" + ":" + getRoomNumber()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "sessionType" + "=" + (getSessionType() != null ? !getSessionType().equals(this)  ? getSessionType().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "date" + "=" + (getDate() != null ? !getDate().equals(this)  ? getDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "startTime" + "=" + (getStartTime() != null ? !getStartTime().equals(this)  ? getStartTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "endTime" + "=" + (getEndTime() != null ? !getEndTime().equals(this)  ? getEndTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "sportCenter = "+(getSportCenter()!=null?Integer.toHexString(System.identityHashCode(getSportCenter())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "session = "+(getSession()!=null?Integer.toHexString(System.identityHashCode(getSession())):"null");
-  }
 }

@@ -102,24 +102,4 @@ public class Session
     wasSet = true;
     return wasSet;
   }
-
-  public void delete()
-  {
-    SportCenter placeholderSportCenter = sportCenter;
-    this.sportCenter = null;
-    if(placeholderSportCenter != null)
-    {
-      placeholderSportCenter.removeSession(this);
-    }
-  }
-
-
-  public String toString()
-  {
-    return super.toString() + "["+
-            "id" + ":" + getId()+ "," +
-            "sessionName" + ":" + getSessionName()+ "," +
-            "isApproved" + ":" + getIsApproved()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "sportCenter = "+(getSportCenter()!=null?Integer.toHexString(System.identityHashCode(getSportCenter())):"null");
-  }
 }

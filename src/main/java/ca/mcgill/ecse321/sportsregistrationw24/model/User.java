@@ -70,16 +70,4 @@ public abstract class User
   {
     return password;
   }
-
-  public void delete()
-  {}
-
-
-  public String toString()
-  {
-    return super.toString() + "["+
-            "id" + ":" + getId()+ "," +
-            "email" + ":" + getEmail()+ "," +
-            "password" + ":" + getPassword()+ "]";
-  }
 }

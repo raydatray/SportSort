@@ -85,19 +85,4 @@ public class Registration
     }
     return wasSet;
   }
-
-  public void delete()
-  {
-    customer = null;
-    specificSession = null;
-  }
-
-
-  public String toString()
-  {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "date" + "=" + (getDate() != null ? !getDate().equals(this)  ? getDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "customer = "+(getCustomer()!=null?Integer.toHexString(System.identityHashCode(getCustomer())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "specificSession = "+(getSpecificSession()!=null?Integer.toHexString(System.identityHashCode(getSpecificSession())):"null");
-  }
 }

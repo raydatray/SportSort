@@ -106,18 +106,4 @@ public class PaymentInfo
   {
     return expirationMonth;
   }
-
-  public void delete()
-  {}
-
-
-  public String toString()
-  {
-    return super.toString() + "["+
-            "cardNumber" + ":" + getCardNumber()+ "," +
-            "cvv" + ":" + getCvv()+ "," +
-            "expirationYear" + ":" + getExpirationYear()+ "," +
-            "expirationMonth" + ":" + getExpirationMonth()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "paymentType" + "=" + (getPaymentType() != null ? !getPaymentType().equals(this)  ? getPaymentType().toString().replaceAll("  ","    ") : "this" : "null");
-  }
 }

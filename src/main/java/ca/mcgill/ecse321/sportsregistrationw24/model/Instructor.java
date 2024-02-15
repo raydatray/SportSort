@@ -56,16 +56,4 @@ public class Instructor extends Staff
     wasSet = true;
     return wasSet;
   }
-
-  public void delete()
-  {
-    SportCenter placeholderSportCenter = sportCenter;
-    this.sportCenter = null;
-    if(placeholderSportCenter != null)
-    {
-      placeholderSportCenter.removeInstructor(this);
-    }
-    super.delete();
-  }
-
 }

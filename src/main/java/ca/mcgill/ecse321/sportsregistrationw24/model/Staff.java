@@ -24,10 +24,4 @@ public abstract class Staff extends User
   //------------------------
   // INTERFACE
   //------------------------
-
-  public void delete()
-  {
-    super.delete();
-  }
-
 }

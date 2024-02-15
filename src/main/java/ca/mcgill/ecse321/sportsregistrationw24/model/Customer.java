@@ -146,17 +146,4 @@ public class Customer extends User
     }
     return wasAdded;
   }
-
-  public void delete()
-  {
-    SportCenter placeholderSportCenter = sportCenter;
-    this.sportCenter = null;
-    if(placeholderSportCenter != null)
-    {
-      placeholderSportCenter.removeCustomer(this);
-    }
-    paymentInfos.clear();
-    super.delete();
-  }
-
 }
