@@ -11,13 +11,13 @@ This is the repository of Group 15 which consists of Leon Song, Raymond Liu, Hou
 
 ## Team Members <a name="team-members"></a>
 
-| Name              | Role          | Hours Spent (Deliverable 1)|  | ... |
-|-------------------|---------------|----------------------------|--|-----|
-| Leon Song         | Placeholder   | XX                         |  | ... |
-| Houman Azari      | Placeholder   | XX                         |  | ... |
-| Joseph Ciaravella | Placeholder   | XX                         |  | ... |
-| Colin Xiong       | Placeholder   | XX                         |  | ... |
-| Raymond Liu       | Placeholder   | XX                         |  | ... |
+| Name              | Role          | Hours Spent (Deliverable 1)|| ... |
+|-------------------|---------------|----------------------------||-----|
+| Leon Song         | Placeholder   | XX                         || ... |
+| Houman Azari      | Placeholder   | XX                         || ... |
+| Joseph Ciaravella | Placeholder   | XX                         || ... |
+| Colin Xiong       | Placeholder   | XX                         || ... |
+| Raymond Liu       | Placeholder   | XX                         || ... |
 
 ## Project Deliverables <a name="project-deliverables"></a>
 
@@ -27,4 +27,4 @@ This is the repository of Group 15 which consists of Leon Song, Raymond Liu, Hou
 
 ## Key Design Decisions and Meeting Minutes <a name="key-design-decisions"></a>
 
-For key design decisions and meeting minutes, please refer to our [Project Wiki](Wiki).
+For key design decisions and meeting minutes, please refer to our [Project Wiki](../Wiki).
