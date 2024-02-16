@@ -17,8 +17,8 @@ public class SportCenter
 
   //SportCenter Attributes
   private String name;
-  private Integer openingHour;
-  private Integer closingHour;
+  private Time openingHour;
+  private Time closingHour;
 
   //SportCenter Associations
   private List<SportSession> sportSessions;
@@ -31,7 +31,7 @@ public class SportCenter
   // CONSTRUCTOR
   //------------------------
 
-  public SportCenter(String aName, Integer aOpeningHour, Integer aClosingHour, Owner aOwner)
+  public SportCenter(String aName, Time aOpeningHour, Time aClosingHour, Owner aOwner)
   {
     name = aName;
     openingHour = aOpeningHour;
@@ -47,7 +47,7 @@ public class SportCenter
     sportClasses = new ArrayList<SportClass>();
   }
 
-  public SportCenter(String aName, Integer aOpeningHour, Integer aClosingHour, String aEmailForOwner, String aPasswordForOwner)
+  public SportCenter(String aName, Time aOpeningHour, Time aClosingHour, String aEmailForOwner, String aPasswordForOwner)
   {
     name = aName;
     openingHour = aOpeningHour;
@@ -71,7 +71,7 @@ public class SportCenter
     return wasSet;
   }
 
-  public boolean setOpeningHour(Integer aOpeningHour)
+  public boolean setOpeningHour(Time aOpeningHour)
   {
     boolean wasSet = false;
     openingHour = aOpeningHour;
@@ -79,7 +79,7 @@ public class SportCenter
     return wasSet;
   }
 
-  public boolean setClosingHour(Integer aClosingHour)
+  public boolean setClosingHour(Time aClosingHour)
   {
     boolean wasSet = false;
     closingHour = aClosingHour;
@@ -92,12 +92,12 @@ public class SportCenter
     return name;
   }
 
-  public Integer getOpeningHour()
+  public Time getOpeningHour()
   {
     return openingHour;
   }
 
-  public Integer getClosingHour()
+  public Time getClosingHour()
   {
     return closingHour;
   }
