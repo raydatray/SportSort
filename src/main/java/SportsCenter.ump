@@ -4,9 +4,9 @@ class SportCenter {
   1 <@>- * Instructor;
   1 <@>- 1 Owner;
   1 <@>- * SportClass;
-	String name;
-  Integer openingHour;
-  Integer closingHour;
+  String name;
+  Time openingHour;
+  Time closingHour;
 }
 
 class UserAccount {
