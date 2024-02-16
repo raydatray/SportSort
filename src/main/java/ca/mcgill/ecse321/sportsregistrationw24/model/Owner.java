@@ -3,6 +3,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 /*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
 
 
+import java.sql.Time;
 
 // line 30 "SportsCenter.ump"
 public class Owner extends Staff
@@ -29,7 +30,7 @@ public class Owner extends Staff
     sportCenter = aSportCenter;
   }
 
-  public Owner(String aEmail, String aPassword, String aNameForSportCenter, Integer aOpeningHourForSportCenter, Integer aClosingHourForSportCenter)
+  public Owner(String aEmail, String aPassword, String aNameForSportCenter, Time aOpeningHourForSportCenter, Time aClosingHourForSportCenter)
   {
     super(aEmail, aPassword);
     sportCenter = new SportCenter(aNameForSportCenter, aOpeningHourForSportCenter, aClosingHourForSportCenter, this);
