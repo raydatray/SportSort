@@ -4,7 +4,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 
-// line 12 "SportsCenter.ump"
+// line 7 "SportsCenter.ump"
 public abstract class UserAccount
 {
 
@@ -13,6 +13,7 @@ public abstract class UserAccount
   //------------------------
 
   //UserAccount Attributes
+  private Integer id;
   private String email;
   private String password;
 
@@ -20,8 +21,9 @@ public abstract class UserAccount
   // CONSTRUCTOR
   //------------------------
 
-  public UserAccount(String aEmail, String aPassword)
+  public UserAccount(Integer aId, String aEmail, String aPassword)
   {
+    id = aId;
     email = aEmail;
     password = aPassword;
   }
@@ -29,6 +31,14 @@ public abstract class UserAccount
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setId(Integer aId)
+  {
+    boolean wasSet = false;
+    id = aId;
+    wasSet = true;
+    return wasSet;
+  }
 
   public boolean setEmail(String aEmail)
   {
@@ -44,6 +54,11 @@ public abstract class UserAccount
     password = aPassword;
     wasSet = true;
     return wasSet;
+  }
+
+  public Integer getId()
+  {
+    return id;
   }
 
   public String getEmail()

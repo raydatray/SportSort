@@ -4,7 +4,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 
-// line 34 "SportsCenter.ump"
+// line 30 "SportsCenter.ump"
 public class Instructor extends Staff
 {
 
@@ -12,48 +12,13 @@ public class Instructor extends Staff
   // MEMBER VARIABLES
   //------------------------
 
-  //Instructor Associations
-  private SportCenter sportCenter;
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Instructor(String aEmail, String aPassword, SportCenter aSportCenter)
+  public Instructor(Integer aId, String aEmail, String aPassword)
   {
-    super(aEmail, aPassword);
-    boolean didAddSportCenter = setSportCenter(aSportCenter);
-    if (!didAddSportCenter)
-    {
-      throw new RuntimeException("Unable to create instructor due to sportCenter. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    super(aId, aEmail, aPassword);
   }
 
-  //------------------------
-  // INTERFACE
-  //------------------------
-  /* Code from template association_GetOne */
-  public SportCenter getSportCenter()
-  {
-    return sportCenter;
-  }
-  /* Code from template association_SetOneToMany */
-  public boolean setSportCenter(SportCenter aSportCenter)
-  {
-    boolean wasSet = false;
-    if (aSportCenter == null)
-    {
-      return wasSet;
-    }
-
-    SportCenter existingSportCenter = sportCenter;
-    sportCenter = aSportCenter;
-    if (existingSportCenter != null && !existingSportCenter.equals(aSportCenter))
-    {
-      existingSportCenter.removeInstructor(this);
-    }
-    sportCenter.addInstructor(this);
-    wasSet = true;
-    return wasSet;
-  }
 }

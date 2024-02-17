@@ -4,7 +4,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 
-// line 38 "SportsCenter.ump"
+// line 34 "SportsCenter.ump"
 public class Customer extends UserAccount
 {
 
@@ -12,48 +12,13 @@ public class Customer extends UserAccount
   // MEMBER VARIABLES
   //------------------------
 
-  //Customer Associations
-  private SportCenter sportCenter;
-
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Customer(String aEmail, String aPassword, SportCenter aSportCenter)
+  public Customer(Integer aId, String aEmail, String aPassword)
   {
-    super(aEmail, aPassword);
-    boolean didAddSportCenter = setSportCenter(aSportCenter);
-    if (!didAddSportCenter)
-    {
-      throw new RuntimeException("Unable to create customer due to sportCenter. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    super(aId, aEmail, aPassword);
   }
 
-  //------------------------
-  // INTERFACE
-  //------------------------
-  /* Code from template association_GetOne */
-  public SportCenter getSportCenter()
-  {
-    return sportCenter;
-  }
-  /* Code from template association_SetOneToMany */
-  public boolean setSportCenter(SportCenter aSportCenter)
-  {
-    boolean wasSet = false;
-    if (aSportCenter == null)
-    {
-      return wasSet;
-    }
-
-    SportCenter existingSportCenter = sportCenter;
-    sportCenter = aSportCenter;
-    if (existingSportCenter != null && !existingSportCenter.equals(aSportCenter))
-    {
-      existingSportCenter.removeCustomer(this);
-    }
-    sportCenter.addCustomer(this);
-    wasSet = true;
-    return wasSet;
-  }
 }

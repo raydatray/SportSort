@@ -1,9 +1,4 @@
 class SportCenter {
-  1 <@>- * SportSession;
-  1 <@>- * Customer;
-  1 <@>- * Instructor;
-  1 <@>- 1 Owner;
-  1 <@>- * SportClass;
   String name;
   Time openingHour;
   Time closingHour;
@@ -11,6 +6,7 @@ class SportCenter {
 
 class UserAccount {
   abstract;
+  Integer id;
   String email;
   String password;
 }
@@ -41,6 +37,7 @@ class Customer {
 
 class SportSession {
   enum SessionType {cardio, stretching, strengthTraining}
+  Integer id;
   SessionType sessionType;
   Date date;
   Time startTime;

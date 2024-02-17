@@ -6,7 +6,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 import java.sql.Date;
 import java.sql.Time;
 
-// line 42 "SportsCenter.ump"
+// line 38 "SportsCenter.ump"
 public class SportSession
 {
 
@@ -21,6 +21,7 @@ public class SportSession
   //------------------------
 
   //SportSession Attributes
+  private Integer id;
   private SessionType sessionType;
   private Date date;
   private Time startTime;
@@ -29,26 +30,21 @@ public class SportSession
   private Integer roomNumber;
 
   //SportSession Associations
-  private SportCenter sportCenter;
   private SportClass sportClass;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public SportSession(SessionType aSessionType, Date aDate, Time aStartTime, Time aEndTime, Integer aFloorNumber, Integer aRoomNumber, SportCenter aSportCenter, SportClass aSportClass)
+  public SportSession(Integer aId, SessionType aSessionType, Date aDate, Time aStartTime, Time aEndTime, Integer aFloorNumber, Integer aRoomNumber, SportClass aSportClass)
   {
+    id = aId;
     sessionType = aSessionType;
     date = aDate;
     startTime = aStartTime;
     endTime = aEndTime;
     floorNumber = aFloorNumber;
     roomNumber = aRoomNumber;
-    boolean didAddSportCenter = setSportCenter(aSportCenter);
-    if (!didAddSportCenter)
-    {
-      throw new RuntimeException("Unable to create sportSession due to sportCenter. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
     if (!setSportClass(aSportClass))
     {
       throw new RuntimeException("Unable to create SportSession due to aSportClass. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
@@ -58,6 +54,14 @@ public class SportSession
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setId(Integer aId)
+  {
+    boolean wasSet = false;
+    id = aId;
+    wasSet = true;
+    return wasSet;
+  }
 
   public boolean setSessionType(SessionType aSessionType)
   {
@@ -107,6 +111,11 @@ public class SportSession
     return wasSet;
   }
 
+  public Integer getId()
+  {
+    return id;
+  }
+
   public SessionType getSessionType()
   {
     return sessionType;
@@ -137,33 +146,9 @@ public class SportSession
     return roomNumber;
   }
   /* Code from template association_GetOne */
-  public SportCenter getSportCenter()
-  {
-    return sportCenter;
-  }
-  /* Code from template association_GetOne */
   public SportClass getSportClass()
   {
     return sportClass;
-  }
-  /* Code from template association_SetOneToMany */
-  public boolean setSportCenter(SportCenter aSportCenter)
-  {
-    boolean wasSet = false;
-    if (aSportCenter == null)
-    {
-      return wasSet;
-    }
-
-    SportCenter existingSportCenter = sportCenter;
-    sportCenter = aSportCenter;
-    if (existingSportCenter != null && !existingSportCenter.equals(aSportCenter))
-    {
-      existingSportCenter.removeSportSession(this);
-    }
-    sportCenter.addSportSession(this);
-    wasSet = true;
-    return wasSet;
   }
   /* Code from template association_SetUnidirectionalOne */
   public boolean setSportClass(SportClass aNewSportClass)

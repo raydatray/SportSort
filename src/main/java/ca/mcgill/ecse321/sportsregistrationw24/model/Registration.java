@@ -5,7 +5,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 import java.sql.Date;
 
-// line 52 "SportsCenter.ump"
+// line 49 "SportsCenter.ump"
 public class Registration
 {
 
