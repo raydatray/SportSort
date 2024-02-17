@@ -4,7 +4,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 
-// line 58 "SportsCenter.ump"
+// line 55 "SportsCenter.ump"
 public class PaymentInfo
 {
 
@@ -129,4 +129,5 @@ public class PaymentInfo
     }
     return wasSet;
   }
+
 }
