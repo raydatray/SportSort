@@ -10,7 +10,7 @@ import java.sql.Time;
 import java.util.Optional;
 
 public interface InstructorRepository extends CrudRepository<Instructor, Integer> {
-    Instructor findInstructorById(Integer id);
+    Optional<Instructor> findInstructorById(Integer id);
     Optional<Instructor> findInstructorByEmail(String email);
     boolean isTeachingClass(Integer classId);
     boolean proposeClass(Integer classId, String className);
