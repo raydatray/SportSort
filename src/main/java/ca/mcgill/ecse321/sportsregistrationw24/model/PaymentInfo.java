@@ -11,6 +11,9 @@ import jakarta.persistence.Table;
 // line 55 "SportsCenter.ump"
 public class PaymentInfo
 {
+  public PaymentInfo() {
+
+  }
 
   //------------------------
   // ENUMERATIONS

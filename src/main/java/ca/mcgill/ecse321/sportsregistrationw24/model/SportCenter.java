@@ -34,6 +34,10 @@ public class SportCenter
     closingHour = aClosingHour;
   }
 
+  public SportCenter() {
+
+  }
+
   //------------------------
   // INTERFACE
   //------------------------

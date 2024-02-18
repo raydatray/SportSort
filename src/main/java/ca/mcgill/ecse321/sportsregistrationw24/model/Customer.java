@@ -25,4 +25,7 @@ public class Customer extends UserAccount
     super(aId, aEmail, aPassword);
   }
 
+  public Customer() {
+    super();
+  }
 }
