@@ -22,6 +22,5 @@ public class OwnerAccount extends StaffAccount
   }
 
   public Instructor() {
-
   }
 }

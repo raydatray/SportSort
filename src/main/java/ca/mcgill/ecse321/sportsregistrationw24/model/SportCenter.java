@@ -4,6 +4,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 import java.sql.Time;
@@ -18,6 +19,7 @@ public class SportCenter
   // MEMBER VARIABLES
   //------------------------
 
+  @Id
   //SportCenter Attributes
   private String name;
   private Time openingHour;
@@ -35,7 +37,6 @@ public class SportCenter
   }
 
   public SportCenter() {
-
   }
 
   //------------------------
