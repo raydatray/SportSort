@@ -15,6 +15,9 @@ import java.sql.Time;
 // line 38 "SportsCenter.ump"
 public class SportSession
 {
+  public SportSession() {
+
+  }
 
   //------------------------
   // ENUMERATIONS

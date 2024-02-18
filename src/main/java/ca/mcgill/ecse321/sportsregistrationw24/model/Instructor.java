@@ -25,4 +25,7 @@ public class Instructor extends Staff
     super(aId, aEmail, aPassword);
   }
 
+  public Instructor() {
+
+  }
 }

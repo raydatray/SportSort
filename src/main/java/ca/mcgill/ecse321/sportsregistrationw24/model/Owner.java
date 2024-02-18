@@ -25,4 +25,7 @@ public class Owner extends Staff
     super(aId, aEmail, aPassword);
   }
 
+  public Owner() {
+
+  }
 }

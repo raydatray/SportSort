@@ -34,6 +34,10 @@ public class SportClass
     isApproved = aIsApproved;
   }
 
+  public SportClass() {
+
+  }
+
   //------------------------
   // INTERFACE
   //------------------------
