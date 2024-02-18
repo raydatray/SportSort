@@ -1,0 +1,64 @@
+class SportCenter {
+  String name;
+  Time openingHour;
+  Time closingHour;
+}
+
+class UserAccount {
+  abstract;
+  Integer id;
+  String email;
+  String password;
+}
+
+class SportClass {
+  Integer id;
+  String className;
+  boolean isApproved;
+  1 <- * SportSession;
+}
+
+class Staff {
+  abstract;
+  isA UserAccount;
+}
+
+class Owner {
+  isA Staff;
+}
+
+class Instructor {
+  isA Staff;
+}
+
+class Customer {
+  isA UserAccount;
+}
+
+class SportSession {
+  enum SessionType {cardio, stretching, strengthTraining}
+  Integer id;
+  SessionType sessionType;
+  Date date;
+  Time startTime;
+  Time endTime;
+  Integer floorNumber;
+  Integer roomNumber;
+}
+
+class Registration {
+  Date date;
+  * -> 1 Customer;
+  * -> 1 SportSession;
+}
+
+class PaymentInfo {
+  enum PaymentType {credit, debit};
+  Integer id;
+  PaymentType paymentType;
+  Integer cardNumber;
+  Integer cvv;
+  Integer expirationYear;
+  Integer expirationMonth;
+  * -> 1 Customer;
+}
