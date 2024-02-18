@@ -15,5 +15,4 @@ public interface OwnerRepository extends CrudRepository<Owner, Integer> {
     boolean modifySession(Integer sessionId, Date date, SportSession.SessionType sessionType, Time startTime, Time endTime, Integer floorNumber, Integer roomNumber);
     boolean approveClass(Integer classId);
     boolean hasPendingClasses();
-
 }
