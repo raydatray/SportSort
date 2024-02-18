@@ -3,8 +3,8 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 /*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import ca.mcgill.ecse321.sportsregistrationw24.model.keys.RegistrationId;
+import jakarta.persistence.*;
 
 import java.sql.Date;
 
@@ -22,7 +22,15 @@ public class Registration
   private Date date;
 
   //Registration Associations
+  @EmbeddedId
+  private RegistrationId id;
+
+  @ManyToOne
+  @JoinColumn(name = "customer_id")
   private Customer customer;
+
+  @ManyToOne
+  @JoinColumn(name = "sport_session_id")
   private SportSession sportSession;
 
   //------------------------

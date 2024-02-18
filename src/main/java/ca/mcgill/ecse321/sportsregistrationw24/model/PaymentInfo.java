@@ -3,8 +3,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 /*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "paymentinfo")
@@ -27,11 +26,15 @@ public class PaymentInfo
 
   //PaymentInfo Attributes
   private PaymentType paymentType;
+
+  @Id
   private Integer cardNumber;
   private Integer cvv;
   private Integer expirationYear;
   private Integer expirationMonth;
 
+  @ManyToOne
+  @JoinColumn(name = "customer_id")
   //PaymentInfo Associations
   private Customer customer;
 
