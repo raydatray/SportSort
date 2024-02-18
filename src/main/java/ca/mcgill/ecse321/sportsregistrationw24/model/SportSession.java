@@ -3,9 +3,15 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 /*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import java.sql.Date;
 import java.sql.Time;
 
+@Entity
+@Table(name = "sportsession")
 // line 38 "SportsCenter.ump"
 public class SportSession
 {
@@ -20,6 +26,7 @@ public class SportSession
   // MEMBER VARIABLES
   //------------------------
 
+  @Id
   //SportSession Attributes
   private Integer id;
   private SessionType sessionType;
