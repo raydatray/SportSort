@@ -7,9 +7,11 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Optional;
 
 public interface InstructorRepository extends CrudRepository<Instructor, Integer> {
-    Customer findInstructorById(Integer id);
+    Instructor findInstructorById(Integer id);
+    Optional<Instructor> findInstructorByEmail(String email);
     boolean isTeachingClass(Integer classId);
     boolean proposeClass(Integer classId, String className);
     boolean createSession(Integer sessionId, Date date, SportSession.SessionType sessionType, Time startTime, Time endTime, Integer floorNumber, Integer roomNumber);
