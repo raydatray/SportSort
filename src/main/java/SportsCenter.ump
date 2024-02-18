@@ -53,7 +53,8 @@ class Registration {
 }
 
 class PaymentInfo {
-	enum PaymentType {credit, debit};
+  enum PaymentType {credit, debit};
+  Integer id;
   PaymentType paymentType;
   Integer cardNumber;
   Integer cvv;

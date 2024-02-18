@@ -23,15 +23,14 @@ public class PaymentInfo
   //------------------------
   // MEMBER VARIABLES
   //------------------------
-
-  //PaymentInfo Attributes
-  private PaymentType paymentType;
-
   @Id
-  private Integer cardNumber;
-  private Integer cvv;
-  private Integer expirationYear;
-  private Integer expirationMonth;
+  //PaymentInfo Attributes
+  private int id;
+  private PaymentType paymentType;
+  private int cardNumber;
+  private int cvv;
+  private int expirationYear;
+  private int expirationMonth;
 
   @ManyToOne
   @JoinColumn(name = "customer_id")
@@ -42,8 +41,9 @@ public class PaymentInfo
   // CONSTRUCTOR
   //------------------------
 
-  public PaymentInfo(PaymentType aPaymentType, Integer aCardNumber, Integer aCvv, Integer aExpirationYear, Integer aExpirationMonth, Customer aCustomer)
+  public PaymentInfo(int aId, PaymentType aPaymentType, int aCardNumber, int aCvv, int aExpirationYear, int aExpirationMonth, Customer aCustomer)
   {
+    id = aId;
     paymentType = aPaymentType;
     cardNumber = aCardNumber;
     cvv = aCvv;
@@ -59,6 +59,14 @@ public class PaymentInfo
   // INTERFACE
   //------------------------
 
+  public boolean setId(int aId)
+  {
+    boolean wasSet = false;
+    id = aId;
+    wasSet = true;
+    return wasSet;
+  }
+
   public boolean setPaymentType(PaymentType aPaymentType)
   {
     boolean wasSet = false;
@@ -67,7 +75,7 @@ public class PaymentInfo
     return wasSet;
   }
 
-  public boolean setCardNumber(Integer aCardNumber)
+  public boolean setCardNumber(int aCardNumber)
   {
     boolean wasSet = false;
     cardNumber = aCardNumber;
@@ -75,7 +83,7 @@ public class PaymentInfo
     return wasSet;
   }
 
-  public boolean setCvv(Integer aCvv)
+  public boolean setCvv(int aCvv)
   {
     boolean wasSet = false;
     cvv = aCvv;
@@ -83,7 +91,7 @@ public class PaymentInfo
     return wasSet;
   }
 
-  public boolean setExpirationYear(Integer aExpirationYear)
+  public boolean setExpirationYear(int aExpirationYear)
   {
     boolean wasSet = false;
     expirationYear = aExpirationYear;
@@ -91,7 +99,7 @@ public class PaymentInfo
     return wasSet;
   }
 
-  public boolean setExpirationMonth(Integer aExpirationMonth)
+  public boolean setExpirationMonth(int aExpirationMonth)
   {
     boolean wasSet = false;
     expirationMonth = aExpirationMonth;
@@ -99,27 +107,32 @@ public class PaymentInfo
     return wasSet;
   }
 
+  public int getId()
+  {
+    return id;
+  }
+
   public PaymentType getPaymentType()
   {
     return paymentType;
   }
 
-  public Integer getCardNumber()
+  public int getCardNumber()
   {
     return cardNumber;
   }
 
-  public Integer getCvv()
+  public int getCvv()
   {
     return cvv;
   }
 
-  public Integer getExpirationYear()
+  public int getExpirationYear()
   {
     return expirationYear;
   }
 
-  public Integer getExpirationMonth()
+  public int getExpirationMonth()
   {
     return expirationMonth;
   }
@@ -139,5 +152,4 @@ public class PaymentInfo
     }
     return wasSet;
   }
-
 }
