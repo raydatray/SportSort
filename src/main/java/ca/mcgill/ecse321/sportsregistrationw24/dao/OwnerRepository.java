@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.dao;
 
 import ca.mcgill.ecse321.sportsregistrationw24.model.Instructor;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Owner;
+import ca.mcgill.ecse321.sportsregistrationw24.model.SportClass;
 import ca.mcgill.ecse321.sportsregistrationw24.model.SportSession;
 import org.springframework.data.repository.CrudRepository;
 

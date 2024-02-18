@@ -6,5 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 public interface SportClassRepository extends CrudRepository<SportClass, Integer> {
     Integer getFloorNumber(Integer classId);
     Integer getRoomNumber(Integer classId);
+    SportClass findClassById(Integer classId);
 }
 
