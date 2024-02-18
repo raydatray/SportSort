@@ -21,4 +21,7 @@ public class CustomerAccount extends UserAccount
     super(aId, aEmail, aPassword);
   }
 
+  public Owner() {
+
+  }
 }

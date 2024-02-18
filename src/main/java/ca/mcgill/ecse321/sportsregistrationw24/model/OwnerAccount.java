@@ -21,4 +21,7 @@ public class OwnerAccount extends StaffAccount
     super(aId, aEmail, aPassword);
   }
 
+  public Instructor() {
+
+  }
 }

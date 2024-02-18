@@ -7,6 +7,9 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 // line 69 "SportsCenter.ump"
 public class PaymentInfo
 {
+  public PaymentInfo() {
+
+  }
 
   //------------------------
   // ENUMERATIONS

@@ -37,6 +37,10 @@ public class Registration
     }
   }
 
+  public Registration() {
+
+  }
+
   //------------------------
   // INTERFACE
   //------------------------

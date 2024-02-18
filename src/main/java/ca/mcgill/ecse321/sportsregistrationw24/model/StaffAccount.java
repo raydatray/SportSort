@@ -21,4 +21,7 @@ public abstract class StaffAccount extends UserAccount
     super(aId, aEmail, aPassword);
   }
 
+  public Staff() {
+
+  }
 }

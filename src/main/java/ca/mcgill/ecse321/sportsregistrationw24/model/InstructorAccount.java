@@ -21,4 +21,7 @@ public class InstructorAccount extends StaffAccount
     super(aId, aEmail, aPassword);
   }
 
+  public Customer() {
+    super();
+  }
 }

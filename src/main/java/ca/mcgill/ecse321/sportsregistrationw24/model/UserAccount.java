@@ -34,6 +34,10 @@ public abstract class UserAccount
     password = aPassword;
   }
 
+  public UserAccount() {
+
+  }
+
   //------------------------
   // INTERFACE
   //------------------------

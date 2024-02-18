@@ -28,6 +28,10 @@ public class CourseType
     approved = aApproved;
   }
 
+  public SportClass() {
+
+  }
+
   //------------------------
   // INTERFACE
   //------------------------
