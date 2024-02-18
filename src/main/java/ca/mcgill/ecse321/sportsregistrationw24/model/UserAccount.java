@@ -3,7 +3,12 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 /*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
 
 
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "userAccounts")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "USER_TYPE")
 // line 7 "SportsCenter.ump"
 public abstract class UserAccount
 {
@@ -12,6 +17,7 @@ public abstract class UserAccount
   // MEMBER VARIABLES
   //------------------------
 
+  @Id
   //UserAccount Attributes
   private Integer id;
   private String email;

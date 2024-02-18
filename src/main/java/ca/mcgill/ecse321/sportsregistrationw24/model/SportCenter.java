@@ -3,8 +3,13 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 /*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+
 import java.sql.Time;
 
+@Entity
+@Table(name = "sportcenter")
 // line 1 "SportsCenter.ump"
 public class SportCenter
 {

@@ -1,0 +1,8 @@
+package ca.mcgill.ecse321.sportsregistrationw24.dao;
+
+import ca.mcgill.ecse321.sportsregistrationw24.model.SportClass;
+import org.springframework.data.repository.CrudRepository;
+
+public interface SportClassRepository extends CrudRepository<SportClass, Integer> {
+}
+
