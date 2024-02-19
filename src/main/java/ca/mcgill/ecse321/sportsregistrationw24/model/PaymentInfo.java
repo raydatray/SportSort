@@ -23,6 +23,7 @@ public class PaymentInfo
   //------------------------
   // MEMBER VARIABLES
   //------------------------
+<<<<<<< HEAD
   @Id
   //PaymentInfo Attributes
   private int id;
@@ -32,16 +33,14 @@ public class PaymentInfo
   private int expirationYear;
   private int expirationMonth;
 
-  @ManyToOne
-  @JoinColumn(name = "customer_id")
   //PaymentInfo Associations
-  private Customer customer;
+  private CustomerAccount customerAccount;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public PaymentInfo(int aId, PaymentType aPaymentType, int aCardNumber, int aCvv, int aExpirationYear, int aExpirationMonth, Customer aCustomer)
+  public PaymentInfo(Integer aId, PaymentType aPaymentType, Integer aCardNumber, Integer aCvv, Integer aExpirationYear, Integer aExpirationMonth, CustomerAccount aCustomerAccount)
   {
     id = aId;
     paymentType = aPaymentType;
@@ -49,9 +48,9 @@ public class PaymentInfo
     cvv = aCvv;
     expirationYear = aExpirationYear;
     expirationMonth = aExpirationMonth;
-    if (!setCustomer(aCustomer))
+    if (!setCustomerAccount(aCustomerAccount))
     {
-      throw new RuntimeException("Unable to create PaymentInfo due to aCustomer. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create PaymentInfo due to aCustomerAccount. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
@@ -59,7 +58,7 @@ public class PaymentInfo
   // INTERFACE
   //------------------------
 
-  public boolean setId(int aId)
+  public boolean setId(Integer aId)
   {
     boolean wasSet = false;
     id = aId;
@@ -75,7 +74,7 @@ public class PaymentInfo
     return wasSet;
   }
 
-  public boolean setCardNumber(int aCardNumber)
+  public boolean setCardNumber(Integer aCardNumber)
   {
     boolean wasSet = false;
     cardNumber = aCardNumber;
@@ -83,7 +82,7 @@ public class PaymentInfo
     return wasSet;
   }
 
-  public boolean setCvv(int aCvv)
+  public boolean setCvv(Integer aCvv)
   {
     boolean wasSet = false;
     cvv = aCvv;
@@ -91,7 +90,7 @@ public class PaymentInfo
     return wasSet;
   }
 
-  public boolean setExpirationYear(int aExpirationYear)
+  public boolean setExpirationYear(Integer aExpirationYear)
   {
     boolean wasSet = false;
     expirationYear = aExpirationYear;
@@ -99,7 +98,7 @@ public class PaymentInfo
     return wasSet;
   }
 
-  public boolean setExpirationMonth(int aExpirationMonth)
+  public boolean setExpirationMonth(Integer aExpirationMonth)
   {
     boolean wasSet = false;
     expirationMonth = aExpirationMonth;
@@ -107,7 +106,7 @@ public class PaymentInfo
     return wasSet;
   }
 
-  public int getId()
+  public Integer getId()
   {
     return id;
   }
@@ -117,39 +116,40 @@ public class PaymentInfo
     return paymentType;
   }
 
-  public int getCardNumber()
+  public Integer getCardNumber()
   {
     return cardNumber;
   }
 
-  public int getCvv()
+  public Integer getCvv()
   {
     return cvv;
   }
 
-  public int getExpirationYear()
+  public Integer getExpirationYear()
   {
     return expirationYear;
   }
 
-  public int getExpirationMonth()
+  public Integer getExpirationMonth()
   {
     return expirationMonth;
   }
   /* Code from template association_GetOne */
-  public Customer getCustomer()
+  public CustomerAccount getCustomerAccount()
   {
-    return customer;
+    return customerAccount;
   }
   /* Code from template association_SetUnidirectionalOne */
-  public boolean setCustomer(Customer aNewCustomer)
+  public boolean setCustomerAccount(CustomerAccount aNewCustomerAccount)
   {
     boolean wasSet = false;
-    if (aNewCustomer != null)
+    if (aNewCustomerAccount != null)
     {
-      customer = aNewCustomer;
+      customerAccount = aNewCustomerAccount;
       wasSet = true;
     }
     return wasSet;
   }
+
 }
