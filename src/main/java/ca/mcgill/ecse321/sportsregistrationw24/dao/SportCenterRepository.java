@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.sql.Time;
 
-public interface SportCenterRepository extends CrudRepository<SportCenter, Integer> {
+public interface SportCenterRepository extends CrudRepository<SportCenter, String> {
 }
