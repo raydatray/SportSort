@@ -5,7 +5,7 @@ Your commit issue should also follow the format: "Fixes/Resolves (pick most rele
 ### 👷Development Process
 Summarize the work you did. Describe any issues you ran into and how you resolved them.
 
-### :books: Tests
+### :blue_book: Tests
 Briefly describe the tests you ran your code against
 
 ### 📸UI changes
