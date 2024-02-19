@@ -9,8 +9,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CourseOfferingRepository extends CrudRepository<CourseOffering, Integer> {
-    Optional<List<CourseOffering>> findByInstructor(InstructorAccount instructor);
+    Optional<List<CourseOffering>> findByInstructorAccount(InstructorAccount instructor);
     List<CourseOffering> findByCourseType(CourseType courseType);
+
 
 }
 
