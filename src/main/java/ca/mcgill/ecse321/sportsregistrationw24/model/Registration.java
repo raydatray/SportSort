@@ -43,6 +43,7 @@ public class Registration
   public Registration(Date aRegisteredDate, CourseOffering aCourseOffering, CustomerAccount aCustomerAccount)
   {
     registeredDate = aRegisteredDate;
+
     if (!setCourseOffering(aCourseOffering))
     {
       throw new RuntimeException("Unable to create Registration due to aCourseOffering. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
@@ -51,6 +52,8 @@ public class Registration
     {
       throw new RuntimeException("Unable to create Registration due to aCustomerAccount. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
+
+    id = new RegistrationId(courseOffering.getId(), customerAccount.getId());
   }
 
   public Registration() {
@@ -83,6 +86,8 @@ public class Registration
   {
     return customerAccount;
   }
+
+  public RegistrationId getId() { return id;  }
   /* Code from template association_SetUnidirectionalOne */
   public boolean setCourseOffering(CourseOffering aNewCourseOffering)
   {

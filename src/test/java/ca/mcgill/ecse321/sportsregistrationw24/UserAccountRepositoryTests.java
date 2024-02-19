@@ -39,7 +39,7 @@ public class UserAccountRepositoryTests {
         String testCustomerEmail = "joebama@gmail.com";
         String testCustomerPassword = "obama";
 
-        CustomerAccount testCustomer = new CustomerAccount(1, testCustomerEmail, testCustomerPassword);
+        CustomerAccount testCustomer = new CustomerAccount(3, testCustomerEmail, testCustomerPassword);
 
         userAccountRepository.save(testInstructor);
         userAccountRepository.save(testOwner);
@@ -51,7 +51,7 @@ public class UserAccountRepositoryTests {
 
         assertNotNull(testInstructor = (InstructorAccount) readInstructor.orElse(null));
         assertEquals(testInstructorEmail, testInstructor.getEmail());
-        assertEquals(testInstructorEmail, testInstructor.getPassword());
+        assertEquals(testInstructorPassword, testInstructor.getPassword());
 
         assertNotNull(testOwner = (OwnerAccount) readOwner.orElse(null));
         assertEquals(testOwnerEmail, testOwner.getEmail());

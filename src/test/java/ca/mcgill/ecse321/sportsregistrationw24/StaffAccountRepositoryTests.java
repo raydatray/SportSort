@@ -45,7 +45,7 @@ public class StaffAccountRepositoryTests {
 
         assertNotNull(testInstructor = (InstructorAccount) readInstructor.orElse(null));
         assertEquals(testInstructorEmail, testInstructor.getEmail());
-        assertEquals(testInstructorEmail, testInstructor.getPassword());
+        assertEquals(testInstructorPassword, testInstructor.getPassword());
 
         assertNotNull(testOwner = (OwnerAccount) readOwner.orElse(null));
         assertEquals(testOwnerEmail, testOwner.getEmail());

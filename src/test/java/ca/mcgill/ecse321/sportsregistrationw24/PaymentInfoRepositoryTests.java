@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.sportsregistrationw24;
 
+import ca.mcgill.ecse321.sportsregistrationw24.dao.CustomerAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.PaymentInfoRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.PaymentInfo;
@@ -19,9 +20,13 @@ public class PaymentInfoRepositoryTests {
     @Autowired
     private PaymentInfoRepository paymentInfoRepository;
 
+    @Autowired
+    private CustomerAccountRepository customerAccountRepository;
+
     @AfterEach
     public void clearDatabase() {
         paymentInfoRepository.deleteAll();
+        customerAccountRepository.deleteAll();
     }
     @Test
     public void testPersistAndLoadPaymentInfo() {
@@ -30,7 +35,10 @@ public class PaymentInfoRepositoryTests {
         Integer testCvv = 123;
         Integer testExpiryYear = 24;
         Integer testExpiryMonth = 6;
+
         CustomerAccount testCustomer = new CustomerAccount(1,"houman@gmail.com", "eye");
+        customerAccountRepository.save(testCustomer);
+
 
         PaymentInfo testPayment = new PaymentInfo(1,paymentType,testCardNumber,testCvv,testExpiryYear,testExpiryMonth,testCustomer);
 
@@ -39,12 +47,13 @@ public class PaymentInfoRepositoryTests {
         Optional<PaymentInfo> readPayment = paymentInfoRepository.findById(1);
 
         assertNotNull(testPayment = readPayment.orElse(null));
+        assertEquals(testCustomer.getId(), testPayment.getCustomerAccount().getId());
+
         assertEquals(paymentType, testPayment.getPaymentType());
         assertEquals(testCardNumber, testPayment.getCardNumber());
         assertEquals(testCvv,testPayment.getCvv());
         assertEquals(testExpiryYear, testPayment.getExpirationYear());
         assertEquals(testExpiryMonth, testPayment.getExpirationMonth());
-        assertEquals(testCustomer, testPayment.getCustomerAccount());
     }
 
 }
