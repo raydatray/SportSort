@@ -32,7 +32,7 @@ public class CourseOfferingRepositoryTests {
     public void testPersistAndLoadCourseOffering(){
         //create a new course offering
         CourseType courseType = new CourseType(1, "Cardio", true);
-        Room testRoom = new Room("Pool", 10, 10, 10);
+        Room testRoom = new Room(1, "Pool", 10, 10, 10);
         InstructorAccount testInstructor = new InstructorAccount(1, "raydatray@gmail.com", "password");
         List<DayOfWeek> testDays = List.of(new DayOfWeek[]{DayOfWeek.MONDAY, DayOfWeek.FRIDAY});
         Date startDate = Date.valueOf("2024-02-18");
