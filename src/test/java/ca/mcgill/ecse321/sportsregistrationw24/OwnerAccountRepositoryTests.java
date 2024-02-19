@@ -1,17 +1,17 @@
 package ca.mcgill.ecse321.sportsregistrationw24;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dao.StaffRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.OwnerAccountRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class StaffRepositoryTests {
+public class OwnerAccountRepositoryTests {
     @Autowired
-    private StaffRepository staffRepository;
+    private OwnerAccountRepository ownerAccountRepository;
 
     @AfterEach
     public void clearDatabase() {
-        staffRepository.deleteAll();
+        ownerAccountRepository.deleteAll();
     }
 }

@@ -23,7 +23,6 @@ public class PaymentInfo
   //------------------------
   // MEMBER VARIABLES
   //------------------------
-<<<<<<< HEAD
   @Id
   //PaymentInfo Attributes
   private int id;
@@ -33,6 +32,8 @@ public class PaymentInfo
   private int expirationYear;
   private int expirationMonth;
 
+  @ManyToOne
+  @JoinColumn(name = "customerAccount_id")
   //PaymentInfo Associations
   private CustomerAccount customerAccount;
 

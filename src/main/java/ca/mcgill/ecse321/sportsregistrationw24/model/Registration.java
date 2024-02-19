@@ -19,7 +19,6 @@ public class Registration
   //------------------------
 
   //Registration Attributes
-<<<<<<< HEAD
   private Date registeredDate;
 
   //Registration Associations

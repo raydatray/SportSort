@@ -3,9 +3,14 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 /*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
 
 
-import java.sql.Date;
-import java.time.DayOfWeek;
+import jakarta.persistence.*;
 
+import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@Table(name = "courseoffering")
 // line 38 "SportsCenter.ump"
 public class CourseOffering
 {
@@ -14,40 +19,39 @@ public class CourseOffering
   // MEMBER VARIABLES
   //------------------------
 
+  @Id
   //CourseOffering Attributes
   private Integer id;
   private Date startDate;
   private Date endDate;
 
-  private DayOfWeek[] days;
-
+  @OneToOne
   //CourseOffering Associations
   private Room room;
-  private CourseType courseType;
-  private InstructorAccount instructorAccount;
+  @OneToMany
+  private List<CourseType> courseType;
+  @OneToMany
+  private List<InstructorAccount> instructorAccount;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public CourseOffering(Integer aId, Date aStartDate, Date aEndDate, DayOfWeek[] days, Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount)
+  public CourseOffering(Integer aId, Date aStartDate, Date aEndDate, Room aRoom, List<CourseType> aCourseType, List<InstructorAccount> aInstructorAccount)
   {
     id = aId;
     startDate = aStartDate;
     endDate = aEndDate;
-    days = days;
     if (!setRoom(aRoom))
     {
       throw new RuntimeException("Unable to create CourseOffering due to aRoom. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    if (!setCourseType(aCourseType))
-    {
-      throw new RuntimeException("Unable to create CourseOffering due to aCourseType. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    if (!setInstructorAccount(aInstructorAccount))
-    {
-      throw new RuntimeException("Unable to create CourseOffering due to aInstructorAccount. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    courseType = aCourseType;
+    instructorAccount = aInstructorAccount;
+  }
+
+  public CourseOffering() {
+
   }
 
   //------------------------
@@ -98,12 +102,12 @@ public class CourseOffering
     return room;
   }
   /* Code from template association_GetOne */
-  public CourseType getCourseType()
+  public List<CourseType> getCourseType()
   {
     return courseType;
   }
   /* Code from template association_GetOne */
-  public InstructorAccount getInstructorAccount()
+  public List<InstructorAccount> getInstructorAccount()
   {
     return instructorAccount;
   }
@@ -118,26 +122,18 @@ public class CourseOffering
     }
     return wasSet;
   }
-  /* Code from template association_SetUnidirectionalOne */
-  public boolean setCourseType(CourseType aNewCourseType)
-  {
-    boolean wasSet = false;
-    if (aNewCourseType != null)
-    {
-      courseType = aNewCourseType;
-      wasSet = true;
+
+  public boolean addCourseType(CourseType aCourseType) {
+    if (courseType == null) {
+      courseType = new ArrayList<>();
     }
-    return wasSet;
+    return courseType.add(aCourseType);
   }
-  /* Code from template association_SetUnidirectionalOne */
-  public boolean setInstructorAccount(InstructorAccount aNewInstructorAccount)
-  {
-    boolean wasSet = false;
-    if (aNewInstructorAccount != null)
-    {
-      instructorAccount = aNewInstructorAccount;
-      wasSet = true;
+
+  public boolean removeCourseType(CourseType aCourseType) {
+    if (courseType != null && courseType.contains(aCourseType)) {
+      return courseType.remove(aCourseType);
     }
-    return wasSet;
+    return false;
   }
 }

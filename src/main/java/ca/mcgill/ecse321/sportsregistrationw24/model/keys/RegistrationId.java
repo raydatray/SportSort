@@ -6,31 +6,31 @@ import java.io.Serializable;
 
 @Embeddable
 public class RegistrationId implements Serializable {
-    @Column(name = "customer_id")
-    private Integer customerId;
-    @Column(name = "sport_session_id")
-    private Integer sportSessionId;
+    @Column(name = "customer_account_id")
+    private Integer customerAccountId;
+    @Column(name = "course_offering_id")
+    private Integer courseOfferingId;
 
     public RegistrationId() {}
 
-    public RegistrationId(Integer customerId, Integer sportSessionId) {
-        this.customerId = customerId;
-        this.sportSessionId = sportSessionId;
+    public RegistrationId(Integer customerAccountId, Integer courseOfferingId) {
+        this.customerAccountId = customerAccountId;
+        this.courseOfferingId = courseOfferingId;
     }
 
-    public Integer getCustomerId() {
-        return customerId;
+    public Integer getCustomerAccountId() {
+        return customerAccountId;
     }
 
-    public void setCustomerId(Integer customerId) {
-        this.customerId = customerId;
+    public void setCustomerAccountId(Integer customerAccountId) {
+        this.customerAccountId = customerAccountId;
     }
 
-    public Integer getSportSessionId() {
-        return sportSessionId;
+    public Integer getCourseOfferingId() {
+        return courseOfferingId;
     }
 
-    public void setSportSessionId(Integer sportSessionId) {
-        this.sportSessionId = sportSessionId;
+    public void setCourseOfferingId(Integer courseOfferingId) {
+        this.courseOfferingId = courseOfferingId;
     }
 }

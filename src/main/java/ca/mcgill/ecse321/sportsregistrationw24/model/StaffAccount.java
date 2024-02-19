@@ -3,7 +3,11 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 /*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
 
 
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
 
+@Entity
+@DiscriminatorValue("STAFF")
 // line 14 "SportsCenter.ump"
 public abstract class StaffAccount extends UserAccount
 {
@@ -21,7 +25,7 @@ public abstract class StaffAccount extends UserAccount
     super(aId, aEmail, aPassword);
   }
 
-  public Staff() {
-
+  public StaffAccount() {
+    super();
   }
 }
