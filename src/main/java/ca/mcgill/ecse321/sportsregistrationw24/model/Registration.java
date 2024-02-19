@@ -26,11 +26,13 @@ public class Registration
   private RegistrationId id;
 
   @ManyToOne
+  @MapsId("customerAccountId")
   @JoinColumn(name = "customer_account_id")
   private CustomerAccount customerAccount;
 
 
   @ManyToOne
+  @MapsId("courseOfferingId")
   @JoinColumn(name = "course_offering_id")
   private CourseOffering courseOffering;
 
