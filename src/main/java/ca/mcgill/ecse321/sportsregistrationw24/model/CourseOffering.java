@@ -28,16 +28,16 @@ public class CourseOffering
   @OneToOne
   //CourseOffering Associations
   private Room room;
-  @OneToMany
-  private List<CourseType> courseType;
-  @OneToMany
-  private List<InstructorAccount> instructorAccount;
+  @ManyToOne
+  private CourseType courseType;
+  @ManyToOne
+  private InstructorAccount instructorAccount;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public CourseOffering(Integer aId, Date aStartDate, Date aEndDate, Room aRoom, List<CourseType> aCourseType, List<InstructorAccount> aInstructorAccount)
+  public CourseOffering(Integer aId, Date aStartDate, Date aEndDate, Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount)
   {
     id = aId;
     startDate = aStartDate;
@@ -102,12 +102,12 @@ public class CourseOffering
     return room;
   }
   /* Code from template association_GetOne */
-  public List<CourseType> getCourseType()
+  public CourseType getCourseType()
   {
     return courseType;
   }
   /* Code from template association_GetOne */
-  public List<InstructorAccount> getInstructorAccount()
+  public InstructorAccount getInstructorAccount()
   {
     return instructorAccount;
   }
@@ -121,19 +121,5 @@ public class CourseOffering
       wasSet = true;
     }
     return wasSet;
-  }
-
-  public boolean addCourseType(CourseType aCourseType) {
-    if (courseType == null) {
-      courseType = new ArrayList<>();
-    }
-    return courseType.add(aCourseType);
-  }
-
-  public boolean removeCourseType(CourseType aCourseType) {
-    if (courseType != null && courseType.contains(aCourseType)) {
-      return courseType.remove(aCourseType);
-    }
-    return false;
   }
 }
