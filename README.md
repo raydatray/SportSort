@@ -11,14 +11,14 @@ This is the repository of Group 15 which consists of Leon Song, Raymond Liu, Hou
 
 ## Team Members <a name="team-members"></a>
 
-| Name              | Role          | Hours Spent (Deliverable 1)| ... |
-|-------------------|---------------|----------------------------|-----|
-| Leon Song         | Placeholder   | XX                         | ... |
-| Houman Azari      | Placeholder   | XX                         | ... |
-| Joseph Ciaravella | Placeholder   | XX                         | ... |
-| Colin Xiong       | Placeholder   | XX                         | ... |
-| Raymond Liu       | Placeholder   | XX                         | ... |
-| Alexander Liu     | Placeholder   | XX                         | ... |
+| Name              | Role            | Hours Spent (Deliverable 1)| ... |
+|-------------------|-----------------|----------------------------|-----|
+| Leon Song         | Frontend Dev    | 16                         | ... |
+| Houman Azari      | Backend Dev     | 17                         | ... |
+| Joseph Ciaravella | UI/UX Designer  | 16                         | ... |
+| Colin Xiong       | Fullstack Dev   | 16                         | ... |
+| Raymond Liu       | QA Engineer     | 18                         | ... |
+| Alexander Liu     | Project Manager | 20                         | ... |
 
 ## Project Deliverables <a name="project-deliverables"></a>
 
