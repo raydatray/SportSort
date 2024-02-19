@@ -32,7 +32,7 @@ public class CustomerAccountRepositoryTests {
 
         customerAccountRepository.save(testCustomer);
 
-        Optional<CustomerAccount> readCustomer = customerAccountRepository.findCustomerAccountByEmail(testEmail);
+        Optional<CustomerAccount> readCustomer = customerAccountRepository.findByEmail(testEmail);
 
         assertNotNull(testCustomer = readCustomer.orElse(null));
         assertEquals(testEmail, testCustomer.getEmail());

@@ -28,7 +28,7 @@ public class CourseTypeRepositoryTests {
 
         courseTypeRepository.save(testType);
 
-        CourseType readType = courseTypeRepository.findCourseTypeByCourseName("Cardio");
+        CourseType readType = courseTypeRepository.findByCourseName("Cardio");
 
         assertNotNull(readType);
         assertEquals(typeName, readType.getCourseName());

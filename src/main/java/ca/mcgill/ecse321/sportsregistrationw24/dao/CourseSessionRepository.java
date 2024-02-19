@@ -7,8 +7,8 @@ import java.util.Date;
 import java.util.List;
 
 public interface CourseSessionRepository extends CrudRepository<CourseSession, Integer> {
-    List<CourseSession> findCourseSessionByDate(Date date);
-    List<CourseSession> findCourseSessionByFloorNumberAndRoomNumber(Integer floorNumber, Integer roomNumber);
-    List<CourseSession> findCourseSessionBySportType(String sportType);
+    List<CourseSession> findByDate(Date date);
+    List<CourseSession> findByFloorNumberAndRoomNumber(Integer floorNumber, Integer roomNumber);
+    List<CourseSession> findBySportType(String sportType);
 
 }

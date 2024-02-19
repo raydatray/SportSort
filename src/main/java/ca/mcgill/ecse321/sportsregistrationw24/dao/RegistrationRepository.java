@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface RegistrationRepository extends CrudRepository<Registration, Integer> {
-    List<Registration> findByCustomer(CustomerAccount customerAccount);
+    List<Registration> findByCustomerAccount(CustomerAccount customerAccount);
     List<Registration> findByCourseOffering(CourseOffering courseOffering);
-    boolean existsByCustomerAndCourseOffering(CustomerAccount customerAccount, CourseOffering courseOffering);
+    boolean existsByCustomerAccountAndCourseOffering(CustomerAccount customerAccount, CourseOffering courseOffering);
 }

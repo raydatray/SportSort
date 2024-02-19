@@ -32,7 +32,7 @@ public class InstructorAccountRepositoryTests {
 
         instructorAccountRepository.save(testInstructor);
 
-        Optional<InstructorAccount> readInstructor = instructorAccountRepository.findInstructorAccountByEmail(testEmail);
+        Optional<InstructorAccount> readInstructor = instructorAccountRepository.findByEmail(testEmail);
 
         assertNotNull(testInstructor = readInstructor.orElse(null));
         assertEquals(testEmail, testInstructor.getEmail());

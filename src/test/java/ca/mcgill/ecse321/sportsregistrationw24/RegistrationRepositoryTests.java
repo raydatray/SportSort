@@ -45,7 +45,7 @@ public class RegistrationRepositoryTests {
 
         registrationRepository.save(testRegistration);
 
-        List<Registration> readRegistrations = registrationRepository.findByCustomer(testCustomer);
+        List<Registration> readRegistrations = registrationRepository.findByCustomerAccount(testCustomer);
 
         assertNotNull(readRegistrations);
         assertNotNull(testRegistration = readRegistrations.contains(testRegistration) ? testRegistration : null);
