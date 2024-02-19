@@ -4,8 +4,8 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 
-// line 34 "SportsCenter.ump"
-public class Customer extends UserAccount
+// line 23 "SportsCenter.ump"
+public class InstructorAccount extends StaffAccount
 {
 
   //------------------------
@@ -16,7 +16,7 @@ public class Customer extends UserAccount
   // CONSTRUCTOR
   //------------------------
 
-  public Customer(Integer aId, String aEmail, String aPassword)
+  public InstructorAccount(Integer aId, String aEmail, String aPassword)
   {
     super(aId, aEmail, aPassword);
   }

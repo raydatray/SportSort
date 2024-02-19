@@ -4,28 +4,28 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 
-// line 14 "SportsCenter.ump"
-public class SportClass
+// line 32 "SportsCenter.ump"
+public class CourseType
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //SportClass Attributes
+  //CourseType Attributes
   private Integer id;
-  private String className;
-  private boolean isApproved;
+  private String courseName;
+  private boolean approved;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public SportClass(Integer aId, String aClassName, boolean aIsApproved)
+  public CourseType(Integer aId, String aCourseName, boolean aApproved)
   {
     id = aId;
-    className = aClassName;
-    isApproved = aIsApproved;
+    courseName = aCourseName;
+    approved = aApproved;
   }
 
   //------------------------
@@ -40,18 +40,18 @@ public class SportClass
     return wasSet;
   }
 
-  public boolean setClassName(String aClassName)
+  public boolean setCourseName(String aCourseName)
   {
     boolean wasSet = false;
-    className = aClassName;
+    courseName = aCourseName;
     wasSet = true;
     return wasSet;
   }
 
-  public boolean setIsApproved(boolean aIsApproved)
+  public boolean setApproved(boolean aApproved)
   {
     boolean wasSet = false;
-    isApproved = aIsApproved;
+    approved = aApproved;
     wasSet = true;
     return wasSet;
   }
@@ -61,14 +61,14 @@ public class SportClass
     return id;
   }
 
-  public String getClassName()
+  public String getCourseName()
   {
-    return className;
+    return courseName;
   }
 
-  public boolean getIsApproved()
+  public boolean getApproved()
   {
-    return isApproved;
+    return approved;
   }
 
 }
