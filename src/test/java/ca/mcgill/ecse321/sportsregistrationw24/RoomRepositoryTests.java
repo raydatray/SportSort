@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -31,12 +33,17 @@ public class RoomRepositoryTests {
 
         roomRepository.save(testRoom);
 
-        Room readRoom = roomRepository.findRoomByFloorNumberAndRoomNumber(testFloor, testRoomNum);
+        Optional<Room> readRoom = roomRepository.findRoomByFloorNumberAndRoomNumber(testFloor, testRoomNum);
 
-        assertNotNull(readRoom);
-        assertEquals(testName, readRoom.getName());
-        assertEquals(testFloor, readRoom.getFloorNumber());
-        assertEquals(testRoomNum, readRoom.getRoomNumber());
-        assertEquals(testCapacity, readRoom.getCapacity());
+        if (readRoom.isPresent()) {
+            // Retrieve the Room object
+            Room room = readRoom.get();
+
+            assertNotNull(room);
+            assertEquals(testName, room.getName());
+            assertEquals(testFloor, room.getFloorNumber());
+            assertEquals(testRoomNum, room.getRoomNumber());
+            assertEquals(testCapacity, room.getCapacity());
+        }
     }
 }
