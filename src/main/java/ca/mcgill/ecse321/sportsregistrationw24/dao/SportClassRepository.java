@@ -4,10 +4,9 @@ import ca.mcgill.ecse321.sportsregistrationw24.model.Instructor;
 import ca.mcgill.ecse321.sportsregistrationw24.model.SportClass;
 import org.springframework.data.repository.CrudRepository;
 
+import java.util.Optional;
+
 public interface SportClassRepository extends CrudRepository<SportClass, Integer> {
-    Integer getFloorNumber(Integer classId);
-    Integer getRoomNumber(Integer classId);
-    SportClass findClassById(Integer classId);
-    Instructor findClassInstructor(Integer classId);
+    Optional<List<CourseOffering>> findCourseOfferingByInstructor(Instructor instructor);
 }
 

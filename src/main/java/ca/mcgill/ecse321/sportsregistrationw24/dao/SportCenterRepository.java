@@ -6,6 +6,4 @@ import org.springframework.data.repository.CrudRepository;
 import java.sql.Time;
 
 public interface SportCenterRepository extends CrudRepository<SportCenter, Integer> {
-    Time getOpeningHour();
-    Time getClosingHour();
 }
