@@ -4,8 +4,8 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 
-// line 30 "SportsCenter.ump"
-public class Instructor extends Staff
+// line 19 "SportsCenter.ump"
+public class OwnerAccount extends StaffAccount
 {
 
   //------------------------
@@ -16,7 +16,7 @@ public class Instructor extends Staff
   // CONSTRUCTOR
   //------------------------
 
-  public Instructor(Integer aId, String aEmail, String aPassword)
+  public OwnerAccount(Integer aId, String aEmail, String aPassword)
   {
     super(aId, aEmail, aPassword);
   }

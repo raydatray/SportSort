@@ -39,14 +39,9 @@ class CourseOffering {
   Integer id;
   Date startDate;
   Date endDate;
-
-  1 <- 1..7 Days;
   * -> 1 Room;
   * -> 1 CourseType;
-  1 -> 1 InstructorAccount;
-}
-
-class Days {
+  * -> 1 InstructorAccount;
 }
 
 class Registration {

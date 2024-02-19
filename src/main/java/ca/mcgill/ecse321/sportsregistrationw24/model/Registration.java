@@ -5,7 +5,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 import java.sql.Date;
 
-// line 49 "SportsCenter.ump"
+// line 47 "SportsCenter.ump"
 public class Registration
 {
 
@@ -14,26 +14,26 @@ public class Registration
   //------------------------
 
   //Registration Attributes
-  private Date date;
+  private Date registeredDate;
 
   //Registration Associations
-  private Customer customer;
-  private SportSession sportSession;
+  private CourseOffering courseOffering;
+  private CustomerAccount customerAccount;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Registration(Date aDate, Customer aCustomer, SportSession aSportSession)
+  public Registration(Date aRegisteredDate, CourseOffering aCourseOffering, CustomerAccount aCustomerAccount)
   {
-    date = aDate;
-    if (!setCustomer(aCustomer))
+    registeredDate = aRegisteredDate;
+    if (!setCourseOffering(aCourseOffering))
     {
-      throw new RuntimeException("Unable to create Registration due to aCustomer. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create Registration due to aCourseOffering. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    if (!setSportSession(aSportSession))
+    if (!setCustomerAccount(aCustomerAccount))
     {
-      throw new RuntimeException("Unable to create Registration due to aSportSession. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create Registration due to aCustomerAccount. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
@@ -41,48 +41,49 @@ public class Registration
   // INTERFACE
   //------------------------
 
-  public boolean setDate(Date aDate)
+  public boolean setRegisteredDate(Date aRegisteredDate)
   {
     boolean wasSet = false;
-    date = aDate;
+    registeredDate = aRegisteredDate;
     wasSet = true;
     return wasSet;
   }
 
-  public Date getDate()
+  public Date getRegisteredDate()
   {
-    return date;
+    return registeredDate;
   }
   /* Code from template association_GetOne */
-  public Customer getCustomer()
+  public CourseOffering getCourseOffering()
   {
-    return customer;
+    return courseOffering;
   }
   /* Code from template association_GetOne */
-  public SportSession getSportSession()
+  public CustomerAccount getCustomerAccount()
   {
-    return sportSession;
+    return customerAccount;
   }
   /* Code from template association_SetUnidirectionalOne */
-  public boolean setCustomer(Customer aNewCustomer)
+  public boolean setCourseOffering(CourseOffering aNewCourseOffering)
   {
     boolean wasSet = false;
-    if (aNewCustomer != null)
+    if (aNewCourseOffering != null)
     {
-      customer = aNewCustomer;
+      courseOffering = aNewCourseOffering;
       wasSet = true;
     }
     return wasSet;
   }
   /* Code from template association_SetUnidirectionalOne */
-  public boolean setSportSession(SportSession aNewSportSession)
+  public boolean setCustomerAccount(CustomerAccount aNewCustomerAccount)
   {
     boolean wasSet = false;
-    if (aNewSportSession != null)
+    if (aNewCustomerAccount != null)
     {
-      sportSession = aNewSportSession;
+      customerAccount = aNewCustomerAccount;
       wasSet = true;
     }
     return wasSet;
   }
+
 }
