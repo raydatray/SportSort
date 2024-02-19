@@ -7,4 +7,5 @@ public interface CourseTypeRepository extends CrudRepository<CourseType, Integer
     CourseType findCourseTypeByCourseName(String courseName);
     void deleteCourseTypeByCourseName(String courseName);
     boolean existsByCourseName(String courseName);
+
 }

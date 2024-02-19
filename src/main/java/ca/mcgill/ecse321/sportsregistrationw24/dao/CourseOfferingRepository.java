@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public interface CourseOfferingRepository extends CrudRepository<CourseOffering, Integer> {
     Optional<List<CourseOffering>> findCourseOfferingByInstructor(InstructorAccount instructor);
-    List<CourseOffering> findSessionBySessionType(CourseType courseType);
+    List<CourseOffering> findCourseOfferingBySessionType(CourseType courseType);
 
 }
 
