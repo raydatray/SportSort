@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface InstructorAccountRepository extends CrudRepository<InstructorAccount, Integer> {
     Optional<InstructorAccount> findInstructorAccountByEmail(String email);
-    boolean existsByInstructorAccountEmail(String email);
+    boolean existsByEmail(String email);
 }

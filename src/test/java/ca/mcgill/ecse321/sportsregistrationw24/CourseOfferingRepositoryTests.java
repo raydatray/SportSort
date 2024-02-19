@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Date;
+import java.time.DayOfWeek;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,10 +34,11 @@ public class CourseOfferingRepositoryTests {
         CourseType courseType = new CourseType(1, "Cardio", true);
         Room testRoom = new Room("Pool", 10, 10, 10);
         InstructorAccount testInstructor = new InstructorAccount(1, "raydatray@gmail.com", "password");
+        List<DayOfWeek> testDays = List.of(new DayOfWeek[]{DayOfWeek.MONDAY, DayOfWeek.FRIDAY});
         Date startDate = Date.valueOf("2024-02-18");
         Date endDate = Date.valueOf("2024-03-15");
 
-        CourseOffering test  = new CourseOffering(1, startDate, endDate, testRoom, courseType, testInstructor);
+        CourseOffering test  = new CourseOffering(1, startDate, endDate, testDays, testRoom, courseType, testInstructor);
 
         //Save the event
         courseOfferingRepository.save(test);

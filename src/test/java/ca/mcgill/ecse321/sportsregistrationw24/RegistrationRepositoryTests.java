@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Date;
+import java.time.DayOfWeek;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,8 +30,9 @@ public class RegistrationRepositoryTests {
         InstructorAccount testInstructor = new InstructorAccount(1, "raydatray@gmail.com", "password");
         Date startDate = Date.valueOf("2024-02-18");
         Date endDate = Date.valueOf("2024-03-15");
+        List<DayOfWeek> testDays = List.of(new DayOfWeek[]{DayOfWeek.MONDAY, DayOfWeek.FRIDAY});
 
-        CourseOffering testOffering  = new CourseOffering(1, startDate, endDate, testRoom, courseType, testInstructor);
+        CourseOffering testOffering  = new CourseOffering(1, startDate, endDate, testDays, testRoom, courseType, testInstructor);
 
         String testEmail = "joebama@gmail.com";
         String testPassword = "obama";

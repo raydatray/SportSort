@@ -7,7 +7,6 @@ import jakarta.persistence.*;
 
 import java.sql.Date;
 import java.time.DayOfWeek;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity

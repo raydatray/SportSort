@@ -32,7 +32,7 @@ public class OwnerAccountRepositoryTests {
 
         ownerAccountRepository.save(testOwner);
 
-        OwnerAccount readOwner = ownerAccountRepository.findByOwnerAccountEmail(testEmail);
+        OwnerAccount readOwner = ownerAccountRepository.findByEmail(testEmail);
 
         assertNotNull(readOwner);
         assertEquals(testEmail, readOwner.getEmail());
