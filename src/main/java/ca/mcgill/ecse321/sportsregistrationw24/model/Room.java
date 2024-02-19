@@ -81,6 +81,8 @@ public class Room
     return name;
   }
 
+  public Integer getId() { return this.id; }
+
   public Integer getFloorNumber()
   {
     return this.floorNumber;
