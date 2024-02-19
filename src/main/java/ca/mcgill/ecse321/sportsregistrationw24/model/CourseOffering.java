@@ -6,6 +6,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,9 @@ public class CourseOffering
   private Integer id;
   private Date startDate;
   private Date endDate;
+  @ElementCollection
+  @Enumerated(EnumType.STRING)
+  private List<DayOfWeek> daysOffered;
 
   @OneToOne
   //CourseOffering Associations
@@ -37,11 +41,12 @@ public class CourseOffering
   // CONSTRUCTOR
   //------------------------
 
-  public CourseOffering(Integer aId, Date aStartDate, Date aEndDate, Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount)
+  public CourseOffering(Integer aId, Date aStartDate, Date aEndDate, List<DayOfWeek> someDaysOffered,  Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount)
   {
     id = aId;
     startDate = aStartDate;
     endDate = aEndDate;
+    daysOffered = someDaysOffered;
     if (!setRoom(aRoom))
     {
       throw new RuntimeException("Unable to create CourseOffering due to aRoom. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
