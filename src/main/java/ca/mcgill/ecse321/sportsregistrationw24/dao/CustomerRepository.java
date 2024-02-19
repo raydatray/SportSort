@@ -7,11 +7,11 @@ import java.util.Optional;
 
 
 public interface CustomerRepository extends CrudRepository<Customer, Integer> {
-    Customer findCustomerById(Integer id);
-    Optional<Customer> findByEmail(String email);
+    Optional<Customer> findCustomerByEmail(String customerEmail);
+    Optional<Customer> findCustomerByName(String customerName);
 
     // Check if a customer with a specific email exists
-    boolean existsByEmail(String email);
+    boolean existsByCustomerEmail(String email);
 
     // Delete a customer by email
     void deleteByEmail(String email);
