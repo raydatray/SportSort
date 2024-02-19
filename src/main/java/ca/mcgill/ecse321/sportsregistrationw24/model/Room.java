@@ -6,6 +6,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 import ca.mcgill.ecse321.sportsregistrationw24.model.keys.RoomId;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
 @Entity
 // line 62 "SportsCenter.ump"
@@ -17,18 +18,23 @@ public class Room
   //------------------------
 
   //Room Attributes
+  @Id
+  private Integer id;
   private String name;
-  @EmbeddedId
-  private RoomId id;
+  private Integer floorNumber;
+  private Integer roomNumber;
   private Integer capacity;
+
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Room(String name, Integer floorNumber, Integer roomNumber, Integer capacity) {
-    this.id = new RoomId(floorNumber, roomNumber);
+  public Room(Integer aId, String name, Integer floorNumber, Integer roomNumber, Integer capacity) {
+    this.id = aId;
     this.name = name;
+    this.floorNumber = floorNumber;
+    this.roomNumber = roomNumber;
     this.capacity = capacity;
   }
 
@@ -51,7 +57,6 @@ public class Room
   public boolean setFloorNumber(Integer aFloorNumber)
   {
     boolean wasSet = false;
-    id.setFloorNumber(aFloorNumber);
     wasSet = true;
     return wasSet;
   }
@@ -59,7 +64,6 @@ public class Room
   public boolean setRoomNumber(Integer aRoomNumber)
   {
     boolean wasSet = false;
-    id.setRoomNumber(aRoomNumber);
     wasSet = true;
     return wasSet;
   }
@@ -79,12 +83,12 @@ public class Room
 
   public Integer getFloorNumber()
   {
-    return id.getFloorNumber();
+    return this.floorNumber;
   }
 
   public Integer getRoomNumber()
   {
-    return id.getRoomNumber();
+    return this.roomNumber;
   }
 
   public Integer getCapacity()
