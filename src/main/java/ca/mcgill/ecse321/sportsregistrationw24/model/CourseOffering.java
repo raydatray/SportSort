@@ -4,6 +4,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 import java.sql.Date;
+import java.time.DayOfWeek;
 
 // line 38 "SportsCenter.ump"
 public class CourseOffering
@@ -18,6 +19,8 @@ public class CourseOffering
   private Date startDate;
   private Date endDate;
 
+  private DayOfWeek[] days;
+
   //CourseOffering Associations
   private Room room;
   private CourseType courseType;
@@ -27,11 +30,12 @@ public class CourseOffering
   // CONSTRUCTOR
   //------------------------
 
-  public CourseOffering(Integer aId, Date aStartDate, Date aEndDate, Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount)
+  public CourseOffering(Integer aId, Date aStartDate, Date aEndDate, DayOfWeek[] days, Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount)
   {
     id = aId;
     startDate = aStartDate;
     endDate = aEndDate;
+    days = days;
     if (!setRoom(aRoom))
     {
       throw new RuntimeException("Unable to create CourseOffering due to aRoom. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
