@@ -1,7 +1,6 @@
 package ca.mcgill.ecse321.sportsregistrationw24;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.InstructorAccountRepository;
-import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

@@ -2,7 +2,6 @@ package ca.mcgill.ecse321.sportsregistrationw24;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.CustomerAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
-import ch.qos.logback.core.testUtil.XTeeOutputStream;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

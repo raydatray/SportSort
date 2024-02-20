@@ -3,7 +3,6 @@ package ca.mcgill.ecse321.sportsregistrationw24;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.*;
 import ca.mcgill.ecse321.sportsregistrationw24.model.*;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,9 +39,9 @@ public class CourseOfferingRepositoryTests {
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
+        registrationRepository.deleteAll();
         courseOfferingRepository.deleteAll();
         customerAccountRepository.deleteAll();
-        registrationRepository.deleteAll();
         courseTypeRepository.deleteAll();
         roomRepository.deleteAll();
         instructorAccountRepository.deleteAll();
@@ -84,7 +83,34 @@ public class CourseOfferingRepositoryTests {
     }
 
     @Test
-    public void testDeleteCourseOffering() {
+    public void testDeleteCourseOfferingWithoutRegistrations() {
+        //create a new course offering
+        CourseType courseType = new CourseType(1, "Cardio", true);
+        courseTypeRepository.save(courseType);
+
+        Room testRoom = new Room(1, "Pool", 10, 10, 10);
+        roomRepository.save(testRoom);
+
+        InstructorAccount testInstructor = new InstructorAccount(5, "raydatray@gmail.com", "password");
+        instructorAccountRepository.save(testInstructor);
+
+        List<DayOfWeek> testDays = List.of(new DayOfWeek[]{DayOfWeek.MONDAY, DayOfWeek.FRIDAY});
+        Date startDate = Date.valueOf("2024-02-18");
+        Date endDate = Date.valueOf("2024-03-15");
+
+        CourseOffering testCourseOffering = new CourseOffering(1, startDate, endDate, testDays, testRoom, courseType, testInstructor);
+        courseOfferingRepository.save(testCourseOffering);
+
+        courseOfferingRepository.deleteById(testCourseOffering.getId());
+
+        // After the exception, verify that the CourseOffering still exists
+        Optional<CourseOffering> deletedOffering = courseOfferingRepository.findById(testCourseOffering.getId());
+        assertFalse(deletedOffering.isPresent(), CourseOffering.class.getSimpleName() + " was not deleted successfully");
+
+    }
+
+    @Test
+    public void testDeleteCourseOfferingWithRegistrations() {
         //create a new course offering
         CourseType courseType = new CourseType(1, "Cardio", true);
         courseTypeRepository.save(courseType);
@@ -124,19 +150,11 @@ public class CourseOfferingRepositoryTests {
         registrationRepository.save(registration3);
 
         // Verify that CourseOffering cannot be deleted while Registrations exist
-        assertThrows(DataIntegrityViolationException.class, () -> {
-            courseOfferingRepository.deleteById(testCourseOffering.getId());
-        });
+        assertThrows(DataIntegrityViolationException.class, () -> courseOfferingRepository.deleteById(testCourseOffering.getId()));
 
-        // Delete all related Registrations
-        registrationRepository.deleteByCourseOffering(testCourseOffering);
-
-        // Now try deleting the CourseOffering again
-        courseOfferingRepository.deleteById(testCourseOffering.getId());
-
-        // Verify that the CourseOffering is deleted
-        Optional<CourseOffering> deletedOffering = courseOfferingRepository.findById(testCourseOffering.getId());
-        assertTrue(deletedOffering.isEmpty());
-
+        // After the exception, verify that the CourseOffering still exists
+        Optional<CourseOffering> notDeletedOffering = courseOfferingRepository.findById(testCourseOffering.getId());
+        assertTrue(notDeletedOffering.isPresent(), CourseOffering.class.getSimpleName() + " was deleted when it should not have been");
     }
+
 }

@@ -2,7 +2,6 @@ package ca.mcgill.ecse321.sportsregistrationw24;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.*;
 import ca.mcgill.ecse321.sportsregistrationw24.model.*;
-import ca.mcgill.ecse321.sportsregistrationw24.model.keys.RegistrationId;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,10 +40,10 @@ public class RegistrationRepositoryTests {
     public void clearDatabase() {
         registrationRepository.deleteAll();
         courseOfferingRepository.deleteAll();
+        customerAccountRepository.deleteAll();
         courseTypeRepository.deleteAll();
         roomRepository.deleteAll();
         instructorAccountRepository.deleteAll();
-        customerAccountRepository.deleteAll();
     }
 
     @Test
