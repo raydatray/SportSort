@@ -1,0 +1,78 @@
+class SportCenter {
+  String name;
+  Time openingHour;
+  Time closingHour;
+}
+
+class UserAccount {
+  abstract;
+  Integer id;
+  String email;
+  String password;
+}
+
+class StaffAccount {
+  abstract;
+  isA UserAccount;
+}
+
+class OwnerAccount {
+  isA StaffAccount;
+}
+
+class InstructorAccount{
+  isA StaffAccount;
+}
+
+class CustomerAccount {
+  isA UserAccount;
+}
+
+
+class CourseType {
+  Integer id;
+  String courseName;
+  boolean approved;
+}
+
+class CourseOffering {
+  Integer id;
+  Date startDate;
+  Date endDate;
+  * -> 1 Room;
+  * -> 1 CourseType;
+  * -> 1 InstructorAccount;
+}
+
+class Registration {
+  Date registeredDate;
+  * -> 1 CourseOffering;
+  * -> 1 CustomerAccount;
+}
+
+class CourseSession {
+  Integer id;
+  Date date;
+  Time startTime;
+  Time endTime;
+
+  * -> 1 CourseOffering;
+}
+
+class Room {
+  String name;
+  Integer floorNumber;
+  Integer roomNumber;
+  Integer capacity;
+}
+
+class PaymentInfo {
+    enum PaymentType {credit, debit};
+  Integer id;
+  PaymentType paymentType;
+  Integer cardNumber;
+  Integer cvv;
+  Integer expirationYear;
+  Integer expirationMonth;
+  * -> 1 CustomerAccount;
+}
