@@ -3,9 +3,13 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 /*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
 
 
+import jakarta.persistence.*;
+
 import java.sql.Date;
 import java.sql.Time;
 
+@Entity
+@Table(name = "coursesession")
 // line 53 "SportsCenter.ump"
 public class CourseSession
 {
@@ -14,13 +18,15 @@ public class CourseSession
   // MEMBER VARIABLES
   //------------------------
 
+  @Id
   //CourseSession Attributes
   private Integer id;
   private Date date;
   private Time startTime;
   private Time endTime;
 
-  //CourseSession Associations
+  @ManyToOne
+  @JoinColumn(name = "course_offering_id")
   private CourseOffering courseOffering;
 
   //------------------------
@@ -37,6 +43,10 @@ public class CourseSession
     {
       throw new RuntimeException("Unable to create CourseSession due to aCourseOffering. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
+  }
+
+  public CourseSession() {
+
   }
 
   //------------------------

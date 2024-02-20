@@ -3,10 +3,16 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 /*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
 
 
+import jakarta.persistence.*;
 
-// line 69 "SportsCenter.ump"
+@Entity
+@Table(name = "paymentinfo")
+// line 55 "SportsCenter.ump"
 public class PaymentInfo
 {
+  public PaymentInfo() {
+
+  }
 
   //------------------------
   // ENUMERATIONS
@@ -17,15 +23,17 @@ public class PaymentInfo
   //------------------------
   // MEMBER VARIABLES
   //------------------------
-
+  @Id
   //PaymentInfo Attributes
-  private Integer id;
+  private int id;
   private PaymentType paymentType;
-  private Integer cardNumber;
-  private Integer cvv;
-  private Integer expirationYear;
-  private Integer expirationMonth;
+  private int cardNumber;
+  private int cvv;
+  private int expirationYear;
+  private int expirationMonth;
 
+  @ManyToOne
+  @JoinColumn(name = "customerAccount_id")
   //PaymentInfo Associations
   private CustomerAccount customerAccount;
 

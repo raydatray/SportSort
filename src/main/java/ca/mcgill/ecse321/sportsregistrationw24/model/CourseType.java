@@ -3,7 +3,12 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 /*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "coursetype")
 // line 32 "SportsCenter.ump"
 public class CourseType
 {
@@ -12,6 +17,7 @@ public class CourseType
   // MEMBER VARIABLES
   //------------------------
 
+  @Id
   //CourseType Attributes
   private Integer id;
   private String courseName;
@@ -26,6 +32,10 @@ public class CourseType
     id = aId;
     courseName = aCourseName;
     approved = aApproved;
+  }
+
+  public CourseType() {
+
   }
 
   //------------------------

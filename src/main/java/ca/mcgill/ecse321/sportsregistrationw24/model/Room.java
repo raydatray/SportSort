@@ -3,7 +3,10 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 /*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
 
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 
+@Entity
 // line 62 "SportsCenter.ump"
 public class Room
 {
@@ -13,21 +16,28 @@ public class Room
   //------------------------
 
   //Room Attributes
+  @Id
+  private Integer id;
   private String name;
   private Integer floorNumber;
   private Integer roomNumber;
   private Integer capacity;
 
+
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Room(String aName, Integer aFloorNumber, Integer aRoomNumber, Integer aCapacity)
-  {
-    name = aName;
-    floorNumber = aFloorNumber;
-    roomNumber = aRoomNumber;
-    capacity = aCapacity;
+  public Room(Integer aId, String name, Integer floorNumber, Integer roomNumber, Integer capacity) {
+    this.id = aId;
+    this.name = name;
+    this.floorNumber = floorNumber;
+    this.roomNumber = roomNumber;
+    this.capacity = capacity;
+  }
+
+  public Room() {
+
   }
 
   //------------------------
@@ -45,7 +55,6 @@ public class Room
   public boolean setFloorNumber(Integer aFloorNumber)
   {
     boolean wasSet = false;
-    floorNumber = aFloorNumber;
     wasSet = true;
     return wasSet;
   }
@@ -53,7 +62,6 @@ public class Room
   public boolean setRoomNumber(Integer aRoomNumber)
   {
     boolean wasSet = false;
-    roomNumber = aRoomNumber;
     wasSet = true;
     return wasSet;
   }
@@ -71,14 +79,16 @@ public class Room
     return name;
   }
 
+  public Integer getId() { return this.id; }
+
   public Integer getFloorNumber()
   {
-    return floorNumber;
+    return this.floorNumber;
   }
 
   public Integer getRoomNumber()
   {
-    return roomNumber;
+    return this.roomNumber;
   }
 
   public Integer getCapacity()
