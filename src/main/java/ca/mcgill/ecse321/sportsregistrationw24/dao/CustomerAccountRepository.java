@@ -8,10 +8,7 @@ import java.util.Optional;
 
 public interface CustomerAccountRepository extends CrudRepository<CustomerAccount, Integer> {
     Optional<CustomerAccount> findByEmail(String customerEmail);
-    // Check if a customer with a specific email exists
-    boolean existsByEmail(String email);
-
-    // Delete a customer by email
     void deleteByEmail(String email);
-    }
+
+}
 

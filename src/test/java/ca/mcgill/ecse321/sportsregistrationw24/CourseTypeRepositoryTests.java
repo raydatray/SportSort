@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -30,11 +32,11 @@ public class CourseTypeRepositoryTests {
 
         courseTypeRepository.save(testType);
 
-        CourseType readType = courseTypeRepository.findByCourseName("Cardio");
+        Optional<CourseType> readType = courseTypeRepository.findByCourseName("Cardio");
 
-        assertNotNull(readType);
-        assertEquals(typeName, readType.getCourseName());
-        assertEquals(approval, readType.getApproved());
-        assertEquals(1, readType.getId());
+        assertNotNull(testType = readType.orElse(null));
+        assertEquals(typeName, testType.getCourseName());
+        assertEquals(approval, testType.getApproved());
+        assertEquals(1, testType.getId());
     }
 }

@@ -12,6 +12,7 @@ import java.sql.Date;
 import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -75,14 +76,16 @@ public class RegistrationRepositoryTests {
         Registration testRegistration = new Registration(testDate, testOffering, testCustomer);
         registrationRepository.save(testRegistration);
 
-        List<Registration> readRegistrations = registrationRepository.findByCustomerAccount(testCustomer);
+        Optional<List<Registration>> readRegistrations = registrationRepository.findByCustomerAccount(testCustomer);
 
-        assertNotNull(readRegistrations);
+        List<Registration> testRegistrations;
+
+        assertNotNull(testRegistrations = readRegistrations.orElse(null));
 
         Registration foundRegistration = null;
 
-        for(Registration registration : readRegistrations) {
-            if (Objects.equals(registration.getId().getCourseOfferingId(), testRegistration.getId().getCourseOfferingId()) && Objects.equals(registration.getId().getCustomerAccountId(), testRegistration.getId().getCustomerAccountId())) {
+        for(Registration registration : testRegistrations) {
+            if (registration.getId().equals(testRegistration.getId())) {
                 foundRegistration = registration;
                 return;
             }

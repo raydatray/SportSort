@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -31,10 +33,10 @@ public class OwnerAccountRepositoryTests {
 
         ownerAccountRepository.save(testOwner);
 
-        OwnerAccount readOwner = ownerAccountRepository.findByEmail(testEmail);
+        Optional<OwnerAccount> readOwner = ownerAccountRepository.findByEmail(testEmail);
 
-        assertNotNull(readOwner);
-        assertEquals(testEmail, readOwner.getEmail());
-        assertEquals(testPassword, readOwner.getPassword());
+        assertNotNull(testOwner = readOwner.orElse(null));
+        assertEquals(testEmail, testOwner.getEmail());
+        assertEquals(testPassword, testOwner.getPassword());
     }
 }

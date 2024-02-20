@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.sportsregistrationw24.model.keys;
 
+import ca.mcgill.ecse321.sportsregistrationw24.model.Registration;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
@@ -16,6 +17,10 @@ public class RegistrationId implements Serializable {
     public RegistrationId(Integer customerAccountId, Integer courseOfferingId) {
         this.customerAccountId = customerAccountId;
         this.courseOfferingId = courseOfferingId;
+    }
+
+    public boolean equals(RegistrationId that) {
+        return (this.courseOfferingId.equals(that.courseOfferingId) && this.customerAccountId.equals(that.customerAccountId));
     }
 
     public Integer getCustomerAccountId() {
