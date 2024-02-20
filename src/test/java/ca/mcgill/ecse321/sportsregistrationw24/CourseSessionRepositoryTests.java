@@ -3,6 +3,7 @@ package ca.mcgill.ecse321.sportsregistrationw24;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.*;
 import ca.mcgill.ecse321.sportsregistrationw24.model.*;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,6 +34,7 @@ public class CourseSessionRepositoryTests {
     @Autowired
     private InstructorAccountRepository instructorAccountRepository;
 
+    @BeforeEach
     @AfterEach
     public void clearDatabase() {
         courseSessionRepository.deleteAll();

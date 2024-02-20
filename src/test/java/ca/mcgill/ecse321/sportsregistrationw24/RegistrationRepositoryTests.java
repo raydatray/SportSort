@@ -4,6 +4,7 @@ import ca.mcgill.ecse321.sportsregistrationw24.dao.*;
 import ca.mcgill.ecse321.sportsregistrationw24.model.*;
 import ca.mcgill.ecse321.sportsregistrationw24.model.keys.RegistrationId;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,6 +36,7 @@ public class RegistrationRepositoryTests {
     @Autowired
     private CustomerAccountRepository customerAccountRepository;
 
+    @BeforeEach
     @AfterEach
     public void clearDatabase() {
         registrationRepository.deleteAll();

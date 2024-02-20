@@ -11,4 +11,5 @@ public interface RegistrationRepository extends CrudRepository<Registration, Int
     List<Registration> findByCustomerAccount(CustomerAccount customerAccount);
     List<Registration> findByCourseOffering(CourseOffering courseOffering);
     boolean existsByCustomerAccountAndCourseOffering(CustomerAccount customerAccount, CourseOffering courseOffering);
+    void deleteByCourseOffering(CourseOffering courseOffering);
 }

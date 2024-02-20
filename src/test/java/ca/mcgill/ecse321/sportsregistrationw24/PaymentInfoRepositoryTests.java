@@ -6,6 +6,7 @@ import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.PaymentInfo;
 import ch.qos.logback.core.rolling.helper.IntegerTokenConverter;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +24,7 @@ public class PaymentInfoRepositoryTests {
     @Autowired
     private CustomerAccountRepository customerAccountRepository;
 
+    @BeforeEach
     @AfterEach
     public void clearDatabase() {
         paymentInfoRepository.deleteAll();

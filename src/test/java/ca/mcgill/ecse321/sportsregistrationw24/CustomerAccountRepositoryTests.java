@@ -4,6 +4,7 @@ import ca.mcgill.ecse321.sportsregistrationw24.dao.CustomerAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ch.qos.logback.core.testUtil.XTeeOutputStream;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,6 +19,7 @@ public class CustomerAccountRepositoryTests {
     @Autowired
     private CustomerAccountRepository customerAccountRepository;
 
+    @BeforeEach
     @AfterEach
     public void clearDatabase() {
         customerAccountRepository.deleteAll();

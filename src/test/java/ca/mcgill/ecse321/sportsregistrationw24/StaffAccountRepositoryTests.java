@@ -5,6 +5,7 @@ import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.OwnerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.StaffAccount;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +20,7 @@ public class StaffAccountRepositoryTests {
     @Autowired
     private StaffAccountRepository staffAccountRepository;
 
+    @BeforeEach
     @AfterEach
     public void clearDatabase() {
         staffAccountRepository.deleteAll();
