@@ -18,6 +18,8 @@ public abstract class UserAccount
   //------------------------
 
   @Id
+  @GeneratedValue
+  //TODO: Do the generated value thing for ids that needs it
   //UserAccount Attributes
   private Integer id;
   private String email;
