@@ -2,7 +2,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dto.CustomerAccountDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
-import ca.mcgill.ecse321.sportsregistrationw24.service.CustomerAccountCreationService;
+import ca.mcgill.ecse321.sportsregistrationw24.service.CustomerAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,10 +11,10 @@ import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
-public class CustomerAccountCreationRestController {
+public class CustomerAccountRestController {
 
     @Autowired
-    private CustomerAccountCreationService service;
+    private CustomerAccountService service;
 
     @PostMapping(value = {"/customerAccounts/{email}/{password}/{passwordConfirmation}",
             "/customerAccounts/{email}/{password}/{passwordConfirmation}/"})
