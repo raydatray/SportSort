@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.service;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.CustomerAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
+import ca.mcgill.ecse321.sportsregistrationw24.model.PaymentInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,11 +17,7 @@ public class CustomerAccountService {
     private CustomerAccountRepository customerAccountRepository;
 
     @Transactional
-    public CustomerAccount createCustomerAccount(String email, String password, String passwordConfirmation) {
-
-        if (!(password.equals(passwordConfirmation))) {
-            throw new IllegalArgumentException("Passwords do not match!");
-        }
+    public CustomerAccount createCustomerAccount(String email, String password) {
 
         CustomerAccount customerAccount = new CustomerAccount();
         customerAccount.setEmail(email);
@@ -34,7 +31,19 @@ public class CustomerAccountService {
         return customerAccountRepository.findByEmail(email).orElse(null);
     }
 
+    @Transactional
+    public void updateCustomerAccount(String oldEmail, String email, String password) {
+        CustomerAccount customerAccount = customerAccountRepository.findByEmail(oldEmail).orElse(null);
 
+        if (customerAccount == null) {
+            throw new IllegalArgumentException("Customer Account does not exist!");
+        }
+
+        customerAccount.setEmail(email);
+        customerAccount.setPassword(password);
+
+        customerAccountRepository.save(customerAccount);
+    }
     @Transactional
     public void deleteCustomerAccount(String email) {
         CustomerAccount customerAccount = customerAccountRepository.findByEmail(email).orElse(null);

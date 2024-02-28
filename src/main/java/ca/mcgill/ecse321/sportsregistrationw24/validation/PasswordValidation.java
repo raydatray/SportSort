@@ -4,7 +4,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.validation;
 
 public class PasswordValidation {
     public static void validatePassword(String password, String passwordConfirmation) {
-        if (password.equals(passwordConfirmation)) {
+        if (!(password.equals(passwordConfirmation))) {
             throw new IllegalArgumentException("Passwords do not match!");
         }
     }
