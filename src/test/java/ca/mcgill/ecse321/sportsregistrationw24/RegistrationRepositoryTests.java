@@ -49,26 +49,26 @@ public class RegistrationRepositoryTests {
 
     @Test
     public void testPersistAndLoadRegistration() {
-        CourseType courseType = new CourseType(1, "Cardio", true);
+        CourseType courseType = new CourseType("Cardio", true);
         courseTypeRepository.save(courseType);
 
-        Room testRoom = new Room(1, "Pool", 10, 10, 10);
+        Room testRoom = new Room("Pool", 10, 10, 10);
         roomRepository.save(testRoom);
 
-        InstructorAccount testInstructor = new InstructorAccount(1, "raydatray@gmail.com", "password");
+        InstructorAccount testInstructor = new InstructorAccount("raydatray@gmail.com", "password");
         instructorAccountRepository.save(testInstructor);
 
         Date startDate = Date.valueOf("2024-02-18");
         Date endDate = Date.valueOf("2024-03-15");
         List<DayOfWeek> testDays = List.of(new DayOfWeek[]{DayOfWeek.MONDAY, DayOfWeek.FRIDAY});
 
-        CourseOffering testOffering  = new CourseOffering(1, startDate, endDate, testDays, testRoom, courseType, testInstructor);
+        CourseOffering testOffering  = new CourseOffering(startDate, endDate, testDays, testRoom, courseType, testInstructor);
         courseOfferingRepository.save(testOffering);
 
         String testEmail = "joebama@gmail.com";
         String testPassword = "obama";
 
-        CustomerAccount testCustomer = new CustomerAccount(2, testEmail, testPassword);
+        CustomerAccount testCustomer = new CustomerAccount(testEmail, testPassword);
         customerAccountRepository.save(testCustomer);
 
         Date testDate = Date.valueOf("2024-03-04");

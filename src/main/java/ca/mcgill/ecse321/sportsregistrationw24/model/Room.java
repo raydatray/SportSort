@@ -4,6 +4,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
@@ -17,6 +18,7 @@ public class Room
 
   //Room Attributes
   @Id
+  @GeneratedValue
   private Integer id;
   private String name;
   private Integer floorNumber;
@@ -28,8 +30,7 @@ public class Room
   // CONSTRUCTOR
   //------------------------
 
-  public Room(Integer aId, String name, Integer floorNumber, Integer roomNumber, Integer capacity) {
-    this.id = aId;
+  public Room(String name, Integer floorNumber, Integer roomNumber, Integer capacity) {
     this.name = name;
     this.floorNumber = floorNumber;
     this.roomNumber = roomNumber;

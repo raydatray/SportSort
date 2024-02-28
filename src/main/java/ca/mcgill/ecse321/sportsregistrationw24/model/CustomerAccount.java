@@ -20,9 +20,9 @@ public class CustomerAccount extends UserAccount
   // CONSTRUCTOR
   //------------------------
 
-  public CustomerAccount(Integer aId, String aEmail, String aPassword)
+  public CustomerAccount(String aEmail, String aPassword)
   {
-    super(aId, aEmail, aPassword);
+    super(aEmail, aPassword);
   }
 
   public CustomerAccount() {

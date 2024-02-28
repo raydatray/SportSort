@@ -31,13 +31,13 @@ public class StaffAccountRepositoryTests {
         String testInstructorEmail = "colin@gmail.com";
         String testInstructorPassword = "obama";
 
-        InstructorAccount testInstructor = new InstructorAccount(1, testInstructorEmail, testInstructorPassword);
+        InstructorAccount testInstructor = new InstructorAccount(testInstructorEmail, testInstructorPassword);
 
 
         String testOwnerEmail = "alex@hotmail.com";
         String testOwnerPassword = "password";
 
-        OwnerAccount testOwner = new OwnerAccount(2, testOwnerEmail, testOwnerPassword);
+        OwnerAccount testOwner = new OwnerAccount(testOwnerEmail, testOwnerPassword);
 
         staffAccountRepository.save(testInstructor);
         staffAccountRepository.save(testOwner);

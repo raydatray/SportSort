@@ -20,6 +20,7 @@ public class CourseOffering
   //------------------------
 
   @Id
+  @GeneratedValue
   //CourseOffering Attributes
   private Integer id;
   private Date startDate;
@@ -40,9 +41,8 @@ public class CourseOffering
   // CONSTRUCTOR
   //------------------------
 
-  public CourseOffering(Integer aId, Date aStartDate, Date aEndDate, List<DayOfWeek> someDaysOffered,  Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount)
+  public CourseOffering(Date aStartDate, Date aEndDate, List<DayOfWeek> someDaysOffered,  Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount)
   {
-    id = aId;
     startDate = aStartDate;
     endDate = aEndDate;
     daysOffered = someDaysOffered;

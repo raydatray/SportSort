@@ -4,6 +4,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -18,6 +19,7 @@ public class CourseType
   //------------------------
 
   @Id
+  @GeneratedValue
   //CourseType Attributes
   private Integer id;
   private String courseName;
@@ -27,9 +29,8 @@ public class CourseType
   // CONSTRUCTOR
   //------------------------
 
-  public CourseType(Integer aId, String aCourseName, boolean aApproved)
+  public CourseType(String aCourseName, boolean aApproved)
   {
-    id = aId;
     courseName = aCourseName;
     approved = aApproved;
   }

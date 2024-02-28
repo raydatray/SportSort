@@ -29,7 +29,7 @@ public class CustomerAccountRepositoryTests {
         String testEmail = "joebama@gmail.com";
         String testPassword = "obama";
 
-        CustomerAccount testCustomer = new CustomerAccount(1, testEmail, testPassword);
+        CustomerAccount testCustomer = new CustomerAccount( testEmail, testPassword);
 
         customerAccountRepository.save(testCustomer);
 

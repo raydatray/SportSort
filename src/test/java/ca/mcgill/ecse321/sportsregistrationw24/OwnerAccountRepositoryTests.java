@@ -29,7 +29,7 @@ public class OwnerAccountRepositoryTests {
         String testEmail = "joebama@gmail.com";
         String testPassword = "obama";
 
-        OwnerAccount testOwner = new OwnerAccount(1, testEmail, testPassword);
+        OwnerAccount testOwner = new OwnerAccount(testEmail, testPassword);
 
         ownerAccountRepository.save(testOwner);
 

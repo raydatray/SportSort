@@ -31,7 +31,7 @@ public class RoomRepositoryTests {
         Integer testRoomNum = 10;
         Integer testCapacity = 100;
 
-        Room testRoom = new Room(1, testName, testFloor, testRoomNum, testCapacity);
+        Room testRoom = new Room(testName, testFloor, testRoomNum, testCapacity);
 
         roomRepository.save(testRoom);
 

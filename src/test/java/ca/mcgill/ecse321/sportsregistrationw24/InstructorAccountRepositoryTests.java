@@ -30,7 +30,7 @@ public class InstructorAccountRepositoryTests {
         String testEmail = "colin@gmail.com";
         String testPassword = "obama";
 
-        InstructorAccount testInstructor = new InstructorAccount(1, testEmail, testPassword);
+        InstructorAccount testInstructor = new InstructorAccount(testEmail, testPassword);
 
         instructorAccountRepository.save(testInstructor);
 

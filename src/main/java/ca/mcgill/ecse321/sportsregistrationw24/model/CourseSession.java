@@ -19,6 +19,7 @@ public class CourseSession
   //------------------------
 
   @Id
+  @GeneratedValue
   //CourseSession Attributes
   private Integer id;
   private Date date;
@@ -33,9 +34,8 @@ public class CourseSession
   // CONSTRUCTOR
   //------------------------
 
-  public CourseSession(Integer aId, Date aDate, Time aStartTime, Time aEndTime, CourseOffering aCourseOffering)
+  public CourseSession(Date aDate, Time aStartTime, Time aEndTime, CourseOffering aCourseOffering)
   {
-    id = aId;
     date = aDate;
     startTime = aStartTime;
     endTime = aEndTime;

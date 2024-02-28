@@ -29,18 +29,18 @@ public class UserAccountRepositoryTests {
         String testInstructorEmail = "colin@gmail.com";
         String testInstructorPassword = "obama";
 
-        InstructorAccount testInstructor = new InstructorAccount(1, testInstructorEmail, testInstructorPassword);
+        InstructorAccount testInstructor = new InstructorAccount(testInstructorEmail, testInstructorPassword);
 
 
         String testOwnerEmail = "alex@hotmail.com";
         String testOwnerPassword = "password";
 
-        OwnerAccount testOwner = new OwnerAccount(2, testOwnerEmail, testOwnerPassword);
+        OwnerAccount testOwner = new OwnerAccount(testOwnerEmail, testOwnerPassword);
 
         String testCustomerEmail = "joebama@gmail.com";
         String testCustomerPassword = "obama";
 
-        CustomerAccount testCustomer = new CustomerAccount(3, testCustomerEmail, testCustomerPassword);
+        CustomerAccount testCustomer = new CustomerAccount(testCustomerEmail, testCustomerPassword);
 
         userAccountRepository.save(testInstructor);
         userAccountRepository.save(testOwner);

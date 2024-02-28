@@ -20,9 +20,9 @@ public class OwnerAccount extends StaffAccount
   // CONSTRUCTOR
   //------------------------
 
-  public OwnerAccount(Integer aId, String aEmail, String aPassword)
+  public OwnerAccount(String aEmail, String aPassword)
   {
-    super(aId, aEmail, aPassword);
+    super(aEmail, aPassword);
   }
 
   public OwnerAccount() {

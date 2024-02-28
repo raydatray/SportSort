@@ -37,15 +37,16 @@ public class PaymentInfoRepositoryTests {
         Integer testExpiryYear = 24;
         Integer testExpiryMonth = 6;
 
-        CustomerAccount testCustomer = new CustomerAccount(1,"houman@gmail.com", "eye");
+        CustomerAccount testCustomer = new CustomerAccount("houman@gmail.com", "eye");
         customerAccountRepository.save(testCustomer);
 
 
-        PaymentInfo testPayment = new PaymentInfo(1,paymentType,testCardNumber,testCvv,testExpiryYear,testExpiryMonth,testCustomer);
-
+        PaymentInfo testPayment = new PaymentInfo(paymentType,testCardNumber,testCvv,testExpiryYear,testExpiryMonth,testCustomer);
         paymentInfoRepository.save(testPayment);
+        Integer testPaymentGeneratedID = testPayment.getId();
 
-        Optional<PaymentInfo> readPayment = paymentInfoRepository.findById(1);
+
+        Optional<PaymentInfo> readPayment = paymentInfoRepository.findById(testPaymentGeneratedID);
 
         assertNotNull(testPayment = readPayment.orElse(null));
         assertEquals(testCustomer.getId(), testPayment.getCustomerAccount().getId());

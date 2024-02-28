@@ -50,24 +50,25 @@ public class CourseOfferingRepositoryTests {
     @Test
     public void testPersistAndLoadCourseOffering(){
         //create a new course offering
-        CourseType courseType = new CourseType(1, "Cardio", true);
+        CourseType courseType = new CourseType("Cardio", true);
         courseTypeRepository.save(courseType);
 
-        Room testRoom = new Room(1, "Pool", 10, 10, 10);
+        Room testRoom = new Room("Pool", 10, 10, 10);
         roomRepository.save(testRoom);
 
-        InstructorAccount testInstructor = new InstructorAccount(1, "raydatray@gmail.com", "password");
+        InstructorAccount testInstructor = new InstructorAccount("raydatray@gmail.com", "password");
         instructorAccountRepository.save(testInstructor);
 
         List<DayOfWeek> testDays = List.of(new DayOfWeek[]{DayOfWeek.MONDAY, DayOfWeek.FRIDAY});
         Date startDate = Date.valueOf("2024-02-18");
         Date endDate = Date.valueOf("2024-03-15");
 
-        CourseOffering test  = new CourseOffering(1, startDate, endDate, testDays, testRoom, courseType, testInstructor);
+        CourseOffering test  = new CourseOffering(startDate, endDate, testDays, testRoom, courseType, testInstructor);
         courseOfferingRepository.save(test);
+        Integer generatedID = test.getId();
 
         //Read the event
-        Optional<CourseOffering> readOffering = courseOfferingRepository.findById(1);
+        Optional<CourseOffering> readOffering = courseOfferingRepository.findById(generatedID);
 
         assertNotNull(test = readOffering.orElse(null));
         //Verify that the courseType is the same thing
@@ -79,29 +80,30 @@ public class CourseOfferingRepositoryTests {
 
         assertEquals(startDate, test.getStartDate());
         assertEquals(endDate, test.getEndDate());
-        assertEquals(1, test.getId());
+        assertEquals(generatedID, test.getId());
     }
 
     @Test
     public void testDeleteCourseOfferingWithoutRegistrations() {
         //create a new course offering
-        CourseType courseType = new CourseType(1, "Cardio", true);
+        CourseType courseType = new CourseType("Cardio", true);
         courseTypeRepository.save(courseType);
 
-        Room testRoom = new Room(1, "Pool", 10, 10, 10);
+        Room testRoom = new Room("Pool", 10, 10, 10);
         roomRepository.save(testRoom);
 
-        InstructorAccount testInstructor = new InstructorAccount(5, "raydatray@gmail.com", "password");
+        InstructorAccount testInstructor = new InstructorAccount("raydatray@gmail.com", "password");
         instructorAccountRepository.save(testInstructor);
 
         List<DayOfWeek> testDays = List.of(new DayOfWeek[]{DayOfWeek.MONDAY, DayOfWeek.FRIDAY});
         Date startDate = Date.valueOf("2024-02-18");
         Date endDate = Date.valueOf("2024-03-15");
 
-        CourseOffering testCourseOffering = new CourseOffering(1, startDate, endDate, testDays, testRoom, courseType, testInstructor);
+        CourseOffering testCourseOffering = new CourseOffering(startDate, endDate, testDays, testRoom, courseType, testInstructor);
         courseOfferingRepository.save(testCourseOffering);
+        Integer generatedCourseOfferingID = testCourseOffering.getId();
 
-        courseOfferingRepository.deleteById(testCourseOffering.getId());
+        courseOfferingRepository.deleteById(generatedCourseOfferingID);
 
         // After the exception, verify that the CourseOffering still exists
         Optional<CourseOffering> deletedOffering = courseOfferingRepository.findById(testCourseOffering.getId());
@@ -112,21 +114,22 @@ public class CourseOfferingRepositoryTests {
     @Test
     public void testDeleteCourseOfferingWithRegistrations() {
         //create a new course offering
-        CourseType courseType = new CourseType(1, "Cardio", true);
+        CourseType courseType = new CourseType("Cardio", true);
         courseTypeRepository.save(courseType);
 
-        Room testRoom = new Room(1, "Pool", 10, 10, 10);
+        Room testRoom = new Room("Pool", 10, 10, 10);
         roomRepository.save(testRoom);
 
-        InstructorAccount testInstructor = new InstructorAccount(5, "raydatray@gmail.com", "password");
+        InstructorAccount testInstructor = new InstructorAccount("raydatray@gmail.com", "password");
         instructorAccountRepository.save(testInstructor);
 
         List<DayOfWeek> testDays = List.of(new DayOfWeek[]{DayOfWeek.MONDAY, DayOfWeek.FRIDAY});
         Date startDate = Date.valueOf("2024-02-18");
         Date endDate = Date.valueOf("2024-03-15");
 
-        CourseOffering testCourseOffering = new CourseOffering(1, startDate, endDate, testDays, testRoom, courseType, testInstructor);
+        CourseOffering testCourseOffering = new CourseOffering(startDate, endDate, testDays, testRoom, courseType, testInstructor);
         courseOfferingRepository.save(testCourseOffering);
+        Integer generatedCourseOfferingID = testCourseOffering.getId();
 
         String testEmail = "joebama@gmail.com";
         String testPassword = "obama";
@@ -135,9 +138,9 @@ public class CourseOfferingRepositoryTests {
         String testEmail3 = "joebama3@gmail.com";
         String testPassword3 = "obama3";
 
-        CustomerAccount testCustomer = new CustomerAccount(63, testEmail, testPassword);
-        CustomerAccount testCustomer2 = new CustomerAccount(25, testEmail2, testPassword2);
-        CustomerAccount testCustomer3 = new CustomerAccount(34, testEmail3, testPassword3);
+        CustomerAccount testCustomer = new CustomerAccount(testEmail, testPassword);
+        CustomerAccount testCustomer2 = new CustomerAccount(testEmail2, testPassword2);
+        CustomerAccount testCustomer3 = new CustomerAccount(testEmail3, testPassword3);
         customerAccountRepository.save(testCustomer);
         customerAccountRepository.save(testCustomer2);
         customerAccountRepository.save(testCustomer3);
@@ -150,10 +153,10 @@ public class CourseOfferingRepositoryTests {
         registrationRepository.save(registration3);
 
         // Verify that CourseOffering cannot be deleted while Registrations exist
-        assertThrows(DataIntegrityViolationException.class, () -> courseOfferingRepository.deleteById(testCourseOffering.getId()));
+        assertThrows(DataIntegrityViolationException.class, () -> courseOfferingRepository.deleteById(generatedCourseOfferingID));
 
         // After the exception, verify that the CourseOffering still exists
-        Optional<CourseOffering> notDeletedOffering = courseOfferingRepository.findById(testCourseOffering.getId());
+        Optional<CourseOffering> notDeletedOffering = courseOfferingRepository.findById(generatedCourseOfferingID);
         assertTrue(notDeletedOffering.isPresent(), CourseOffering.class.getSimpleName() + " was deleted when it should not have been");
     }
 

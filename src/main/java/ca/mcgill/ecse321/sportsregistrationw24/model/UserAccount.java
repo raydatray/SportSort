@@ -18,6 +18,7 @@ public abstract class UserAccount
   //------------------------
 
   @Id
+  @GeneratedValue
   //UserAccount Attributes
   private Integer id;
   private String email;
@@ -27,9 +28,8 @@ public abstract class UserAccount
   // CONSTRUCTOR
   //------------------------
 
-  public UserAccount(Integer aId, String aEmail, String aPassword)
+  public UserAccount(String aEmail, String aPassword)
   {
-    id = aId;
     email = aEmail;
     password = aPassword;
   }

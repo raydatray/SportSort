@@ -24,6 +24,7 @@ public class PaymentInfo
   // MEMBER VARIABLES
   //------------------------
   @Id
+  @GeneratedValue
   //PaymentInfo Attributes
   private int id;
   private PaymentType paymentType;
@@ -41,9 +42,8 @@ public class PaymentInfo
   // CONSTRUCTOR
   //------------------------
 
-  public PaymentInfo(Integer aId, PaymentType aPaymentType, Integer aCardNumber, Integer aCvv, Integer aExpirationYear, Integer aExpirationMonth, CustomerAccount aCustomerAccount)
+  public PaymentInfo(PaymentType aPaymentType, Integer aCardNumber, Integer aCvv, Integer aExpirationYear, Integer aExpirationMonth, CustomerAccount aCustomerAccount)
   {
-    id = aId;
     paymentType = aPaymentType;
     cardNumber = aCardNumber;
     cvv = aCvv;

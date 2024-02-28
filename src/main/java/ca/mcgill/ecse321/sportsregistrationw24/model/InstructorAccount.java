@@ -20,9 +20,9 @@ public class InstructorAccount extends StaffAccount
   // CONSTRUCTOR
   //------------------------
 
-  public InstructorAccount(Integer aId, String aEmail, String aPassword)
+  public InstructorAccount(String aEmail, String aPassword)
   {
-    super(aId, aEmail, aPassword);
+    super(aEmail, aPassword);
   }
 
   public InstructorAccount() {

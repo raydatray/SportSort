@@ -20,9 +20,9 @@ public abstract class StaffAccount extends UserAccount
   // CONSTRUCTOR
   //------------------------
 
-  public StaffAccount(Integer aId, String aEmail, String aPassword)
+  public StaffAccount(String aEmail, String aPassword)
   {
-    super(aId, aEmail, aPassword);
+    super(aEmail, aPassword);
   }
 
   public StaffAccount() {
