@@ -3,6 +3,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.controller;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.CustomerAccountDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.service.CustomerAccountService;
+import ca.mcgill.ecse321.sportsregistrationw24.validation.PasswordValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,16 +17,24 @@ public class CustomerAccountRestController {
     @Autowired
     private CustomerAccountService service;
 
+    //DONT DO LIKE THIS NEED TO CHECK
+    private final PasswordValidation passwordValidation = new PasswordValidation();
+
     @PostMapping(value = {"/customerAccounts/create}","/customerAccounts/create/"})
-    public CustomerAccountDto createCustomerAccount(@RequestBody String email,
-                                                    String password,
-                                                    String passwordConfirmation) throws IllegalArgumentException{
+    public CustomerAccountDto createCustomerAccount(@RequestBody CustomerAccountDto customerAccountDto,
+                                                    @RequestParam String passwordConfirmation) throws IllegalArgumentException{
+        String email = customerAccountDto.getEmail();
+        String password = customerAccountDto.getPassword();
+
+        //DONT DO LIKE THIS NEED TO CHECK
+        passwordValidation.validatePassword(password, passwordConfirmation);
+
         CustomerAccount customerAccount = service.createCustomerAccount(email, password, passwordConfirmation);
         return convertToDto(customerAccount);
     }
 
     @GetMapping(value = {"/customerAccounts/get", "/customerAccounts/get/"})
-    public CustomerAccountDto getCustomerAccount(@RequestBody String email) {
+    public CustomerAccountDto getCustomerAccount(@RequestParam String email) {
         CustomerAccount customerAccount = service.getCustomerAccount(email);
         return convertToDto(customerAccount);
     }
@@ -40,7 +49,7 @@ public class CustomerAccountRestController {
     }
 
     @DeleteMapping(value = {"/customerAccounts/delete", "/customerAccounts/delete/"})
-    public void deleteCustomerAccount(@RequestBody String email) {
+    public void deleteCustomerAccount(@RequestParam String email) {
         service.deleteCustomerAccount(email);
     }
 
