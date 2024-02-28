@@ -16,28 +16,32 @@ public class CustomerAccountRestController {
     @Autowired
     private CustomerAccountService service;
 
-    @PostMapping(value = {"/customerAccounts/{email}/{password}/{passwordConfirmation}",
-            "/customerAccounts/{email}/{password}/{passwordConfirmation}/"})
-    public CustomerAccountDto createCustomerAccount(@PathVariable("email") String email,
-                                                   @PathVariable("password") String password,
-                                                   @PathVariable("passwordConfirmation") String passwordConfirmation) throws IllegalArgumentException{
+    @PostMapping(value = {"/customerAccounts/create}","/customerAccounts/create/"})
+    public CustomerAccountDto createCustomerAccount(@RequestBody String email,
+                                                    String password,
+                                                    String passwordConfirmation) throws IllegalArgumentException{
         CustomerAccount customerAccount = service.createCustomerAccount(email, password, passwordConfirmation);
         return convertToDto(customerAccount);
     }
 
-    @GetMapping(value = {"/customerAccounts/{email}", "/customerAccounts/{email}/"})
-    public CustomerAccountDto getCustomerAccount(@PathVariable("email") String email) {
+    @GetMapping(value = {"/customerAccounts/get", "/customerAccounts/get/"})
+    public CustomerAccountDto getCustomerAccount(@RequestBody String email) {
         CustomerAccount customerAccount = service.getCustomerAccount(email);
         return convertToDto(customerAccount);
     }
 
-    @GetMapping(value = {"/customerAccounts", "/customerAccounts/"})
+    @GetMapping(value = {"/customerAccounts/getAll", "/customerAccounts/getAll/"})
     public List<CustomerAccountDto> getAllCustomerAccounts() {
         List<CustomerAccountDto> customerAccountDtos = new ArrayList<>();
         for (CustomerAccount customerAccount : service.getAllCustomerAccounts()) {
             customerAccountDtos.add(convertToDto(customerAccount));
         }
         return customerAccountDtos;
+    }
+
+    @DeleteMapping(value = {"/customerAccounts/delete", "/customerAccounts/delete/"})
+    public void deleteCustomerAccount(@RequestBody String email) {
+        service.deleteCustomerAccount(email);
     }
 
     private CustomerAccountDto convertToDto(CustomerAccount customerAccount) {

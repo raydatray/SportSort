@@ -31,7 +31,19 @@ public class CustomerAccountService {
 
     @Transactional
     public CustomerAccount getCustomerAccount(String email) {
-        return customerAccountRepository.findByEmail(email).orElseGet(null);
+        return customerAccountRepository.findByEmail(email).orElse(null);
+    }
+
+
+    @Transactional
+    public void deleteCustomerAccount(String email) {
+        CustomerAccount customerAccount = customerAccountRepository.findByEmail(email).orElse(null);
+
+        if (customerAccount == null) {
+            throw new IllegalArgumentException("Customer Account does not exist!");
+        }
+
+        customerAccountRepository.delete(customerAccount);
     }
 
     @Transactional
