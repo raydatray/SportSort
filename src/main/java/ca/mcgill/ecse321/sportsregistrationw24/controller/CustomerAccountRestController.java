@@ -3,7 +3,6 @@ package ca.mcgill.ecse321.sportsregistrationw24.controller;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.CustomerAccountDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.service.CustomerAccountService;
-import ca.mcgill.ecse321.sportsregistrationw24.validation.PasswordValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
