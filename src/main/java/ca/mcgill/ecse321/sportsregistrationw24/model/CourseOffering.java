@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 
 import java.sql.Date;
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,7 +28,7 @@ public class CourseOffering
   private Date endDate;
   @ElementCollection
   @Enumerated(EnumType.STRING)
-  private List<DayOfWeek> daysOffered;
+  private ArrayList<DayOfWeek> daysOffered;
 
   @OneToOne
   //CourseOffering Associations
@@ -41,7 +42,7 @@ public class CourseOffering
   // CONSTRUCTOR
   //------------------------
 
-  public CourseOffering(Date aStartDate, Date aEndDate, List<DayOfWeek> someDaysOffered,  Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount)
+  public CourseOffering(Date aStartDate, Date aEndDate, ArrayList<DayOfWeek> someDaysOffered, Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount)
   {
     startDate = aStartDate;
     endDate = aEndDate;
@@ -100,6 +101,7 @@ public class CourseOffering
   {
     return endDate;
   }
+  public ArrayList<DayOfWeek> getDaysOffered() { return daysOffered; }
   /* Code from template association_GetOne */
   public Room getRoom()
   {
