@@ -27,10 +27,11 @@ public class InstructorAccountRepositoryTests {
 
     @Test
     public void testPersistAndLoadInstructorAccount() {
+        String testName = "colin";
         String testEmail = "colin@gmail.com";
         String testPassword = "obama";
 
-        InstructorAccount testInstructor = new InstructorAccount(testEmail, testPassword);
+        InstructorAccount testInstructor = new InstructorAccount(testName, testEmail, testPassword);
 
         instructorAccountRepository.save(testInstructor);
 

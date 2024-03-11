@@ -29,6 +29,7 @@ public class PaymentInfoRepositoryTests {
         paymentInfoRepository.deleteAll();
         customerAccountRepository.deleteAll();
     }
+
     @Test
     public void testPersistAndLoadPaymentInfo() {
         PaymentInfo.PaymentType paymentType = PaymentInfo.PaymentType.Credit;
@@ -37,16 +38,28 @@ public class PaymentInfoRepositoryTests {
         Integer testExpiryYear = 24;
         Integer testExpiryMonth = 6;
 
-        CustomerAccount testCustomer = new CustomerAccount("houman@gmail.com", "eye");
+        CustomerAccount testCustomer = new CustomerAccount("houman","houman@gmail.com", "eye");
+        CustomerAccount testCustomer2 = new CustomerAccount("ray", "rayemail", "raypassword");
+
         customerAccountRepository.save(testCustomer);
+        customerAccountRepository.save(testCustomer2);
 
 
         PaymentInfo testPayment = new PaymentInfo(paymentType,testCardNumber,testCvv,testExpiryYear,testExpiryMonth,testCustomer);
+        PaymentInfo testPayment2 = new PaymentInfo(paymentType,123490823,892,2099,7,testCustomer);
+
+        PaymentInfo testPayment3 = new PaymentInfo(paymentType,testCardNumber,testCvv,testExpiryYear,testExpiryMonth,testCustomer2);
+        PaymentInfo testPayment4 = new PaymentInfo(paymentType,123490823,892,2099,7,testCustomer2);
+
         paymentInfoRepository.save(testPayment);
-        Integer testPaymentGeneratedID = testPayment.getId();
+        paymentInfoRepository.save(testPayment2);
+        paymentInfoRepository.save(testPayment3);
+        paymentInfoRepository.save(testPayment4);
+
+        Integer paymentInfoId = testPayment.getId();
 
 
-        Optional<PaymentInfo> readPayment = paymentInfoRepository.findById(testPaymentGeneratedID);
+        Optional<PaymentInfo> readPayment = paymentInfoRepository.findById(paymentInfoId);
 
         assertNotNull(testPayment = readPayment.orElse(null));
         assertEquals(testCustomer.getId(), testPayment.getCustomerAccount().getId());

@@ -1,7 +1,4 @@
 package ca.mcgill.ecse321.sportsregistrationw24.model;
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
-
 
 import jakarta.persistence.*;
 
@@ -9,74 +6,41 @@ import jakarta.persistence.*;
 @Table(name = "userAccounts")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "USER_TYPE")
-// line 7 "SportsCenter.ump"
-public abstract class UserAccount
-{
-
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-
+public abstract class UserAccount {
   @Id
   @GeneratedValue
-  //UserAccount Attributes
   private Integer id;
+  private String name;
   private String email;
   private String password;
+  private String token;
 
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
-
-  public UserAccount(String aEmail, String aPassword)
-  {
-    email = aEmail;
-    password = aPassword;
+  public UserAccount(String aName, String aEmail, String aPassword) {
+    this.name = aName;
+    this.email = aEmail;
+    this.password = aPassword;
   }
 
-  public UserAccount() {
-  }
+  public UserAccount() {}
 
-  //------------------------
-  // INTERFACE
-  //------------------------
-
-  public boolean setId(Integer aId)
-  {
-    boolean wasSet = false;
-    id = aId;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setEmail(String aEmail)
-  {
-    boolean wasSet = false;
-    email = aEmail;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setPassword(String aPassword)
-  {
-    boolean wasSet = false;
-    password = aPassword;
-    wasSet = true;
-    return wasSet;
-  }
+  public void setId (Integer id) { this.id = id;}
+  public void setName(String name) { this.name = name; }
+  public void setEmail(String email) { this.email = email; }
+  public void setPassword(String password) { this.password = password; }
+  public void setToken(String token) { this.token = token; }
 
   public Integer getId()
   {
-    return id;
+    return this.id;
   }
-
+  public String getName() { return this.name; }
   public String getEmail()
   {
-    return email;
+    return this.email;
   }
-
   public String getPassword()
   {
-    return password;
+    return this.password;
   }
+  public String getToken() { return this.token; }
 }
