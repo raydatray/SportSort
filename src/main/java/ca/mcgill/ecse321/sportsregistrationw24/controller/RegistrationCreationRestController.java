@@ -16,11 +16,9 @@ public class RegistrationCreationRestController {
     @Autowired
     private RegistrationCreationService service;
 
-    @PostMapping(value = {"/registrations/{courseOfferingId}/{userAccountEmail}/{registrationDate}", "/registrations/{courseOfferingId}/{userAccountEmail}/{registrationDate}/"})
-    public RegistrationDto createRegistration(@PathVariable("courseOfferingId") Integer courseOfferingId,
-                                              @PathVariable("userAccountEmail") String userAccountEmail,
-                                              @PathVariable("registrationDate") Date registrationDate) {
-        Registration registration = service.createRegistration(courseOfferingId, userAccountEmail, registrationDate);
+    @PostMapping(value = {"/registrations/create", "/registrations/create/"})
+    public RegistrationDto createRegistration(@RequestBody RegistrationDto registrationDto) {
+        Registration registration = service.createRegistration();
         return convertToDto(registration);
     }
 
