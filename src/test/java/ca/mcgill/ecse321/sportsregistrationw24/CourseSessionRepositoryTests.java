@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,17 +47,17 @@ public class CourseSessionRepositoryTests {
 
     @Test
     public void testPersistAndLoadCourseSession() {
-        CourseType courseType = new CourseType("Cardio", true);
+        CourseType courseType = new CourseType("Cardio");
+        courseType.setApproved(true);
         courseTypeRepository.save(courseType);
 
         Room testRoom = new Room("Pool", 10, 10, 10);
         roomRepository.save(testRoom);
 
-        InstructorAccount testInstructor = new InstructorAccount("raydatray@gmail.com", "password");
+        InstructorAccount testInstructor = new InstructorAccount("ray","raydatray@gmail.com", "password");
         instructorAccountRepository.save(testInstructor);
 
-        List<DayOfWeek> testDays = List.of(new DayOfWeek[]{DayOfWeek.MONDAY, DayOfWeek.FRIDAY});
-
+        ArrayList<DayOfWeek> testDays = new ArrayList<>(List.of(DayOfWeek.MONDAY, DayOfWeek.FRIDAY));
         CourseOffering testOffering  = new CourseOffering(Date.valueOf("2024-02-18"), Date.valueOf("2024-03-15"), testDays, testRoom, courseType, testInstructor);
         courseOfferingRepository.save(testOffering);
 
