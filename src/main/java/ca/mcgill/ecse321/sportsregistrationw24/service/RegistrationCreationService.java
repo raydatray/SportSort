@@ -1,9 +1,11 @@
 package ca.mcgill.ecse321.sportsregistrationw24.service;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseOfferingRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseTypeRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.CustomerAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.RegistrationRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
+import ca.mcgill.ecse321.sportsregistrationw24.model.CourseType;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Registration;
 import jakarta.transaction.Transactional;
@@ -24,6 +26,9 @@ public class RegistrationCreationService {
 
     @Autowired
     private CourseOfferingRepository courseOfferingRepository;
+
+    @Autowired
+    private CourseTypeRepository courseTypeRepository;
 
     @Transactional
     public Registration createRegistration(Integer courseOfferingId, String userAccountEmail, Date registrationDate) {
