@@ -34,7 +34,7 @@ public class RegistrationDto {
         return this.userAccountEmail;
     }
 
-    public Date getRegistrationDateDate() {
+    public Date getRegistrationDate() {
         return this.registrationDate;
     }
 }

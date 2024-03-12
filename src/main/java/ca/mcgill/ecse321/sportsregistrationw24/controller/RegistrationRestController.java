@@ -2,7 +2,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dto.RegistrationDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Registration;
-import ca.mcgill.ecse321.sportsregistrationw24.service.RegistrationCreationService;
+import ca.mcgill.ecse321.sportsregistrationw24.service.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,21 +14,43 @@ import java.util.List;
 @RestController
 public class RegistrationRestController {
     @Autowired
-    private RegistrationCreationService service;
+    private RegistrationService service;
 
-    @PostMapping(value = {"/registrations/create", "/registrations/create/"})
+    @PostMapping(value = {
+            "/registrations/create",
+            "/registrations/create/"
+    })
     public RegistrationDto createRegistration(@RequestBody RegistrationDto registrationDto) {
-        Registration registration = service.createRegistration();
+        String courseTypeName = registrationDto.getCourseTypeName();
+        String instructorEmail = registrationDto.getInstructorEmail();
+        Date courseStartDate = registrationDto.getCourseStartDate();
+        Date courseEndDate = registrationDto.getCourseEndDate();
+        String userAccountEmail = registrationDto.getUserAccountEmail();
+        Date registrationDate = registrationDto.getRegistrationDate();
+
+        Registration registration = service.createRegistration(courseTypeName, instructorEmail, courseStartDate,
+                courseEndDate, userAccountEmail, registrationDate);
+
         return convertToDto(registration);
     }
 
-    // NOTE: CHANGE FROM ID TO SMTH ELSE MAYBE
-    @GetMapping(value = {"/registrations/{id}", "/registrations/{id}/"})
-    public Registration getRegistration() {
-        return new Registration();
+    @GetMapping(value = {
+            "/registrations/get",
+            "/registrations/get/"
+    })
+    public RegistrationDto getRegistration(@RequestParam String courseTypeName,
+                                           String instructorEmail, Date courseStartDate,
+                                           Date courseEndDate, String userAccountEmail,
+                                           Date registrationDate) {
+        Registration registration = service.getRegistration(courseTypeName, instructorEmail, courseStartDate,
+                courseEndDate, userAccountEmail, registrationDate);
+        return convertToDto(registration);
     }
 
-    @GetMapping()
+    @GetMapping(value = {
+            "/registrations/getAll",
+            "/registrations/getAll/"
+    })
     public List<RegistrationDto> getAllRegistrations() {
         List<RegistrationDto> registrationDtos = new ArrayList<>();
         for (Registration registration : service.getAllRegistrations()) {
@@ -41,6 +63,13 @@ public class RegistrationRestController {
         if (registration == null) {
             throw new IllegalArgumentException("There is no such registration!");
         }
-        return new RegistrationDto(registration.getCourseOffering().getId(), registration.getCustomerAccount().getEmail(), registration.getRegisteredDate());
+        return new RegistrationDto(
+                registration.getCourseOffering().getCourseType().getCourseName(),
+                registration.getCourseOffering().getInstructorAccount().getEmail(),
+                registration.getCourseOffering().getStartDate(),
+                registration.getCourseOffering().getEndDate(),
+                registration.getCustomerAccount().getEmail(),
+                registration.getRegisteredDate()
+        );
     }
 }
