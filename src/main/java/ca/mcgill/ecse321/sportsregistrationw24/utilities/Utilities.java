@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Utilities {
-    public static <T> ArrayList<T> iterableToArrayList(Iterable<T> anIterable) {
-        ArrayList<T> returnList = new ArrayList<T>();
+  public static <T> ArrayList<T> iterableToArrayList(Iterable<T> anIterable) {
+    ArrayList<T> returnList = new ArrayList<T>();
 
-        for (T element : anIterable) {
-            returnList.add(element);
-        }
+    for (T element : anIterable) {
+      returnList.add(element);
+    }
 
-        return returnList;
+    return returnList;
     }
 }

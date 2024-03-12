@@ -10,12 +10,15 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Array;
 import java.sql.Date;
 import java.sql.Time;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -29,13 +32,20 @@ public class CourseSessionService {
 
     @Transactional
     //Use when you are creating a singular courseSession (Course Offerings where you know for a fact will only have one associated session)
-    public CourseSession createCourseSession (Date aDate, Time aStartTime, Time aEndTime, CourseOffering aCourseOffering) {
+    public CourseSession createCourseSession (Date aDate, Time aStartTime, Time aEndTime, Integer aCourseOfferindId) {
+        CourseOffering foundCourseOffering = courseOfferingRepository.findById(aCourseOfferindId).orElse(null);
+
+        if (foundCourseOffering == null) {
+            throw new IllegalArgumentException("Course Offering not found");
+        }
+
+
         CourseSession newCourseSession = new CourseSession();
 
         newCourseSession.setDate(aDate);
         newCourseSession.setStartTime(aStartTime);
         newCourseSession.setEndTime(aEndTime);
-        newCourseSession.setCourseOffering(aCourseOffering);
+        newCourseSession.setCourseOffering(foundCourseOffering);
 
         courseSessionRepository.save(newCourseSession);
 
@@ -44,10 +54,16 @@ public class CourseSessionService {
 
     @Transactional
     //Use when you are creating courseSessions from a courseOffering with recurring sessions
-    public ArrayList<CourseSession> createCourseSessions (Time aStartTime, Time aEndTime, CourseOffering aCourseOffering) {
-        LocalDate startDate = aCourseOffering.getStartDate().toLocalDate();
-        LocalDate endDate = aCourseOffering.getEndDate().toLocalDate();
-        ArrayList<DayOfWeek> daysOffered = aCourseOffering.getDaysOffered();
+    public ArrayList<CourseSession> createCourseSessions (HashMap<DayOfWeek, ArrayList<Time>> dayTimeMapping, Integer aCourseOfferingID) {
+        CourseOffering foundCourseOffering = courseOfferingRepository.findById(aCourseOfferingID).orElse(null);
+
+        if (foundCourseOffering == null) {
+            throw new IllegalArgumentException("Course Offering not found");
+        }
+
+        LocalDate startDate = foundCourseOffering.getStartDate().toLocalDate();
+        LocalDate endDate = foundCourseOffering.getEndDate().toLocalDate();
+        ArrayList<DayOfWeek> daysOffered = foundCourseOffering.getDaysOffered();
 
         LocalDate generatedDate = startDate;
         ArrayList<Date> sessionDates = new ArrayList<Date>();
@@ -65,9 +81,9 @@ public class CourseSessionService {
             CourseSession newCourseSession = new CourseSession();
 
             newCourseSession.setDate(sessionDate);
-            newCourseSession.setStartTime(aStartTime);
-            newCourseSession.setEndTime(aEndTime);
-            newCourseSession.setCourseOffering(aCourseOffering);
+            newCourseSession.setStartTime(dayTimeMapping.get(sessionDate.toLocalDate().getDayOfWeek()).get(0));
+            newCourseSession.setEndTime(dayTimeMapping.get(sessionDate.toLocalDate().getDayOfWeek()).get(1));
+            newCourseSession.setCourseOffering(foundCourseOffering);
 
             generatedCourseSessions.add(newCourseSession);
 
@@ -105,7 +121,7 @@ public class CourseSessionService {
         CourseOffering foundCourseOffering = courseOfferingRepository.findById(courseOfferingID).orElse(null);
 
         if (foundCourseOffering == null) {
-            return null; //TODO THROW SOME KIND OF EXCEPTION
+            throw new IllegalArgumentException("Course Offering not found");
         }
 
         Iterable<CourseSession> foundCourseSessions = courseSessionRepository.findByCourseOffering(foundCourseOffering).orElse(null);
@@ -128,7 +144,7 @@ public class CourseSessionService {
         CourseOffering foundCourseOffering = courseOfferingRepository.findById(courseOfferingID).orElse(null);
 
         if (foundCourseOffering == null) {
-            return; //TODO THROW SOME KIND OF EXCEPTION
+            throw new IllegalArgumentException("Course Offering not found");
         }
 
         Iterable<CourseSession> foundCourseSessions = courseSessionRepository.findByCourseOffering(foundCourseOffering).orElse(null);
