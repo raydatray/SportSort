@@ -10,16 +10,14 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Array;
 import java.sql.Date;
 import java.sql.Time;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class CourseSessionService {
