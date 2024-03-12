@@ -7,8 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface UserAccountRepository extends CrudRepository<UserAccount, Integer> {
-    Optional<UserAccount> findUserByEmail(String newEmail);
-    Optional<UserAccount> findByToken(String token);
-    void deleteByEmail(String email);
-
+  Optional<UserAccount> findUserByEmail(String newEmail);
+  Optional<UserAccount> findUserByToken(String token);
+  void deleteByEmail(String email);
 }
