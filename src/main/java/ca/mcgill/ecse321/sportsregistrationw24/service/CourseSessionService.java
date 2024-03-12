@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.sportsregistrationw24.service;
 
+import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseOfferingRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseSessionRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseSession;
@@ -15,12 +16,16 @@ import java.sql.Time;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Service
 public class CourseSessionService {
 
     @Autowired
     private CourseSessionRepository courseSessionRepository;
+
+    @Autowired
+    private CourseOfferingRepository courseOfferingRepository;
 
     @Transactional
     //Use when you are creating a singular courseSession (Course Offerings where you know for a fact will only have one associated session)
@@ -72,6 +77,8 @@ public class CourseSessionService {
         return generatedCourseSessions;
     }
 
+    @Deprecated
+    //YOU SHOULD NOT USE THIS WE DO NOT ALLOW UPDATE OPERATIONS
     @Transactional
     public void updateCourseSession (Integer aID, Date aDate, Time aStartTime, Time aEndTime, CourseOffering aCourseOffering) {
         CourseSession courseSessionToUpdate = courseSessionRepository.findById(aID).orElse(null);
@@ -94,12 +101,19 @@ public class CourseSessionService {
     }
 
     @Transactional
-    public ArrayList<CourseSession> getCourseSessionsByCourseOffering (CourseOffering aCourseOffering) {
-        Iterable<CourseSession> foundCourseSessions = courseSessionRepository.findByCourseOffering(aCourseOffering).orElse(null);
+    public ArrayList<CourseSession> getCourseSessionsByCourseOfferingID (Integer courseOfferingID) {
+        CourseOffering foundCourseOffering = courseOfferingRepository.findById(courseOfferingID).orElse(null);
+
+        if (foundCourseOffering == null) {
+            return null; //TODO THROW SOME KIND OF EXCEPTION
+        }
+
+        Iterable<CourseSession> foundCourseSessions = courseSessionRepository.findByCourseOffering(foundCourseOffering).orElse(null);
 
         if (foundCourseSessions == null) {
             return null;
         }
+
         return Utilities.iterableToArrayList(foundCourseSessions);
     }
 
@@ -110,8 +124,14 @@ public class CourseSessionService {
 
 
     @Transactional
-    public void deleteCourseSessionsByCourseOffering (CourseOffering aCourseOffering) {
-        Iterable<CourseSession> foundCourseSessions = courseSessionRepository.findByCourseOffering(aCourseOffering).orElse(null);
+    public void deleteCourseSessionsByCourseOfferingID (Integer courseOfferingID) {
+        CourseOffering foundCourseOffering = courseOfferingRepository.findById(courseOfferingID).orElse(null);
+
+        if (foundCourseOffering == null) {
+            return; //TODO THROW SOME KIND OF EXCEPTION
+        }
+
+        Iterable<CourseSession> foundCourseSessions = courseSessionRepository.findByCourseOffering(foundCourseOffering).orElse(null);
 
         if (foundCourseSessions == null) {
             return;
