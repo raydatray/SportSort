@@ -3,11 +3,12 @@ package ca.mcgill.ecse321.sportsregistrationw24.service;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.CustomerAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.PaymentInfo;
+import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 @Service
@@ -57,14 +58,7 @@ public class CustomerAccountService {
 
     @Transactional
     public List<CustomerAccount> getAllCustomerAccounts() {
-        return toList(customerAccountRepository.findAll());
-    }
-
-    private <T> List<T> toList(Iterable<T> iterable){
-        List<T> resultList = new ArrayList<T>();
-        for (T t : iterable) {
-            resultList.add(t);
-        }
-        return resultList;
+        Utilities utilities = new Utilities();
+        return utilities.iterableToArrayList(customerAccountRepository.findAll());
     }
 }
