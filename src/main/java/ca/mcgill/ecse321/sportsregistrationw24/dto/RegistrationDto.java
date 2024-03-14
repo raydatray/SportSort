@@ -17,13 +17,12 @@ public class RegistrationDto {
     this.registrationId = registrationId;
 
     // Hide card information (only expose last 4 digits of card)
-    String processedCardNumber = "**** **** **** ";
-    String paymentCardNumStr = paymentInfoCardNumber;
+    StringBuilder processedCardNumber = new StringBuilder("**** **** **** ");
     for (int i = 11; i > 7; i--) {
-      processedCardNumber += paymentCardNumStr.charAt(i);
+      processedCardNumber.append(paymentInfoCardNumber.charAt(i));
     }
 
-    this.paymentInfoCardNumber = processedCardNumber;
+    this.paymentInfoCardNumber = processedCardNumber.toString();
     this.registrationPrice = registrationPrice;
     this.registrationDate = registrationDate;
   }
