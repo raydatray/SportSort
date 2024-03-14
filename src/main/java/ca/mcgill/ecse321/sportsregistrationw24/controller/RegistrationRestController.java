@@ -56,11 +56,24 @@ public class RegistrationRestController {
     })
     public ResponseEntity<?> getAllRegistrations() {
         try {
-            List<RegistrationDto> registrationCOs = new ArrayList<>();
+            List<RegistrationDto> registrationDtos = new ArrayList<>();
             for (Registration registration : registrationService.getAllRegistrations()) {
-                registrationCOs.add(convertToDto(registration));
+                registrationDtos.add(convertToDto(registration));
             }
-            return ResponseEntity.ok().body(registrationCOs);
+            return ResponseEntity.ok().body(registrationDtos);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping(value = {
+            "/registrations/delete",
+            "/registrations/delete/"
+    })
+    public ResponseEntity<?> deleteRegistration(RegistrationId registrationId) {
+        try {
+            registrationService.deleteRegistration(registrationId);
+            return ResponseEntity.ok().body("Registration has been successfully deleted!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
