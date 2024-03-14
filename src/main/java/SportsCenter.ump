@@ -7,8 +7,10 @@ class SportCenter {
 class UserAccount {
   abstract;
   Integer id;
+  String name;
   String email;
   String password;
+  String token;
 }
 
 class StaffAccount {
@@ -28,7 +30,6 @@ class CustomerAccount {
   isA UserAccount;
 }
 
-
 class CourseType {
   Integer id;
   String courseName;
@@ -37,8 +38,10 @@ class CourseType {
 
 class CourseOffering {
   Integer id;
+  String courseOfferingName;
   Date startDate;
   Date endDate;
+
   * -> 1 Room;
   * -> 1 CourseType;
   * -> 1 InstructorAccount;
@@ -46,8 +49,10 @@ class CourseOffering {
 
 class Registration {
   Date registeredDate;
+
   * -> 1 CourseOffering;
   * -> 1 CustomerAccount;
+  * -> 1 PaymentInfo;
 }
 
 class CourseSession {
@@ -60,6 +65,7 @@ class CourseSession {
 }
 
 class Room {
+  Integer id;
   String name;
   Integer floorNumber;
   Integer roomNumber;
@@ -67,12 +73,13 @@ class Room {
 }
 
 class PaymentInfo {
-    enum PaymentType {credit, debit};
+  enum PaymentType {credit, debit};
   Integer id;
   PaymentType paymentType;
   Integer cardNumber;
   Integer cvv;
   Integer expirationYear;
   Integer expirationMonth;
+
   * -> 1 CustomerAccount;
 }
