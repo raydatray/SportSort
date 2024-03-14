@@ -63,6 +63,15 @@ public class Registration {
     return wasSet;
   }
 
+  public boolean setPaymentInfo (PaymentInfo aNewPaymentInfo) {
+    boolean wasSet = false;
+    if (aNewPaymentInfo != null) {
+      paymentInfo = aNewPaymentInfo;
+      wasSet = true;
+    }
+    return wasSet;
+  }
+
   public RegistrationId getId() { return this.id; }
 
   public Date getRegisteredDate()
