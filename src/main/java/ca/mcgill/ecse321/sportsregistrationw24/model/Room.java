@@ -4,96 +4,45 @@ package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 
 @Entity
 // line 62 "SportsCenter.ump"
-public class Room
-{
-
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-
-  //Room Attributes
+public class Room {
   @Id
+  @GeneratedValue
   private Integer id;
   private String name;
   private Integer floorNumber;
   private Integer roomNumber;
   private Integer capacity;
 
-
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
-
-  public Room(Integer aId, String name, Integer floorNumber, Integer roomNumber, Integer capacity) {
-    this.id = aId;
+  public Room(String name, Integer floorNumber, Integer roomNumber, Integer capacity) {
     this.name = name;
     this.floorNumber = floorNumber;
     this.roomNumber = roomNumber;
     this.capacity = capacity;
   }
 
-  public Room() {
+  public Room() {}
 
-  }
+  public void setName (String aName) { this.name = aName; }
 
-  //------------------------
-  // INTERFACE
-  //------------------------
+  public void setFloorNumber (Integer aFloorNumber) { this.floorNumber = aFloorNumber; }
 
-  public boolean setName(String aName)
-  {
-    boolean wasSet = false;
-    name = aName;
-    wasSet = true;
-    return wasSet;
-  }
+  public void setRoomNumber (Integer aRoomNumber) { this.roomNumber = aRoomNumber; }
 
-  public boolean setFloorNumber(Integer aFloorNumber)
-  {
-    boolean wasSet = false;
-    wasSet = true;
-    return wasSet;
-  }
+  public void setCapacity (Integer aCapacity) { this.capacity = aCapacity; }
 
-  public boolean setRoomNumber(Integer aRoomNumber)
-  {
-    boolean wasSet = false;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setCapacity(Integer aCapacity)
-  {
-    boolean wasSet = false;
-    capacity = aCapacity;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public String getName()
-  {
-    return name;
-  }
+  public String getName() { return this.name; }
 
   public Integer getId() { return this.id; }
 
-  public Integer getFloorNumber()
-  {
-    return this.floorNumber;
-  }
+  public Integer getFloorNumber() { return this.floorNumber; }
 
-  public Integer getRoomNumber()
-  {
-    return this.roomNumber;
-  }
+  public Integer getRoomNumber() { return this.roomNumber; }
 
-  public Integer getCapacity()
-  {
-    return capacity;
-  }
+  public Integer getCapacity() { return this.capacity; }
 
 }

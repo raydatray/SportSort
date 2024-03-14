@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,28 +47,29 @@ public class CourseSessionRepositoryTests {
 
     @Test
     public void testPersistAndLoadCourseSession() {
-        CourseType courseType = new CourseType(1, "Cardio", true);
+        CourseType courseType = new CourseType("Cardio");
+        courseType.setApproved(true);
         courseTypeRepository.save(courseType);
 
-        Room testRoom = new Room(1, "Pool", 10, 10, 10);
+        Room testRoom = new Room("Pool", 10, 10, 10);
         roomRepository.save(testRoom);
 
-        InstructorAccount testInstructor = new InstructorAccount(1, "raydatray@gmail.com", "password");
+        InstructorAccount testInstructor = new InstructorAccount("ray","raydatray@gmail.com", "password");
         instructorAccountRepository.save(testInstructor);
 
-        List<DayOfWeek> testDays = List.of(new DayOfWeek[]{DayOfWeek.MONDAY, DayOfWeek.FRIDAY});
-
-        CourseOffering testOffering  = new CourseOffering(1, Date.valueOf("2024-02-18"), Date.valueOf("2024-03-15"), testDays, testRoom, courseType, testInstructor);
+        ArrayList<DayOfWeek> testDays = new ArrayList<>(List.of(DayOfWeek.MONDAY, DayOfWeek.FRIDAY));
+        CourseOffering testOffering  = new CourseOffering(Date.valueOf("2024-02-18"), Date.valueOf("2024-03-15"), testDays, testRoom, courseType, testInstructor);
         courseOfferingRepository.save(testOffering);
 
         Date sessionDate = Date.valueOf("2024-02-20");
         Time startTime = Time.valueOf("08:00:00");
         Time endTime = Time.valueOf("09:00:00");
 
-        CourseSession testSession = new CourseSession(1, sessionDate, startTime, endTime, testOffering);
+        CourseSession testSession = new CourseSession(sessionDate, startTime, endTime, testOffering);
         courseSessionRepository.save(testSession);
+        Integer generatedTestSessionID = testSession.getId();
 
-        Optional<CourseSession> readSession = courseSessionRepository.findById(1);
+        Optional<CourseSession> readSession = courseSessionRepository.findById(generatedTestSessionID);
 
 
         assertNotNull(testSession = readSession.orElse(null));
@@ -83,6 +85,6 @@ public class CourseSessionRepositoryTests {
         assertEquals(sessionDate, testSession.getDate());
         assertEquals(startTime, testSession.getStartTime());
         assertEquals(endTime, testSession.getEndTime());
-        assertEquals(1, testSession.getId());
+        assertEquals(generatedTestSessionID, testSession.getId());
     }
 }

@@ -28,16 +28,17 @@ public class StaffAccountRepositoryTests {
 
     @Test
     public void testPersistAndLoadStaff() {
+        String testInstructorName = "Colin";
         String testInstructorEmail = "colin@gmail.com";
         String testInstructorPassword = "obama";
 
-        InstructorAccount testInstructor = new InstructorAccount(1, testInstructorEmail, testInstructorPassword);
+        InstructorAccount testInstructor = new InstructorAccount(testInstructorName, testInstructorEmail, testInstructorPassword);
 
-
+        String testOwnerName = "Alex";
         String testOwnerEmail = "alex@hotmail.com";
         String testOwnerPassword = "password";
 
-        OwnerAccount testOwner = new OwnerAccount(2, testOwnerEmail, testOwnerPassword);
+        OwnerAccount testOwner = new OwnerAccount(testOwnerName, testOwnerEmail, testOwnerPassword);
 
         staffAccountRepository.save(testInstructor);
         staffAccountRepository.save(testOwner);

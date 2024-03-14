@@ -10,8 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class CourseTypeRepositoryTests {
@@ -28,15 +27,16 @@ public class CourseTypeRepositoryTests {
     public void testPersistAndLoadCourseType(){
         String typeName = "Cardio";
         boolean approval = true;
-        CourseType testType = new CourseType(1, typeName, approval);
-
+        CourseType testType = new CourseType(typeName);
+        testType.setApproved(approval);
         courseTypeRepository.save(testType);
+        Integer testTypeGeneratedID = testType.getId();
 
         Optional<CourseType> readType = courseTypeRepository.findByCourseName("Cardio");
 
         assertNotNull(testType = readType.orElse(null));
         assertEquals(typeName, testType.getCourseName());
         assertEquals(approval, testType.getApproved());
-        assertEquals(1, testType.getId());
+        assertEquals(testTypeGeneratedID, testType.getId());
     }
 }

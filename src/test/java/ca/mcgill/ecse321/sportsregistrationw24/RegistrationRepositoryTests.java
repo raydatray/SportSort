@@ -8,8 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.sql.Array;
 import java.sql.Date;
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -36,44 +38,54 @@ public class RegistrationRepositoryTests {
     @Autowired
     private CustomerAccountRepository customerAccountRepository;
 
+    @Autowired
+    private PaymentInfoRepository paymentInfoRepository;
+
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
         registrationRepository.deleteAll();
         courseOfferingRepository.deleteAll();
+        paymentInfoRepository.deleteAll();
         customerAccountRepository.deleteAll();
         courseTypeRepository.deleteAll();
         roomRepository.deleteAll();
         instructorAccountRepository.deleteAll();
+
     }
 
     @Test
     public void testPersistAndLoadRegistration() {
-        CourseType courseType = new CourseType(1, "Cardio", true);
+        CourseType courseType = new CourseType("Cardio");
+        courseType.setApproved(true);
         courseTypeRepository.save(courseType);
 
-        Room testRoom = new Room(1, "Pool", 10, 10, 10);
+        Room testRoom = new Room("Pool", 10, 10, 10);
         roomRepository.save(testRoom);
 
-        InstructorAccount testInstructor = new InstructorAccount(1, "raydatray@gmail.com", "password");
+        InstructorAccount testInstructor = new InstructorAccount("ray","raydatray@gmail.com", "password");
         instructorAccountRepository.save(testInstructor);
 
         Date startDate = Date.valueOf("2024-02-18");
         Date endDate = Date.valueOf("2024-03-15");
-        List<DayOfWeek> testDays = List.of(new DayOfWeek[]{DayOfWeek.MONDAY, DayOfWeek.FRIDAY});
+        ArrayList<DayOfWeek> testDays = new ArrayList<>(List.of(DayOfWeek.MONDAY, DayOfWeek.FRIDAY));
 
-        CourseOffering testOffering  = new CourseOffering(1, startDate, endDate, testDays, testRoom, courseType, testInstructor);
+        CourseOffering testOffering  = new CourseOffering(startDate, endDate, testDays, testRoom, courseType, testInstructor);
         courseOfferingRepository.save(testOffering);
 
+        String testName = "joe";
         String testEmail = "joebama@gmail.com";
         String testPassword = "obama";
 
-        CustomerAccount testCustomer = new CustomerAccount(2, testEmail, testPassword);
+        CustomerAccount testCustomer = new CustomerAccount(testName, testEmail, testPassword);
         customerAccountRepository.save(testCustomer);
+
+        PaymentInfo testPayment = new PaymentInfo(PaymentInfo.PaymentType.Credit, 12345, 123, 24, 6, testCustomer);
+        paymentInfoRepository.save(testPayment);
 
         Date testDate = Date.valueOf("2024-03-04");
 
-        Registration testRegistration = new Registration(testDate, testOffering, testCustomer);
+        Registration testRegistration = new Registration(testDate, testOffering, testCustomer, testPayment);
         registrationRepository.save(testRegistration);
 
         Optional<List<Registration>> readRegistrations = registrationRepository.findByCustomerAccount(testCustomer);
