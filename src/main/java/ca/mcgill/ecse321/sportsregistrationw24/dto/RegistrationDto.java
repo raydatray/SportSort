@@ -11,8 +11,7 @@ public class RegistrationDto {
   Integer registrationPrice;
   Date registrationDate;
 
-  public RegistrationDto(String courseTypeName, RegistrationId registrationId, String paymentInfoCardNumber,
-                         Integer registrationPrice, Date registrationDate) {
+  public RegistrationDto(String courseTypeName, RegistrationId registrationId, String paymentInfoCardNumber, Integer registrationPrice, Date registrationDate) {
     this.courseTypeName = courseTypeName;
     this.registrationId = registrationId;
 

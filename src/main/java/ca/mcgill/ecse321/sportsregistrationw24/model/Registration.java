@@ -23,8 +23,7 @@ public class Registration {
   private CourseOffering courseOffering;
 
   @ManyToOne
-  @AssociationOverride(name = "PaymentInfoId",
-      joinColumns = @JoinColumn(name = "payment_info_id"))
+  @AssociationOverride(name = "PaymentInfoId", joinColumns = @JoinColumn(name = "payment_info_id"))
   private PaymentInfo paymentInfo;
 
   public Registration(Date aRegisteredDate, CourseOffering aCourseOffering, CustomerAccount aCustomerAccount, PaymentInfo aPaymentInfo) {

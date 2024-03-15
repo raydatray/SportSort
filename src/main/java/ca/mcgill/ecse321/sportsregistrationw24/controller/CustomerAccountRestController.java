@@ -33,8 +33,8 @@ public class CustomerAccountRestController {
             "/customerAccounts/get",
             "/customerAccounts/get/"
     })
-    public CustomerAccountDto getCustomerAccount(@RequestParam Integer customerId) {
-        CustomerAccount customerAccount = service.getCustomerAccount(customerId);
+    public CustomerAccountDto getCustomerAccount(@RequestParam String email) {
+        CustomerAccount customerAccount = service.getCustomerAccount(email);
         return convertToDto(customerAccount);
     }
 

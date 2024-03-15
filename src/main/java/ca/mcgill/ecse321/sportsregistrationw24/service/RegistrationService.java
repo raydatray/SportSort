@@ -6,12 +6,10 @@ import ca.mcgill.ecse321.sportsregistrationw24.model.keys.RegistrationId;
 import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.*;
-import java.util.logging.Logger;
 
 @Service
 public class RegistrationService {
@@ -28,10 +26,7 @@ public class RegistrationService {
   private PaymentInfoRepository paymentInfoRepository;
 
   @Transactional
-  public Registration createRegistration(Integer courseOfferingId, Integer customerAccountId,
-                                         Integer paymentInfoId, Date registrationDate) {
-    Registration newRegistration = new Registration();
-
+  public Registration createRegistration(Integer courseOfferingId, Integer customerAccountId, Integer paymentInfoId, Date registrationDate) {
     CourseOffering courseOffering = courseOfferingRepository.findById(courseOfferingId).orElse(null);
     CustomerAccount customer = customerAccountRepository.findById(customerAccountId).orElse(null);
     PaymentInfo paymentInfo = paymentInfoRepository.findById(paymentInfoId).orElse(null);
@@ -48,10 +43,7 @@ public class RegistrationService {
       throw new IllegalArgumentException("No payment information was found with the provided information!");
     }
 
-    newRegistration.setCustomerAccount(customer);
-    newRegistration.setCourseOffering(courseOffering);
-    newRegistration.setPaymentInfo(paymentInfo);
-    newRegistration.setRegisteredDate(registrationDate);
+    Registration newRegistration = new Registration(registrationDate, courseOffering, customer, paymentInfo);
 
     registrationRepository.save(newRegistration);
 
@@ -60,7 +52,13 @@ public class RegistrationService {
 
   @Transactional
   public Registration getRegistration(RegistrationId registrationId) {
-    return registrationRepository.findById(registrationId).orElseThrow(() -> new IllegalArgumentException("The registration does not exist!"));
+    Registration registration = registrationRepository.findById(registrationId).orElse(null);
+
+    if (registration == null) {
+      throw new IllegalArgumentException("Registration does not exist!");
+    }
+
+    return registration;
   }
 
   @Transactional
