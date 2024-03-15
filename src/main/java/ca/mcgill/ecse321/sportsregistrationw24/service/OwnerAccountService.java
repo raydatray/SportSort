@@ -3,9 +3,11 @@ package ca.mcgill.ecse321.sportsregistrationw24.service;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.CustomerAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.InstructorAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.OwnerAccountRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.OwnerAccount;
+import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.util.List;
 
 @Service
 public class OwnerAccountService {
+    private UserAccountRepository userAccountRepository;
     @Autowired
     private OwnerAccountRepository ownerAccountRepository;
     @Autowired
@@ -36,8 +39,8 @@ public class OwnerAccountService {
         ownerAccountRepository.save(ownerAccount);
     }
 
-    @Transactional      //TODO Correct return type?
-    public void changeOwnerPassword(OwnerAccount owner, String newPassword, String oldPassword) {
+    @Transactional
+    public void updateOwnerPassword(OwnerAccount owner, String newPassword, String oldPassword) {
         // Incorrect old password
         if (!owner.getPassword().equals(oldPassword)) {
             throw new IllegalArgumentException("Incorrect old password!");
@@ -49,6 +52,7 @@ public class OwnerAccountService {
         owner.setPassword(newPassword);
         ownerAccountRepository.save(owner);
     }
+
 
     @Transactional
     public void deleteCustomerAccount(String email) {
@@ -62,10 +66,45 @@ public class OwnerAccountService {
     }
 
     @Transactional
+    public CustomerAccount getCustomerAccount(String email) {
+        return customerAccountRepository.findByEmail(email).orElse(null);
+    }
+
+    @Transactional
     public List<CustomerAccount> getAllCustomerAccounts() {
         Utilities utilities = new Utilities();
         return utilities.iterableToArrayList(customerAccountRepository.findAll());
     }
+
+    @Transactional
+    public InstructorAccount createInstructorAccount(String email, String password, String passwordConfirmation) {
+
+        if (!(password.equals(passwordConfirmation))) {
+            throw new IllegalArgumentException("Passwords do not match!");
+        }
+
+        InstructorAccount instructorAccount = new InstructorAccount();
+        instructorAccount.setEmail(email);
+        instructorAccount.setPassword(password);
+        instructorAccountRepository.save(instructorAccount);
+        return instructorAccount;
+    }
+
+    @Transactional
+    public void updateInstructorEmail(String oldEmail, String email, String password) {
+        InstructorAccount instructorAccount = instructorAccountRepository.findByEmail(oldEmail).orElse(null);
+
+        if (instructorAccount == null) {
+            throw new IllegalArgumentException("Owner Account does not exist!");
+        }
+
+        instructorAccount.setEmail(email);
+        instructorAccount.setPassword(password);
+
+        instructorAccountRepository.save(instructorAccount);
+    }
+
+
     @Transactional
     public void deleteInstructorAccount(String email) {
         InstructorAccount instructorAccount = instructorAccountRepository.findByEmail(email).orElse(null);
@@ -78,8 +117,21 @@ public class OwnerAccountService {
     }
 
     @Transactional
+    public InstructorAccount getInstructorAccount(String email) {
+        return instructorAccountRepository.findByEmail(email).orElse(null);
+    }
+
+    @Transactional
     public List<InstructorAccount> getAllInstructorAccounts() {
         Utilities utilities = new Utilities();
         return utilities.iterableToArrayList(instructorAccountRepository.findAll());
     }
+
+    @Transactional
+    public List<UserAccount> getAllUserAccounts() {
+        Utilities utilities = new Utilities();
+        return utilities.iterableToArrayList(userAccountRepository.findAll());
+    }
+
+
 }
