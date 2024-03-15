@@ -6,6 +6,6 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class RegistrationService {
-    @Autowired
-    private RegistrationRepository registrationRepository;
+  @Autowired
+  private RegistrationRepository registrationRepository;
 }

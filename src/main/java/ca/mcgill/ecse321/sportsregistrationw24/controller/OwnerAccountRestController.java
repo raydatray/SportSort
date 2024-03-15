@@ -16,60 +16,60 @@ import java.util.List;
 @RestController
 public class OwnerAccountRestController {
 
-    @Autowired
-    private OwnerAccountService service;
+  @Autowired
+  private OwnerAccountService service;
 
-    @PutMapping(value = {
-            "/ownerAccounts/updateEmail",
-            "/ownerAccounts/updateEmail/"
-    })
-    public ResponseEntity<?> updateOwnerEmail(@RequestBody OwnerAccountDto ownerAccountDto, @RequestParam String newEmail) {
-        try {
-            String oldEmail = ownerAccountDto.getEmail();
-            service.updateOwnerEmail(oldEmail, newEmail);
-            return ResponseEntity.ok().body("Customer account updated successfully.");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+  @PutMapping(value = {
+    "/ownerAccounts/updateEmail",
+    "/ownerAccounts/updateEmail/"
+  })
+  public ResponseEntity<?> updateOwnerEmail(@RequestBody OwnerAccountDto ownerAccountDto, @RequestParam String newEmail) {
+    try {
+      String oldEmail = ownerAccountDto.getEmail();
+      service.updateOwnerEmail(oldEmail, newEmail);
+      return ResponseEntity.ok().body("Customer account updated successfully.");
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
+  }
 
-    @PutMapping(value = {
-            "/ownerAccounts/updatePassword",
-            "/ownerAccounts/updatePassword/"
-    })
-    public ResponseEntity<?> updateInstructorPassword(@RequestBody OwnerAccountDto ownerAccountDto, String newPassword) {
-        try {
-            OwnerAccount ownerAccount = service.getOwnerAccount(ownerAccountDto.getEmail());
-            String oldPassword = ownerAccountDto.getPassword();
-            service.updateOwnerPassword(ownerAccount, newPassword, oldPassword);
-            return ResponseEntity.ok().body("Password updated successfully.");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+  @PutMapping(value = {
+    "/ownerAccounts/updatePassword",
+    "/ownerAccounts/updatePassword/"
+  })
+  public ResponseEntity<?> updateInstructorPassword(@RequestBody OwnerAccountDto ownerAccountDto, String newPassword) {
+    try {
+      OwnerAccount ownerAccount = service.getOwnerAccount(ownerAccountDto.getEmail());
+      String oldPassword = ownerAccountDto.getPassword();
+      service.updateOwnerPassword(ownerAccount, newPassword, oldPassword);
+      return ResponseEntity.ok().body("Password updated successfully.");
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
+  }
 
-    @GetMapping(value = {
-            "/userAccounts/getAll",
-            "/userAccounts/getAll/"
-    })
-    public ResponseEntity<?> getAllUserAccounts() {
-        try {
-            List<UserAccountDto> userAccountDtos = new ArrayList<>();
-            for (UserAccount userAccount : service.getAllUserAccounts()) {
-                UserAccountDto dto = convertToDto(userAccount);
-                userAccountDtos.add(dto);
-            }
-            return ResponseEntity.ok().body(userAccountDtos);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+  @GetMapping(value = {
+    "/userAccounts/getAll",
+    "/userAccounts/getAll/"
+  })
+  public ResponseEntity<?> getAllUserAccounts() {
+    try {
+      List<UserAccountDto> userAccountDtos = new ArrayList<>();
+      for (UserAccount userAccount : service.getAllUserAccounts()) {
+        UserAccountDto dto = convertToDto(userAccount);
+        userAccountDtos.add(dto);
+      }
+      return ResponseEntity.ok().body(userAccountDtos);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
+  }
 
-    private UserAccountDto convertToDto(UserAccount userAccount) {
-        if (userAccount == null) {
-            throw new IllegalArgumentException("There is no such customer account!");
-        }
-        return new UserAccountDto(userAccount.getEmail(),
-                userAccount.getPassword());
+  private UserAccountDto convertToDto(UserAccount userAccount) {
+    if (userAccount == null) {
+      throw new IllegalArgumentException("There is no such customer account!");
     }
+    return new UserAccountDto(userAccount.getEmail(),
+      userAccount.getPassword());
+  }
 }

@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*")
 @RestController
 public class UserAccountRestController {
-    @Autowired
-    private UserAccountService service;
+  @Autowired
+  private UserAccountService service;
 }
