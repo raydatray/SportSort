@@ -1,11 +1,8 @@
 package ca.mcgill.ecse321.sportsregistrationw24.service;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dao.CustomerAccountRepository;
-import ca.mcgill.ecse321.sportsregistrationw24.dao.InstructorAccountRepository;
+
 import ca.mcgill.ecse321.sportsregistrationw24.dao.OwnerAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
-import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
-import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.OwnerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities;
@@ -17,13 +14,10 @@ import java.util.List;
 
 @Service
 public class OwnerAccountService {
+    @Autowired
     private UserAccountRepository userAccountRepository;
     @Autowired
     private OwnerAccountRepository ownerAccountRepository;
-    @Autowired
-    private CustomerAccountRepository customerAccountRepository;
-    @Autowired
-    private InstructorAccountRepository instructorAccountRepository;
 
     @Transactional
     public void updateOwnerEmail(String oldEmail, String email, String password) {

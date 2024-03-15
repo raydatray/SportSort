@@ -66,12 +66,10 @@ public class InstructorAccountRestController {
             "/instructorAccounts/updateEmail",
             "/instructorAccounts/updateEmail/"
     })
-    public ResponseEntity<?> updateInstructorEmail(@RequestBody InstructorAccountDto instructorAccountDto, @RequestParam String oldEmail) {
+    public ResponseEntity<?> updateInstructorEmail(@RequestBody InstructorAccountDto instructorAccountDto, @RequestParam String newEmail) {
         try {
-            String email = instructorAccountDto.getEmail();
-            String password = instructorAccountDto.getPassword();
-
-            service.updateInstructorEmail(oldEmail, email, password);
+            String oldEmail = instructorAccountDto.getEmail();
+            service.updateInstructorEmail(oldEmail, newEmail);
             return ResponseEntity.ok().body("Customer account updated successfully.");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

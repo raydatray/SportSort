@@ -26,16 +26,12 @@ public class InstructorAccountService {
     }
 
     @Transactional
-    public void updateInstructorEmail(String oldEmail, String email, String password) {
+    public void updateInstructorEmail(String oldEmail, String newEmail) {
         InstructorAccount instructorAccount = instructorAccountRepository.findByEmail(oldEmail).orElse(null);
-
         if (instructorAccount == null) {
-            throw new IllegalArgumentException("Owner Account does not exist!");
+            throw new IllegalArgumentException("Instructor Account does not exist!");
         }
-
-        instructorAccount.setEmail(email);
-        instructorAccount.setPassword(password);
-
+        instructorAccount.setEmail(newEmail);
         instructorAccountRepository.save(instructorAccount);
     }
 
