@@ -1,5 +1,4 @@
 package ca.mcgill.ecse321.sportsregistrationw24.service;
-
 import ca.mcgill.ecse321.sportsregistrationw24.dao.InstructorAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities;

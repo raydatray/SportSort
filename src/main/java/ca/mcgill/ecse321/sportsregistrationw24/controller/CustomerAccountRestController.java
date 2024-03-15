@@ -4,6 +4,7 @@ import ca.mcgill.ecse321.sportsregistrationw24.dto.CustomerAccountDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.service.CustomerAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -66,8 +67,13 @@ public class CustomerAccountRestController {
             "/customerAccounts/delete",
             "/customerAccounts/delete/"
     })
-    public void deleteCustomerAccount(@RequestParam String email) {
-        service.deleteCustomerAccount(email);
+    public ResponseEntity<?> deleteCustomerAccount(@RequestParam String email) {
+        try {
+            service.deleteCustomerAccount(email);
+            return ResponseEntity.ok().body("Customer account deleted successfully.");
+        } catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     private CustomerAccountDto convertToDto(CustomerAccount customerAccount) {

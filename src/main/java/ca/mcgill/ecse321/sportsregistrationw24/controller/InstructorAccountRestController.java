@@ -26,7 +26,7 @@ public class InstructorAccountRestController {
             String email = instructorAccountDto.getEmail();
             String password = instructorAccountDto.getPassword();
             InstructorAccount instructorAccount = service.createInstructorAccount(email, password);
-            return ResponseEntity.ok().body(instructorAccount);
+            return ResponseEntity.ok().body(convertToDto(instructorAccount));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -39,7 +39,7 @@ public class InstructorAccountRestController {
     public ResponseEntity<?> getInstructorAccount(@RequestParam String email) {
         try {
             InstructorAccount instructorAccount = service.getInstructorAccount(email);
-            return ResponseEntity.ok().body(instructorAccount);
+            return ResponseEntity.ok().body(convertToDto(instructorAccount));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
