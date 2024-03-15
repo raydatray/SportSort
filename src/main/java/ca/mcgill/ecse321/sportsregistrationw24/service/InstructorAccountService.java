@@ -16,11 +16,7 @@ public class InstructorAccountService {
     private InstructorAccountRepository instructorAccountRepository;
 
     @Transactional
-    public InstructorAccount createInstructorAccount(String email, String password, String passwordConfirmation) {
-
-        if (!(password.equals(passwordConfirmation))) {
-            throw new IllegalArgumentException("Passwords do not match!");
-        }
+    public InstructorAccount createInstructorAccount(String email, String password) {
 
         InstructorAccount instructorAccount = new InstructorAccount();
         instructorAccount.setEmail(email);
