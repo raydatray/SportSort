@@ -2,9 +2,12 @@ package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseOfferingDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
+import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
+import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.service.CourseOfferingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,57 +25,80 @@ public class CourseOfferingRestController {
             "/courseOfferings/create",
             "/courseOffering/create/"
     })
-    public CourseOfferingDto createCourseOffering(@RequestBody CourseOfferingDto courseOfferingDto) {
-        Date startDate = courseOfferingDto.getStartDate();
-        Date endDate = courseOfferingDto.getEndDate();
-        Room room = courseOfferingDto.getRoom();
-        Integer id = courseOfferingDto.getiD();
+    public ResponseEntity<?> createCourseOffering(@RequestBody CourseOfferingDto courseOfferingDto) {
+        try {
+            Date startDate = courseOfferingDto.getStartDate();
+            Date endDate = courseOfferingDto.getEndDate();
+            Room room = courseOfferingDto.getRoom();
+            Integer id = courseOfferingDto.getiD();
 
 
-       CourseOffering courseOffering = service.createCourseOffering(startDate, endDate, room, id);
-        return convertToDto(courseOffering);
+            service.createCourseOffering(startDate, endDate, room, id);
+            return ResponseEntity.ok().body("Course offering created successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
     }
 
     @GetMapping(value = {
             "/courseOfferings/get",
             "/courseOfferings/get/"
     })
-    public CourseOfferingDto getCourseOffering(@RequestParam Integer id) {
-       CourseOffering courseOffering = service.getCourseOffering(id);
-        return convertToDto(courseOffering);
+    public ResponseEntity<?> getCourseOffering(@RequestParam Integer id, UserAccount user) {
+        try {
+            CourseOffering courseOffering = service.getCourseOfferingById(id, user);
+            return ResponseEntity.ok().body(convertToDto(courseOffering));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping(value = {
             "/courseOfferings/getAll",
             "/courseOfferings/getAll/"
     })
-    public List<CourseOfferingDto> getAllCourseOfferings() {
-        List<CourseOfferingDto> courseOfferingDtos = new ArrayList<>();
-        for (CourseOffering courseOffering : service.getAllCourseOfferings()) {
-            courseOfferingDtos.add(convertToDto(courseOffering));
+    public ResponseEntity<?> getAllCourseOfferings() {
+        try {
+            List<CourseOfferingDto> courseOfferingDtos = new ArrayList<>();
+            for (CourseOffering courseOffering : service.getAllCourseOfferings()) {
+                courseOfferingDtos.add(convertToDto(courseOffering));
+            }
+            return ResponseEntity.ok().body(courseOfferingDtos);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return courseOfferingDtos;
     }
 
-    @PutMapping(value = {
+    /* @PutMapping(value = {
             "/courseOfferings/update",
             "/courseOfferings/update/"
     })
 
-    public void updateCustomerAccount(@RequestBody CourseOfferingDto courseOfferingDto, @RequestParam Date aStartDate, Date aEndDate, Room aRoom, Integer aId) {
-        Date startDate = courseOfferingDto.getStartDate();
-        Date endDate = courseOfferingDto.getEndDate();
-        Room room = courseOfferingDto.getRoom();
+    public ResponseEntity<?> updateCustomerAccount(@RequestBody CourseOfferingDto courseOfferingDto, @RequestParam Integer aId) {
+        try {
+            Date startDate = courseOfferingDto.getStartDate();
+            Date endDate = courseOfferingDto.getEndDate();
+            Room room = courseOfferingDto.getRoom();
 
-        service.updateCourseOffering(startDate,endDate,room, aId);
-    }
+            service.updateCourseOffering(startDate,endDate,room, aId);
+            return ResponseEntity.ok().body("Course offering updated successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    } */
 
     @DeleteMapping(value = {
             "/courseOfferings/delete",
             "/courseOfferings/delete/"
     })
-    public void deleteCourseOffering(@RequestParam Integer id) {
-        service.deleteCourseOffering(id);
+    public ResponseEntity<?> deleteCourseOffering(@RequestParam Integer id) {
+        try {
+            service.deleteCourseOffering(id);
+            return ResponseEntity.ok().body("Course offering deleted successfully!");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     private CourseOfferingDto convertToDto(CourseOffering courseOffering) {
