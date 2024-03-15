@@ -6,10 +6,12 @@ import ca.mcgill.ecse321.sportsregistrationw24.model.keys.RegistrationId;
 import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Lookup;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 import java.util.*;
+import java.util.logging.Logger;
 
 @Service
 public class RegistrationService {
@@ -58,12 +60,12 @@ public class RegistrationService {
 
   @Transactional
   public Registration getRegistration(RegistrationId registrationId) {
-      return registrationRepository.findById(registrationId).orElse(null);
+    return registrationRepository.findById(registrationId).orElseThrow(() -> new IllegalArgumentException("The registration does not exist!"));
   }
 
   @Transactional
   public void deleteRegistration(RegistrationId registrationId) {
-    Registration registration = getRegistration(registrationId);
+    Registration registration = registrationRepository.findById(registrationId).orElse(null);
 
     if (registration == null) {
       throw new IllegalArgumentException("Registration does not exist!");

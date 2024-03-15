@@ -27,8 +27,8 @@ public class CustomerAccountService {
     }
 
     @Transactional
-    public CustomerAccount getCustomerAccount(String email) {
-        return customerAccountRepository.findByEmail(email).orElse(null);
+    public CustomerAccount getCustomerAccount(Integer customerId) {
+        return customerAccountRepository.findById(customerId).orElse(null);
     }
 
     @Transactional

@@ -18,7 +18,7 @@ public class RegistrationDto {
 
     // Hide card information (only expose last 4 digits of card)
     StringBuilder processedCardNumber = new StringBuilder("**** **** **** ");
-    for (int i = 11; i > 7; i--) {
+    for (int i = 4; i > 0; i--) { // TODO - Change back to i = 11 i < 7
       processedCardNumber.append(paymentInfoCardNumber.charAt(i));
     }
 

@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dto.RegistrationCO;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.RegistrationDto;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.RegistrationIdDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Registration;
 import ca.mcgill.ecse321.sportsregistrationw24.model.keys.RegistrationId;
 import ca.mcgill.ecse321.sportsregistrationw24.service.RegistrationService;
@@ -40,10 +41,14 @@ public class RegistrationRestController {
             "/registrations/get",
             "/registrations/get/"
     })
-    public ResponseEntity<?> getRegistration(@RequestParam RegistrationId registrationId) {
+    public ResponseEntity<?> getRegistration(@RequestBody RegistrationIdDto registrationIdDto) {
         try {
+            Integer customerAccountId = registrationIdDto.getCustomerAccountId();
+            Integer courseOfferingId = registrationIdDto.getCourseOfferingId();
+            RegistrationId registrationId = new RegistrationId(customerAccountId, courseOfferingId);
             Registration registration = registrationService.getRegistration(registrationId);
-            return ResponseEntity.ok().body(registration);
+
+            return ResponseEntity.ok().body(convertToDto(registration));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
