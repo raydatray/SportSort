@@ -1,6 +1,5 @@
 package ca.mcgill.ecse321.sportsregistrationw24.service;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dao.CustomerAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseOfferingRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.InstructorAccountRepository;
@@ -77,7 +76,10 @@ public class CourseOfferingService {
     } */
 
     @Transactional
-    public void deleteCourseOffering(Integer aId) {
+    public void deleteCourseOffering(Integer aId, UserAccount user) {
+        if (user.getUserType().equals("CUSTOMER")){
+            throw new IllegalArgumentException("Customers cannot delete course offerings!");
+        }
         CourseOffering courseOffering = courseOfferingRepository.findById(aId).orElse(null);
 
         if (courseOffering == null) {
@@ -87,7 +89,16 @@ public class CourseOfferingService {
         courseOfferingRepository.delete(courseOffering);
     }
     @Transactional
-    public List<CourseOffering> getAllCourseOfferings() {
+    public List<CourseOffering> getAllCourseOfferings(UserAccount user) {
+        if (user.getUserType().equals("INSTRUCTOR")) {
+            Optional<InstructorAccount> optional = instructorAccountRepository.findByEmail(user.getEmail());
+            InstructorAccount instructor = optional.orElse(null);
+
+            if (instructor == null) {
+                throw new IllegalArgumentException("Instructor does not exist!");
+            }
+            return getCourseOfferingByInstructor(instructor);
+        }
         return toList(courseOfferingRepository.findAll());
     }
 

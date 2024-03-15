@@ -1,4 +1,5 @@
-package ca.mcgill.ecse321.sportsregistrationw24.dto;
+package ca.mcgill.ecse321.sportsregistrationw24.dto.courseOffering;
+import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
 import java.sql.Date;
 
@@ -17,6 +18,10 @@ public class CourseOfferingDto {
         this.endDate = aEndDate;
         this.room = aRoom;
         this.id = aId;
+    }
+
+    public CourseOfferingDto(CourseOffering aCourseOffering){
+        this(aCourseOffering.getStartDate(), aCourseOffering.getEndDate(), aCourseOffering.getRoom(), aCourseOffering.getId());
     }
 
     public Date getStartDate() {

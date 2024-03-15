@@ -1,8 +1,8 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseOfferingDto;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.courseOffering.CourseOfferingDto;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.courseOffering.CourseOfferingCO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
-import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.service.CourseOfferingService;
@@ -25,12 +25,12 @@ public class CourseOfferingRestController {
             "/courseOfferings/create",
             "/courseOffering/create/"
     })
-    public ResponseEntity<?> createCourseOffering(@RequestBody CourseOfferingDto courseOfferingDto) {
+    public ResponseEntity<?> createCourseOffering(@RequestBody CourseOfferingCO courseOfferingCO) {
         try {
-            Date startDate = courseOfferingDto.getStartDate();
-            Date endDate = courseOfferingDto.getEndDate();
-            Room room = courseOfferingDto.getRoom();
-            Integer id = courseOfferingDto.getiD();
+            Date startDate = courseOfferingCO.getStartDate();
+            Date endDate = courseOfferingCO.getEndDate();
+            Room room = courseOfferingCO.getRoom();
+            Integer id = courseOfferingCO.getiD();
 
 
             service.createCourseOffering(startDate, endDate, room, id);
@@ -58,10 +58,10 @@ public class CourseOfferingRestController {
             "/courseOfferings/getAll",
             "/courseOfferings/getAll/"
     })
-    public ResponseEntity<?> getAllCourseOfferings() {
+    public ResponseEntity<?> getAllCourseOfferings(UserAccount user) {
         try {
             List<CourseOfferingDto> courseOfferingDtos = new ArrayList<>();
-            for (CourseOffering courseOffering : service.getAllCourseOfferings()) {
+            for (CourseOffering courseOffering : service.getAllCourseOfferings(user)) {
                 courseOfferingDtos.add(convertToDto(courseOffering));
             }
             return ResponseEntity.ok().body(courseOfferingDtos);
@@ -92,9 +92,9 @@ public class CourseOfferingRestController {
             "/courseOfferings/delete",
             "/courseOfferings/delete/"
     })
-    public ResponseEntity<?> deleteCourseOffering(@RequestParam Integer id) {
+    public ResponseEntity<?> deleteCourseOffering(@RequestParam Integer id, UserAccount user) {
         try {
-            service.deleteCourseOffering(id);
+            service.deleteCourseOffering(id, user);
             return ResponseEntity.ok().body("Course offering deleted successfully!");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
