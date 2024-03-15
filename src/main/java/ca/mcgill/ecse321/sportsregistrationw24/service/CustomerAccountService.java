@@ -27,16 +27,12 @@ public class CustomerAccountService {
     }
 
     @Transactional
-    public void updateCustomerEmail(String oldEmail, String email, String password) {
+    public void updateCustomerEmail(String oldEmail, String email) {
         CustomerAccount customerAccount = customerAccountRepository.findByEmail(oldEmail).orElse(null);
-
         if (customerAccount == null) {
             throw new IllegalArgumentException("Customer Account does not exist!");
         }
-
         customerAccount.setEmail(email);
-        customerAccount.setPassword(password);
-
         customerAccountRepository.save(customerAccount);
     }
 

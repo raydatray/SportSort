@@ -21,46 +21,75 @@ public class CustomerAccountRestController {
             "/customerAccounts/create",
             "/customerAccounts/create/"
     })
-    public CustomerAccountDto createCustomerAccount(@RequestBody CustomerAccountDto customerAccountDto) {
-        String email = customerAccountDto.getEmail();
-        String password = customerAccountDto.getPassword();
-
-
-        CustomerAccount customerAccount = service.createCustomerAccount(email, password);
-        return convertToDto(customerAccount);
+    public ResponseEntity<?> createCustomerAccount(@RequestBody CustomerAccountDto customerAccountDto) {
+        try {
+            String email = customerAccountDto.getEmail();
+            String password = customerAccountDto.getPassword();
+            CustomerAccount customerAccount = service.createCustomerAccount(email, password);
+            return ResponseEntity.ok().body(convertToDto(customerAccount));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping(value = {
             "/customerAccounts/get",
             "/customerAccounts/get/"
     })
-    public CustomerAccountDto getCustomerAccount(@RequestParam String email) {
-        CustomerAccount customerAccount = service.getCustomerAccount(email);
-        return convertToDto(customerAccount);
+    public ResponseEntity<?> getCustomerAccount(@RequestParam String email) {
+        try {
+            CustomerAccount customerAccount = service.getCustomerAccount(email);
+            return ResponseEntity.ok().body(convertToDto(customerAccount));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping(value = {
             "/customerAccounts/getAll",
             "/customerAccounts/getAll/"
     })
-    public List<CustomerAccountDto> getAllCustomerAccounts() {
-        List<CustomerAccountDto> customerAccountDtos = new ArrayList<>();
-        for (CustomerAccount customerAccount : service.getAllCustomerAccounts()) {
-            customerAccountDtos.add(convertToDto(customerAccount));
+    public ResponseEntity<?> getAllCustomerAccounts() {
+        try {
+            List<CustomerAccountDto> customerAccountDtos = new ArrayList<>();
+            for (CustomerAccount customerAccount : service.getAllCustomerAccounts()) {
+                CustomerAccountDto dto = convertToDto(customerAccount);
+                customerAccountDtos.add(dto);
+            }
+            return ResponseEntity.ok().body(customerAccountDtos);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
-        return customerAccountDtos;
     }
 
     @PutMapping(value = {
-            "/customerAccounts/update",
-            "/customerAccounts/update/"
+            "/customerAccounts/updateEmail",
+            "/customerAccounts/updateEmail/"
     })
 
-    public void updateCustomerAccount(@RequestBody CustomerAccountDto customerAccountDto, @RequestParam String oldEmail) {
-        String email = customerAccountDto.getEmail();
-        String password = customerAccountDto.getPassword();
+    public ResponseEntity<?> updateCustomerEmail(@RequestBody CustomerAccountDto customerAccountDto, @RequestParam String newEmail) {
+        try {
+            String oldEmail = customerAccountDto.getEmail();
+            service.updateCustomerEmail(oldEmail, newEmail);
+            return ResponseEntity.ok().body("Customer account updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 
-        service.updateCustomerEmail(oldEmail, email, password);
+    @PutMapping(value = {
+            "/customerAccounts/updatePassword",
+            "/customerAccounts/updatePassword/"
+    })
+    public ResponseEntity<?> updateCustomerPassword(@RequestBody CustomerAccountDto customerAccountDto, String newPassword) {
+        try {
+            CustomerAccount customerAccount = service.getCustomerAccount(customerAccountDto.getEmail());
+            String oldPassword = customerAccountDto.getPassword();
+            service.updateCustomerPassword(customerAccount, newPassword, oldPassword);
+            return ResponseEntity.ok().body("Password updated successfully.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @DeleteMapping(value = {
