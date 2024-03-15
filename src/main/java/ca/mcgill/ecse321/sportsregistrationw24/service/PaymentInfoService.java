@@ -108,17 +108,4 @@ public class PaymentInfoService {
   @Transactional
   public void deletePaymentInfo(Integer aID) { paymentInfoRepository.deleteById(aID); }
 
-
-
-
-
-  private <T> List<T> toList(Iterable<T> iterable){
-    List<T> resultList = new ArrayList<T>();
-    for (T t : iterable) {
-      resultList.add(t);
-    }
-    return resultList;
-  }
-
-
 }

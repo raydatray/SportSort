@@ -36,9 +36,9 @@ public class RoomRestController {
     "/room/update",
     "/room/update/"
   })
-  public void updateRoom(@RequestBody RoomDto roomDto, @RequestParam Integer aFloorNumber, @RequestParam Integer aRoomNumber) {
-    String newName = roomDto.getName();
-    Integer newCapacity = roomDto.getCapacity();
+  public void updateRoom(@RequestBody RoomDto roomDto, @RequestParam String newName, @RequestParam Integer newCapacity) {
+    Integer aFloorNumber = roomDto.getFloorNumber();
+    Integer aRoomNumber = roomDto.getRoomNumber();
 
     service.updateRoom(newName, aFloorNumber, aRoomNumber, newCapacity);
   }
