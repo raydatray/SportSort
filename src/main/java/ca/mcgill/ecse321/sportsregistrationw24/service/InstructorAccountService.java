@@ -15,7 +15,7 @@ public class InstructorAccountService {
     private InstructorAccountRepository instructorAccountRepository;
 
     @Transactional
-    public InstructorAccount createInstructorAccount(String email, String password) {
+    public InstructorAccount createInstructorAccount(String email, String password, String name) {
         InstructorAccount existingInstructoraccount = getInstructorAccount(email);
         if (existingInstructoraccount != null) {
             throw new IllegalArgumentException("An instructor account already exists with this email");
@@ -23,6 +23,7 @@ public class InstructorAccountService {
         InstructorAccount instructorAccount = new InstructorAccount();
         instructorAccount.setEmail(email);
         instructorAccount.setPassword(password);
+        instructorAccount.setName(name);
         instructorAccountRepository.save(instructorAccount);
         return instructorAccount;
     }

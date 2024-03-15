@@ -17,11 +17,15 @@ public class CustomerAccountService {
     private CustomerAccountRepository customerAccountRepository;
 
     @Transactional
-    public CustomerAccount createCustomerAccount(String email, String password) {
-
+    public CustomerAccount createCustomerAccount(String email, String password, String name) {
+        CustomerAccount existingCustomeraccount = getCustomerAccount(email);
+        if (existingCustomeraccount != null) {
+            throw new IllegalArgumentException("An customer account already exists with this email");
+        }
         CustomerAccount customerAccount = new CustomerAccount();
         customerAccount.setEmail(email);
         customerAccount.setPassword(password);
+        customerAccount.setName(name);
         customerAccountRepository.save(customerAccount);
         return customerAccount;
     }

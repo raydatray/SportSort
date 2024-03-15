@@ -25,7 +25,8 @@ public class InstructorAccountRestController {
         try {
             String email = instructorAccountDto.getEmail();
             String password = instructorAccountDto.getPassword();
-            InstructorAccount instructorAccount = service.createInstructorAccount(email, password);
+            String name = instructorAccountDto.getName();
+            InstructorAccount instructorAccount = service.createInstructorAccount(email, password, name);
             return ResponseEntity.ok().body(convertToDto(instructorAccount));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -109,7 +110,7 @@ public class InstructorAccountRestController {
             throw new IllegalArgumentException("There is no such customer account!");
         }
         return new InstructorAccountDto(instructorAccount.getEmail(),
-                instructorAccount.getPassword());
+                instructorAccount.getPassword(), instructorAccount.getName());
     }
 
 }
