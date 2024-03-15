@@ -20,16 +20,13 @@ public class OwnerAccountService {
     private OwnerAccountRepository ownerAccountRepository;
 
     @Transactional
-    public void updateOwnerEmail(String oldEmail, String email, String password) {
+    public void updateOwnerEmail(String oldEmail, String email) {
         OwnerAccount ownerAccount = ownerAccountRepository.findByEmail(oldEmail).orElse(null);
 
         if (ownerAccount == null) {
             throw new IllegalArgumentException("Owner Account does not exist!");
         }
-
         ownerAccount.setEmail(email);
-        ownerAccount.setPassword(password);
-
         ownerAccountRepository.save(ownerAccount);
     }
 
@@ -45,6 +42,11 @@ public class OwnerAccountService {
         }
         owner.setPassword(newPassword);
         ownerAccountRepository.save(owner);
+    }
+
+    @Transactional
+    public OwnerAccount getOwnerAccount(String email) {
+        return ownerAccountRepository.findByEmail(email).orElse(null);
     }
 
     @Transactional
