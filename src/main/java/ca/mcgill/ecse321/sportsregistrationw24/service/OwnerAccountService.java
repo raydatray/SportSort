@@ -53,85 +53,9 @@ public class OwnerAccountService {
         ownerAccountRepository.save(owner);
     }
 
-
-    @Transactional
-    public void deleteCustomerAccount(String email) {
-        CustomerAccount customerAccount = customerAccountRepository.findByEmail(email).orElse(null);
-
-        if (customerAccount == null) {
-            throw new IllegalArgumentException("Customer Account does not exist!");
-        }
-
-        customerAccountRepository.delete(customerAccount);
-    }
-
-    @Transactional
-    public CustomerAccount getCustomerAccount(String email) {
-        return customerAccountRepository.findByEmail(email).orElse(null);
-    }
-
-    @Transactional
-    public List<CustomerAccount> getAllCustomerAccounts() {
-        Utilities utilities = new Utilities();
-        return utilities.iterableToArrayList(customerAccountRepository.findAll());
-    }
-
-    @Transactional
-    public InstructorAccount createInstructorAccount(String email, String password, String passwordConfirmation) {
-
-        if (!(password.equals(passwordConfirmation))) {
-            throw new IllegalArgumentException("Passwords do not match!");
-        }
-
-        InstructorAccount instructorAccount = new InstructorAccount();
-        instructorAccount.setEmail(email);
-        instructorAccount.setPassword(password);
-        instructorAccountRepository.save(instructorAccount);
-        return instructorAccount;
-    }
-
-    @Transactional
-    public void updateInstructorEmail(String oldEmail, String email, String password) {
-        InstructorAccount instructorAccount = instructorAccountRepository.findByEmail(oldEmail).orElse(null);
-
-        if (instructorAccount == null) {
-            throw new IllegalArgumentException("Owner Account does not exist!");
-        }
-
-        instructorAccount.setEmail(email);
-        instructorAccount.setPassword(password);
-
-        instructorAccountRepository.save(instructorAccount);
-    }
-
-
-    @Transactional
-    public void deleteInstructorAccount(String email) {
-        InstructorAccount instructorAccount = instructorAccountRepository.findByEmail(email).orElse(null);
-
-        if (instructorAccount == null) {
-            throw new IllegalArgumentException("Instructor account does not exist!");
-        }
-
-        instructorAccountRepository.delete(instructorAccount);
-    }
-
-    @Transactional
-    public InstructorAccount getInstructorAccount(String email) {
-        return instructorAccountRepository.findByEmail(email).orElse(null);
-    }
-
-    @Transactional
-    public List<InstructorAccount> getAllInstructorAccounts() {
-        Utilities utilities = new Utilities();
-        return utilities.iterableToArrayList(instructorAccountRepository.findAll());
-    }
-
     @Transactional
     public List<UserAccount> getAllUserAccounts() {
         Utilities utilities = new Utilities();
         return utilities.iterableToArrayList(userAccountRepository.findAll());
     }
-
-
 }

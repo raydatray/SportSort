@@ -59,7 +59,7 @@ public class CustomerAccountRestController {
         String email = customerAccountDto.getEmail();
         String password = customerAccountDto.getPassword();
 
-        service.updateCustomerAccount(oldEmail, email, password);
+        service.updateCustomerEmail(oldEmail, email, password);
     }
 
     @DeleteMapping(value = {

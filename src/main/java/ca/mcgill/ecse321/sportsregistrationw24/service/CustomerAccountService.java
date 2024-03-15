@@ -2,9 +2,12 @@ package ca.mcgill.ecse321.sportsregistrationw24.service;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.CustomerAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
+import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service
@@ -38,7 +41,7 @@ public class CustomerAccountService {
     }
 
     @Transactional
-    public void updateOwnerPassword(CustomerAccount customer, String newPassword, String oldPassword) {
+    public void updateCustomerPassword(CustomerAccount customer, String newPassword, String oldPassword) {
         // Incorrect old password
         if (!customer.getPassword().equals(oldPassword)) {
             throw new IllegalArgumentException("Incorrect old password!");
@@ -60,6 +63,17 @@ public class CustomerAccountService {
         }
 
         customerAccountRepository.delete(customerAccount);
+    }
+
+    @Transactional
+    public CustomerAccount getCustomerAccount(String email) {
+        return customerAccountRepository.findByEmail(email).orElse(null);
+    }
+
+    @Transactional
+    public List<CustomerAccount> getAllCustomerAccounts() {
+        Utilities utilities = new Utilities();
+        return utilities.iterableToArrayList(customerAccountRepository.findAll());
     }
 
 }
