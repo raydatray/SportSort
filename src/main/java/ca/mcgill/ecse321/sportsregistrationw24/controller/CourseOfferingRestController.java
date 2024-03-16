@@ -19,56 +19,55 @@ import java.sql.Date;
 @RestController
 public class CourseOfferingRestController {
 
-    @Autowired
-    private CourseOfferingService service;
-    @PostMapping(value = {
-            "/courseOfferings/create",
-            "/courseOffering/create/"
-    })
-    public ResponseEntity<?> createCourseOffering(@RequestBody CourseOfferingCO courseOfferingCO) {
-        try {
-            Date startDate = courseOfferingCO.getStartDate();
-            Date endDate = courseOfferingCO.getEndDate();
-            Room room = courseOfferingCO.getRoom();
-            Integer id = courseOfferingCO.getiD();
+  @Autowired
+  private CourseOfferingService service;
+  @PostMapping(value = {
+    "/courseOfferings/create",
+    "/courseOffering/create/"
+  })
+  public ResponseEntity<?> createCourseOffering(@RequestBody CourseOfferingCO courseOfferingCO) {
+    try {
+      Date startDate = courseOfferingCO.getStartDate();
+      Date endDate = courseOfferingCO.getEndDate();
+      Room room = courseOfferingCO.getRoom();
+      Integer id = courseOfferingCO.getiD();
 
-
-            service.createCourseOffering(startDate, endDate, room, id);
-            return ResponseEntity.ok().body("Course offering created successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-
+      service.createCourseOffering(startDate, endDate, room, id);
+      return ResponseEntity.ok().body("Course offering created successfully!");
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
 
-    @GetMapping(value = {
-            "/courseOfferings/get",
-            "/courseOfferings/get/"
-    })
-    public ResponseEntity<?> getCourseOffering(@RequestParam Integer id, UserAccount user) {
-        try {
-            CourseOffering courseOffering = service.getCourseOfferingById(id, user);
-            return ResponseEntity.ok().body(convertToDto(courseOffering));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
+  }
 
-    @GetMapping(value = {
-            "/courseOfferings/getAll",
-            "/courseOfferings/getAll/"
-    })
-    public ResponseEntity<?> getAllCourseOfferings(UserAccount user) {
-        try {
-            List<CourseOfferingDto> courseOfferingDtos = new ArrayList<>();
-            for (CourseOffering courseOffering : service.getAllCourseOfferings(user)) {
-                courseOfferingDtos.add(convertToDto(courseOffering));
-            }
-            return ResponseEntity.ok().body(courseOfferingDtos);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+  @GetMapping(value = {
+    "/courseOfferings/get",
+    "/courseOfferings/get/"
+  })
+  public ResponseEntity<?> getCourseOffering(@RequestParam Integer id, UserAccount user) {
+    try {
+      CourseOffering courseOffering = service.getCourseOfferingById(id, user);
+      return ResponseEntity.ok().body(convertToDto(courseOffering));
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
+  }
+
+  @GetMapping(value = {
+    "/courseOfferings/getAll",
+    "/courseOfferings/getAll/"
+  })
+  public ResponseEntity<?> getAllCourseOfferings(UserAccount user) {
+    try {
+      List<CourseOfferingDto> courseOfferingDtos = new ArrayList<>();
+      for (CourseOffering courseOffering : service.getAllCourseOfferings(user)) {
+        courseOfferingDtos.add(convertToDto(courseOffering));
+      }
+      return ResponseEntity.ok().body(courseOfferingDtos);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
 
     /* @PutMapping(value = {
             "/courseOfferings/update",
@@ -88,25 +87,24 @@ public class CourseOfferingRestController {
         }
     } */
 
-    @DeleteMapping(value = {
-            "/courseOfferings/delete",
-            "/courseOfferings/delete/"
-    })
-    public ResponseEntity<?> deleteCourseOffering(@RequestParam Integer id, UserAccount user) {
-        try {
-            service.deleteCourseOffering(id, user);
-            return ResponseEntity.ok().body("Course offering deleted successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+  @DeleteMapping(value = {
+    "/courseOfferings/delete",
+    "/courseOfferings/delete/"
+  })
+  public ResponseEntity<?> deleteCourseOffering(@RequestParam Integer id, UserAccount user) {
+    try {
+      service.deleteCourseOffering(id, user);
+      return ResponseEntity.ok().body("Course offering deleted successfully!");
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
+  }
 
-    private CourseOfferingDto convertToDto(CourseOffering courseOffering) {
-        if (courseOffering == null) {
-            throw new IllegalArgumentException("There is no such course offering!");
-        }
-        return new CourseOfferingDto(courseOffering.getStartDate(),
-                courseOffering.getEndDate(), courseOffering.getRoom(), courseOffering.getId());
+  private CourseOfferingDto convertToDto(CourseOffering courseOffering) {
+    if (courseOffering == null) {
+      throw new IllegalArgumentException("There is no such course offering!");
     }
-
+    return new CourseOfferingDto(courseOffering.getStartDate(),
+      courseOffering.getEndDate(), courseOffering.getRoom(), courseOffering.getId());
+    }
 }

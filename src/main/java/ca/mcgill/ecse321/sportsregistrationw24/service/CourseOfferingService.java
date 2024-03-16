@@ -19,46 +19,46 @@ import java.util.Optional;
 @Service
 public class CourseOfferingService {
 
-    @Autowired
-    private CourseOfferingRepository courseOfferingRepository;
+  @Autowired
+  private CourseOfferingRepository courseOfferingRepository;
 
-    @Autowired
-    private InstructorAccountRepository instructorAccountRepository;
+  @Autowired
+  private InstructorAccountRepository instructorAccountRepository;
 
-    @Transactional
-    public CourseOffering createCourseOffering(Date aStartDate, Date aEndDate, Room aRoom, Integer aId){
-        CourseOffering courseOffering = new CourseOffering();
-        courseOffering.setStartDate(aStartDate);
-        courseOffering.setEndDate(aEndDate);
-        courseOffering.setRoom(aRoom);
-        courseOffering.setId(aId);
-        courseOfferingRepository.save(courseOffering);
-        return courseOffering;
-    }
+  @Transactional
+  public CourseOffering createCourseOffering(Date aStartDate, Date aEndDate, Room aRoom, Integer aId){
+    CourseOffering courseOffering = new CourseOffering();
+    courseOffering.setStartDate(aStartDate);
+    courseOffering.setEndDate(aEndDate);
+    courseOffering.setRoom(aRoom);
+    courseOffering.setId(aId);
+    courseOfferingRepository.save(courseOffering);
+    return courseOffering;
+  }
 
-    @Transactional
-    public CourseOffering getCourseOfferingById(Integer aId, UserAccount user) {
-        if (user.getUserType().equals("INSTRUCTOR")) {
-            Optional<InstructorAccount> optional = instructorAccountRepository.findByEmail(user.getEmail());
-            InstructorAccount instructor = optional.orElse(null);
+  @Transactional
+  public CourseOffering getCourseOfferingById(Integer aId, UserAccount user) {
+    if (user.getUserType().equals("INSTRUCTOR")) {
+      Optional<InstructorAccount> optional = instructorAccountRepository.findByEmail(user.getEmail());
+      InstructorAccount instructor = optional.orElse(null);
 
-            if (instructor == null) {
-                throw new IllegalArgumentException("Instructor does not exist!");
-            }
+      if (instructor == null) {
+        throw new IllegalArgumentException("Instructor does not exist!");
+      }
 
-            Optional<CourseOffering> optional_1 = courseOfferingRepository.findById(aId);
-            if (getCourseOfferingByInstructor(instructor).contains(optional_1.orElse(null))) {
-                return courseOfferingRepository.findById(aId).orElse(null);
-            } else {
-                throw new IllegalArgumentException("Instructor does not teach this course!");
-            }
-        }
+      Optional<CourseOffering> optional_1 = courseOfferingRepository.findById(aId);
+      if (getCourseOfferingByInstructor(instructor).contains(optional_1.orElse(null))) {
         return courseOfferingRepository.findById(aId).orElse(null);
+      } else {
+        throw new IllegalArgumentException("Instructor does not teach this course!");
+      }
     }
-    @Transactional
-    public List<CourseOffering> getCourseOfferingByInstructor(InstructorAccount instructor) {
-        return courseOfferingRepository.findByInstructorAccount(instructor).orElse(null);
-    }
+    return courseOfferingRepository.findById(aId).orElse(null);
+  }
+  @Transactional
+  public List<CourseOffering> getCourseOfferingByInstructor(InstructorAccount instructor) {
+    return courseOfferingRepository.findByInstructorAccount(instructor).orElse(null);
+  }
 
     /*@Transactional
     public void updateCourseOffering(Date aStartDate, Date aEndDate, Room aRoom, Integer aId) {
@@ -75,38 +75,38 @@ public class CourseOfferingService {
         courseOfferingRepository.save(courseOffering);
     } */
 
-    @Transactional
-    public void deleteCourseOffering(Integer aId, UserAccount user) {
-        if (user.getUserType().equals("CUSTOMER")){
-            throw new IllegalArgumentException("Customers cannot delete course offerings!");
-        }
-        CourseOffering courseOffering = courseOfferingRepository.findById(aId).orElse(null);
-
-        if (courseOffering == null) {
-            throw new IllegalArgumentException("Course Offering does not exist!");
-        }
-
-        courseOfferingRepository.delete(courseOffering);
+  @Transactional
+  public void deleteCourseOffering(Integer aId, UserAccount user) {
+    if (user.getUserType().equals("CUSTOMER")){
+      throw new IllegalArgumentException("Customers cannot delete course offerings!");
     }
-    @Transactional
-    public List<CourseOffering> getAllCourseOfferings(UserAccount user) {
-        if (user.getUserType().equals("INSTRUCTOR")) {
-            Optional<InstructorAccount> optional = instructorAccountRepository.findByEmail(user.getEmail());
-            InstructorAccount instructor = optional.orElse(null);
+    CourseOffering courseOffering = courseOfferingRepository.findById(aId).orElse(null);
 
-            if (instructor == null) {
-                throw new IllegalArgumentException("Instructor does not exist!");
-            }
-            return getCourseOfferingByInstructor(instructor);
-        }
-        return toList(courseOfferingRepository.findAll());
+    if (courseOffering == null) {
+      throw new IllegalArgumentException("Course Offering does not exist!");
     }
 
-    private <T> List<T> toList(Iterable<T> iterable){
-        List<T> resultList = new ArrayList<T>();
-        for (T t : iterable) {
-            resultList.add(t);
-        }
-        return resultList;
+    courseOfferingRepository.delete(courseOffering);
+  }
+  @Transactional
+  public List<CourseOffering> getAllCourseOfferings(UserAccount user) {
+    if (user.getUserType().equals("INSTRUCTOR")) {
+      Optional<InstructorAccount> optional = instructorAccountRepository.findByEmail(user.getEmail());
+      InstructorAccount instructor = optional.orElse(null);
+
+      if (instructor == null) {
+        throw new IllegalArgumentException("Instructor does not exist!");
+      }
+      return getCourseOfferingByInstructor(instructor);
     }
+    return toList(courseOfferingRepository.findAll());
+  }
+
+  private <T> List<T> toList(Iterable<T> iterable){
+    List<T> resultList = new ArrayList<T>();
+    for (T t : iterable) {
+      resultList.add(t);
+    }
+    return resultList;
+  }
 }
