@@ -23,7 +23,7 @@ public class CourseOfferingRestController {
   private CourseOfferingService service;
   @PostMapping(value = {
     "/courseOfferings/create",
-    "/courseOffering/create/"
+    "/courseOfferings/create/"
   })
   public ResponseEntity<?> createCourseOffering(@RequestBody CourseOfferingCO courseOfferingCO) {
     try {
