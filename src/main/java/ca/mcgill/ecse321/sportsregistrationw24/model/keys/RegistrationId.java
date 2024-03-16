@@ -22,4 +22,6 @@ public class RegistrationId implements Serializable {
         return (this.courseOfferingId.equals(that.courseOfferingId) && this.customerAccountId.equals(that.customerAccountId));
     }
 
+    public Integer getCustomerAccountId() { return customerAccountId; }
+    public Integer getCourseOfferingId() { return courseOfferingId; }
 }

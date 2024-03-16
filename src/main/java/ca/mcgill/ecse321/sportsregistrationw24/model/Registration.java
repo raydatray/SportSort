@@ -23,8 +23,7 @@ public class Registration {
   private CourseOffering courseOffering;
 
   @ManyToOne
-  @AssociationOverride(name = "PaymentInfoId",
-      joinColumns = @JoinColumn(name = "payment_info_id"))
+  @AssociationOverride(name = "PaymentInfoId", joinColumns = @JoinColumn(name = "payment_info_id"))
   private PaymentInfo paymentInfo;
 
   public Registration(Date aRegisteredDate, CourseOffering aCourseOffering, CustomerAccount aCustomerAccount, PaymentInfo aPaymentInfo) {
@@ -58,6 +57,15 @@ public class Registration {
     boolean wasSet = false;
     if (aNewCustomerAccount != null) {
       customerAccount = aNewCustomerAccount;
+      wasSet = true;
+    }
+    return wasSet;
+  }
+
+  public boolean setPaymentInfo (PaymentInfo aNewPaymentInfo) {
+    boolean wasSet = false;
+    if (aNewPaymentInfo != null) {
+      paymentInfo = aNewPaymentInfo;
       wasSet = true;
     }
     return wasSet;
