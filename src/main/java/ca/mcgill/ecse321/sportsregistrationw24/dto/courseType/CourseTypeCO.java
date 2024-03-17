@@ -2,15 +2,15 @@ package ca.mcgill.ecse321.sportsregistrationw24.dto.courseType;
 
 public class CourseTypeCO {
   private String courseName;
-  private boolean approval;
+  private String userType;
 
   public CourseTypeCO(){}
 
-  public CourseTypeCO(String aCourseName, boolean approval){
+  public CourseTypeCO(String aCourseName, String aUserType){
     this.courseName = aCourseName;
-    this.approval = approval;
+    this.userType = aUserType;
   }
 
   public String getCourseName() {return this.courseName;}
-  public boolean getApprovalStatus() {return this.approval;}
+  public String getUserType() {return this.userType;}
 }

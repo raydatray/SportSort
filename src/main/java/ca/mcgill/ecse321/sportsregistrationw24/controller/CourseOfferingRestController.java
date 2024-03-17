@@ -56,7 +56,7 @@ public class CourseOfferingRestController {
     "/courseOfferings/getAll",
     "/courseOfferings/getAll/"
   })
-  public ResponseEntity<?> getAllCourseOfferings(String userEmail) {
+  public ResponseEntity<?> getAllCourseOfferings(@RequestParam String userEmail) {
     try {
       List<CourseOfferingDto> courseOfferingDtos = new ArrayList<>();
       for (CourseOffering courseOffering : service.getAllCourseOfferings(userEmail)) {

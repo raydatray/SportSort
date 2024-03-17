@@ -44,12 +44,7 @@ public class CourseOfferingService {
 
   @Transactional
   public CourseOffering getCourseOfferingById(Integer aId, String userEmail) {
-    Optional<UserAccount> optional = userAccountRepository.findUserByEmail(userEmail);
-    UserAccount user = optional.orElse(null);
-
-    if (user == null) {
-      throw new IllegalArgumentException("User does not exist!");
-    }
+    UserAccount user = getUser(userEmail);
 
     // different results depending on user type
     if (user.getUserType().equals("INSTRUCTOR")) {
@@ -70,12 +65,7 @@ public class CourseOfferingService {
 
   @Transactional
   public void deleteCourseOffering(Integer aId, String userEmail) {
-    Optional<UserAccount> optional = userAccountRepository.findUserByEmail(userEmail);
-    UserAccount user = optional.orElse(null);
-
-    if (user == null) {
-      throw new IllegalArgumentException("User does not exist!");
-    }
+    UserAccount user = getUser(userEmail);
 
     if (user.getUserType().equals("CUSTOMER")){
       throw new IllegalArgumentException("Customers cannot delete course offerings!");
@@ -90,12 +80,8 @@ public class CourseOfferingService {
   }
   @Transactional
   public List<CourseOffering> getAllCourseOfferings(String userEmail) {
-    Optional<UserAccount> optional = userAccountRepository.findUserByEmail(userEmail);
-    UserAccount user = optional.orElse(null);
+    UserAccount user = getUser(userEmail);
 
-    if (user == null) {
-      throw new IllegalArgumentException("User does not exist!");
-    }
     if (user.getUserType().equals("INSTRUCTOR")) {
       InstructorAccount instructor = (InstructorAccount) user;
       return getCourseOfferingByInstructor(instructor);
@@ -109,5 +95,15 @@ public class CourseOfferingService {
       resultList.add(t);
     }
     return resultList;
+  }
+
+  private UserAccount getUser(String userEmail) {
+    Optional<UserAccount> optional = userAccountRepository.findUserByEmail(userEmail);
+    UserAccount user = optional.orElse(null);
+
+    if (user == null) {
+      throw new IllegalArgumentException("User does not exist!");
+    }
+    return user;
   }
 }

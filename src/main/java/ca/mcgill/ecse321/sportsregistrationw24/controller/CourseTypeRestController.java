@@ -2,7 +2,6 @@ package ca.mcgill.ecse321.sportsregistrationw24.controller;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.courseType.CourseTypeCO;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.courseType.CourseTypeDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseType;
-import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.service.CourseTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -26,8 +25,9 @@ public class CourseTypeRestController {
   public ResponseEntity<?> createCourseType(@RequestBody CourseTypeCO courseTypeCO){
     try {
       String aCourseName = courseTypeCO.getCourseName();
+      String userType = courseTypeCO.getUserType();
 
-      service.createCourseType(aCourseName);
+      service.createCourseType(aCourseName, userType);
       return ResponseEntity.ok().body("Course type created succesfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -38,9 +38,9 @@ public class CourseTypeRestController {
     "/courseTypes/get",
     "/courseTypes/get/"
   })
-  public ResponseEntity<?> getCourseType(@RequestParam Integer aId) {
+  public ResponseEntity<?> getCourseType(@RequestParam Integer id, String userEmail) {
     try {
-      CourseType courseType = service.getCourseType(aId);
+      CourseType courseType = service.getCourseType(id, userEmail);
       return ResponseEntity.ok().body(convertToDto(courseType));
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -51,10 +51,10 @@ public class CourseTypeRestController {
     "/courseTypes/getAll",
     "/courseTypes/getAll/"
   })
-  public ResponseEntity<?> getAllCourseTypes() {
+  public ResponseEntity<?> getAllCourseTypes(@RequestParam String userEmail) {
     try {
       List<CourseTypeDto> courseTypeDtos = new ArrayList<>();
-      for (CourseType courseType : service.getAllCourseTypes()) {
+      for (CourseType courseType : service.getAllCourseTypes(userEmail)) {
         courseTypeDtos.add(convertToDto(courseType));
       }
       return ResponseEntity.ok().body(courseTypeDtos);
@@ -64,15 +64,13 @@ public class CourseTypeRestController {
   }
 
   @PutMapping(value = {
-    "/courseOfferings/update",
-    "/courseOfferings/update/"
+    "/courseTypes/update",
+    "/courseTypes/update/"
   })
 
-  public ResponseEntity<?> updateCourseType(@RequestBody CourseTypeDto courseTypeDto, @RequestParam Integer aId, boolean approval){
+  public ResponseEntity<?> updateCourseType(@RequestParam Integer id, String userEmail, boolean approved){
     try {
-      boolean approved = courseTypeDto.getApprovalStatus();
-
-      service.updateCourseTypeApproval(aId, approval);
+      service.updateCourseTypeApproval(id, approved, userEmail);
       return ResponseEntity.ok().body("Course type approval updated successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -83,9 +81,9 @@ public class CourseTypeRestController {
     "/courseTypes/delete",
     "/courseTypes/delete/"
   })
-  public ResponseEntity<?> deleteCourseType(@RequestParam Integer id) {
+  public ResponseEntity<?> deleteCourseType(@RequestParam Integer id, String userEmail) {
     try {
-      service.deleteCourseType(id);
+      service.deleteCourseType(id, userEmail);
       return ResponseEntity.ok().body("Course type deleted successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
