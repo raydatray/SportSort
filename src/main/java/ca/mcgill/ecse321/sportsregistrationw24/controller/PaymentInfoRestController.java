@@ -24,7 +24,7 @@ public class PaymentInfoRestController {
     "/paymentInfo/create",
     "/paymentInfo/create/"
   })
-  public ResponseEntity<?> createPaymentInfo(@RequestBody PaymentInfoDto paymentInfoDto) {
+  public ResponseEntity<?> createPaymentInfo(@RequestBody PaymentInfoDto paymentInfoDto, @RequestHeader String token) {
     try {
 
       PaymentInfo.PaymentType paymentType = paymentInfoDto.getPaymentType();
@@ -32,7 +32,6 @@ public class PaymentInfoRestController {
       Integer cvv = paymentInfoDto.getCvv();
       Integer expirationYear = paymentInfoDto.getExpirationYear();
       Integer expirationMonth = paymentInfoDto.getExpirationMonth();
-      String token = paymentInfoDto.getToken();
 
       PaymentInfo paymentInfo = service.createPaymentInfo(paymentType, cardNumber, cvv, expirationYear, expirationMonth, token);
 
@@ -82,9 +81,9 @@ public class PaymentInfoRestController {
           "/paymentInfo/getAll",
           "/paymentInfo/getAll/"
   })
-  public ResponseEntity<?> getAllPaymentInfosPerCustomer(@RequestParam String token) {
+  public ResponseEntity<?> getAllPaymentInfosPerCustomer(@RequestHeader String token, @RequestParam Integer paymentType) {
     try {
-      List<PaymentInfoDto> paymentInfoDtos = convertToDtos(service.getAllPaymentInfoPerCustomer(token));
+      List<PaymentInfoDto> paymentInfoDtos = convertToDtos(service.getAllPaymentInfoPerCustomer(token, paymentType));
       return ResponseEntity.ok().body(paymentInfoDtos);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -97,7 +96,7 @@ public class PaymentInfoRestController {
     "/paymentInfo/delete",
     "/paymentInfo/delete/"
   })
-  public ResponseEntity<?> deletePaymentInfo(@RequestParam Integer id) {
+  public ResponseEntity<?> deletePaymentInfo(@RequestHeader Integer id) {
     try {
       service.deletePaymentInfo(id);
       return ResponseEntity.ok().body("Payment Info successfully deleted");
@@ -112,7 +111,7 @@ public class PaymentInfoRestController {
       }
       return new PaymentInfoDto(paymentInfo.getId(), paymentInfo.getPaymentType(),
               paymentInfo.getCardNumber(), paymentInfo.getCvv(), paymentInfo.getExpirationYear(),
-              paymentInfo.getExpirationMonth(), paymentInfo.getCustomerAccount().getEmail());
+              paymentInfo.getExpirationMonth());
   }
 
   private List<PaymentInfoDto> convertToDtos(List<PaymentInfo> paymentInfo) {

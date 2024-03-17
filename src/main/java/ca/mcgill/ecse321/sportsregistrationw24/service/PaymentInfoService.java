@@ -107,7 +107,7 @@ public class PaymentInfoService {
   public PaymentInfo getPaymentInfo(Integer aID) { return paymentInfoRepository.findById(aID).orElseThrow(() -> new IllegalArgumentException("payment info with this ID doesn't exist")); }
 
   @Transactional
-  public List<PaymentInfo> getAllPaymentInfoPerCustomer(String token) {
+  public List<PaymentInfo> getAllPaymentInfoPerCustomer(String token, Integer paymentType) {
     Utilities utilities = new Utilities();
     ArrayList<PaymentInfo> allPaymentInfos = utilities.iterableToArrayList(paymentInfoRepository.findAll());
 
@@ -120,10 +120,19 @@ public class PaymentInfoService {
       }
     }
 
+    if (paymentType.equals(0)) {
+      filteredPaymentInfos.removeIf(info -> info.getPaymentType().toString().equals("Debit"));
+    }
+    else if (paymentType.equals(1)) {
+      filteredPaymentInfos.removeIf(info -> info.getPaymentType().toString().equals("Credit"));
+    }
     return filteredPaymentInfos;
   }
 
   @Transactional
-  public void deletePaymentInfo(Integer aID) { paymentInfoRepository.deleteById(aID); }
+  public void deletePaymentInfo(Integer aID) {
+    Optional<PaymentInfo> wrappedPaymentInfo = paymentInfoRepository.findById(aID);
+    paymentInfoRepository.delete(wrappedPaymentInfo.orElseThrow(() -> new IllegalArgumentException("There is no PaymentInfo with this id")));
+  }
 
 }

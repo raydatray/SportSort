@@ -16,21 +16,18 @@ public class PaymentInfoDto {
   private Integer cvv;
   private Integer expirationYear;
   private Integer expirationMonth;
-  private String token;
 
 
-  private CustomerAccountRepository customerAccountRepository;
 
   public PaymentInfoDto() {}
 
-  public PaymentInfoDto(Integer id, PaymentInfo.PaymentType paymentType, Integer cardNumber, Integer cvv, Integer expirationYear, Integer expirationMonth, String token) {
+  public PaymentInfoDto(Integer id, PaymentInfo.PaymentType paymentType, Integer cardNumber, Integer cvv, Integer expirationYear, Integer expirationMonth) {
     this.id = id;
     this.paymentType = paymentType;
     this.cardNumber = cardNumber;
     this.cvv = cvv;
     this.expirationYear = expirationYear;
     this.expirationMonth = expirationMonth;
-    this.token = token;
   }
 
   public Integer getId() { return id; }
@@ -39,5 +36,5 @@ public class PaymentInfoDto {
   public Integer getCvv() { return cvv; }
   public Integer getExpirationYear() { return expirationYear; }
   public Integer getExpirationMonth() { return expirationMonth; }
-  public String getToken() { return token; }
+
 }
