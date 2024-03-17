@@ -1,5 +1,6 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
+import ca.mcgill.ecse321.sportsregistrationw24.dto.AuthenticationDto;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.PaymentInfoDto;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.RoomDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.PaymentInfo;
@@ -7,6 +8,7 @@ import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
 import ca.mcgill.ecse321.sportsregistrationw24.service.PaymentInfoService;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -22,46 +24,72 @@ public class PaymentInfoRestController {
     "/paymentInfo/create",
     "/paymentInfo/create/"
   })
-  public PaymentInfoDto createPaymentInfo(@RequestBody PaymentInfoDto paymentInfoDto) {
+  public ResponseEntity<?> createPaymentInfo(@RequestBody PaymentInfoDto paymentInfoDto) {
+    try {
 
-    PaymentInfo.PaymentType paymentType = paymentInfoDto.getPaymentType();
-    Integer cardNumber = paymentInfoDto.getCardNumber();
-    Integer cvv = paymentInfoDto.getCvv();
-    Integer expirationYear = paymentInfoDto.getExpirationYear();
-    Integer expirationMonth = paymentInfoDto.getExpirationMonth();
-    String customerEmail = paymentInfoDto.getCustomerAccountEmail();
+      PaymentInfo.PaymentType paymentType = paymentInfoDto.getPaymentType();
+      Integer cardNumber = paymentInfoDto.getCardNumber();
+      Integer cvv = paymentInfoDto.getCvv();
+      Integer expirationYear = paymentInfoDto.getExpirationYear();
+      Integer expirationMonth = paymentInfoDto.getExpirationMonth();
+      String customerEmail = paymentInfoDto.getCustomerAccountEmail();
 
-    PaymentInfo paymentInfo = service.createPaymentInfo(paymentType, cardNumber, cvv, expirationYear, expirationMonth, customerEmail);
+      PaymentInfo paymentInfo = service.createPaymentInfo(paymentType, cardNumber, cvv, expirationYear, expirationMonth, customerEmail);
 
-    return convertToDto(paymentInfo);
+      return ResponseEntity.ok().body(paymentInfo);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
   }
 
   @PutMapping(value = {
     "/paymentInfo/update",
     "/paymentInfo/update/"
   })
-  public void updatePaymentInfo(@RequestBody PaymentInfoDto paymentInfoDto, @RequestParam Integer id) {
-    PaymentInfo.PaymentType newPaymentType = paymentInfoDto.getPaymentType();
-    Integer newCardNumber = paymentInfoDto.getCardNumber();
-    Integer newCvv = paymentInfoDto.getCvv();
-    Integer newExpirationYear = paymentInfoDto.getExpirationYear();
-    Integer newExpirationMonth = paymentInfoDto.getExpirationMonth();
+  public ResponseEntity<?> updatePaymentInfo(@RequestBody PaymentInfoDto paymentInfoDto) {
+    try {
+      PaymentInfo.PaymentType newPaymentType = paymentInfoDto.getPaymentType();
+      Integer newCardNumber = paymentInfoDto.getCardNumber();
+      Integer newCvv = paymentInfoDto.getCvv();
+      Integer newExpirationYear = paymentInfoDto.getExpirationYear();
+      Integer newExpirationMonth = paymentInfoDto.getExpirationMonth();
+      Integer id = paymentInfoDto.getId();
 
-    service.updatePaymentInfo(id, newPaymentType, newCardNumber, newCvv, newExpirationYear, newExpirationMonth);
+      service.updatePaymentInfo(id, newPaymentType, newCardNumber, newCvv, newExpirationYear, newExpirationMonth);
+      return ResponseEntity.ok().body(paymentInfoDto);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
   }
 
   @GetMapping(value = {
     "/paymentInfo/get",
     "/paymentInfo/get/"
   })
-  public PaymentInfoDto getPaymentInfo(@RequestHeader Integer id) { return convertToDto(service.getPaymentInfo(id)); }
+  public ResponseEntity<?> getPaymentInfo(@RequestHeader Integer id) {
+
+    try {
+      PaymentInfoDto paymentInfoDto = convertToDto(service.getPaymentInfo(id));
+      return ResponseEntity.ok().body(paymentInfoDto);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
 
 
   @GetMapping(value = {
           "/paymentInfo/getAll",
           "/paymentInfo/getAll/"
   })
-  public List<PaymentInfoDto> getAllPaymentInfosPerCustomer(@RequestParam String email) { return convertToDtos(service.getAllPaymentInfoPerCustomer(email)); }
+  public ResponseEntity<?> getAllPaymentInfosPerCustomer(@RequestParam String email) {
+    try {
+      List<PaymentInfoDto> paymentInfoDtos = convertToDtos(service.getAllPaymentInfoPerCustomer(email));
+      return ResponseEntity.ok().body(paymentInfoDtos);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
 
 
 
@@ -69,7 +97,14 @@ public class PaymentInfoRestController {
     "/paymentInfo/delete",
     "/paymentInfo/delete/"
   })
-  public void deletePaymentInfo(@RequestParam Integer id) { service.deletePaymentInfo(id); }
+  public ResponseEntity<?> deletePaymentInfo(@RequestParam Integer id) {
+    try {
+      service.deletePaymentInfo(id);
+      return ResponseEntity.ok().body("Payment Info successfully deleted");
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
 
   private PaymentInfoDto convertToDto(PaymentInfo paymentInfo) {
       if (paymentInfo == null) {
