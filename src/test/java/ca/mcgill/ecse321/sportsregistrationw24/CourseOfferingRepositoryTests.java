@@ -101,7 +101,8 @@ public class CourseOfferingRepositoryTests {
         InstructorAccount testInstructor = new InstructorAccount("ray","raydatray@gmail.com", "password");
         instructorAccountRepository.save(testInstructor);
 
-        ArrayList<DayOfWeek> testDays = new ArrayList<>(List.of(DayOfWeek.MONDAY, DayOfWeek.FRIDAY));        Date startDate = Date.valueOf("2024-02-18");
+        ArrayList<DayOfWeek> testDays = new ArrayList<>(List.of(DayOfWeek.MONDAY, DayOfWeek.FRIDAY));
+        Date startDate = Date.valueOf("2024-02-18");
         Date endDate = Date.valueOf("2024-03-15");
 
         CourseOffering testCourseOffering = new CourseOffering(startDate, endDate, testDays, testRoom, courseType, testInstructor);
