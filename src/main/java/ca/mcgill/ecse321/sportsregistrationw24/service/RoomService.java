@@ -36,7 +36,7 @@ public class RoomService {
       throw new IllegalArgumentException("A room with this floor or room number already exists");
     }
 
-    if (capacity == null || capacity.intValue() <= 0) {
+    if (capacity == null || capacity <= 0) {
       throw new IllegalArgumentException("A room with this capacity cannot exist");
     }
 
@@ -67,7 +67,7 @@ public class RoomService {
       }
     }
 
-    if (newCapacity == null || newCapacity.intValue() <= 0) {
+    if (newCapacity == null || newCapacity <= 0) {
       throw new IllegalArgumentException("A room with this capacity cannot exist");
     }
 
