@@ -1,11 +1,13 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
+import ca.mcgill.ecse321.sportsregistrationw24.dto.AuthenticationDto;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.CustomerAccountDto;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.RoomDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
 import ca.mcgill.ecse321.sportsregistrationw24.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -21,53 +23,90 @@ public class RoomRestController {
     "/room/create",
     "/room/create/"
   })
-  public RoomDto createRoom(@RequestBody RoomDto roomDto) {
-    String name = roomDto.getName();
-    Integer floorNumber = roomDto.getFloorNumber();
-    Integer roomNumber = roomDto.getRoomNumber();
-    Integer capacity = roomDto.getCapacity();
+  public ResponseEntity<?> createRoom(@RequestBody RoomDto roomDto) {
 
-    Room room = service.createRoom(name, floorNumber, roomNumber, capacity);
 
-    return convertToDto(room);
+    try {
+      String name = roomDto.getName();
+      Integer floorNumber = roomDto.getFloorNumber();
+      Integer roomNumber = roomDto.getRoomNumber();
+      Integer capacity = roomDto.getCapacity();
+
+      Room room = service.createRoom(name, floorNumber, roomNumber, capacity);
+
+      return ResponseEntity.ok().body(room);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
   }
 
   @PutMapping(value = {
     "/room/update",
     "/room/update/"
   })
-  public void updateRoom(@RequestBody RoomDto roomDto, @RequestParam String newName, @RequestParam Integer newCapacity) {
-    Integer aFloorNumber = roomDto.getFloorNumber();
-    Integer aRoomNumber = roomDto.getRoomNumber();
+  public ResponseEntity<?> updateRoom(@RequestBody RoomDto roomDto) {
 
-    service.updateRoom(newName, aFloorNumber, aRoomNumber, newCapacity);
+    try {
+      String newName = roomDto.getName();
+      Integer aFloorNumber = roomDto.getFloorNumber();
+      Integer aRoomNumber = roomDto.getRoomNumber();
+      Integer newCapacity = roomDto.getCapacity();
+
+      service.updateRoom(newName, aFloorNumber, aRoomNumber, newCapacity);
+
+      return ResponseEntity.ok().body(roomDto);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
   }
 
   @GetMapping(value = {
     "/room/get",
     "/room/get/"
   })
-  public RoomDto getRoom(@RequestParam Integer aFloorNumber, @RequestParam Integer aRoomNumber) {
-    return convertToDto(service.getRoom(aFloorNumber, aRoomNumber));
+  public ResponseEntity<?> getRoom(@RequestParam Integer aFloorNumber, @RequestParam Integer aRoomNumber) {
+
+    try {
+      RoomDto roomDto = convertToDto(service.getRoom(aFloorNumber, aRoomNumber));
+
+      return ResponseEntity.ok().body(roomDto);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
   }
 
   @GetMapping(value = {
     "/room/getAll",
     "/room/getAll/"
   })
-  public List<RoomDto> getRooms(@RequestParam Integer aFloorNumber, @RequestParam Integer aRoomNumber) {
-    List<RoomDto> filteredRoomDtos = new ArrayList<>();
-    for (Room room: service.getAllRooms(aFloorNumber, aRoomNumber)) {
-      filteredRoomDtos.add(convertToDto(room));
+  public ResponseEntity<?> getRooms(@RequestParam Integer aFloorNumber, @RequestParam Integer aRoomNumber) {
+
+    try {
+      List<RoomDto> filteredRoomDtos = new ArrayList<>();
+      for (Room room: service.getAllRooms(aFloorNumber, aRoomNumber)) {
+        filteredRoomDtos.add(convertToDto(room));
+      }
+
+      return ResponseEntity.ok().body(filteredRoomDtos);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
-    return filteredRoomDtos;
+
   }
 
   @DeleteMapping(value = {
     "/room/delete",
     "/room/delete/"
   })
-  public void deleteRoom(@RequestParam Integer aFloorNumber, @RequestParam Integer aRoomNumber) { service.deleteRoom(aFloorNumber, aRoomNumber); }
+  public ResponseEntity<?> deleteRoom(@RequestBody RoomDto roomDto) {
+    try {
+      service.deleteRoom(roomDto.getFloorNumber(), roomDto.getRoomNumber());
+
+      return ResponseEntity.ok().body("Room successfully deleted");
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
 
 
 

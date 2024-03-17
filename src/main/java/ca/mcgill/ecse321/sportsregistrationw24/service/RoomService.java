@@ -20,9 +20,24 @@ public class RoomService {
   @Transactional
   public Room createRoom(String aName, Integer aFloorNumber, Integer aRoomNumber, Integer capacity) {
     Optional<Room> wrappedTestRoom = roomRepository.findRoomByFloorNumberAndRoomNumber(aFloorNumber, aRoomNumber);
-    Room testRoom = wrappedTestRoom.orElse(null);
-    if (testRoom != null) {
-      throw new IllegalArgumentException("A room with this floor and room number already exists");
+    if (aName == null) {
+      throw new IllegalArgumentException("Cannot create a room with no name specified");
+    }
+    if (aFloorNumber == null || aRoomNumber == null) {
+      if (aFloorNumber == null && aRoomNumber == null) {
+        throw new IllegalArgumentException("Cannot create a room with no floor and no room number specified");
+      } else if (aFloorNumber == null && aRoomNumber != null) {
+        throw new IllegalArgumentException("Cannot create a room with no floor number specified");
+      } else {
+        throw new IllegalArgumentException("Cannot create a room with no room number specified");
+      }
+    }
+    else if (wrappedTestRoom.isPresent()) {
+      throw new IllegalArgumentException("A room with this floor or room number already exists");
+    }
+
+    if (capacity == null || capacity.intValue() <= 0) {
+      throw new IllegalArgumentException("A room with this capacity cannot exist");
     }
 
     Room room = new Room();
@@ -39,6 +54,23 @@ public class RoomService {
   @Transactional
   public void updateRoom(String newName, Integer aFloorNumber, Integer aRoomNumber, Integer newCapacity) {
     Optional<Room> wrappedRoomToUpdate = roomRepository.findRoomByFloorNumberAndRoomNumber(aFloorNumber, aRoomNumber);
+    if (newName == null) {
+      throw new IllegalArgumentException("Cannot update a room with no name specified");
+    }
+    if (aFloorNumber == null || aRoomNumber == null) {
+      if (aFloorNumber == null && aRoomNumber == null) {
+        throw new IllegalArgumentException("Cannot update a room with no floor and no room number specified");
+      } else if (aFloorNumber == null && aRoomNumber != null) {
+        throw new IllegalArgumentException("Cannot update a room with no floor number specified");
+      } else {
+        throw new IllegalArgumentException("Cannot update a room with no room number specified");
+      }
+    }
+
+    if (newCapacity == null || newCapacity.intValue() <= 0) {
+      throw new IllegalArgumentException("A room with this capacity cannot exist");
+    }
+
     Room roomToUpdate = wrappedRoomToUpdate.orElseThrow(() -> new IllegalArgumentException("No room with this floor and room number was found"));
 
     roomToUpdate.setCapacity(newCapacity);
@@ -51,36 +83,44 @@ public class RoomService {
 
   @Transactional
   public Room getRoom(Integer aFloorNumber, Integer aRoomNumber) {
+    if (aFloorNumber.equals(-1) || aRoomNumber.equals(-1)) {
+      if (aFloorNumber.equals(-1) && aRoomNumber.equals(-1)) {
+        throw new IllegalArgumentException("Cannot get a specific room with no floor and no room number specified");
+      } else if (aFloorNumber.equals(-1) && aRoomNumber > -1) {
+        throw new IllegalArgumentException("Cannot get a specific room with no floor number specified");
+      } else {
+        throw new IllegalArgumentException("Cannot get a specific room with no room number specified");
+      }
+    }
     Optional<Room> wrappedRoom = roomRepository.findRoomByFloorNumberAndRoomNumber(aFloorNumber, aRoomNumber);
+    if(wrappedRoom.isEmpty()) {
+      throw new IllegalArgumentException("No room with this floor and room number was found");
+    }
     return wrappedRoom.orElseThrow(() -> new IllegalArgumentException("No room with this floor and room number was found"));
   }
 
   @Transactional
   public List<Room> getAllRooms(Integer floorNumber, Integer roomNumber) {
     // room number specified
-    if(Objects.equals(floorNumber, null) && !Objects.equals(roomNumber, null)) {
-      Optional<List<Room>> wrappedFilteredByRoomNumber = roomRepository.findRoomByRoomNumber(roomNumber);
-      if (wrappedFilteredByRoomNumber.isEmpty()) {
-        throw new IllegalArgumentException("There is no room with this room number");
+    if(floorNumber.equals(-1) && roomNumber > -1) {
+      List<Room> filteredByRoomNumber = roomRepository.findRoomByRoomNumber(roomNumber).orElseThrow(() -> new IllegalArgumentException("There are no rooms with this room number"));
+      if (filteredByRoomNumber.isEmpty()) {
+        throw new IllegalArgumentException("There are no rooms with this room number");
       }
-      else {
-        return toList(wrappedFilteredByRoomNumber.orElse(null));
-      }
+      return filteredByRoomNumber;
     }
 
     // floor number specified
-    else if (!Objects.equals(floorNumber, null) && Objects.equals(roomNumber, null)) {
-      Optional<List<Room>> wrappedFilteredByRoomNumber = roomRepository.findRoomByFloorNumber(floorNumber);
-      if (wrappedFilteredByRoomNumber.isEmpty()) {
-        throw new IllegalArgumentException("There is no room with this floor number");
+    else if (floorNumber > -1 && roomNumber.equals(-1)) {
+      List<Room> filteredByFloorNumber = roomRepository.findRoomByFloorNumber(floorNumber).orElseThrow(() -> new IllegalArgumentException("There are no rooms with this floor number"));
+      if (filteredByFloorNumber.isEmpty()) {
+        throw new IllegalArgumentException("There are no rooms with this floor number");
       }
-      else {
-        return toList(wrappedFilteredByRoomNumber.orElse(null));
-      }
+      return filteredByFloorNumber;
     }
 
     // floor and room number specified
-    else if (!Objects.equals(floorNumber, null) && !Objects.equals(roomNumber, null)) {
+    else if (floorNumber > -1 && roomNumber > -1) {
       Optional<Room> wrappedSpecificRoom = roomRepository.findRoomByFloorNumberAndRoomNumber(floorNumber, roomNumber);
       Room specificRoom = wrappedSpecificRoom.orElseThrow(() -> new IllegalArgumentException("There is no room with this floor number and room number"));
 
