@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,21 +31,23 @@ public class CourseOfferingService {
   private UserAccountRepository userAccountRepository;
 
   @Transactional
-  public CourseOffering createCourseOffering(Date aStartDate, Date aEndDate, Room aRoom, String userType){
+  public CourseOffering createCourseOffering(Date aStartDate, Date aEndDate, List<DayOfWeek> aDaysOffered, InstructorAccount aInstructor, Room aRoom, String userType){
     if (!userType.equals("INSTRUCTOR")){
       throw new IllegalArgumentException("Only instructors can create course offerings!");
     }
     CourseOffering courseOffering = new CourseOffering();
     courseOffering.setStartDate(aStartDate);
     courseOffering.setEndDate(aEndDate);
+    courseOffering.setDaysOffered(aDaysOffered);
+    courseOffering.setInstructorAccount(aInstructor);
     courseOffering.setRoom(aRoom);
     courseOfferingRepository.save(courseOffering);
     return courseOffering;
   }
 
   @Transactional
-  public CourseOffering getCourseOfferingById(Integer aId, String userEmail) {
-    UserAccount user = getUser(userEmail);
+  public CourseOffering getCourseOfferingById(Integer aId, String userToken) {
+    UserAccount user = getUser(userToken);
 
     // different results depending on user type
     if (user.getUserType().equals("INSTRUCTOR")) {
@@ -64,8 +67,8 @@ public class CourseOfferingService {
   }
 
   @Transactional
-  public void deleteCourseOffering(Integer aId, String userEmail) {
-    UserAccount user = getUser(userEmail);
+  public void deleteCourseOffering(Integer aId, String userToken) {
+    UserAccount user = getUser(userToken);
 
     if (user.getUserType().equals("CUSTOMER")){
       throw new IllegalArgumentException("Customers cannot delete course offerings!");
@@ -79,8 +82,8 @@ public class CourseOfferingService {
     courseOfferingRepository.delete(courseOffering);
   }
   @Transactional
-  public List<CourseOffering> getAllCourseOfferings(String userEmail) {
-    UserAccount user = getUser(userEmail);
+  public List<CourseOffering> getAllCourseOfferings(String userToken) {
+    UserAccount user = getUser(userToken);
 
     if (user.getUserType().equals("INSTRUCTOR")) {
       InstructorAccount instructor = (InstructorAccount) user;
@@ -97,8 +100,8 @@ public class CourseOfferingService {
     return resultList;
   }
 
-  private UserAccount getUser(String userEmail) {
-    Optional<UserAccount> optional = userAccountRepository.findUserByEmail(userEmail);
+  private UserAccount getUser(String userToken) {
+    Optional<UserAccount> optional = userAccountRepository.findUserByToken(userToken);
     UserAccount user = optional.orElse(null);
 
     if (user == null) {

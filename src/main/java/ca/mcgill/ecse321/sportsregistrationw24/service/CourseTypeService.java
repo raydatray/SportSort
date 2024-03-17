@@ -27,15 +27,13 @@ public class CourseTypeService {
     }
     CourseType courseType = new CourseType();
     courseType.setCourseName(aCourseName);
-    // created course type initially requires approval
-    courseType.setApproved(false);
     courseTypeRepository.save(courseType);
     return courseType;
   }
 
   @Transactional
-  public CourseType getCourseType(Integer aId, String userEmail) {
-    UserAccount user = getUser(userEmail);
+  public CourseType getCourseType(Integer aId, String userToken) {
+    UserAccount user = getUser(userToken);
 
     // Customers cannot view course types
     if (user.getUserType().equals("CUSTOMER")){
@@ -45,8 +43,8 @@ public class CourseTypeService {
   }
 
   @Transactional
-  public List<CourseType> getAllCourseTypes(String userEmail) {
-    UserAccount user = getUser(userEmail);
+  public List<CourseType> getAllCourseTypes(String userToken) {
+    UserAccount user = getUser(userToken);
 
     // Customers cannot view course types
     if (user.getUserType().equals("CUSTOMER")){
@@ -56,15 +54,15 @@ public class CourseTypeService {
   }
 
   @Transactional
-  public void updateCourseTypeApproval(Integer aId, boolean approval, String userEmail) {
-    UserAccount user = getUser(userEmail);
+  public void updateCourseTypeApproval(Integer aId, boolean approval, String userToken) {
+    UserAccount user = getUser(userToken);
 
     // only the owner can approve
     if (!user.getUserType().equals("OWNER")){
       throw new IllegalArgumentException("Only the owner can approve course types!");
     }
 
-    CourseType courseType = getCourseType(aId, userEmail);
+    CourseType courseType = getCourseType(aId, userToken);
 
     if (courseType == null) {
       throw new IllegalArgumentException("Course Type does not exist!");
@@ -82,20 +80,20 @@ public class CourseTypeService {
   }
 
   @Transactional
-  public void deleteCourseType(Integer aId, String userEmail) {
-    UserAccount user = getUser(userEmail);
+  public void deleteCourseType(Integer aId, String userToken) {
+    UserAccount user = getUser(userToken);
     if (!user.getUserType().equals("OWNER")){
       throw new IllegalArgumentException("Only the owner can delete course types!");
     }
-    CourseType courseType = getCourseType(aId, userEmail);
+    CourseType courseType = getCourseType(aId, userToken);
     if (courseType == null) {
       throw new IllegalArgumentException("Course Type does not exist!");
     }
     courseTypeRepository.delete(courseType);
   }
 
-  private UserAccount getUser(String userEmail) {
-    Optional<UserAccount> optional = userAccountRepository.findUserByEmail(userEmail);
+  private UserAccount getUser(String userToken) {
+    Optional<UserAccount> optional = userAccountRepository.findUserByToken(userToken);
     UserAccount user = optional.orElse(null);
 
     if (user == null) {

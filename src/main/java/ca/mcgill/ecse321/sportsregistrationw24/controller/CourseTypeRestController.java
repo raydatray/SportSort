@@ -38,9 +38,9 @@ public class CourseTypeRestController {
     "/courseTypes/get",
     "/courseTypes/get/"
   })
-  public ResponseEntity<?> getCourseType(@RequestParam Integer id, String userEmail) {
+  public ResponseEntity<?> getCourseType(@RequestParam Integer id, @RequestHeader String userToken) {
     try {
-      CourseType courseType = service.getCourseType(id, userEmail);
+      CourseType courseType = service.getCourseType(id, userToken);
       return ResponseEntity.ok().body(convertToDto(courseType));
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -51,10 +51,10 @@ public class CourseTypeRestController {
     "/courseTypes/getAll",
     "/courseTypes/getAll/"
   })
-  public ResponseEntity<?> getAllCourseTypes(@RequestParam String userEmail) {
+  public ResponseEntity<?> getAllCourseTypes(@RequestHeader String userToken) {
     try {
       List<CourseTypeDto> courseTypeDtos = new ArrayList<>();
-      for (CourseType courseType : service.getAllCourseTypes(userEmail)) {
+      for (CourseType courseType : service.getAllCourseTypes(userToken)) {
         courseTypeDtos.add(convertToDto(courseType));
       }
       return ResponseEntity.ok().body(courseTypeDtos);
@@ -68,9 +68,9 @@ public class CourseTypeRestController {
     "/courseTypes/update/"
   })
 
-  public ResponseEntity<?> updateCourseType(@RequestParam Integer id, String userEmail, boolean approved){
+  public ResponseEntity<?> updateCourseType(@RequestParam Integer id, @RequestParam boolean approved, @RequestHeader String userToken){
     try {
-      service.updateCourseTypeApproval(id, approved, userEmail);
+      service.updateCourseTypeApproval(id, approved, userToken);
       return ResponseEntity.ok().body("Course type approval updated successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -81,9 +81,9 @@ public class CourseTypeRestController {
     "/courseTypes/delete",
     "/courseTypes/delete/"
   })
-  public ResponseEntity<?> deleteCourseType(@RequestParam Integer id, String userEmail) {
+  public ResponseEntity<?> deleteCourseType(@RequestParam Integer id, @RequestHeader String userToken) {
     try {
-      service.deleteCourseType(id, userEmail);
+      service.deleteCourseType(id, userToken);
       return ResponseEntity.ok().body("Course type deleted successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());

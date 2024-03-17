@@ -44,6 +44,10 @@ public class CourseOffering {
 
   public void setEndDate(Date aEndDate) { this.endDate = aEndDate; }
 
+  public void setDaysOffered(List<DayOfWeek> aDaysOffered) { this.daysOffered = aDaysOffered; }
+
+  public void setInstructorAccount(InstructorAccount instructor) { this.instructorAccount = instructor; }
+
   public boolean setRoom(Room aNewRoom) {
     boolean wasSet = false;
     if (aNewRoom != null) {
@@ -72,6 +76,8 @@ public class CourseOffering {
   {
     return this.room;
   }
+
+  public List<DayOfWeek> getDaysOffered() { return this.daysOffered; }
 
   public CourseType getCourseType()
   {

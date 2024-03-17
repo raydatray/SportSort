@@ -3,13 +3,14 @@ package ca.mcgill.ecse321.sportsregistrationw24.controller;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.courseOffering.CourseOfferingDto;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.courseOffering.CourseOfferingCO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
+import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
-import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.service.CourseOfferingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Date;
@@ -29,10 +30,12 @@ public class CourseOfferingRestController {
     try {
       Date startDate = courseOfferingCO.getStartDate();
       Date endDate = courseOfferingCO.getEndDate();
+      List<DayOfWeek> daysOffered = courseOfferingCO.getDaysOffered();
+      InstructorAccount instructor = courseOfferingCO.getInstructor();
       Room room = courseOfferingCO.getRoom();
       String userType = courseOfferingCO.getUserType();
 
-      service.createCourseOffering(startDate, endDate, room, userType);
+      service.createCourseOffering(startDate, endDate, daysOffered, instructor, room, userType);
       return ResponseEntity.ok().body("Course offering created successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -43,9 +46,9 @@ public class CourseOfferingRestController {
     "/courseOfferings/get",
     "/courseOfferings/get/"
   })
-  public ResponseEntity<?> getCourseOffering(@RequestParam Integer id, String userEmail) {
+  public ResponseEntity<?> getCourseOffering(@RequestParam Integer id, @RequestHeader String userToken) {
     try {
-      CourseOffering courseOffering = service.getCourseOfferingById(id, userEmail);
+      CourseOffering courseOffering = service.getCourseOfferingById(id, userToken);
       return ResponseEntity.ok().body(convertToDto(courseOffering));
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -56,10 +59,10 @@ public class CourseOfferingRestController {
     "/courseOfferings/getAll",
     "/courseOfferings/getAll/"
   })
-  public ResponseEntity<?> getAllCourseOfferings(@RequestParam String userEmail) {
+  public ResponseEntity<?> getAllCourseOfferings(@RequestHeader String userToken) {
     try {
       List<CourseOfferingDto> courseOfferingDtos = new ArrayList<>();
-      for (CourseOffering courseOffering : service.getAllCourseOfferings(userEmail)) {
+      for (CourseOffering courseOffering : service.getAllCourseOfferings(userToken)) {
         courseOfferingDtos.add(convertToDto(courseOffering));
       }
       return ResponseEntity.ok().body(courseOfferingDtos);
@@ -73,9 +76,9 @@ public class CourseOfferingRestController {
     "/courseOfferings/delete",
     "/courseOfferings/delete/"
   })
-  public ResponseEntity<?> deleteCourseOffering(@RequestParam Integer id, String userEmail) {
+  public ResponseEntity<?> deleteCourseOffering(@RequestParam Integer id, @RequestHeader String userToken) {
     try {
-      service.deleteCourseOffering(id, userEmail);
+      service.deleteCourseOffering(id, userToken);
       return ResponseEntity.ok().body("Course offering deleted successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -87,6 +90,6 @@ public class CourseOfferingRestController {
       throw new IllegalArgumentException("There is no such course offering!");
     }
     return new CourseOfferingDto(courseOffering.getStartDate(),
-      courseOffering.getEndDate(), courseOffering.getRoom(), courseOffering.getId());
+      courseOffering.getEndDate(), courseOffering.getDaysOffered(), courseOffering.getInstructorAccount(), courseOffering.getRoom());
     }
 }
