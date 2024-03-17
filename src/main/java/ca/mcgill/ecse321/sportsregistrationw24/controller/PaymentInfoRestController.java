@@ -32,9 +32,9 @@ public class PaymentInfoRestController {
       Integer cvv = paymentInfoDto.getCvv();
       Integer expirationYear = paymentInfoDto.getExpirationYear();
       Integer expirationMonth = paymentInfoDto.getExpirationMonth();
-      String customerEmail = paymentInfoDto.getCustomerAccountEmail();
+      String token = paymentInfoDto.getToken();
 
-      PaymentInfo paymentInfo = service.createPaymentInfo(paymentType, cardNumber, cvv, expirationYear, expirationMonth, customerEmail);
+      PaymentInfo paymentInfo = service.createPaymentInfo(paymentType, cardNumber, cvv, expirationYear, expirationMonth, token);
 
       return ResponseEntity.ok().body(paymentInfo);
     } catch (Exception e) {
@@ -82,9 +82,9 @@ public class PaymentInfoRestController {
           "/paymentInfo/getAll",
           "/paymentInfo/getAll/"
   })
-  public ResponseEntity<?> getAllPaymentInfosPerCustomer(@RequestParam String email) {
+  public ResponseEntity<?> getAllPaymentInfosPerCustomer(@RequestParam String token) {
     try {
-      List<PaymentInfoDto> paymentInfoDtos = convertToDtos(service.getAllPaymentInfoPerCustomer(email));
+      List<PaymentInfoDto> paymentInfoDtos = convertToDtos(service.getAllPaymentInfoPerCustomer(token));
       return ResponseEntity.ok().body(paymentInfoDtos);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());

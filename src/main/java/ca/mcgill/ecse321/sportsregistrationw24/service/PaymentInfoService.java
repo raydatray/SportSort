@@ -26,16 +26,20 @@ public class PaymentInfoService {
 
 
   @Transactional
-  public PaymentInfo createPaymentInfo(PaymentInfo.PaymentType aPaymentType, Integer aCardNumber, Integer aCvv, Integer aExpirationYear, Integer aExpirationMonth, String aEmail) {
-
-    if (aCardNumber.toString().length() != 16) {
+  public PaymentInfo createPaymentInfo(PaymentInfo.PaymentType aPaymentType, Integer aCardNumber, Integer aCvv, Integer aExpirationYear, Integer aExpirationMonth, String aToken) {
+    /*
+    if (aCardNumber.toString().length() != 16 || aCardNumber == null) {
       throw new IllegalArgumentException("This is not a valid credit/debit card number");
     }
+    */
 
-    if (aCvv.toString().length() != 3) {
+    if (aCvv == null || aCvv.toString().length() != 3) {
       throw new IllegalArgumentException("This is not a valid credit/debit card cvv");
     }
 
+    if (aExpirationYear == null || aExpirationMonth == null) {
+      throw new IllegalArgumentException("Cannot have a null month/year");
+    }
     YearMonth currYearMonth = YearMonth.now();
     YearMonth inputYearMonth = YearMonth.of(aExpirationYear, aExpirationMonth);
 
@@ -51,7 +55,7 @@ public class PaymentInfoService {
     newPaymentInfo.setExpirationYear(aExpirationYear);
     newPaymentInfo.setExpirationMonth(aExpirationMonth);
 
-    CustomerAccount fetchedCustomer = customerAccountRepository.findByEmail(aEmail).orElse(null);
+    CustomerAccount fetchedCustomer = customerAccountRepository.findByToken(aToken).orElse(null);
     if (fetchedCustomer == null) {
       throw new IllegalArgumentException("CustomerAccount not found");
     }
@@ -66,8 +70,22 @@ public class PaymentInfoService {
 
   @Transactional
   public void updatePaymentInfo (Integer aID, PaymentInfo.PaymentType newPaymentType, Integer newCardNumber, Integer newCvv, Integer newExpirationYear, Integer newExpirationMonth) {
+     /*
+    if (aCardNumber == null || aCardNumber.toString().length() != 16) {
+      throw new IllegalArgumentException("This is not a valid credit/debit card number");
+    }
+    */
+
+    if (newCvv == null || newCvv.toString().length() != 3) {
+      throw new IllegalArgumentException("This is not a valid credit/debit card cvv");
+    }
+
+    if (newExpirationYear == null || newExpirationMonth == null) {
+      throw new IllegalArgumentException("Cannot have a null month/year");
+    }
+
     Optional<PaymentInfo> wrappedPaymentInfo = paymentInfoRepository.findById(aID);
-    PaymentInfo paymentInfo = wrappedPaymentInfo.orElseThrow(() -> new IllegalArgumentException("goober!"));
+    PaymentInfo paymentInfo = wrappedPaymentInfo.orElseThrow(() -> new IllegalArgumentException("There is no paymentInfo with this id"));
 
     YearMonth currYearMonth = YearMonth.now();
     YearMonth inputYearMonth = YearMonth.of(newExpirationYear, newExpirationMonth);
@@ -80,7 +98,7 @@ public class PaymentInfoService {
     paymentInfo.setCardNumber(newCardNumber);
     paymentInfo.setCvv(newCvv);
     paymentInfo.setExpirationYear(newExpirationYear);
-    paymentInfo.setExpirationMonth(newExpirationYear);
+    paymentInfo.setExpirationMonth(newExpirationMonth);
 
     paymentInfoRepository.save(paymentInfo);
   }
@@ -89,12 +107,12 @@ public class PaymentInfoService {
   public PaymentInfo getPaymentInfo(Integer aID) { return paymentInfoRepository.findById(aID).orElseThrow(() -> new IllegalArgumentException("payment info with this ID doesn't exist")); }
 
   @Transactional
-  public List<PaymentInfo> getAllPaymentInfoPerCustomer(String email) {
+  public List<PaymentInfo> getAllPaymentInfoPerCustomer(String token) {
     Utilities utilities = new Utilities();
     ArrayList<PaymentInfo> allPaymentInfos = utilities.iterableToArrayList(paymentInfoRepository.findAll());
 
     ArrayList<PaymentInfo> filteredPaymentInfos = new ArrayList<>();
-    CustomerAccount targetCustomer = customerAccountRepository.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
+    CustomerAccount targetCustomer = customerAccountRepository.findByToken(token).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
 
     for (PaymentInfo info: allPaymentInfos) {
       if (info.getCustomerAccount().equals(targetCustomer)) {
