@@ -30,23 +30,22 @@ public class CourseOfferingRestController {
       Date startDate = courseOfferingCO.getStartDate();
       Date endDate = courseOfferingCO.getEndDate();
       Room room = courseOfferingCO.getRoom();
-      Integer id = courseOfferingCO.getiD();
+      String userType = courseOfferingCO.getUserType();
 
-      service.createCourseOffering(startDate, endDate, room, id);
+      service.createCourseOffering(startDate, endDate, room, userType);
       return ResponseEntity.ok().body("Course offering created successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
-
   }
 
   @GetMapping(value = {
     "/courseOfferings/get",
     "/courseOfferings/get/"
   })
-  public ResponseEntity<?> getCourseOffering(@RequestParam Integer id, UserAccount user) {
+  public ResponseEntity<?> getCourseOffering(@RequestParam Integer id, String userEmail) {
     try {
-      CourseOffering courseOffering = service.getCourseOfferingById(id, user);
+      CourseOffering courseOffering = service.getCourseOfferingById(id, userEmail);
       return ResponseEntity.ok().body(convertToDto(courseOffering));
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -57,10 +56,10 @@ public class CourseOfferingRestController {
     "/courseOfferings/getAll",
     "/courseOfferings/getAll/"
   })
-  public ResponseEntity<?> getAllCourseOfferings(UserAccount user) {
+  public ResponseEntity<?> getAllCourseOfferings(String userEmail) {
     try {
       List<CourseOfferingDto> courseOfferingDtos = new ArrayList<>();
-      for (CourseOffering courseOffering : service.getAllCourseOfferings(user)) {
+      for (CourseOffering courseOffering : service.getAllCourseOfferings(userEmail)) {
         courseOfferingDtos.add(convertToDto(courseOffering));
       }
       return ResponseEntity.ok().body(courseOfferingDtos);
@@ -69,31 +68,14 @@ public class CourseOfferingRestController {
     }
   }
 
-    /* @PutMapping(value = {
-            "/courseOfferings/update",
-            "/courseOfferings/update/"
-    })
-
-    public ResponseEntity<?> updateCustomerAccount(@RequestBody CourseOfferingDto courseOfferingDto, @RequestParam Integer aId) {
-        try {
-            Date startDate = courseOfferingDto.getStartDate();
-            Date endDate = courseOfferingDto.getEndDate();
-            Room room = courseOfferingDto.getRoom();
-
-            service.updateCourseOffering(startDate,endDate,room, aId);
-            return ResponseEntity.ok().body("Course offering updated successfully!");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    } */
 
   @DeleteMapping(value = {
     "/courseOfferings/delete",
     "/courseOfferings/delete/"
   })
-  public ResponseEntity<?> deleteCourseOffering(@RequestParam Integer id, UserAccount user) {
+  public ResponseEntity<?> deleteCourseOffering(@RequestParam Integer id, String userEmail) {
     try {
-      service.deleteCourseOffering(id, user);
+      service.deleteCourseOffering(id, userEmail);
       return ResponseEntity.ok().body("Course offering deleted successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());

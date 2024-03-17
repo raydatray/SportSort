@@ -7,17 +7,17 @@ public class CourseOfferingCO {
   private Date startDate;
   private Date endDate;
   private Room room;
-  private Integer id;
+  private String userType;
 
 
   public CourseOfferingCO() {
   }
 
-  public CourseOfferingCO(Date aStartDate, Date aEndDate, Room aRoom, Integer aId) {
+  public CourseOfferingCO(Date aStartDate, Date aEndDate, Room aRoom, String aUserType) {
     this.startDate = aStartDate;
     this.endDate = aEndDate;
     this.room = aRoom;
-    this.id = aId;
+    this.userType = aUserType;
   }
   public Date getStartDate() {
     return this.startDate;
@@ -26,6 +26,6 @@ public class CourseOfferingCO {
     return this.endDate;
   }
   public Room getRoom() {return this.room; }
-  public Integer getiD() {return this.id; }
+  public String getUserType() {return this.userType;}
 }
 

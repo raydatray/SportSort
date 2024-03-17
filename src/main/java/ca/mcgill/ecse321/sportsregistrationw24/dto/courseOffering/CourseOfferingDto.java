@@ -7,7 +7,6 @@ public class CourseOfferingDto {
   private Date startDate;
   private Date endDate;
   private Room room;
-  private Integer id;
 
 
   public CourseOfferingDto() {
@@ -17,7 +16,6 @@ public class CourseOfferingDto {
     this.startDate = aStartDate;
     this.endDate = aEndDate;
     this.room = aRoom;
-    this.id = aId;
   }
 
   public CourseOfferingDto(CourseOffering aCourseOffering){
@@ -30,6 +28,5 @@ public class CourseOfferingDto {
     return this.endDate;
   }
   public Room getRoom() {return this.room; }
-  public Integer getiD() {return this.id; }
 }
 

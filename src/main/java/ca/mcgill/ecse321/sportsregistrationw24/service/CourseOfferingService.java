@@ -3,6 +3,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.service;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseOfferingRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.InstructorAccountRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
@@ -25,27 +26,34 @@ public class CourseOfferingService {
   @Autowired
   private InstructorAccountRepository instructorAccountRepository;
 
+  @Autowired
+  private UserAccountRepository userAccountRepository;
+
   @Transactional
-  public CourseOffering createCourseOffering(Date aStartDate, Date aEndDate, Room aRoom, Integer aId){
+  public CourseOffering createCourseOffering(Date aStartDate, Date aEndDate, Room aRoom, String userType){
+    if (!userType.equals("INSTRUCTOR")){
+      throw new IllegalArgumentException("Only instructors can create course offerings!");
+    }
     CourseOffering courseOffering = new CourseOffering();
     courseOffering.setStartDate(aStartDate);
     courseOffering.setEndDate(aEndDate);
     courseOffering.setRoom(aRoom);
-    courseOffering.setId(aId);
     courseOfferingRepository.save(courseOffering);
     return courseOffering;
   }
 
   @Transactional
-  public CourseOffering getCourseOfferingById(Integer aId, UserAccount user) {
+  public CourseOffering getCourseOfferingById(Integer aId, String userEmail) {
+    Optional<UserAccount> optional = userAccountRepository.findUserByEmail(userEmail);
+    UserAccount user = optional.orElse(null);
+
+    if (user == null) {
+      throw new IllegalArgumentException("User does not exist!");
+    }
+
+    // different results depending on user type
     if (user.getUserType().equals("INSTRUCTOR")) {
-      Optional<InstructorAccount> optional = instructorAccountRepository.findByEmail(user.getEmail());
-      InstructorAccount instructor = optional.orElse(null);
-
-      if (instructor == null) {
-        throw new IllegalArgumentException("Instructor does not exist!");
-      }
-
+      InstructorAccount instructor = (InstructorAccount) user;
       Optional<CourseOffering> optional_1 = courseOfferingRepository.findById(aId);
       if (getCourseOfferingByInstructor(instructor).contains(optional_1.orElse(null))) {
         return courseOfferingRepository.findById(aId).orElse(null);
@@ -60,23 +68,15 @@ public class CourseOfferingService {
     return courseOfferingRepository.findByInstructorAccount(instructor).orElse(null);
   }
 
-    /*@Transactional
-    public void updateCourseOffering(Date aStartDate, Date aEndDate, Room aRoom, Integer aId) {
-        CourseOffering courseOffering = courseOfferingRepository.findById(aId).orElse(null);
-
-        if (courseOffering== null) {
-            throw new IllegalArgumentException("Course Offering does not exist!");
-        }
-
-        courseOffering.setStartDate(aStartDate);
-        courseOffering.setEndDate(aEndDate);
-        courseOffering.setRoom(aRoom);
-        courseOffering.setId(aId);
-        courseOfferingRepository.save(courseOffering);
-    } */
-
   @Transactional
-  public void deleteCourseOffering(Integer aId, UserAccount user) {
+  public void deleteCourseOffering(Integer aId, String userEmail) {
+    Optional<UserAccount> optional = userAccountRepository.findUserByEmail(userEmail);
+    UserAccount user = optional.orElse(null);
+
+    if (user == null) {
+      throw new IllegalArgumentException("User does not exist!");
+    }
+
     if (user.getUserType().equals("CUSTOMER")){
       throw new IllegalArgumentException("Customers cannot delete course offerings!");
     }
@@ -89,14 +89,15 @@ public class CourseOfferingService {
     courseOfferingRepository.delete(courseOffering);
   }
   @Transactional
-  public List<CourseOffering> getAllCourseOfferings(UserAccount user) {
-    if (user.getUserType().equals("INSTRUCTOR")) {
-      Optional<InstructorAccount> optional = instructorAccountRepository.findByEmail(user.getEmail());
-      InstructorAccount instructor = optional.orElse(null);
+  public List<CourseOffering> getAllCourseOfferings(String userEmail) {
+    Optional<UserAccount> optional = userAccountRepository.findUserByEmail(userEmail);
+    UserAccount user = optional.orElse(null);
 
-      if (instructor == null) {
-        throw new IllegalArgumentException("Instructor does not exist!");
-      }
+    if (user == null) {
+      throw new IllegalArgumentException("User does not exist!");
+    }
+    if (user.getUserType().equals("INSTRUCTOR")) {
+      InstructorAccount instructor = (InstructorAccount) user;
       return getCourseOfferingByInstructor(instructor);
     }
     return toList(courseOfferingRepository.findAll());
