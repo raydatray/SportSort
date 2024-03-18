@@ -24,8 +24,6 @@ public class RoomRestController {
     "/room/create/"
   })
   public ResponseEntity<?> createRoom(@RequestBody RoomDto roomDto) {
-
-
     try {
       String name = roomDto.getName();
       Integer floorNumber = roomDto.getFloorNumber();
@@ -45,7 +43,6 @@ public class RoomRestController {
     "/room/update/"
   })
   public ResponseEntity<?> updateRoom(@RequestBody RoomDto roomDto) {
-
     try {
       String newName = roomDto.getName();
       Integer aFloorNumber = roomDto.getFloorNumber();
@@ -65,7 +62,6 @@ public class RoomRestController {
     "/room/get/"
   })
   public ResponseEntity<?> getRoom(@RequestParam Integer aFloorNumber, @RequestParam Integer aRoomNumber) {
-
     try {
       RoomDto roomDto = convertToDto(service.getRoom(aFloorNumber, aRoomNumber));
 
@@ -80,7 +76,6 @@ public class RoomRestController {
     "/room/getAll/"
   })
   public ResponseEntity<?> getRooms(@RequestParam Integer aFloorNumber, @RequestParam Integer aRoomNumber) {
-
     try {
       List<RoomDto> filteredRoomDtos = new ArrayList<>();
       for (Room room: service.getAllRooms(aFloorNumber, aRoomNumber)) {
@@ -91,7 +86,6 @@ public class RoomRestController {
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
-
   }
 
   @DeleteMapping(value = {
@@ -107,9 +101,6 @@ public class RoomRestController {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
-
-
-
 
   private RoomDto convertToDto(Room room) {
     if (room == null) {

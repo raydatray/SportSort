@@ -26,7 +26,6 @@ public class PaymentInfoRestController {
   })
   public ResponseEntity<?> createPaymentInfo(@RequestBody PaymentInfoDto paymentInfoDto, @RequestHeader String token) {
     try {
-
       PaymentInfo.PaymentType paymentType = paymentInfoDto.getPaymentType();
       Integer cardNumber = paymentInfoDto.getCardNumber();
       Integer cvv = paymentInfoDto.getCvv();
@@ -67,7 +66,6 @@ public class PaymentInfoRestController {
     "/paymentInfo/get/"
   })
   public ResponseEntity<?> getPaymentInfo(@RequestHeader Integer id) {
-
     try {
       PaymentInfoDto paymentInfoDto = convertToDto(service.getPaymentInfo(id));
       return ResponseEntity.ok().body(paymentInfoDto);
@@ -78,8 +76,8 @@ public class PaymentInfoRestController {
 
 
   @GetMapping(value = {
-          "/paymentInfo/getAll",
-          "/paymentInfo/getAll/"
+    "/paymentInfo/getAll",
+    "/paymentInfo/getAll/"
   })
   public ResponseEntity<?> getAllPaymentInfosPerCustomer(@RequestHeader String token, @RequestParam Integer paymentType) {
     try {
@@ -106,12 +104,10 @@ public class PaymentInfoRestController {
   }
 
   private PaymentInfoDto convertToDto(PaymentInfo paymentInfo) {
-      if (paymentInfo == null) {
-          throw new IllegalArgumentException("There is no such room");
-      }
-      return new PaymentInfoDto(paymentInfo.getId(), paymentInfo.getPaymentType(),
-              paymentInfo.getCardNumber(), paymentInfo.getCvv(), paymentInfo.getExpirationYear(),
-              paymentInfo.getExpirationMonth());
+    if (paymentInfo == null) {
+      throw new IllegalArgumentException("There is no such room");
+    }
+      return new PaymentInfoDto(paymentInfo.getId(), paymentInfo.getPaymentType(), paymentInfo.getCardNumber(), paymentInfo.getCvv(), paymentInfo.getExpirationYear(), paymentInfo.getExpirationMonth());
   }
 
   private List<PaymentInfoDto> convertToDtos(List<PaymentInfo> paymentInfo) {
