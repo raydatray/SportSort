@@ -16,8 +16,8 @@ public class RoomDto {
     this.capacity = capacity;
   }
 
-  public Integer getCapacity() { return capacity; }
-  public Integer getFloorNumber() { return floorNumber; }
-  public Integer getRoomNumber() { return roomNumber; }
-  public String getName() { return name; }
+  public Integer getCapacity() { return this.capacity; }
+  public Integer getFloorNumber() { return this.floorNumber; }
+  public Integer getRoomNumber() { return this.roomNumber; }
+  public String getName() { return this.name; }
 }
