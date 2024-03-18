@@ -100,7 +100,7 @@ public class PaymentInfoRestController {
 
   private PaymentInfoDto convertToDto(PaymentInfo paymentInfo) {
     if (paymentInfo == null) {
-      throw new IllegalArgumentException("There is no such room");
+      throw new IllegalArgumentException("There is no such payment info");
     }
       return new PaymentInfoDto(paymentInfo.getId(), paymentInfo.getPaymentType(), paymentInfo.getCardNumber(), paymentInfo.getCvv(), paymentInfo.getExpirationYear(), paymentInfo.getExpirationMonth());
   }
@@ -109,7 +109,7 @@ public class PaymentInfoRestController {
     ArrayList<PaymentInfoDto> paymentInfoDtos = new ArrayList<>();
     for (PaymentInfo info: paymentInfo) {
       if (info == null) {
-        throw new IllegalArgumentException("There is no such room");
+        throw new IllegalArgumentException("There is no such payment info");
       }
       paymentInfoDtos.add(convertToDto(info));
     }
