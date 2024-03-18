@@ -73,6 +73,8 @@ public class CourseOffering {
     return this.room;
   }
 
+  public ArrayList<DayOfWeek> getDaysOffered() { return new ArrayList<>(this.daysOffered); }
+
   public CourseType getCourseType()
   {
     return this.courseType;
@@ -82,5 +84,6 @@ public class CourseOffering {
   {
     return this.instructorAccount;
   }
+
 
 }
