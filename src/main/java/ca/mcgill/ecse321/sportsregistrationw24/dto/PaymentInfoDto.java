@@ -30,11 +30,11 @@ public class PaymentInfoDto {
     this.expirationMonth = expirationMonth;
   }
 
-  public Integer getId() { return id; }
-  public PaymentInfo.PaymentType getPaymentType() { return paymentType; }
-  public Integer getCardNumber() { return cardNumber; }
-  public Integer getCvv() { return cvv; }
-  public Integer getExpirationYear() { return expirationYear; }
-  public Integer getExpirationMonth() { return expirationMonth; }
+  public Integer getId() { return this.id; }
+  public PaymentInfo.PaymentType getPaymentType() { return this.paymentType; }
+  public Integer getCardNumber() { return this.cardNumber; }
+  public Integer getCvv() { return this.cvv; }
+  public Integer getExpirationYear() { return this.expirationYear; }
+  public Integer getExpirationMonth() { return this.expirationMonth; }
 
 }
