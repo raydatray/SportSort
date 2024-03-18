@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dto.CustomerAccountDto;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CustomerAccountSafeDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.service.CustomerAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,20 +28,20 @@ public class CustomerAccountRestController {
       String password = customerAccountDto.getPassword();
       String name = customerAccountDto.getName();
       CustomerAccount customerAccount = service.createCustomerAccount(email, password, name);
-      return ResponseEntity.ok().body(convertToDto(customerAccount));
+      return ResponseEntity.ok().body("Customer account created successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
 
   @GetMapping(value = {
-    "/customerAccounts/get",
-    "/customerAccounts/get/"
+    "/customerAccounts/getByEmail",
+    "/customerAccounts/getByEmail/"
   })
-  public ResponseEntity<?> getCustomerAccount(@RequestParam String email) {
+  public ResponseEntity<?> getCustomerAccountByEmail(@RequestParam String email) {
     try {
-      CustomerAccount customerAccount = service.getCustomerAccount(email);
-      return ResponseEntity.ok().body(convertToDto(customerAccount));
+      CustomerAccount customerAccount = service.getCustomerAccountByEmail(email);
+      return ResponseEntity.ok().body(convertToSafeDto(customerAccount));
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -52,9 +53,9 @@ public class CustomerAccountRestController {
   })
   public ResponseEntity<?> getAllCustomerAccounts() {
     try {
-      List<CustomerAccountDto> customerAccountDtos = new ArrayList<>();
+      List<CustomerAccountSafeDto> customerAccountDtos = new ArrayList<>();
       for (CustomerAccount customerAccount : service.getAllCustomerAccounts()) {
-        CustomerAccountDto dto = convertToDto(customerAccount);
+        CustomerAccountSafeDto dto = convertToSafeDto(customerAccount);
         customerAccountDtos.add(dto);
       }
       return ResponseEntity.ok().body(customerAccountDtos);
@@ -68,11 +69,10 @@ public class CustomerAccountRestController {
     "/customerAccounts/updateEmail/"
   })
 
-  public ResponseEntity<?> updateCustomerEmail(@RequestBody CustomerAccountDto customerAccountDto, @RequestParam String newEmail) {
+  public ResponseEntity<?> updateCustomerEmail(@RequestParam String newEmail, @RequestHeader String token) {
     try {
-      String oldEmail = customerAccountDto.getEmail();
-      service.updateCustomerEmail(oldEmail, newEmail);
-      return ResponseEntity.ok().body("Customer account updated successfully.");
+      service.updateCustomerEmail(newEmail, token);
+      return ResponseEntity.ok().body("Email updated successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -82,12 +82,24 @@ public class CustomerAccountRestController {
     "/customerAccounts/updatePassword",
     "/customerAccounts/updatePassword/"
   })
-  public ResponseEntity<?> updateCustomerPassword(@RequestBody CustomerAccountDto customerAccountDto, String newPassword) {
+  public ResponseEntity<?> updateCustomerPassword(@RequestBody CustomerAccountDto customerAccountDto, String newPassword, @RequestHeader String token) {
     try {
-      CustomerAccount customerAccount = service.getCustomerAccount(customerAccountDto.getEmail());
       String oldPassword = customerAccountDto.getPassword();
-      service.updateCustomerPassword(customerAccount, newPassword, oldPassword);
-      return ResponseEntity.ok().body("Password updated successfully.");
+      service.updateCustomerPassword(newPassword, oldPassword, token);
+      return ResponseEntity.ok().body("Password updated successfully!");
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
+
+  @DeleteMapping(value = {
+    "/customerAccounts/deleteByEmail",
+    "/customerAccounts/deleteByEmail/"
+  })
+  public ResponseEntity<?> deleteCustomerAccountByEmail(@RequestParam String email) {
+    try {
+      service.deleteCustomerAccountByEmail(email);
+      return ResponseEntity.ok().body("Customer account deleted successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -97,10 +109,10 @@ public class CustomerAccountRestController {
     "/customerAccounts/delete",
     "/customerAccounts/delete/"
   })
-  public ResponseEntity<?> deleteCustomerAccount(@RequestParam String email) {
+  public ResponseEntity<?> deleteCustomerAccountByToken(@RequestHeader String token) {
     try {
-      service.deleteCustomerAccount(email);
-      return ResponseEntity.ok().body("Customer account deleted successfully.");
+      service.deleteCustomerAccountByToken(token);
+      return ResponseEntity.ok().body("Customer account deleted successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -114,4 +126,10 @@ public class CustomerAccountRestController {
       customerAccount.getPassword(), customerAccount.getName());
   }
 
+  private CustomerAccountSafeDto convertToSafeDto(CustomerAccount customerAccount) {
+    if (customerAccount == null) {
+      throw new IllegalArgumentException("There is no such customer account!");
+    }
+    return new CustomerAccountSafeDto(customerAccount.getEmail(), customerAccount.getName());
+  }
 }

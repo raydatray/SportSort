@@ -22,7 +22,5 @@ public class InstructorAccountDto {
     return this.password;
   }
 
-  public String getName() {
-    return this.name;
-  }
+  public String getName() { return this.name; }
 }

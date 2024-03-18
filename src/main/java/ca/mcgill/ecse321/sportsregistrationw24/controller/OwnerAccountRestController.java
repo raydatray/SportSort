@@ -27,7 +27,7 @@ public class OwnerAccountRestController {
     try {
       String oldEmail = ownerAccountDto.getEmail();
       service.updateOwnerEmail(oldEmail, newEmail);
-      return ResponseEntity.ok().body("Customer account updated successfully.");
+      return ResponseEntity.ok().body("Owner account updated successfully.");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -37,7 +37,7 @@ public class OwnerAccountRestController {
     "/ownerAccounts/updatePassword",
     "/ownerAccounts/updatePassword/"
   })
-  public ResponseEntity<?> updateInstructorPassword(@RequestBody OwnerAccountDto ownerAccountDto, String newPassword) {
+  public ResponseEntity<?> updateOwnerPassword(@RequestBody OwnerAccountDto ownerAccountDto, String newPassword) {
     try {
       OwnerAccount ownerAccount = service.getOwnerAccount(ownerAccountDto.getEmail());
       String oldPassword = ownerAccountDto.getPassword();
@@ -67,9 +67,9 @@ public class OwnerAccountRestController {
 
   private UserAccountDto convertToDto(UserAccount userAccount) {
     if (userAccount == null) {
-      throw new IllegalArgumentException("There is no such customer account!");
+      throw new IllegalArgumentException("There is no such user account!");
     }
     return new UserAccountDto(userAccount.getEmail(),
-      userAccount.getPassword());
+      userAccount.getPassword(), userAccount.getName());
   }
 }

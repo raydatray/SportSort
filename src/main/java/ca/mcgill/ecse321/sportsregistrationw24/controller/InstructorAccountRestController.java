@@ -27,7 +27,7 @@ public class InstructorAccountRestController {
       String password = instructorAccountDto.getPassword();
       String name = instructorAccountDto.getName();
       InstructorAccount instructorAccount = service.createInstructorAccount(email, password, name);
-      return ResponseEntity.ok().body(convertToDto(instructorAccount));
+      return ResponseEntity.ok().body("Instructor account created successfully");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -40,7 +40,7 @@ public class InstructorAccountRestController {
   public ResponseEntity<?> getInstructorAccount(@RequestParam String email) {
     try {
       InstructorAccount instructorAccount = service.getInstructorAccount(email);
-      return ResponseEntity.ok().body(convertToDto(instructorAccount));
+      return ResponseEntity.ok().body("Instructor account retrieved");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -96,9 +96,9 @@ public class InstructorAccountRestController {
     "/instructorAccounts/delete",
     "/instructorAccounts/delete/"
   })
-  public ResponseEntity<?> deleteInstructorAccount(@RequestParam String email) {
+  public ResponseEntity<?> deleteInstructorAccountByEmail(@RequestParam String email) {
     try {
-      service.deleteInstructorAccount(email);
+      service.deleteInstructorAccountByEmail(email);
       return ResponseEntity.ok().body("Instructor account deleted successfully.");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -107,7 +107,7 @@ public class InstructorAccountRestController {
 
   private InstructorAccountDto convertToDto(InstructorAccount instructorAccount) {
     if (instructorAccount == null) {
-      throw new IllegalArgumentException("There is no such customer account!");
+      throw new IllegalArgumentException("There is no such instructor account!");
     }
     return new InstructorAccountDto(instructorAccount.getEmail(),
       instructorAccount.getPassword(), instructorAccount.getName());

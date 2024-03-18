@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -18,9 +19,9 @@ public class CustomerAccountService {
 
   @Transactional
   public CustomerAccount createCustomerAccount(String email, String password, String name) {
-    CustomerAccount existingCustomeraccount = getCustomerAccount(email);
+    CustomerAccount existingCustomeraccount = getCustomerAccountByEmail(email);
     if (existingCustomeraccount != null) {
-      throw new IllegalArgumentException("An customer account already exists with this email");
+      throw new IllegalArgumentException("Customer email is already in use!");
     }
     CustomerAccount customerAccount = new CustomerAccount();
     customerAccount.setEmail(email);
@@ -31,42 +32,64 @@ public class CustomerAccountService {
   }
 
   @Transactional
-  public void updateCustomerEmail(String oldEmail, String email) {
-    CustomerAccount customerAccount = customerAccountRepository.findByEmail(oldEmail).orElse(null);
+  public void updateCustomerEmail(String newEmail, String token) {
+    CustomerAccount customerAccount = customerAccountRepository.findByToken(token).orElse(null);
+    // Customer with this email does not exist
     if (customerAccount == null) {
-      throw new IllegalArgumentException("Customer Account does not exist!");
+      throw new IllegalArgumentException("Customer account does not exist!");
     }
-    customerAccount.setEmail(email);
+    // Customer's old email matches new email
+    if (customerAccount.getEmail().equals(newEmail)) {
+      throw new IllegalArgumentException("New email matches old email!");
+    }
+    // New email is already in use
+    Optional<CustomerAccount> existingCustomer = customerAccountRepository.findByEmail(newEmail);
+    if (existingCustomer.isPresent()) {
+      throw new IllegalArgumentException("New email is already in use!");
+    }
+    customerAccount.setEmail(newEmail);
     customerAccountRepository.save(customerAccount);
   }
 
   @Transactional
-  public void updateCustomerPassword(CustomerAccount customer, String newPassword, String oldPassword) {
+  public void updateCustomerPassword(String newPassword, String oldPassword, String token) {
+    CustomerAccount customerAccount = customerAccountRepository.findByToken(token).orElse(null);
+    if (customerAccount == null) {
+      throw new IllegalArgumentException("Customer account does not exist!");
+    }
     // Incorrect old password
-    if (!customer.getPassword().equals(oldPassword)) {
+    if (!customerAccount.getPassword().equals(oldPassword)) {
       throw new IllegalArgumentException("Incorrect old password!");
     }
     // New password matches old password
-    if (customer.getPassword().equals(newPassword)) {
+    if (customerAccount.getPassword().equals(newPassword)) {
       throw new IllegalArgumentException("New password cannot match the old password!");
     }
-    customer.setPassword(newPassword);
-    customerAccountRepository.save(customer);
+    customerAccount.setPassword(newPassword);
+    customerAccountRepository.save(customerAccount);
   }
 
   @Transactional
-  public void deleteCustomerAccount(String email) {
+  public void deleteCustomerAccountByEmail(String email) {
     CustomerAccount customerAccount = customerAccountRepository.findByEmail(email).orElse(null);
 
     if (customerAccount == null) {
-      throw new IllegalArgumentException("Customer Account does not exist!");
+      throw new IllegalArgumentException("Customer account does not exist!");
     }
-
     customerAccountRepository.delete(customerAccount);
   }
 
   @Transactional
-  public CustomerAccount getCustomerAccount(String email) {
+  public void deleteCustomerAccountByToken(String token) {
+    CustomerAccount customerAccount = customerAccountRepository.findByToken(token).orElse(null);
+    if (customerAccount == null) {
+      throw new IllegalArgumentException("Customer account does not exist!");
+    }
+    customerAccountRepository.delete(customerAccount);
+  }
+
+  @Transactional
+  public CustomerAccount getCustomerAccountByEmail(String email) {
     return customerAccountRepository.findByEmail(email).orElse(null);
   }
 

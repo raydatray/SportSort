@@ -3,13 +3,15 @@ package ca.mcgill.ecse321.sportsregistrationw24.dto;
 public class OwnerAccountDto {
   private String email;
   private String password;
+  private String name;
 
   public OwnerAccountDto() {
   }
 
-  public OwnerAccountDto(String email, String password) {
+  public OwnerAccountDto(String email, String password, String name) {
     this.email = email;
     this.password = password;
+    this.name = name;
   }
 
   public String getEmail() {
@@ -19,4 +21,5 @@ public class OwnerAccountDto {
   public String getPassword() {
     return this.password;
   }
+  public String getName() { return this.name; }
 }
