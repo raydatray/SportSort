@@ -10,23 +10,23 @@ import java.util.Date;
 
 @Component
 public class TokenProvider {
-    @Value("${secretKey}")
-    private String secretKey;
+  @Value("${secretKey}")
+  private String secretKey;
 
-    @PostConstruct
-    protected void init() {
-      secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-    }
+  @PostConstruct
+  protected void init() {
+    secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
+  }
 
-    public String generateToken(String username) { //This should be emails passed in
-      Date now = new Date();
-      Date expiry = new Date(now.getTime() + (3600000 * 12)); //Set to 12 hours of validity
+  public String generateToken(String username) { //This should be emails passed in
+    Date now = new Date();
+    Date expiry = new Date(now.getTime() + (3600000 * 12)); //Set to 12 hours of validity
 
-      return Jwts.builder()
-        .subject(username)
-        .issuedAt(now)
-        .expiration(expiry)
-        .signWith(SignatureAlgorithm.HS256, secretKey) //??
-        .compact();
-    }
+    return Jwts.builder()
+      .subject(username)
+      .issuedAt(now)
+      .expiration(expiry)
+      .signWith(SignatureAlgorithm.HS256, secretKey) //??
+      .compact();
+  }
 }

@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class CourseOfferingService {
 
-    @Autowired
-    private CourseOfferingRepository courseOfferingRepository;
+  @Autowired
+  private CourseOfferingRepository courseOfferingRepository;
 }

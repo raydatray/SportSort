@@ -1,14 +1,14 @@
 package ca.mcgill.ecse321.sportsregistrationw24.dto;
 
-public class CustomerAccountDto {
+public class InstructorAccountDto {
   private String email;
   private String password;
   private String name;
 
-  public CustomerAccountDto() {
+  public InstructorAccountDto() {
   }
 
-  public CustomerAccountDto(String email, String password, String name) {
+  public InstructorAccountDto(String email, String password, String name) {
     this.email = email;
     this.password = password;
     this.name = name;
@@ -22,7 +22,5 @@ public class CustomerAccountDto {
     return this.password;
   }
 
-  public String getName() {
-    return this.name;
-  }
+  public String getName() { return this.name; }
 }
