@@ -82,9 +82,8 @@ public class CustomerAccountRestController {
     "/customerAccounts/updatePassword",
     "/customerAccounts/updatePassword/"
   })
-  public ResponseEntity<?> updateCustomerPassword(@RequestBody CustomerAccountDto customerAccountDto, @RequestParam String newPassword, @RequestHeader String token) {
+  public ResponseEntity<?> updateCustomerPassword(@RequestParam String oldPassword, @RequestParam String newPassword, @RequestHeader String token) {
     try {
-      String oldPassword = customerAccountDto.getPassword();
       service.updateCustomerPassword(newPassword, oldPassword, token);
       return ResponseEntity.ok().body("Password updated successfully!");
     } catch (Exception e) {
