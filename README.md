@@ -26,5 +26,18 @@ This is the repository of Group 15 which consists of Leon Song, Raymond Liu, Hou
 - **Deliverable 3**: To Come
 
 ## Key Design Decisions and Meeting Minutes <a name="key-design-decisions"></a>
-
 For key design decisions and meeting minutes, please refer to our [Project Wiki](../../wiki). Navigate to the appropriate deliverable section for specific information.
+
+## How To Run the Application
+Navigate to the **Sportsregistrationw24Application.java** file and run it.
+
+## Deployement Guide
+- Server Configuration
+    - Ensure that you have a server running a compatible operating system.
+    - Install Java Development Kit (JDK) version 17.
+    - Install PostgreSQL server using package manager or official PostgreSQL repositories.  
+- Database Setup
+    - Log in to PostgresSQL using the psql command-line tool in your terminal
+    - Create a database for the application
+- IDE Application Configurat
+    - Using an IDE such as Intellij will allow you to view and modify your local database after connecting it to the IDE
