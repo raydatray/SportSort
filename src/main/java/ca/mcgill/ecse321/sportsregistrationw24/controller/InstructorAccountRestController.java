@@ -81,7 +81,7 @@ public class InstructorAccountRestController {
     "/instructorAccounts/updatePassword",
     "/instructorAccounts/updatePassword/"
   })
-  public ResponseEntity<?> updateInstructorPassword(@RequestBody InstructorAccountDto instructorAccountDto, String newPassword, @RequestHeader String token) {
+  public ResponseEntity<?> updateInstructorPassword(@RequestBody InstructorAccountDto instructorAccountDto, @RequestParam String newPassword, @RequestHeader String token) {
     try {
       String oldPassword = instructorAccountDto.getPassword();
       service.updateInstructorPassword(newPassword, oldPassword, token);

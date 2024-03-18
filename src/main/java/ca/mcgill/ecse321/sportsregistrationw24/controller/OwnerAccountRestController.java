@@ -34,8 +34,8 @@ public class OwnerAccountRestController {
   }
 
   @PutMapping(value = {
-    "/ownerAccounts/updateEmail",
-    "/ownerAccounts/updateEmail/"
+    "/ownerAccount/updateEmail",
+    "/ownerAccount/updateEmail/"
   })
   public ResponseEntity<?> updateOwnerEmail(@RequestParam String newEmail, @RequestHeader String token) {
     try {
@@ -47,10 +47,10 @@ public class OwnerAccountRestController {
   }
 
   @PutMapping(value = {
-    "/ownerAccounts/updatePassword",
-    "/ownerAccounts/updatePassword/"
+    "/ownerAccount/updatePassword",
+    "/ownerAccount/updatePassword/"
   })
-  public ResponseEntity<?> updateOwnerPassword(@RequestBody OwnerAccountDto ownerAccountDto, String newPassword, @RequestHeader String token) {
+  public ResponseEntity<?> updateOwnerPassword(@RequestBody OwnerAccountDto ownerAccountDto, @RequestParam String newPassword, @RequestHeader String token) {
     try {
       String oldPassword = ownerAccountDto.getPassword();
       service.updateOwnerPassword(newPassword, oldPassword, token);
@@ -61,8 +61,8 @@ public class OwnerAccountRestController {
   }
 
   @GetMapping(value = {
-    "/userAccounts/getAll",
-    "/userAccounts/getAll/"
+    "/userAccount/getAll",
+    "/userAccount/getAll/"
   })
   public ResponseEntity<?> getAllUserAccounts() {
     try {

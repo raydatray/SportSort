@@ -20,7 +20,7 @@ public class OwnerAccountService {
 
   @Transactional
   public void updateOwnerEmail(String newEmail, String token) {
-    OwnerAccount ownerAccount = ownerAccountRepository.findByEmail(token).orElse(null);
+    OwnerAccount ownerAccount = ownerAccountRepository.findByToken(token).orElse(null);
     if (ownerAccount == null) {
       throw new IllegalArgumentException("Owner Account does not exist!");
     }
