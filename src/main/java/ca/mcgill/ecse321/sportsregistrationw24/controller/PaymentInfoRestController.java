@@ -1,12 +1,8 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dto.AuthenticationDto;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.PaymentInfoDto;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.RoomDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.PaymentInfo;
-import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
 import ca.mcgill.ecse321.sportsregistrationw24.service.PaymentInfoService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +30,7 @@ public class PaymentInfoRestController {
 
       PaymentInfo paymentInfo = service.createPaymentInfo(paymentType, cardNumber, cvv, expirationYear, expirationMonth, token);
 
-      return ResponseEntity.ok().body(paymentInfo);
+      return ResponseEntity.ok().body("Payment information successfully created");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -54,7 +50,7 @@ public class PaymentInfoRestController {
       Integer id = paymentInfoDto.getId();
 
       service.updatePaymentInfo(id, newPaymentType, newCardNumber, newCvv, newExpirationYear, newExpirationMonth);
-      return ResponseEntity.ok().body(paymentInfoDto);
+      return ResponseEntity.ok().body("Payment information successfully updated");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -73,7 +69,6 @@ public class PaymentInfoRestController {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
-
 
   @GetMapping(value = {
     "/paymentInfo/getAll",
