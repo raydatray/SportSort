@@ -1,6 +1,7 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dto.InstructorAccountDto;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.InstructorAccountSafeDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.service.InstructorAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,8 @@ public class InstructorAccountRestController {
       String email = instructorAccountDto.getEmail();
       String password = instructorAccountDto.getPassword();
       String name = instructorAccountDto.getName();
-      InstructorAccount instructorAccount = service.createInstructorAccount(email, password, name);
-      return ResponseEntity.ok().body("Instructor account created successfully");
+      service.createInstructorAccount(email, password, name);
+      return ResponseEntity.ok().body("Instructor account created successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -37,10 +38,10 @@ public class InstructorAccountRestController {
     "/instructorAccounts/get",
     "/instructorAccounts/get/"
   })
-  public ResponseEntity<?> getInstructorAccount(@RequestParam String email) {
+  public ResponseEntity<?> getInstructorAccountByEmail(@RequestParam String email) {
     try {
-      InstructorAccount instructorAccount = service.getInstructorAccount(email);
-      return ResponseEntity.ok().body("Instructor account retrieved");
+      InstructorAccount instructorAccount = service.getInstructorAccountByEmail(email);
+      return ResponseEntity.ok().body(convertToSafeDto(instructorAccount));
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -52,9 +53,9 @@ public class InstructorAccountRestController {
   })
   public ResponseEntity<?> getAllInstructorAccounts() {
     try {
-      List<InstructorAccountDto> instructorAccountDtos = new ArrayList<>();
+      List<InstructorAccountSafeDto> instructorAccountDtos = new ArrayList<>();
       for (InstructorAccount instructorAccount : service.getAllInstructorAccounts()) {
-        InstructorAccountDto dto = convertToDto(instructorAccount);
+        InstructorAccountSafeDto dto = convertToSafeDto(instructorAccount);
         instructorAccountDtos.add(dto);
       }
       return ResponseEntity.ok().body(instructorAccountDtos);
@@ -67,11 +68,10 @@ public class InstructorAccountRestController {
     "/instructorAccounts/updateEmail",
     "/instructorAccounts/updateEmail/"
   })
-  public ResponseEntity<?> updateInstructorEmail(@RequestBody InstructorAccountDto instructorAccountDto, @RequestParam String newEmail) {
+  public ResponseEntity<?> updateInstructorEmail(@RequestParam String oldEmail, @RequestParam String newEmail) {
     try {
-      String oldEmail = instructorAccountDto.getEmail();
       service.updateInstructorEmail(oldEmail, newEmail);
-      return ResponseEntity.ok().body("Customer account updated successfully.");
+      return ResponseEntity.ok().body("Instructor account updated successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -81,36 +81,34 @@ public class InstructorAccountRestController {
     "/instructorAccounts/updatePassword",
     "/instructorAccounts/updatePassword/"
   })
-  public ResponseEntity<?> updateInstructorPassword(@RequestBody InstructorAccountDto instructorAccountDto, String newPassword) {
+  public ResponseEntity<?> updateInstructorPassword(@RequestBody InstructorAccountDto instructorAccountDto, String newPassword, @RequestHeader String token) {
     try {
-      InstructorAccount instructorAccount = service.getInstructorAccount(instructorAccountDto.getEmail());
       String oldPassword = instructorAccountDto.getPassword();
-      service.updateInstructorPassword(instructorAccount, newPassword, oldPassword);
-      return ResponseEntity.ok().body("Password updated successfully.");
+      service.updateInstructorPassword(newPassword, oldPassword, token);
+      return ResponseEntity.ok().body("Password updated successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
 
   @DeleteMapping(value = {
-    "/instructorAccounts/delete",
-    "/instructorAccounts/delete/"
+    "/instructorAccounts/deleteByEmail",
+    "/instructorAccounts/deleteByEmail/"
   })
   public ResponseEntity<?> deleteInstructorAccountByEmail(@RequestParam String email) {
     try {
       service.deleteInstructorAccountByEmail(email);
-      return ResponseEntity.ok().body("Instructor account deleted successfully.");
+      return ResponseEntity.ok().body("Instructor account deleted successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
 
-  private InstructorAccountDto convertToDto(InstructorAccount instructorAccount) {
+  private InstructorAccountSafeDto convertToSafeDto(InstructorAccount instructorAccount) {
     if (instructorAccount == null) {
       throw new IllegalArgumentException("There is no such instructor account!");
     }
-    return new InstructorAccountDto(instructorAccount.getEmail(),
-      instructorAccount.getPassword(), instructorAccount.getName());
+    return new InstructorAccountSafeDto(instructorAccount.getEmail(), instructorAccount.getName());
   }
 
 }

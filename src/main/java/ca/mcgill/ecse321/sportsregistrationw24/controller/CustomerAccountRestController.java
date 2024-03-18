@@ -27,7 +27,7 @@ public class CustomerAccountRestController {
       String email = customerAccountDto.getEmail();
       String password = customerAccountDto.getPassword();
       String name = customerAccountDto.getName();
-      CustomerAccount customerAccount = service.createCustomerAccount(email, password, name);
+      service.createCustomerAccount(email, password, name);
       return ResponseEntity.ok().body("Customer account created successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -35,8 +35,8 @@ public class CustomerAccountRestController {
   }
 
   @GetMapping(value = {
-    "/customerAccounts/getByEmail",
-    "/customerAccounts/getByEmail/"
+    "/customerAccounts/get",
+    "/customerAccounts/get/"
   })
   public ResponseEntity<?> getCustomerAccountByEmail(@RequestParam String email) {
     try {
@@ -116,14 +116,6 @@ public class CustomerAccountRestController {
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
-  }
-
-  private CustomerAccountDto convertToDto(CustomerAccount customerAccount) {
-    if (customerAccount == null) {
-      throw new IllegalArgumentException("There is no such customer account!");
-    }
-    return new CustomerAccountDto(customerAccount.getEmail(),
-      customerAccount.getPassword(), customerAccount.getName());
   }
 
   private CustomerAccountSafeDto convertToSafeDto(CustomerAccount customerAccount) {

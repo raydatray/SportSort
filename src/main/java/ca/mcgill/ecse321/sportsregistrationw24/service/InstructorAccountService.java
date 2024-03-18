@@ -3,7 +3,6 @@ package ca.mcgill.ecse321.sportsregistrationw24.service;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.InstructorAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities;
-import jdk.dynalink.linker.LinkerServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,14 +32,14 @@ public class InstructorAccountService {
   }
 
   @Transactional
-  public void updateInstructorEmail(String newEmail, String token) {
-    InstructorAccount instructorAccount = instructorAccountRepository.findByToken(token).orElse(null);
+  public void updateInstructorEmail(String oldEmail, String newEmail) {
+    InstructorAccount instructorAccount = instructorAccountRepository.findByEmail(oldEmail).orElse(null);
     // Instructor with this email does not exist
     if (instructorAccount == null) {
       throw new IllegalArgumentException("Instructor account does not exist!");
     }
     // Instructor's old email matches new email
-    if (instructorAccount.getEmail().equals(newEmail)) {
+    if (oldEmail.equals(newEmail)) {
       throw new IllegalArgumentException("New email matches old email!");
     }
     // New email is already in use
@@ -71,23 +70,23 @@ public class InstructorAccountService {
   }
 
   @Transactional
-  public void deleteCustomerAccountByEmail(String email) {
+  public void deleteInstructorAccountByEmail(String email) {
     InstructorAccount instructorAccount = instructorAccountRepository.findByEmail(email).orElse(null);
     if (instructorAccount == null) {
-      throw new IllegalArgumentException("Customer account does not exist!");
+      throw new IllegalArgumentException("Instructor account does not exist!");
     }
     instructorAccountRepository.delete(instructorAccount);
   }
 
   @Transactional
-  public  getCustomerAccountByEmail(String email) {
-    return customerAccountRepository.findByEmail(email).orElse(null);
+  public InstructorAccount getInstructorAccountByEmail(String email) {
+    return instructorAccountRepository.findByEmail(email).orElse(null);
   }
 
   @Transactional
-  public List<InstructorAccount> getAllCustomerAccounts() {
+  public List<InstructorAccount> getAllInstructorAccounts() {
     Utilities utilities = new Utilities();
-    return utilities.iterableToArrayList(customerAccountRepository.findAll());
+    return utilities.iterableToArrayList(instructorAccountRepository.findAll());
   }
 
 }

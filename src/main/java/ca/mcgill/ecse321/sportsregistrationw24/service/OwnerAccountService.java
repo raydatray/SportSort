@@ -1,6 +1,5 @@
 package ca.mcgill.ecse321.sportsregistrationw24.service;
 
-
 import ca.mcgill.ecse321.sportsregistrationw24.dao.OwnerAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.OwnerAccount;
@@ -20,32 +19,38 @@ public class OwnerAccountService {
   private OwnerAccountRepository ownerAccountRepository;
 
   @Transactional
-  public void updateOwnerEmail(String oldEmail, String email) {
-    OwnerAccount ownerAccount = ownerAccountRepository.findByEmail(oldEmail).orElse(null);
-
+  public void updateOwnerEmail(String newEmail, String token) {
+    OwnerAccount ownerAccount = ownerAccountRepository.findByEmail(token).orElse(null);
     if (ownerAccount == null) {
       throw new IllegalArgumentException("Owner Account does not exist!");
     }
-    ownerAccount.setEmail(email);
+    if (ownerAccount.getEmail().equals(newEmail)) {
+      throw new IllegalArgumentException("New email matches old email!");
+    }
+    ownerAccount.setEmail(newEmail);
     ownerAccountRepository.save(ownerAccount);
   }
 
   @Transactional
-  public void updateOwnerPassword(OwnerAccount owner, String newPassword, String oldPassword) {
+  public void updateOwnerPassword(String newPassword, String oldPassword, String token) {
+    OwnerAccount ownerAccount = ownerAccountRepository.findByToken(token).orElse(null);
+    if (ownerAccount == null) {
+      throw new IllegalArgumentException("Owner account does not exist!");
+    }
     // Incorrect old password
-    if (!owner.getPassword().equals(oldPassword)) {
+    if (!ownerAccount.getPassword().equals(oldPassword)) {
       throw new IllegalArgumentException("Incorrect old password!");
     }
     // New password matches old password
-    if (owner.getPassword().equals(newPassword)) {
+    if (ownerAccount.getPassword().equals(newPassword)) {
       throw new IllegalArgumentException("New password cannot match the old password!");
     }
-    owner.setPassword(newPassword);
-    ownerAccountRepository.save(owner);
+    ownerAccount.setPassword(newPassword);
+    ownerAccountRepository.save(ownerAccount);
   }
 
   @Transactional
-  public OwnerAccount getOwnerAccount(String email) {
+  public OwnerAccount getOwnerAccountByEmail(String email) {
     return ownerAccountRepository.findByEmail(email).orElse(null);
   }
 
