@@ -1,6 +1,5 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dto.OwnerAccountDto;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.OwnerAccountSafeDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.OwnerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
@@ -50,9 +49,8 @@ public class OwnerAccountRestController {
     "/ownerAccount/updatePassword",
     "/ownerAccount/updatePassword/"
   })
-  public ResponseEntity<?> updateOwnerPassword(@RequestBody OwnerAccountDto ownerAccountDto, @RequestParam String newPassword, @RequestHeader String token) {
+  public ResponseEntity<?> updateOwnerPassword(@RequestParam String oldPassword, @RequestParam String newPassword, @RequestHeader String token) {
     try {
-      String oldPassword = ownerAccountDto.getPassword();
       service.updateOwnerPassword(newPassword, oldPassword, token);
       return ResponseEntity.ok().body("Password updated successfully.");
     } catch (Exception e) {
