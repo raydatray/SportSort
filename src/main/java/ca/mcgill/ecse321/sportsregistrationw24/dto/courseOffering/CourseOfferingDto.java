@@ -2,7 +2,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.dto.courseOffering;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
 import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
-import org.springframework.jndi.support.SimpleJndiBeanFactory;
+
 
 import java.sql.Date;
 import java.time.DayOfWeek;

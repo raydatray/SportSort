@@ -4,6 +4,7 @@ import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseOfferingRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.InstructorAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.RoomRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
@@ -30,17 +31,24 @@ public class CourseOfferingService {
   @Autowired
   private UserAccountRepository userAccountRepository;
 
+  @Autowired
+  private RoomRepository roomRepository;
+
   @Transactional
-  public CourseOffering createCourseOffering(Date aStartDate, Date aEndDate, List<DayOfWeek> aDaysOffered, InstructorAccount aInstructor, Room aRoom, String userType){
-    if (!userType.equals("INSTRUCTOR")){
+  public CourseOffering createCourseOffering(Date aStartDate, Date aEndDate, List<DayOfWeek> aDaysOffered, String aInstructorToken, Integer aRoomId){
+    UserAccount user = getUser(aInstructorToken);
+    if (!user.getUserType().equals("INSTRUCTOR")){
       throw new IllegalArgumentException("Only instructors can create course offerings!");
     }
+    InstructorAccount instructor = (InstructorAccount) user;
+    Optional<Room> optional = roomRepository.findById(aRoomId);
+    Room room = optional.orElse(null);
     CourseOffering courseOffering = new CourseOffering();
     courseOffering.setStartDate(aStartDate);
     courseOffering.setEndDate(aEndDate);
     courseOffering.setDaysOffered(aDaysOffered);
-    courseOffering.setInstructorAccount(aInstructor);
-    courseOffering.setRoom(aRoom);
+    courseOffering.setInstructorAccount(instructor);
+    courseOffering.setRoom(room);
     courseOfferingRepository.save(courseOffering);
     return courseOffering;
   }

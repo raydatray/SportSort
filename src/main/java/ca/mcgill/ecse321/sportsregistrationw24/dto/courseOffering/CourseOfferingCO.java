@@ -1,6 +1,5 @@
 package ca.mcgill.ecse321.sportsregistrationw24.dto.courseOffering;
-import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
-import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
+
 
 import java.sql.Date;
 import java.time.DayOfWeek;
@@ -10,21 +9,18 @@ public class CourseOfferingCO {
   private Date startDate;
   private Date endDate;
   private List<DayOfWeek> daysOffered;
-  private InstructorAccount instructor;
-  private Room room;
-  private String userType;
-
+  private String instructorToken;
+  private Integer roomId;
 
   public CourseOfferingCO() {
   }
 
-  public CourseOfferingCO(Date aStartDate, Date aEndDate, List<DayOfWeek> aDaysOffered, InstructorAccount instructor, Room aRoom, String aUserType) {
+  public CourseOfferingCO(Date aStartDate, Date aEndDate, List<DayOfWeek> aDaysOffered, String aInstructorToken, Integer aRoomId) {
     this.startDate = aStartDate;
     this.endDate = aEndDate;
     this.daysOffered = aDaysOffered;
-    this.instructor = instructor;
-    this.room = aRoom;
-    this.userType = aUserType;
+    this.instructorToken = aInstructorToken;
+    this.roomId = aRoomId;
   }
   public Date getStartDate() {
     return this.startDate;
@@ -33,8 +29,7 @@ public class CourseOfferingCO {
     return this.endDate;
   }
   public List<DayOfWeek> getDaysOffered() { return this.daysOffered; }
-  public InstructorAccount getInstructor() { return this.instructor; }
-  public Room getRoom() {return this.room; }
-  public String getUserType() {return this.userType;}
+  public String getInstructorToken() { return this.instructorToken; }
+  public Integer getRoomId() {return this.roomId; }
 }
 

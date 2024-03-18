@@ -3,8 +3,6 @@ package ca.mcgill.ecse321.sportsregistrationw24.controller;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.courseOffering.CourseOfferingDto;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.courseOffering.CourseOfferingCO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
-import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
-import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
 import ca.mcgill.ecse321.sportsregistrationw24.service.CourseOfferingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,11 +29,10 @@ public class CourseOfferingRestController {
       Date startDate = courseOfferingCO.getStartDate();
       Date endDate = courseOfferingCO.getEndDate();
       List<DayOfWeek> daysOffered = courseOfferingCO.getDaysOffered();
-      InstructorAccount instructor = courseOfferingCO.getInstructor();
-      Room room = courseOfferingCO.getRoom();
-      String userType = courseOfferingCO.getUserType();
+      String instructorToken = courseOfferingCO.getInstructorToken();
+      Integer roomId = courseOfferingCO.getRoomId();
 
-      service.createCourseOffering(startDate, endDate, daysOffered, instructor, room, userType);
+      service.createCourseOffering(startDate, endDate, daysOffered, instructorToken, roomId);
       return ResponseEntity.ok().body("Course offering created successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
