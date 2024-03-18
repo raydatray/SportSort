@@ -39,5 +39,5 @@ Navigate to the **Sportsregistrationw24Application.java** file and run it.
 - Database Setup
     - Log in to PostgresSQL using the psql command-line tool in your terminal
     - Create a database for the application
-- IDE Application Configurat
+- IDE Application Configuration
     - Using an IDE such as Intellij will allow you to view and modify your local database after connecting it to the IDE
