@@ -252,22 +252,22 @@ public class CourseSessionServiceTests {
 
   @Test
   public void testCreateCourseSessionWithStartTimeBeforeOpeningHour() {
-
+    fail();
   }
 
   @Test
   public void testCreateCourseSessionWithStartTimeAfterClosingHour() {
-
+    fail();
   }
 
   @Test
   public void testCreateCourseSessionWithEndTimeBeforeOpeningHour() {
-
+    fail();
   }
 
   @Test
   public void testCreateCourseSessionWithEndTimeAfterClosingHour() {
-
+    fail();
   }
 
   @Test // TODO - TELL RAY TO FIX THIS
