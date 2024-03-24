@@ -55,7 +55,7 @@ public class CourseSessionIntegrationTests {
     ResponseEntity<CourseSessionDto> response = client.postForEntity("/courseSession/createSession", new singleCourseSessionCO(date, startTime, endTime, 1), CourseSessionDto.class);
 
     assertNotNull(response);
-    assertEquals(HttpStatus.OK, response.getStatusCode(), "Response has correct status");
+    assertEquals(HttpStatus.CREATED, response.getStatusCode(), "Response has correct status");
     assertNotNull(response.getBody(), "Response has body");
     assertEquals(date, response.getBody().getDate(), "Response has correct date");
     assertEquals(startTime, response.getBody().getStartTime(), "Response has correct start time");
@@ -76,9 +76,22 @@ public class CourseSessionIntegrationTests {
 
   @Test
   public void testCreateInvalidCourseSession() {
-    ResponseEntity<CourseSessionDto> response = client.postForEntity("/courseSession/createSession", new singleCourseSessionCO(null, null, null, null), CourseSessionDto.class);
+    Date date = Date.valueOf("2024-01-30");
+    Time startTime = Time.valueOf(LocalTime.of(12, 0));
+    Time endTime = Time.valueOf(LocalTime.of(13, 0));
+
+    ResponseEntity<String> response = client.postForEntity("/courseSession/createSession", new singleCourseSessionCO(date, startTime, endTime, 1), String.class);
 
     assertNotNull(response);
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode(), "Response has correct status");
+  }
+
+  @Test
+  public void testGetInvalidCourseSession() {
+    ResponseEntity<String> response = client.getForEntity("/courseSession/getSession?courseSessionId=" + Integer.MAX_VALUE, String.class);
+
+    assertNotNull(response);
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode(), "Response has correct status");
+    assertEquals("Course session was not found", response.getBody(), "Response has correct error message");
   }
 }

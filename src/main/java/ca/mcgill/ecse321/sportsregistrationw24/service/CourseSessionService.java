@@ -81,6 +81,12 @@ public class CourseSessionService {
     @Transactional
     //Use when you are creating courseSessions from a courseOffering with recurring sessions
     public ArrayList<CourseSession> createCourseSessions (HashMap<DayOfWeek, ArrayList<Time>> dayTimeMapping, Integer aCourseOfferingID) {
+        if (dayTimeMapping == null) {
+            throw new IllegalArgumentException("Day time mapping field cannot be null");
+        } else if (aCourseOfferingID == null) {
+            throw new IllegalArgumentException("Course offering ID field cannot be null");
+        }
+
         CourseOffering foundCourseOffering = courseOfferingRepository.findById(aCourseOfferingID).orElse(null);
 
         if (foundCourseOffering == null) {

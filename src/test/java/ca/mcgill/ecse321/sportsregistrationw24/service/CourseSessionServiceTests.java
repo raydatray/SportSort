@@ -351,7 +351,7 @@ public class CourseSessionServiceTests {
       error = e.getMessage();
     }
 
-    assertEquals("Course Offering not found", error);
+    assertEquals("Course offering ID field cannot be null", error);
   }
 
   @Test  // TODO - Tell Ray to fix this
@@ -367,10 +367,10 @@ public class CourseSessionServiceTests {
       error = e.getMessage();
     }
 
-    assertEquals("??", error);
+    assertEquals("Day time mapping field cannot be null", error);
   }
 
-  @Test // TODO - Tell Ray to fix this
+  @Test // TODO - Ask if we want to throw an error or not in this scenario
   public void testCreateCourseSessionsWithInvalidDayTimeMapping() {
     ArrayList<Time> mondayTimes = new ArrayList<>();
     mondayTimes.add(START_TIME);
