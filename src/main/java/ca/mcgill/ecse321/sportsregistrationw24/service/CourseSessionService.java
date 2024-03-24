@@ -115,6 +115,25 @@ public class CourseSessionService {
     }
 
     @Transactional
+    public CourseSession getCourseSession(Integer courseSessionId) {
+        if (courseSessionId == null) {
+            throw new IllegalArgumentException("Course session ID was null");
+        }
+
+        if (courseSessionId < 1) {
+            throw new IllegalArgumentException("Course session ID is invalid");
+        }
+
+        CourseSession courseSession = courseSessionRepository.findById(courseSessionId).orElse(null);
+
+        if (courseSession == null) {
+            throw new IllegalArgumentException("Course session was not found");
+        }
+
+        return courseSession;
+    }
+
+    @Transactional
     public ArrayList<CourseSession> getCourseSessionsByCourseOfferingID (Integer courseOfferingID) {
         CourseOffering foundCourseOffering = courseOfferingRepository.findById(courseOfferingID).orElse(null);
 

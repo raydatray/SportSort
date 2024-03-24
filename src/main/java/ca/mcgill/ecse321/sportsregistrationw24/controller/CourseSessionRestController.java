@@ -69,6 +69,20 @@ public class CourseSessionRestController {
   }
 
   @GetMapping(value = {
+    "courseSession/getSession",
+    "courseSession/getSession/"
+  })
+  public ResponseEntity<?> getSession(@RequestParam Integer courseSessionId) {
+    try {
+      CourseSession courseSession = service.getCourseSession(courseSessionId);
+      return ResponseEntity.ok().body(new CourseSessionDto(courseSession));
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+  }
+
+  @GetMapping(value = {
           "courseSession/getSessionsByOffering",
           "courseSession/getSessionsByOffering/"
   })
