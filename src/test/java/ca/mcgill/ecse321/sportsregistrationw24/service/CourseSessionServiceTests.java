@@ -104,7 +104,7 @@ public class CourseSessionServiceTests {
     assertEquals(COURSE_OFFERING_KEY, courseSession.getCourseOffering().getId());
   }
 
-  @Test // TODO - TELL RAY TO FIX THIS (Null pointer exn instead of illegal argument)
+  @Test
   public void testCreateCourseSessionWithNullDate() {
     Date date = null;
 
@@ -117,10 +117,10 @@ public class CourseSessionServiceTests {
       error = e.getMessage();
     }
 
-    assertEquals("???", error);
+    assertEquals("Date field cannot be null", error);
   }
 
-  @Test // TODO - TELL RAY TO FIX THIS (Null pointer exn instead of illegal argument)
+  @Test
   public void testCreateCourseSessionWithNullStartTime() {
     Time startTime = null;
 
@@ -133,10 +133,10 @@ public class CourseSessionServiceTests {
       error = e.getMessage();
     }
 
-    assertEquals("???", error);
+    assertEquals("Start time field cannot be null", error);
   }
 
-  @Test // TODO - TELL RAY TO FIX THIS (Null pointer exn instead of illegal argument)
+  @Test
   public void testCreateCourseSessionWithNullEndTime() {
     Time endTime = null;
 
@@ -149,7 +149,7 @@ public class CourseSessionServiceTests {
       error = e.getMessage();
     }
 
-    assertEquals("???", error);
+    assertEquals("End time field cannot be null", error);
   }
 
   @Test
@@ -165,7 +165,7 @@ public class CourseSessionServiceTests {
       error = e.getMessage();
     }
 
-    assertEquals("Course Offering not found", error);
+    assertEquals("Course offering ID field cannot be null", error);
   }
 
   @Test
@@ -184,7 +184,7 @@ public class CourseSessionServiceTests {
     assertEquals("Course Offering not found", error);
   }
 
-  @Test // TODO - TELL RAY TO FIX THIS IN SERVICE LAYER
+  @Test
   public void testCreateCourseSessionWithDateBeforeOfferingStartDate() {
     Date date = Date.valueOf("2023-01-01");
 
@@ -197,7 +197,7 @@ public class CourseSessionServiceTests {
       error = e.getMessage();
     }
 
-    assertEquals("???", error);
+    assertEquals("Date of course session cannot be before start date of course offering", error);
   }
 
   @Test // TODO - TELL RAY TO FIX THIS
@@ -213,13 +213,13 @@ public class CourseSessionServiceTests {
       error = e.getMessage();
     }
 
-    assertEquals("???", error);
+    assertEquals("Date of course session cannot be after end date of course offering", error);
   }
 
-  @Test // TODO - Tell ray to fix this
+  @Test
   public void testCreateCourseSessionWithSameStartAndEndTimes() {
     Time startTime = START_TIME;
-    Time endTime = END_TIME;
+    Time endTime = START_TIME;
 
     String error = null;
     CourseSession courseSession = null;
@@ -230,7 +230,7 @@ public class CourseSessionServiceTests {
       error = e.getMessage();
     }
 
-    assertEquals("???", error);
+    assertEquals("Session start time cannot be equal to end time", error);
   }
 
   @Test // TODO - Tell ray to fix this
@@ -247,7 +247,7 @@ public class CourseSessionServiceTests {
       error = e.getMessage();
     }
 
-    assertEquals("???", error);
+    assertEquals("Session start time cannot be after session end time", error);
   }
 
   @Test
@@ -284,7 +284,7 @@ public class CourseSessionServiceTests {
       error = e.getMessage();
     }
 
-    assertEquals("???", error);
+    assertEquals("Course sessions cannot last for over an hour", error);
   }
 
   /*---------- Tests for createCourseSessions() ----------*/

@@ -31,12 +31,40 @@ public class CourseSessionService {
     @Transactional
     //Use when you are creating a singular courseSession (Course Offerings where you know for a fact will only have one associated session)
     public CourseSession createCourseSession (Date aDate, Time aStartTime, Time aEndTime, Integer aCourseOfferindId) {
+        // NULL POINTER CHECKS
+        if (aDate == null) {
+            throw new IllegalArgumentException("Date field cannot be null");
+        } else if (aStartTime == null) {
+            throw new IllegalArgumentException("Start time field cannot be null");
+        } else if (aEndTime == null) {
+            throw new IllegalArgumentException("End time field cannot be null");
+        } else if (aCourseOfferindId == null) {
+            throw new IllegalArgumentException("Course offering ID field cannot be null");
+        }
+        // START AND END TIME CHECKS
+        if (aStartTime.compareTo(aEndTime) == 0) {
+            throw new IllegalArgumentException("Session start time cannot be equal to end time");
+        } else if (aStartTime.compareTo(aEndTime) > 0) {
+            throw new IllegalArgumentException("Session start time cannot be after session end time");
+        }
+        // SESSION DURATION CHECK (CANNOT BE OVER 1 HOUR)
+        long sessionDuration = Math.abs(aStartTime.getTime() - aEndTime.getTime());
+        long oneHour = 60 * 60 * 1000;
+        if (sessionDuration > oneHour) {
+            throw new IllegalArgumentException("Course sessions cannot last for over an hour");
+        }
+
         CourseOffering foundCourseOffering = courseOfferingRepository.findById(aCourseOfferindId).orElse(null);
 
         if (foundCourseOffering == null) {
             throw new IllegalArgumentException("Course Offering not found");
         }
-
+        // DATE CHECKS
+        if (aDate.toLocalDate().isBefore(foundCourseOffering.getStartDate().toLocalDate())) {
+            throw new IllegalArgumentException("Date of course session cannot be before start date of course offering");
+        } else if (aDate.toLocalDate().isAfter(foundCourseOffering.getEndDate().toLocalDate())) {
+            throw new IllegalArgumentException("Date of course session cannot be after end date of course offering");
+        }
 
         CourseSession newCourseSession = new CourseSession();
 

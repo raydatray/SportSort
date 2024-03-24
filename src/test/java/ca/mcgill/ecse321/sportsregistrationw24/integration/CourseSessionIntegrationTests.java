@@ -16,10 +16,8 @@ import org.springframework.http.ResponseEntity;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.util.TimeZone;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,6 +33,9 @@ public class CourseSessionIntegrationTests {
   private CourseSessionRepository courseSessionRepository;
 
   @BeforeEach
+  public void setUp() {
+    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+  }
   @AfterEach
   public void clearDatabase() {
     courseSessionRepository.deleteAll();
@@ -56,16 +57,16 @@ public class CourseSessionIntegrationTests {
     assertNotNull(response);
     assertEquals(HttpStatus.OK, response.getStatusCode(), "Response has correct status");
     assertNotNull(response.getBody(), "Response has body");
-    assertEquals(date, response.getBody().getDate());
-    assertEquals(startTime, response.getBody().getStartTime());
-    assertEquals(endTime, response.getBody().getEndTime());
+    assertEquals(date, response.getBody().getDate(), "Response has correct date");
+    assertEquals(startTime, response.getBody().getStartTime(), "Response has correct start time");
+    assertEquals(endTime, response.getBody().getEndTime(), "Response has correct end time");
     assertTrue(response.getBody().getId() > 0, "Response has valid ID");
 
     return response.getBody().getId();
   }
 
   private void testGetCourseSession(int id) {
-    ResponseEntity<CourseSessionDto> response = client.getForEntity("/courseSession/getSession/" + id, CourseSessionDto.class);
+    ResponseEntity<CourseSessionDto> response = client.getForEntity("/courseSession/getSession?courseSessionId=" + id, CourseSessionDto.class);
 
     assertNotNull(response);
     assertEquals(HttpStatus.OK, response.getStatusCode(), "Response has correct status");
@@ -75,7 +76,7 @@ public class CourseSessionIntegrationTests {
 
   @Test
   public void testCreateInvalidCourseSession() {
-    ResponseEntity<CourseSessionDto> response = client.postForEntity("/courseSession", new singleCourseSessionCO(null, null, null, null), CourseSessionDto.class);
+    ResponseEntity<CourseSessionDto> response = client.postForEntity("/courseSession/createSession", new singleCourseSessionCO(null, null, null, null), CourseSessionDto.class);
 
     assertNotNull(response);
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode(), "Response has correct status");
