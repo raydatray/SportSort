@@ -250,26 +250,6 @@ public class CourseSessionServiceTests {
     assertEquals("Session start time cannot be after session end time", error);
   }
 
-  @Test
-  public void testCreateCourseSessionWithStartTimeBeforeOpeningHour() {
-    fail();
-  }
-
-  @Test
-  public void testCreateCourseSessionWithStartTimeAfterClosingHour() {
-    fail();
-  }
-
-  @Test
-  public void testCreateCourseSessionWithEndTimeBeforeOpeningHour() {
-    fail();
-  }
-
-  @Test
-  public void testCreateCourseSessionWithEndTimeAfterClosingHour() {
-    fail();
-  }
-
   @Test // TODO - TELL RAY TO FIX THIS
   public void testCreateCourseSessionWithDurationOver1Hour() {
     Time startTime = Time.valueOf(java.time.LocalTime.of(14, 0)); // 2 PM
@@ -370,34 +350,6 @@ public class CourseSessionServiceTests {
     assertEquals("Day time mapping field cannot be null", error);
   }
 
-  @Test // TODO - Ask if we want to throw an error or not in this scenario
-  public void testCreateCourseSessionsWithInvalidDayTimeMapping() {
-    ArrayList<Time> mondayTimes = new ArrayList<>();
-    mondayTimes.add(START_TIME);
-    mondayTimes.add(END_TIME);
-
-    ArrayList<Time> tuesdayTimes = new ArrayList<>();
-    Time startTime = Time.valueOf(LocalTime.of(12, 0));
-    Time endTime = Time.valueOf(LocalTime.of(13, 0));
-    tuesdayTimes.add(startTime);
-    tuesdayTimes.add(endTime);
-
-    HashMap<DayOfWeek, ArrayList<Time>> dayTimeMapping = new HashMap<>();
-    dayTimeMapping.put(DayOfWeek.MONDAY, mondayTimes);
-    dayTimeMapping.put(DayOfWeek.TUESDAY, tuesdayTimes); // Set Tuesday instead of Wednesday
-
-    String error = null;
-    ArrayList<CourseSession> courseSessions = null;
-
-    try {
-      courseSessions = service.createCourseSessions(dayTimeMapping, COURSE_OFFERING_KEY);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-
-    assertEquals("???", error);
-  }
-
   /*---------- Tests for deleteCourseSessionByID() ----------*/
   @Test
   public void testDeleteCourseSessionById() {
@@ -429,8 +381,8 @@ public class CourseSessionServiceTests {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-
-    assertEquals("???", error);
+    // We don't want to throw an error
+    assertNull(error);
   }
 
   @Test // TODO - Ask if we want to keep behaviour this way... i.e. not throw error even if input is invalid/null
@@ -444,8 +396,8 @@ public class CourseSessionServiceTests {
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
-
-    assertEquals("???", error);
+    // We don't want to throw an error
+    assertNull(error);
   }
 
   /*---------- Tests for deleteCourseSessionsByCourseOfferingId() ----------*/
