@@ -111,14 +111,21 @@ public class PaymentInfoIntegrationTest {
 
   @Test
   public void testDeletePaymentInfo() {
-    // Assuming an existing ID; you may need to insert a record as part of setup.
-    Integer id = 1;
+    // Step 1: Create a payment info to have an entry to delete
+    PaymentInfoDto newPaymentInfo = new PaymentInfoDto(null, PaymentInfo.PaymentType.Debit, 100100100, 555, 2031, 12);
+    ResponseEntity<PaymentInfoDto> createResponse = restTemplate.postForEntity("/paymentInfo/create", newPaymentInfo, PaymentInfoDto.class);
+    assertEquals(HttpStatus.OK, createResponse.getStatusCode(), "Payment info creation failed");
+    assertNotNull(createResponse.getBody().getId(), "Creation did not return an ID");
+
+    // Step 2: Delete the payment info using the ID from creation
     HttpHeaders headers = new HttpHeaders();
-    headers.set("id", id.toString());
+    headers.set("id", createResponse.getBody().getId().toString());
+    ResponseEntity<String> deleteResponse = restTemplate.exchange("/paymentInfo/delete", HttpMethod.DELETE, new HttpEntity<>(headers), String.class);
 
-    ResponseEntity<String> response = restTemplate.exchange("/paymentInfo/delete", HttpMethod.DELETE, new HttpEntity<>(headers), String.class);
+    // Step 3: Verify the deletion was successful
+    assertEquals(HttpStatus.OK, deleteResponse.getStatusCode(), "Deletion did not return HTTP 200 OK");
+    assertTrue(deleteResponse.getBody().contains("successfully deleted"), "Deletion confirmation message not as expected");
 
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertEquals("Payment Info successfully deleted", response.getBody());
+    // Optional: Verify the record does not exist anymore (requires an additional endpoint or method)
   }
 }
