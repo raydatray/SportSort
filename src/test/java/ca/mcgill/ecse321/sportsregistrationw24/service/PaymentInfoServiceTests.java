@@ -47,17 +47,14 @@ public class PaymentInfoServiceTests {
   private static final Integer VALID_CVV = 123;
   private static final Integer VALID_EXPIRATION_YEAR = YearMonth.now().plusMonths(1).getYear();
   private static final Integer VALID_EXPIRATION_MONTH = YearMonth.now().plusMonths(1).getMonthValue();
-  private static final String VALID_TOKEN = "validToken"; //TODO How to create a valid token in testing
+  private static final String VALID_TOKEN = "validToken";
 
   @BeforeEach
-  public void setup() {
-    // Initialize your PaymentInfo and CustomerAccount objects here
-    customerAccount = new CustomerAccount();
-    paymentInfo = new PaymentInfo();
-
-    // Setup mocks
-    when(customerAccountRepository.findByToken(anyString())).thenReturn(Optional.of(customerAccount));
-    when(paymentInfoRepository.save(any(PaymentInfo.class))).thenAnswer(i -> i.getArguments()[0]);
+  public void setUp() {
+    lenient().when(customerAccountRepository.findByToken(VALID_TOKEN))
+      .thenReturn(Optional.of(new CustomerAccount()));
+    lenient().when(paymentInfoRepository.save(any(PaymentInfo.class)))
+      .thenAnswer(invocation -> invocation.getArgument(0));
   }
 
   // Define tests here
@@ -87,17 +84,14 @@ public class PaymentInfoServiceTests {
     int expirationYear = 2025; // Still a future year
     int expirationMonth = 12; // Still a valid month
     String token = VALID_TOKEN; // Assume this token is valid
-    PaymentInfo paymentinfo = null;
-    String error = null;
-    try {
-      paymentinfo = paymentInfoService.createPaymentInfo(paymentType, (int)cardNumber, cvv, expirationYear, expirationMonth, token);
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertNull(paymentinfo);
-    // Check error
-    assertEquals("This is not a valid credit/debit card cvv", error);
+
+    // Act and Assert: Expect an IllegalArgumentException due to invalid CVV
+    Exception exception = assertThrows(IllegalArgumentException.class, () ->
+      paymentInfoService.createPaymentInfo(paymentType, (int) cardNumber, cvv, expirationYear, expirationMonth, token)
+    );
+    assertEquals("This is not a valid credit/debit card cvv", exception.getMessage());
   }
+
 
   // Expired card
   @Test
