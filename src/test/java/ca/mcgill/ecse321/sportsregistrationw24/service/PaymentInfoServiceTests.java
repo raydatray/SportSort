@@ -90,7 +90,7 @@ public class PaymentInfoServiceTests {
     PaymentInfo paymentinfo = null;
     String error = null;
     try {
-        paymentinfo = paymentInfoService.createPaymentInfo(paymentType, (int)cardNumber, cvv, expirationYear, expirationMonth, token);
+      paymentinfo = paymentInfoService.createPaymentInfo(paymentType, (int)cardNumber, cvv, expirationYear, expirationMonth, token);
     } catch (IllegalArgumentException e) {
       error = e.getMessage();
     }
