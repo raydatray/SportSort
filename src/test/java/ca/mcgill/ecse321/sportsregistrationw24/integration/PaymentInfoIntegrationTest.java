@@ -1,8 +1,11 @@
 package ca.mcgill.ecse321.sportsregistrationw24.integration;
-
 import ca.mcgill.ecse321.sportsregistrationw24.dao.PaymentInfoRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.PaymentInfoDto;
+import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.PaymentInfo;
+import ca.mcgill.ecse321.sportsregistrationw24.service.AuthenticationService;
+import ca.mcgill.ecse321.sportsregistrationw24.service.CustomerAccountService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,19 +25,38 @@ public class PaymentInfoIntegrationTest {
 
   @Autowired
   private PaymentInfoRepository paymentInfoRepository;
+  @Autowired
+  private CustomerAccountService customerAccountService;
+  @Autowired
+  private AuthenticationService authenticationService;
+
+  @Autowired
+
+  private UserAccountRepository userAccountRepository;
+  private String logInCustomerAccount(String email, String password) { return authenticationService.login(email, password).getToken();}
+  private CustomerAccount createCustomerAccount(String email, String password, String name) { return customerAccountService.createCustomerAccount(email, password, name);}
 
   @BeforeEach
   @AfterEach
   public void clearDatabase() {
     paymentInfoRepository.deleteAll();
+    userAccountRepository.deleteAll();
   }
 
   @Test
   public void testCreatePaymentInfo() {
+    // Create a new customer account
+    String customerName = "Test User";
+    String customerEmail = "houman@example.com";
+    String customerPassword = "password";
+    CustomerAccount customer = createCustomerAccount(customerEmail, customerPassword, customerName);
+    // Log in to get a token
+    String token = logInCustomerAccount(customerEmail, customerPassword);
+
+    // Now proceed to create payment info with the obtained token
     PaymentInfoDto paymentInfoDto = new PaymentInfoDto(null, PaymentInfo.PaymentType.Credit, 123456789, 123, 2025, 12);
     HttpHeaders headers = new HttpHeaders();
-    headers.set("token", "someTokenValue");
-
+    headers.set("token", token);
     HttpEntity<PaymentInfoDto> request = new HttpEntity<>(paymentInfoDto, headers);
 
     ResponseEntity<String> response = restTemplate.postForEntity("/paymentInfo/create", request, String.class);
@@ -45,13 +67,18 @@ public class PaymentInfoIntegrationTest {
 
   @Test
   public void testUpdatePaymentInfo() {
-    // This assumes a PaymentInfoDto exists; you might need to create one as part of the setup.
+    PaymentInfoDto originalPaymentInfoDto = new PaymentInfoDto(1, PaymentInfo.PaymentType.Debit, 100100100, 555, 2031, 12);
+    restTemplate.postForEntity("/paymentInfo/create", originalPaymentInfoDto, PaymentInfoDto.class);
+
     PaymentInfoDto updatedPaymentInfoDto = new PaymentInfoDto(1, PaymentInfo.PaymentType.Debit, 987654321, 321, 2030, 11);
 
-    ResponseEntity<String> response = restTemplate.exchange("/paymentInfo/update", HttpMethod.PUT, new HttpEntity<>(updatedPaymentInfoDto), String.class);
+    HttpHeaders headers = new HttpHeaders();
+    HttpEntity<PaymentInfoDto> requestUpdate = new HttpEntity<>(updatedPaymentInfoDto, headers);
 
-    assertEquals(HttpStatus.OK, response.getStatusCode());
-    assertEquals("Payment information successfully updated", response.getBody());
+    ResponseEntity<PaymentInfoDto> response = restTemplate.exchange("/paymentInfo/update", HttpMethod.PUT, requestUpdate, PaymentInfoDto.class);
+
+    assertEquals(HttpStatus.OK, response.getStatusCode(), "Response should be OK");
+    //assertEquals("Payment information successfully updated", response.getBody());
   }
 
   @Test

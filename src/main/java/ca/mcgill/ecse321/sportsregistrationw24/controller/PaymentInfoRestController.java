@@ -54,7 +54,6 @@ public class PaymentInfoRestController {
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
-
   }
 
   @GetMapping(value = {
