@@ -82,7 +82,6 @@ public class PaymentInfoServiceTests {
     assertEquals("This is not a valid credit/debit card cvv", exception.getMessage());
   }
 
-
   // Expired card
   @Test
   public void testCreatePaymentInfo_CardExpired() {
@@ -193,8 +192,4 @@ public class PaymentInfoServiceTests {
     // Additionally, ensure no deletion attempts were made on the repository
     verify(paymentInfoRepository, never()).delete(any(PaymentInfo.class));
   }
-
-
-
-
 }
