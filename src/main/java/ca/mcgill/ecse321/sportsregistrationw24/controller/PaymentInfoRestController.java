@@ -83,8 +83,6 @@ public class PaymentInfoRestController {
     }
   }
 
-
-
   @DeleteMapping(value = {
     "/paymentInfo/delete",
     "/paymentInfo/delete/"
