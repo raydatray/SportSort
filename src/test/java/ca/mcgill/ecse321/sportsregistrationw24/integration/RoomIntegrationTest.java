@@ -84,20 +84,46 @@ public class RoomIntegrationTest {
   }
 
   @Test
-  public void testDeleteRoom() {
-    // Assume this RoomDto corresponds to an existing room in the database
-    RoomDto roomDto = new RoomDto("Meeting Room", 2, 202, 15);
-    // Optionally, create the room first if it doesn't already exist
+  public void testGetRooms() {
+    // Step 1: Preparation - Create multiple rooms
+    RoomDto roomDto1 = new RoomDto("Study Room", 1, 101, 10);
+    RoomDto roomDto2 = new RoomDto("Conference Room", 1, 102, 20);
+    restTemplate.postForEntity("/room/create", roomDto1, RoomDto.class);
+    restTemplate.postForEntity("/room/create", roomDto2, RoomDto.class);
+    // Optionally create more rooms with different floor/room numbers
 
-    // Set up the request
-    HttpHeaders headers = new HttpHeaders();
-    HttpEntity<RoomDto> entity = new HttpEntity<>(roomDto, headers);
+    // Step 2: Action - Retrieve rooms filtered by floor number
+    ResponseEntity<RoomDto[]> responseEntity = restTemplate.getForEntity("/room/getAll?aFloorNumber=1&aRoomNumber=101", RoomDto[].class);
 
-    // Perform the DELETE operation
-    ResponseEntity<String> responseEntity = restTemplate.exchange("/room/delete", HttpMethod.DELETE, entity, String.class);
-
-    // Assertions to verify the deletion was successful
+    // Step 3: Verification - Check response status and content
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode(), "Response should be OK");
-    assertTrue(responseEntity.getBody().contains("successfully deleted"), "Response should confirm successful deletion");
+
+    RoomDto[] rooms = responseEntity.getBody();
+    assertNotNull(rooms, "Rooms should not be null");
+    assertEquals(1, rooms.length, "Should return one room");
+
+    RoomDto retrievedRoom = rooms[0];
+    assertEquals("Study Room", retrievedRoom.getName(), "Room name should match");
+    assertEquals(1, retrievedRoom.getFloorNumber(), "Floor number should match");
+    assertEquals(101, retrievedRoom.getRoomNumber(), "Room number should match");
   }
+
+  @Test
+  public void testDeleteRoom() {
+    // Step 1: Preparation - Create a room to delete
+    RoomDto roomDto = new RoomDto("Meeting Room", 2, 202, 15);
+    ResponseEntity<RoomDto> createResponse = restTemplate.postForEntity("/room/create", roomDto, RoomDto.class);
+    assertEquals(HttpStatus.OK, createResponse.getStatusCode(), "Room should be created successfully");
+
+    // Step 2: Action - Delete the room
+    HttpHeaders headers = new HttpHeaders();
+    HttpEntity<RoomDto> requestEntity = new HttpEntity<>(roomDto, headers);
+    ResponseEntity<String> deleteResponse = restTemplate.exchange("/room/delete", HttpMethod.DELETE, requestEntity, String.class);
+
+    // Step 3: Verification - Check response status and message
+    assertEquals(HttpStatus.OK, deleteResponse.getStatusCode(), "Response should be OK");
+    assertEquals("Room successfully deleted", deleteResponse.getBody(), "Success message should match");
+  }
+
 }
+
