@@ -7,6 +7,7 @@ import java.util.Optional;
 
 public interface StaffAccountRepository extends CrudRepository<StaffAccount, Integer> {
     Optional<StaffAccount> findStaffByEmail(String email);
+    Optional<StaffAccount> findByToken(String token);
     void deleteByEmail(String email);
 
 }

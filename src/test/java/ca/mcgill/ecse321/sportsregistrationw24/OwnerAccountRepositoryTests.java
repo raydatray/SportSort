@@ -26,10 +26,11 @@ public class OwnerAccountRepositoryTests {
 
     @Test
     public void testPersistAndLoadOwnerAccount() {
+        String testName = "joe";
         String testEmail = "joebama@gmail.com";
         String testPassword = "obama";
 
-        OwnerAccount testOwner = new OwnerAccount(1, testEmail, testPassword);
+        OwnerAccount testOwner = new OwnerAccount(testName, testEmail, testPassword);
 
         ownerAccountRepository.save(testOwner);
 

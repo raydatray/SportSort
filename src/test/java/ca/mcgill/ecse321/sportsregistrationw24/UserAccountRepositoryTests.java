@@ -2,6 +2,9 @@ package ca.mcgill.ecse321.sportsregistrationw24;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.*;
+import ca.mcgill.ecse321.sportsregistrationw24.utilities.*;
+
+import org.antlr.v4.runtime.Token;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +21,10 @@ public class UserAccountRepositoryTests {
     @Autowired
     private UserAccountRepository userAccountRepository;
 
+    @Autowired
+    private TokenProvider tokenProvider;
+
+
     @BeforeEach
     @AfterEach
     public void clearDatabase() {
@@ -26,21 +33,33 @@ public class UserAccountRepositoryTests {
 
     @Test
     public void testPersistAndLoadUsers() {
+        String testInstructorName = "ray";
         String testInstructorEmail = "colin@gmail.com";
         String testInstructorPassword = "obama";
 
-        InstructorAccount testInstructor = new InstructorAccount(1, testInstructorEmail, testInstructorPassword);
+        InstructorAccount testInstructor = new InstructorAccount(testInstructorName,testInstructorEmail, testInstructorPassword);
 
 
+        String testOwnerName = "alex";
         String testOwnerEmail = "alex@hotmail.com";
         String testOwnerPassword = "password";
 
-        OwnerAccount testOwner = new OwnerAccount(2, testOwnerEmail, testOwnerPassword);
+        OwnerAccount testOwner = new OwnerAccount("alex",testOwnerEmail, testOwnerPassword);
 
+        String testCustomerName = "joe";
         String testCustomerEmail = "joebama@gmail.com";
         String testCustomerPassword = "obama";
 
-        CustomerAccount testCustomer = new CustomerAccount(3, testCustomerEmail, testCustomerPassword);
+        CustomerAccount testCustomer = new CustomerAccount(testCustomerName,testCustomerEmail, testCustomerPassword);
+
+        //We want to verify the hash generators are working
+        //1. Generate the hash for each user and save it in the user
+        //2. Retrieve users and ensure that they are correct
+        //TODO: Check if the expiration is working???
+        testInstructor.setToken(tokenProvider.generateToken(testInstructorEmail));
+        testOwner.setToken(tokenProvider.generateToken(testOwnerEmail));
+        testCustomer.setToken(tokenProvider.generateToken(testCustomerEmail));
+        //LETS GO COPILOT
 
         userAccountRepository.save(testInstructor);
         userAccountRepository.save(testOwner);

@@ -1,7 +1,4 @@
 package ca.mcgill.ecse321.sportsregistrationw24.model;
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
-
 
 import jakarta.persistence.*;
 
@@ -10,16 +7,9 @@ import java.sql.Time;
 
 @Entity
 @Table(name = "coursesession")
-// line 53 "SportsCenter.ump"
-public class CourseSession
-{
-
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-
+public class CourseSession {
   @Id
-  //CourseSession Attributes
+  @GeneratedValue
   private Integer id;
   private Date date;
   private Time startTime;
@@ -29,96 +19,54 @@ public class CourseSession
   @JoinColumn(name = "course_offering_id")
   private CourseOffering courseOffering;
 
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
-
-  public CourseSession(Integer aId, Date aDate, Time aStartTime, Time aEndTime, CourseOffering aCourseOffering)
-  {
-    id = aId;
-    date = aDate;
-    startTime = aStartTime;
-    endTime = aEndTime;
-    if (!setCourseOffering(aCourseOffering))
-    {
+  public CourseSession(Date aDate, Time aStartTime, Time aEndTime, CourseOffering aCourseOffering) {
+    this.date = aDate;
+    this.startTime = aStartTime;
+    this.endTime = aEndTime;
+    if (!setCourseOffering(aCourseOffering)) {
       throw new RuntimeException("Unable to create CourseSession due to aCourseOffering. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
+  public CourseSession() {}
 
-  public CourseSession() {
+  public void setDate(Date aDate) { this.date = aDate; };
 
-  }
+  public void setStartTime(Time aStartTime) { this.startTime = aStartTime; }
 
-  //------------------------
-  // INTERFACE
-  //------------------------
+  public void setEndTime(Time aEndTime) { this.endTime = aEndTime; }
 
-  public boolean setId(Integer aId)
-  {
+  public boolean setCourseOffering(CourseOffering aNewCourseOffering) {
     boolean wasSet = false;
-    id = aId;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setDate(Date aDate)
-  {
-    boolean wasSet = false;
-    date = aDate;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setStartTime(Time aStartTime)
-  {
-    boolean wasSet = false;
-    startTime = aStartTime;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public boolean setEndTime(Time aEndTime)
-  {
-    boolean wasSet = false;
-    endTime = aEndTime;
-    wasSet = true;
+    if (aNewCourseOffering != null) {
+      courseOffering = aNewCourseOffering;
+      wasSet = true;
+    }
     return wasSet;
   }
 
   public Integer getId()
   {
-    return id;
+    return this.id;
   }
 
   public Date getDate()
   {
-    return date;
+    return this.date;
   }
 
   public Time getStartTime()
   {
-    return startTime;
+    return this.startTime;
   }
 
   public Time getEndTime()
   {
-    return endTime;
+    return this.endTime;
   }
-  /* Code from template association_GetOne */
+
   public CourseOffering getCourseOffering()
   {
-    return courseOffering;
-  }
-  /* Code from template association_SetUnidirectionalOne */
-  public boolean setCourseOffering(CourseOffering aNewCourseOffering)
-  {
-    boolean wasSet = false;
-    if (aNewCourseOffering != null)
-    {
-      courseOffering = aNewCourseOffering;
-      wasSet = true;
-    }
-    return wasSet;
+    return this.courseOffering;
   }
 
 }
