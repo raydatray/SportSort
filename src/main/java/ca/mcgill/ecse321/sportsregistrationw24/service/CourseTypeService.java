@@ -21,10 +21,23 @@ public class CourseTypeService {
   private UserAccountRepository userAccountRepository;
 
   @Transactional
-  public CourseType createCourseType (String aCourseName, String userType){
-    if (!userType.equals("INSTRUCTOR")){
-      throw new IllegalArgumentException("Only instructors can create course types!");
+  public CourseType createCourseType (String aCourseName, String userToken){
+    UserAccount user = getUser(userToken);
+
+    if (user.getUserType().equals("CUSTOMER")){
+      throw new IllegalArgumentException("Only instructors and owners can create course types!");
     }
+
+    if (aCourseName == null || aCourseName.trim().isEmpty()){
+      throw new IllegalArgumentException("Course name cannot be empty!");
+    }
+
+    for (CourseType courseType : courseTypeRepository.findAll()) {
+      if (courseType.getCourseName().equals(aCourseName)) {
+        throw new IllegalArgumentException("A course type with this name already exists!");
+      }
+    }
+
     CourseType courseType = new CourseType();
     courseType.setCourseName(aCourseName);
     courseTypeRepository.save(courseType);
@@ -54,7 +67,7 @@ public class CourseTypeService {
   }
 
   @Transactional
-  public void updateCourseTypeApproval(Integer aId, boolean approval, String userToken) {
+  public CourseType updateCourseTypeApproval(Integer aId, boolean approval, String userToken) {
     UserAccount user = getUser(userToken);
 
     // only the owner can approve
@@ -62,14 +75,14 @@ public class CourseTypeService {
       throw new IllegalArgumentException("Only the owner can approve course types!");
     }
 
-    CourseType courseType = getCourseType(aId, userToken);
+    CourseType courseType = courseTypeRepository.findById(aId).orElse(null);
 
     if (courseType == null) {
       throw new IllegalArgumentException("Course Type does not exist!");
     }
 
     courseType.setApproved(approval);
-    courseTypeRepository.save(courseType);
+    return courseTypeRepository.save(courseType);
   }
   private <T> List<T> toList(Iterable<T> iterable){
     List<T> resultList = new ArrayList<T>();

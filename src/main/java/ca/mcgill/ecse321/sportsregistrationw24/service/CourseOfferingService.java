@@ -1,14 +1,9 @@
 package ca.mcgill.ecse321.sportsregistrationw24.service;
 
-import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
-import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseOfferingRepository;
-import ca.mcgill.ecse321.sportsregistrationw24.dao.InstructorAccountRepository;
-import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
-import ca.mcgill.ecse321.sportsregistrationw24.dao.RoomRepository;
-import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
-import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
-import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.*;
+import ca.mcgill.ecse321.sportsregistrationw24.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +21,7 @@ public class CourseOfferingService {
   private CourseOfferingRepository courseOfferingRepository;
 
   @Autowired
-  private InstructorAccountRepository instructorAccountRepository;
+  private CourseTypeRepository courseTypeRepository;
 
   @Autowired
   private UserAccountRepository userAccountRepository;
@@ -35,21 +30,29 @@ public class CourseOfferingService {
   private RoomRepository roomRepository;
 
   @Transactional
-  public CourseOffering createCourseOffering(Date aStartDate, Date aEndDate, List<DayOfWeek> aDaysOffered, String aInstructorToken, Integer aRoomId){
+  public CourseOffering createCourseOffering(Date aStartDate, Date aEndDate, List<DayOfWeek> aDaysOffered, String aInstructorToken, Integer aRoomId, Integer aCourseTypeId){
     UserAccount user = getUser(aInstructorToken);
+
     if (!user.getUserType().equals("INSTRUCTOR")){
       throw new IllegalArgumentException("Only instructors can create course offerings!");
     }
-    InstructorAccount instructor = (InstructorAccount) user;
-    Optional<Room> optional = roomRepository.findById(aRoomId);
-    Room room = optional.orElse(null);
+
+    InstructorAccount foundInstructor = (InstructorAccount) user;
+
+    Room foundRoom = roomRepository.findById(aRoomId).orElseThrow(() -> new IllegalArgumentException("Room does not exist!"));
+    CourseType foundCourseType = courseTypeRepository.findById(aCourseTypeId).orElseThrow(() -> new IllegalArgumentException("Course Type does not exist!"));
+
     CourseOffering courseOffering = new CourseOffering();
+
     courseOffering.setStartDate(aStartDate);
     courseOffering.setEndDate(aEndDate);
     courseOffering.setDaysOffered(aDaysOffered);
-    courseOffering.setInstructorAccount(instructor);
-    courseOffering.setRoom(room);
+    courseOffering.setInstructorAccount(foundInstructor);
+    courseOffering.setRoom(foundRoom);
+    courseOffering.setCourseType(foundCourseType);
+
     courseOfferingRepository.save(courseOffering);
+
     return courseOffering;
   }
 
@@ -57,6 +60,7 @@ public class CourseOfferingService {
   public CourseOffering getCourseOfferingById(Integer aId, String userToken) {
     UserAccount user = getUser(userToken);
 
+    /**
     // different results depending on user type
     if (user.getUserType().equals("INSTRUCTOR")) {
       InstructorAccount instructor = (InstructorAccount) user;
@@ -67,8 +71,10 @@ public class CourseOfferingService {
         throw new IllegalArgumentException("Instructor does not teach this course!");
       }
     }
+    **/
     return courseOfferingRepository.findById(aId).orElse(null);
   }
+
   @Transactional
   public List<CourseOffering> getCourseOfferingByInstructor(InstructorAccount instructor) {
     return courseOfferingRepository.findByInstructorAccount(instructor).orElse(null);

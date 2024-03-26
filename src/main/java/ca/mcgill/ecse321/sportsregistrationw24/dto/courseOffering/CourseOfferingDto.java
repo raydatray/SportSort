@@ -9,6 +9,7 @@ import java.time.DayOfWeek;
 import java.util.List;
 
 public class CourseOfferingDto {
+  private Integer id;
   private Date startDate;
   private Date endDate;
   private List<DayOfWeek> daysOffered;
@@ -19,7 +20,8 @@ public class CourseOfferingDto {
   public CourseOfferingDto() {
   }
 
-  public CourseOfferingDto(Date aStartDate, Date aEndDate, List<DayOfWeek> aDatesOffered, InstructorAccount instructor, Room aRoom) {
+  public CourseOfferingDto(Integer anId, Date aStartDate, Date aEndDate, List<DayOfWeek> aDatesOffered, InstructorAccount instructor, Room aRoom) {
+    this.id = anId;
     this.startDate = aStartDate;
     this.endDate = aEndDate;
     this.daysOffered = aDatesOffered;
@@ -28,8 +30,9 @@ public class CourseOfferingDto {
   }
 
   public CourseOfferingDto(CourseOffering aCourseOffering){
-    this(aCourseOffering.getStartDate(), aCourseOffering.getEndDate(), aCourseOffering.getDaysOffered(), aCourseOffering.getInstructorAccount(), aCourseOffering.getRoom());
+    this(aCourseOffering.getId(), aCourseOffering.getStartDate(), aCourseOffering.getEndDate(), aCourseOffering.getDaysOffered(), aCourseOffering.getInstructorAccount(), aCourseOffering.getRoom());
   }
+  public Integer getId() { return this.id; }
   public Date getStartDate() {
     return this.startDate;
   }

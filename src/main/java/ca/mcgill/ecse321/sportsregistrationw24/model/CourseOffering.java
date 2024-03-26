@@ -1,6 +1,8 @@
 package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.sql.Date;
 import java.time.DayOfWeek;
@@ -17,8 +19,8 @@ public class CourseOffering {
   private Date endDate;
   @ElementCollection
   @Enumerated(EnumType.STRING)
+  @Fetch(FetchMode.JOIN) // Add this line
   private List<DayOfWeek> daysOffered;
-
   @OneToOne
   private Room room;
   @ManyToOne
@@ -30,13 +32,12 @@ public class CourseOffering {
     this.startDate = aStartDate;
     this.endDate = aEndDate;
     this.daysOffered = someDaysOffered;
-    if (!setRoom(aRoom)) {
-      throw new RuntimeException("Unable to create CourseOffering due to aRoom. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    this.room = aRoom;
     this.courseType = aCourseType;
     this.instructorAccount = aInstructorAccount;
   }
   public CourseOffering() {}
+
 
   public void setId(Integer aId) { this.id = aId; }
 
@@ -48,14 +49,10 @@ public class CourseOffering {
 
   public void setInstructorAccount(InstructorAccount instructor) { this.instructorAccount = instructor; }
 
-  public boolean setRoom(Room aNewRoom) {
-    boolean wasSet = false;
-    if (aNewRoom != null) {
-      room = aNewRoom;
-      wasSet = true;
-    }
-    return wasSet;
-  }
+  public void setRoom(Room aNewRoom) { this.room = aNewRoom; }
+
+  public void setCourseType(CourseType aCourseType) { this.courseType = aCourseType; }
+
 
   public Integer getId()
   {
