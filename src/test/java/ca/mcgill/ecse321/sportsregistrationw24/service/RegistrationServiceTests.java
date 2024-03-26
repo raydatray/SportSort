@@ -207,7 +207,6 @@ public class RegistrationServiceTests {
     assertEquals("No payment information was found with the provided information!", error);
   }
 
-  // create with date after course offering end date
   @Test
   public void testCreateRegistrationWithDateAfterCourseOfferingEndDate() {
     Date registeredDate = Date.valueOf("2024-03-01");
