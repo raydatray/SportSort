@@ -23,13 +23,11 @@ public class CourseType {
   public CourseType() {}
 
   public void setCourseName(String aCourseName) { this.courseName = aCourseName; }
-
   public void setApproved(boolean aApproved) { this.approved = aApproved; }
+  public void setId(Integer aId) { this.id = aId; }
 
   public Integer getId() { return this.id; }
-
   public String getCourseName() { return this.courseName; }
-
   public boolean getApproved() { return this.approved; }
 
 }
