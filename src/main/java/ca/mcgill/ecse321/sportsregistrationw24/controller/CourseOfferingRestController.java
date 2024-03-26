@@ -17,7 +17,6 @@ import java.sql.Date;
 @CrossOrigin(origins = "*")
 @RestController
 public class CourseOfferingRestController {
-
   @Autowired
   private CourseOfferingService service;
   @PostMapping(value = {
@@ -31,8 +30,9 @@ public class CourseOfferingRestController {
       List<DayOfWeek> daysOffered = courseOfferingCO.getDaysOffered();
       String instructorToken = courseOfferingCO.getInstructorToken();
       Integer roomId = courseOfferingCO.getRoomId();
+      Integer courseTypeId = courseOfferingCO.getCourseTypeId();
 
-      service.createCourseOffering(startDate, endDate, daysOffered, instructorToken, roomId);
+      service.createCourseOffering(startDate, endDate, daysOffered, instructorToken, roomId, courseTypeId);
       return ResponseEntity.ok().body("Course offering created successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -86,7 +86,7 @@ public class CourseOfferingRestController {
     if (courseOffering == null) {
       throw new IllegalArgumentException("There is no such course offering!");
     }
-    return new CourseOfferingDto(courseOffering.getStartDate(),
+    return new CourseOfferingDto(courseOffering.getId(), courseOffering.getStartDate(),
       courseOffering.getEndDate(), courseOffering.getDaysOffered(), courseOffering.getInstructorAccount(), courseOffering.getRoom());
-    }
+  }
 }
