@@ -8,6 +8,7 @@ import ca.mcgill.ecse321.sportsregistrationw24.dto.courseSession.singleCourseSes
 import ca.mcgill.ecse321.sportsregistrationw24.dto.courseSession.multipleClassSessionsCO;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +28,9 @@ public class CourseSessionRestController {
   public ResponseEntity<?> createCourseSession(@RequestBody singleCourseSessionCO courseSessionCO) {
     try {
       CourseSession createdCourseSession = service.createCourseSession(courseSessionCO.getDate(), courseSessionCO.getStartTime(), courseSessionCO.getEndTime(), courseSessionCO.getCourseOfferingId());
-      return ResponseEntity.ok().body(new CourseSessionDto(createdCourseSession));
+      return ResponseEntity.status(HttpStatus.CREATED).body(new CourseSessionDto(createdCourseSession));
     } catch (Exception e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
+      return ResponseEntity. badRequest().body(e.getMessage());
     }
   }
 
@@ -46,7 +47,7 @@ public class CourseSessionRestController {
          courseSessionDtos.add(new CourseSessionDto(courseSession));
        }
 
-       return ResponseEntity.ok().body(courseSessionDtos);
+       return ResponseEntity.status(HttpStatus.CREATED).body(courseSessionDtos);
      } catch (Exception e) {
        return ResponseEntity.badRequest().body(e.getMessage());
      }
@@ -66,6 +67,20 @@ public class CourseSessionRestController {
     }
 
     return ResponseEntity.ok().body(courseSessionDtos);
+  }
+
+  @GetMapping(value = {
+    "courseSession/getSession",
+    "courseSession/getSession/"
+  })
+  public ResponseEntity<?> getSession(@RequestParam Integer courseSessionId) {
+    try {
+      CourseSession courseSession = service.getCourseSession(courseSessionId);
+      return ResponseEntity.ok().body(new CourseSessionDto(courseSession));
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
   }
 
   @GetMapping(value = {
