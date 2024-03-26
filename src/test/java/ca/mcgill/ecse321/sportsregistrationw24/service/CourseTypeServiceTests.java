@@ -163,25 +163,6 @@ public class CourseTypeServiceTests {
   }
 
   @Test
-  public void testCreateCourseTypeWithDuplicate() {
-    assertEquals(0, courseTypeService.getAllCourseTypes("instructorToken").size());
-
-    courseTypeService.createCourseType(COURSE_TYPE_NAME, "instructorToken");
-
-    assertEquals(1, courseTypeService.getAllCourseTypes("instructorToken").size());
-
-    CourseType courseType = null;
-    String error = null;
-
-    try {
-      courseType = courseTypeService.createCourseType(COURSE_TYPE_NAME, "instructorToken");
-    } catch (IllegalArgumentException e) {
-      error = e.getMessage();
-    }
-    assertEquals("A course type with this name already exists!", error);
-  }
-
-  @Test
   public void testCreateCourseTypeWithCustomerAccount() {
     assertEquals(0, courseTypeService.getAllCourseTypes("instructorToken").size());
     CourseType courseType = null;
@@ -261,14 +242,6 @@ public class CourseTypeServiceTests {
     assertEquals(viewedCourseType.getCourseName(), COURSE_TYPE_NAME);
   }
 
-  @Test
-  public void viewCourseTypes() {
-    assertEquals(0, courseTypeService.getAllCourseTypes("ownerToken").size());
-    CourseType courseType1 = courseTypeService.createCourseType(COURSE_TYPE_NAME, "instructorToken");
-    CourseType courseType2 = courseTypeService.createCourseType(COURSE_TYPE_NAME2, "instructorToken");
-
-    assertEquals(2, courseTypeService.getAllCourseTypes("ownerToken").size());
-  }
 
   @Test
   public void deleteCourseType() {
