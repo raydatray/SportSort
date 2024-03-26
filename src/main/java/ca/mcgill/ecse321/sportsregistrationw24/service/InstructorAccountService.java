@@ -19,6 +19,9 @@ public class InstructorAccountService {
 
   @Transactional
   public InstructorAccount createInstructorAccount(String email, String password, String name) {
+    if (email == null || password == null || name == null){
+      throw new IllegalArgumentException("Null value detected!");
+    }
     Optional<InstructorAccount> existingInstructorAccount = instructorAccountRepository.findByEmail(email);
     if (existingInstructorAccount.isPresent()) {
       throw new IllegalArgumentException("Instructor email is already in use!");

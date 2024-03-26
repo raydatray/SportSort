@@ -19,6 +19,9 @@ public class CustomerAccountService {
 
   @Transactional
   public CustomerAccount createCustomerAccount(String email, String password, String name) {
+    if (email == null || password == null || name == null){
+      throw new IllegalArgumentException("Null value detected!");
+    }
     CustomerAccount existingCustomeraccount = getCustomerAccountByEmail(email);
     if (existingCustomeraccount != null) {
       throw new IllegalArgumentException("Customer email is already in use!");
