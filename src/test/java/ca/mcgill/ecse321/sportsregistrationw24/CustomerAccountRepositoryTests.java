@@ -26,10 +26,11 @@ public class CustomerAccountRepositoryTests {
 
     @Test
     public void testPersistAndLoadCustomerAccount() {
+        String testName = "joe";
         String testEmail = "joebama@gmail.com";
         String testPassword = "obama";
 
-        CustomerAccount testCustomer = new CustomerAccount(1, testEmail, testPassword);
+        CustomerAccount testCustomer = new CustomerAccount(testName, testEmail, testPassword);
 
         customerAccountRepository.save(testCustomer);
 

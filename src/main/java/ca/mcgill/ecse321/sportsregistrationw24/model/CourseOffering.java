@@ -1,129 +1,90 @@
 package ca.mcgill.ecse321.sportsregistrationw24.model;
-/*PLEASE DO NOT EDIT THIS CODE*/
-/*This code was generated using the UMPLE 1.33.0.6934.a386b0a58 modeling language!*/
-
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.sql.Date;
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "courseoffering")
-// line 38 "SportsCenter.ump"
-public class CourseOffering
-{
-
-  //------------------------
-  // MEMBER VARIABLES
-  //------------------------
-
+public class CourseOffering {
   @Id
-  //CourseOffering Attributes
+  @GeneratedValue
   private Integer id;
   private Date startDate;
   private Date endDate;
   @ElementCollection
   @Enumerated(EnumType.STRING)
+  @Fetch(FetchMode.JOIN) // Add this line
   private List<DayOfWeek> daysOffered;
-
   @OneToOne
-  //CourseOffering Associations
   private Room room;
   @ManyToOne
   private CourseType courseType;
   @ManyToOne
   private InstructorAccount instructorAccount;
 
-  //------------------------
-  // CONSTRUCTOR
-  //------------------------
-
-  public CourseOffering(Integer aId, Date aStartDate, Date aEndDate, List<DayOfWeek> someDaysOffered,  Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount)
-  {
-    id = aId;
-    startDate = aStartDate;
-    endDate = aEndDate;
-    daysOffered = someDaysOffered;
-    if (!setRoom(aRoom))
-    {
-      throw new RuntimeException("Unable to create CourseOffering due to aRoom. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
-    courseType = aCourseType;
-    instructorAccount = aInstructorAccount;
+  public CourseOffering(Date aStartDate, Date aEndDate, ArrayList<DayOfWeek> someDaysOffered, Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount) {
+    this.startDate = aStartDate;
+    this.endDate = aEndDate;
+    this.daysOffered = someDaysOffered;
+    this.room = aRoom;
+    this.courseType = aCourseType;
+    this.instructorAccount = aInstructorAccount;
   }
+  public CourseOffering() {}
 
-  public CourseOffering() {
 
-  }
+  public void setId(Integer aId) { this.id = aId; }
 
-  //------------------------
-  // INTERFACE
-  //------------------------
+  public void setStartDate(Date aStartDate) { this.startDate = aStartDate; }
 
-  public boolean setId(Integer aId)
-  {
-    boolean wasSet = false;
-    id = aId;
-    wasSet = true;
-    return wasSet;
-  }
+  public void setEndDate(Date aEndDate) { this.endDate = aEndDate; }
 
-  public boolean setStartDate(Date aStartDate)
-  {
-    boolean wasSet = false;
-    startDate = aStartDate;
-    wasSet = true;
-    return wasSet;
-  }
+  public void setDaysOffered(List<DayOfWeek> aDaysOffered) { this.daysOffered = aDaysOffered; }
 
-  public boolean setEndDate(Date aEndDate)
-  {
-    boolean wasSet = false;
-    endDate = aEndDate;
-    wasSet = true;
-    return wasSet;
-  }
+  public void setInstructorAccount(InstructorAccount instructor) { this.instructorAccount = instructor; }
+
+  public void setRoom(Room aNewRoom) { this.room = aNewRoom; }
+
+  public void setCourseType(CourseType aCourseType) { this.courseType = aCourseType; }
+
 
   public Integer getId()
   {
-    return id;
+    return this.id;
   }
 
   public Date getStartDate()
   {
-    return startDate;
+    return this.startDate;
   }
 
   public Date getEndDate()
   {
-    return endDate;
+    return this.endDate;
   }
-  /* Code from template association_GetOne */
+
   public Room getRoom()
   {
-    return room;
+    return this.room;
   }
-  /* Code from template association_GetOne */
+
+  public ArrayList<DayOfWeek> getDaysOffered() { return new ArrayList<>(this.daysOffered); }
+
   public CourseType getCourseType()
   {
-    return courseType;
+    return this.courseType;
   }
-  /* Code from template association_GetOne */
+
   public InstructorAccount getInstructorAccount()
   {
-    return instructorAccount;
+    return this.instructorAccount;
   }
-  /* Code from template association_SetUnidirectionalOne */
-  public boolean setRoom(Room aNewRoom)
-  {
-    boolean wasSet = false;
-    if (aNewRoom != null)
-    {
-      room = aNewRoom;
-      wasSet = true;
-    }
-    return wasSet;
-  }
+
+
 }

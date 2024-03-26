@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface OwnerAccountRepository extends CrudRepository<OwnerAccount, Integer> {
     Optional<OwnerAccount> findByEmail(String email);
+    Optional<OwnerAccount> findByToken(String token);
 
 }
