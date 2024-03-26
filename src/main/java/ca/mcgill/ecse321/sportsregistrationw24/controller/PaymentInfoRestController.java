@@ -54,7 +54,6 @@ public class PaymentInfoRestController {
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
-
   }
 
   @GetMapping(value = {
@@ -82,8 +81,6 @@ public class PaymentInfoRestController {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
-
-
 
   @DeleteMapping(value = {
     "/paymentInfo/delete",
