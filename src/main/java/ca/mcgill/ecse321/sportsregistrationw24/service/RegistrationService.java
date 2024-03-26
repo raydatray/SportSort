@@ -43,6 +43,14 @@ public class RegistrationService {
       throw new IllegalArgumentException("No payment information was found with the provided information!");
     }
 
+    if (registrationDate == null) {
+      throw new IllegalArgumentException("Must register on a date that is not null!");
+    }
+
+    if (registrationDate.after(courseOffering.getStartDate()) || registrationDate.after(courseOffering.getEndDate()) || registrationDate.equals(courseOffering.getStartDate())) {
+      throw new IllegalArgumentException("You must register for a course offering at most one day before it starts!");
+    }
+
     Registration newRegistration = new Registration(registrationDate, courseOffering, customer, paymentInfo);
 
     registrationRepository.save(newRegistration);

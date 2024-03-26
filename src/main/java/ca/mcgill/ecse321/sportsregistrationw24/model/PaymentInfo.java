@@ -32,6 +32,8 @@ public class PaymentInfo {
 
   public PaymentInfo() {}
 
+  public void setId(Integer aID) { this.id = aID; }
+
   public void setPaymentType(PaymentType aPaymentType) { this.paymentType = aPaymentType; }
 
   public void setCardNumber(Integer aCardNumber) { this.cardNumber = aCardNumber; }
