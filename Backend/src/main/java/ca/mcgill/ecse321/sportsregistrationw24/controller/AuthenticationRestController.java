@@ -35,7 +35,7 @@ public class AuthenticationRestController {
     try {
       authenticationService.logout(token);
       return ResponseEntity.ok().body("Logout Successful");
-    } catch (Exception e){
+    } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
