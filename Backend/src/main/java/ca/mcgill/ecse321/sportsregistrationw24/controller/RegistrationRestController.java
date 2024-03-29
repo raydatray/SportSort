@@ -31,7 +31,8 @@ public class RegistrationRestController {
           registrationCO.getPaymentInfoId(),
           registrationCO.getRegistrationDate()
         );
-      return ResponseEntity.ok().body("Registration was created successfully!");
+      //return ResponseEntity.ok().body("Registration was created successfully!");
+        return ResponseEntity.ok().body(convertToDto(registration));
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -41,11 +42,9 @@ public class RegistrationRestController {
     "/registrations/get",
     "/registrations/get/"
   })
-  public ResponseEntity<?> getRegistration(@RequestBody RegistrationIdDto registrationIdDto) {
+  public ResponseEntity<?> getRegistration(@RequestParam Integer customerAccountID, @RequestParam Integer courseOfferingID) {
     try {
-      Integer customerAccountId = registrationIdDto.getCustomerAccountId();
-      Integer courseOfferingId = registrationIdDto.getCourseOfferingId();
-      RegistrationId registrationId = new RegistrationId(customerAccountId, courseOfferingId);
+      RegistrationId registrationId = new RegistrationId(customerAccountID, courseOfferingID);
       Registration registration = registrationService.getRegistration(registrationId);
 
       return ResponseEntity.ok().body(convertToDto(registration));
@@ -76,11 +75,9 @@ public class RegistrationRestController {
     "/registrations/delete",
     "/registrations/delete/"
   })
-  public ResponseEntity<?> deleteRegistration(@RequestBody RegistrationIdDto registrationIdDto) {
+  public ResponseEntity<?> deleteRegistration(@RequestParam Integer customerAccountID, @RequestParam Integer courseOfferingID) {
     try {
-      Integer customerAccountId = registrationIdDto.getCustomerAccountId();
-      Integer courseOfferingId = registrationIdDto.getCourseOfferingId();
-      RegistrationId registrationId = new RegistrationId(customerAccountId, courseOfferingId);
+      RegistrationId registrationId = new RegistrationId(customerAccountID, courseOfferingID);
       registrationService.deleteRegistration(registrationId);
       return ResponseEntity.ok().body("Registration has been successfully deleted!");
     } catch (Exception e) {
@@ -93,6 +90,6 @@ public class RegistrationRestController {
       throw new IllegalArgumentException("There is no such registration!");
     }
     // TODO - Once we figure out where price is going to be stored in the model, change the hardcoded value of 100 to the price variable
-    return new RegistrationDto(registration.getCourseOffering().getCourseType().getCourseName(), registration.getId(), Integer.toString(registration.getPaymentInfo().getCardNumber()), 100, registration.getRegisteredDate());
+    return new RegistrationDto(registration);
   }
 }
