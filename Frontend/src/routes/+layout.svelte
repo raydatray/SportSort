@@ -25,7 +25,7 @@
     <slot />
     <footer class="p-4 footer bg-base-300 text-base-content">
       <aside>
-        <p>Copyright © 2024 - All right reserved by Sports Ltd</p>
+        <p>Copyright © 2024 - All right reserved by SportSort Ltd</p>
       </aside>
     </footer>
   </div>
