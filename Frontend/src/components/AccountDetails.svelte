@@ -1,76 +1,136 @@
 <script>
-    import { IconEye } from "@tabler/icons-svelte"
-
+    // Imports
+    import { IconEye, IconMail } from "@tabler/icons-svelte";
+  
+    // Reactive variables
     let name = 'John Doe';
     let email = 'john.doe@example.com';
     let password = 'hashed_password';
     let passwordVisible = false;
     let modalOpen = false;
   
+    // Temporary state to store changes while editing
+    let tempEmail = email;
+    let tempPassword = password;
+  
+    // Function to toggle password visibility
     function togglePassword() {
       passwordVisible = !passwordVisible;
     }
   
+    // Function to open the modal
     function openModal() {
       modalOpen = true;
+      // Set temporary state to current values
+      tempEmail = email;
+      tempPassword = password;
     }
   
+    // Function to close the modal without saving
     function closeModal() {
       modalOpen = false;
+      // Reset temporary state to ensure discarded changes are not shown
+      tempEmail = email;
+      tempPassword = password;
     }
   
+    // Function to save changes and close the modal
     function saveChanges() {
-      // Implement your saving logic here
+      // Save temporary state back to permanent state
+      email = tempEmail;
+      password = tempPassword;
+      // Close modal
       closeModal();
     }
   </script>
   
+  
 <!-- Account Settings Display -->
-<div>
-    <h1>Account Settings</h1>
-    <p>Name: {name}</p>
-    <p>Email: {email}</p>
-    <label class="input input-bordered flex items-center gap-2 w-full max-w-xs">
+<div class="page-container">
+    <h1 class="section-title">Account Settings</h1>
+    <div class="account-detail">Name: {name}</div>
+    <div class="account-detail">Email: {email}</div>
+    <div class="input-label">
+      <label class="input input-bordered flex items-center gap-2 w-full">
         {#if passwordVisible}
         <input type="text" value={password} class="grow" readonly />
-      {:else}
+        {:else}
         <input type="password" value="hashed_password" class="grow bg-300" readonly />
-      {/if}
-      <button on:click={togglePassword} class="btn-neutral"><IconEye color="black"/></button>
-    </label>
-    <button class="btn" on:click={openModal}>Edit Account Details</button>
+        {/if}
+        <button on:click={togglePassword} class="btn-neutral"><IconEye color="black"/></button>
+      </label>
+    </div>
+    <button class="btn btn-custom" on:click={openModal}>Edit Account Details</button>
   </div>
   
   <!-- Modal Component -->
   {#if modalOpen}
   <dialog open class="modal">
-    <div class="modal-box w-11/12 max-w-5xl">
+    <div class="modal-box"> 
       <h3 class="font-bold text-lg">Edit Account Details</h3>
-      <label class="input input-bordered flex items-center gap-2 w-full max-w-xs">
-        <!-- User Icon for Username -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><!-- Path for user icon --></svg>
-        <input type="text" bind:value={name} class="grow" placeholder="Name" />
+      <label class="input input-bordered flex items-center gap-2 mb-4">
+        <IconMail/>
+        <input type="email" bind:value={tempEmail} class="grow" placeholder="Email" />
       </label>
-      <label class="input input-bordered flex items-center gap-2 w-full max-w-xs">
-        <!-- Email Icon for Email -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><!-- Path for email icon --></svg>
-        <input type="email" bind:value={email} class="grow" placeholder="Email" />
-      </label>
-      <label class="input input-bordered flex items-center gap-2 w-full max-w-xs">
-        <!-- Lock Icon for Password -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="w-4 h-4 opacity-70"><!-- Path for lock icon --></svg>
+      <label class="input input-bordered flex items-center gap-2">
         {#if passwordVisible}
-          <input type="text" bind:value={password} class="grow" placeholder="Password" />
+          <input type="text" bind:value={tempPassword} class="grow" placeholder="Password" />
         {:else}
-          <input type="password" bind:value={password} class="grow" placeholder="Password" />
+          <input type="password" bind:value={tempPassword} class="grow" placeholder="Password" />
         {/if}
-        <button on:click={togglePassword} class="btn-neutral"><IconEye color="black"/></button>
+        <button on:click={togglePassword} class="btn-neutral"><IconEye color = "black"/></button>
       </label>
       <div class="modal-action">
-        <button class="btn" on:click={saveChanges}>Save</button>
-        <button class="btn" on:click={closeModal}>Close</button>
+        <button class="btn btn-custom" on:click={saveChanges}>Save</button>
+        <button class="btn btn-custom" on:click={closeModal}>Close</button>
       </div>
     </div>
   </dialog>
-{/if}
+  {/if}
+
+  <style>
+    .page-container {
+      max-width: 640px; /* Adjust the width as needed */
+      margin: 0 auto;
+      padding: 2rem;
+    }
   
+    .section-title {
+      font-size: 1.5rem;
+      color: #333;
+      margin-bottom: 1rem;
+    }
+  
+    .account-detail {
+      margin-bottom: 0.5rem;
+      font-size: 1rem;
+      color: #555;
+    }
+  
+    .input-label {
+      margin-bottom: 1rem;
+    }
+  
+    .btn-custom {
+      background-color: #5c6ac4; /* Example button color */
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+  
+    .btn-custom:hover {
+      background-color: #7886d7;
+    }
+  
+    .modal-box {
+      margin: auto; /* To make the modal width responsive */
+      max-width: 400px;
+      padding: 2rem;
+    }
+  
+    .modal-action {
+      margin-top: 0.5rem;
+    }
+  </style>
