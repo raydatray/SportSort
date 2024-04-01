@@ -1,72 +1,107 @@
 <script>
   import "../app.css";
+  import { IconHome, IconSchool, IconHistory, IconTicket, IconSettings, IconLogout } from '@tabler/icons-svelte';
+  import Logo from "../assets/logo.png";
 </script>
 
-<div data-theme="nord" class="container">
-  <ul class="menu menu-horizontal md:menu-vertical bg-base-200 rounded-box">
-      <li><a>HOME</a></li>
-      <li><a>ABOUT</a></li>
-      <li><a>Contact</a></li>
-  </ul>
+<div class="container" data-theme="north">
+  <nav class="menu">
+    <ul class="menu-horizontal md:menu-vertical bg-base-200 rounded-box">
+      <li class="logo-container">
+        <img src={Logo} alt="Logo" class="logo"/>
+      </li>
+      <li class="spacer1"></li>
+      <li><a> <IconHome /> Home </a></li>
+      <li><a> <IconSchool /> Course Offerings </a></li>
+      <li><a> <IconHistory /> Course History </a></li>
+      <li><a> <IconTicket /> Registrations </a></li>
+      <li class="spacer bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
+      <li class="spacer2"></li> <!-- This spacer will now push the settings and logout to the bottom -->
+      <li><a> <IconSettings /> Account Settings </a></li>
+      <li><a> <IconLogout /> Logout </a></li>
+    </ul>
+  </nav>
   <div class="content">
-      <slot></slot>
+    <slot />
+    <footer class="p-4 footer bg-base-300 text-base-content">
+      <aside>
+        <p>Copyright © 2024 - All right reserved by Sports Ltd</p>
+      </aside>
+    </footer>
   </div>
 </div>
 
-<footer class="footer footer-center p-4 bg-base-300 text-base-content">
-  <aside>
-      <p>Copyright © 2024 - All right reserved by ACME Industries Ltd</p>
-  </aside>
-</footer>
-
 <style lang="postcss">
-  body, html {
-      margin: 0;
-      padding: 0;
-      overflow-x: hidden; 
+  html, body {
+    overflow-x: hidden;
+    height: 100%;
+    margin: 0;
   }
 
   .container {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      min-height: 100vh; 
-      overflow: hidden; 
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: 100vh;
+    overflow-x: hidden;
   }
 
   .menu {
-      grid-column: 1 / 2;
+    background-color: rgba(255, 255, 255, 0.05);
+    height: 100vh;
+    overflow-y: auto;
+    margin: 0;
+  }
+
+  .logo-container {
+    display: flex;
+    justify-content: center;
+    margin: 1em 0;
+  }
+
+  .logo {
+    max-height: 100px;
+    width: auto;
+  }
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .spacer {
+    flex-grow: 1;
   }
 
   .content {
-      grid-column: 2 / 3;
-      padding: 0;
-      margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto;
   }
 
   .footer {
-      width: 100%; /* Full width */
-      position: fixed; /* Fixed at the bottom */
-      bottom: 0;
+    margin-top: auto;
   }
 
   @media (max-width: 768px) {
-      .container {
-          grid-template-columns: 1fr; /* Full width column */
-          grid-template-rows: auto 1fr auto; /* Specify rows for content and menu */
-      }
+    .container {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr auto;
+    }
 
-      .menu {
-          grid-row: 3; /* Position menu at the bottom */
-          grid-column: 1 / -1; /* Stretch across all columns */
-      }
+    .menu {
+      grid-row: 3;
+      grid-column: 1 / -1;
+    }
 
-      .content {
-          grid-row: 1 / 2; /* Content on top */
-          grid-column: 1 / -1; /* Stretch across all columns */
-      }
+    .content {
+      grid-row: 1 / 2;
+      grid-column: 1 / -1;
+    }
 
-      .footer {
-          position: static; /* Allow it to flow in the document */
-      }
+    .footer {
+      position: static;
+    }
   }
 </style>
