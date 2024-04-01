@@ -5,6 +5,10 @@
         'Item 9', 'Item 10', 'Item 11', 'Item 12', 'Item 13', 'Item 14', 'Item 15', 'Item 16', 'Item 17',];
     // variable to store the hovered item
     let hoveredItem = "";
+    // variable to store the clicked item
+    let clickedItem = "";
+    // variable to store which button was clicked
+    let clickedButton = "";
 </script>
 
 <div class="list-container">
@@ -17,8 +21,8 @@
             <div class="list-item" on:mouseover={() => hoveredItem = item} on:mouseleave={() => hoveredItem = ""}>
                 {item}
                 <div class="buttons">
-                    <button class="check-button">✓</button>
-                    <button class="delete-button">×</button>
+                    <button class="check-button" on:click={() => { clickedItem = item; clickedButton = 'check' }}>✓</button>
+                    <button class="delete-button" on:click={() => { clickedItem = item; clickedButton = 'delete' }}>×</button>
                 </div>
             </div>
         {/each}
@@ -26,10 +30,19 @@
     <!-- Display hovered item in a textbox -->
     <div class="hovered-item">
         {#if hoveredItem}
-            {hoveredItem}
+            Hovered Item: {hoveredItem}
         {:else}
             <!-- Display something when nothing is hovered over -->
-            Item x
+            Hovered Item: Item x
+        {/if}
+    </div>
+    <!-- Display clicked item in a textbox -->
+    <div class="clicked-item">
+        {#if clickedItem}
+            Clicked: {clickedItem}, Button: {clickedButton}
+        {:else}
+            <!-- Display something when no item is clicked -->
+            No item clicked
         {/if}
     </div>
 </div>
@@ -64,7 +77,7 @@
         transition: background-color 0.3s; /* Smooth transition for hover effect */
         width: 100%; /* Ensure header spans the full width */
         display: flex; /* Use flexbox */
-        justify-content: space-between; /* Space items evenly within the container */
+        justify-content: space-between; /* Align content on each end */
         align-items: center; /* Center items vertically */
     }
 
@@ -78,7 +91,6 @@
     /* Style for check and delete buttons */
     .buttons {
         display: flex; /* Use flexbox */
-        padding-right: 5px; /* Add left padding to create space */
     }
 
     .check-button, .delete-button {
@@ -93,6 +105,17 @@
 
     /* Style for hovered item textbox */
     .hovered-item {
+        max-width: 300px;
+        margin-top: 10px; /* Add margin on top */
+        padding: 5px;
+        /*background-color: #FFFF;*/
+        border: 2px solid #ccc;
+        border-radius: 5px; /* Rounded corners */
+        text-align: center; /* Center text horizontally */
+    }
+
+    /* Style for clicked item textbox */
+    .clicked-item {
         max-width: 300px;
         margin-top: 10px; /* Add margin on top */
         padding: 5px;
