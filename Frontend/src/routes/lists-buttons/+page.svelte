@@ -91,10 +91,34 @@
     /* Style for check and delete buttons */
     .buttons {
         display: flex; /* Use flexbox */
+        padding-right: 10px;
+        margin: 0px; /* Space between  */
+        border: none; /* Remove default border */
+        cursor: pointer; /* Change cursor to pointer on hover */
     }
 
-    .check-button, .delete-button {
-        margin-left: 10px; /* Add margin between buttons */
+    .check-button {
+        padding-left: 8px;
+        padding-right: 8px;
+        margin-left: 4px; /* Add margin between buttons */
+        border-radius: 7px; /* Make button background circular */
+    }
+
+    .delete-button {
+        padding-left: 8px;
+        padding-right: 8px;
+        margin-left: 4px;
+        font-size: 1.2em; /* Increase font size */
+        border-radius: 7px; /* Make button background circular */
+    }
+
+    /* Style for check and delete buttons */
+    .check-button:hover {
+        background-color: lightgreen; /* Change background color to green on hover */
+    }
+
+    .delete-button:hover {
+        background-color: lightcoral; /* Change background color to red on hover */
     }
 
     /* Style for list header */
