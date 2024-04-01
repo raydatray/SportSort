@@ -3,6 +3,8 @@
     // an array of items
     let items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8',
         'Item 9', 'Item 10', 'Item 11', 'Item 12', 'Item 13', 'Item 14', 'Item 15', 'Item 16', 'Item 17',];
+    // variable to store the hovered item
+    let hoveredItem = "";
 </script>
 
 <div class="list-container">
@@ -10,8 +12,17 @@
         <h1 class="list-header">List of Items</h1>
         <!-- Render list items -->
         {#each items as item}
-            <div class="list-item">{item}</div>
+            <div class="list-item" on:mouseover={() => hoveredItem = item} on:mouseleave={() => hoveredItem = ""}>{item}</div>
         {/each}
+    </div>
+    <!-- Display hovered item in a textbox -->
+    <div class="hovered-item">
+        {#if hoveredItem}
+            {hoveredItem}
+        {:else}
+            <!-- Display something when nothing is hovered over -->
+            Item x
+        {/if}
     </div>
 </div>
 
@@ -56,6 +67,16 @@
         margin-bottom: 10px;
         text-align: center; /* Center the header text horizontally */
         width: 100%; /* Ensure header spans the full width */
+    }
+
+    /* Style for hovered item textbox */
+    .hovered-item {
+        margin-top: 10px; /* Add margin on top */
+        padding: 5px;
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        border-radius: 5px; /* Rounded corners */
+        text-align: center; /* Center text horizontally */
     }
 </style>
 
