@@ -9,7 +9,9 @@
 
 <div class="list-container">
     <div class="scrollable-list">
-        <h1 class="list-header">List of Items</h1>
+        <div class="list-header-bg"> <!-- Background wrapper for list header -->
+            <h1 class="list-header">List of Items</h1>
+        </div>
         <!-- Render list items -->
         {#each items as item}
             <div class="list-item" on:mouseover={() => hoveredItem = item} on:mouseleave={() => hoveredItem = ""}>{item}</div>
@@ -51,6 +53,8 @@
     /* Style for list items */
     .list-item {
         margin-bottom: 5px;
+        background-color: lavender;
+        border-radius: 5px; /* Rounded corners for the highlight box */
         padding-left: 5px; /* Add left padding to create space */
         transition: background-color 0.3s; /* Smooth transition for hover effect */
         width: 100%; /* Ensure header spans the full width */
@@ -60,23 +64,32 @@
     .list-item:hover {
         background-color: lightblue; /* Change background color on hover */
         border-radius: 5px; /* Rounded corners for the highlight box */
+        font-size: 18px; /* Increase font size */
     }
 
     /* Style for list header */
     .list-header {
-        margin-bottom: 10px;
         text-align: center; /* Center the header text horizontally */
         width: 100%; /* Ensure header spans the full width */
     }
 
     /* Style for hovered item textbox */
     .hovered-item {
+        max-width: 300px;
         margin-top: 10px; /* Add margin on top */
         padding: 5px;
-        background-color: #f0f0f0;
-        border: 1px solid #ccc;
+        /*background-color: #FFFF;*/
+        border: 2px solid #ccc;
         border-radius: 5px; /* Rounded corners */
         text-align: center; /* Center text horizontally */
+    }
+
+    .list-header-bg {
+        background-color: lightblue; /* Set the background color */
+        width: 75%; /* Set the width to occupy 75% of the space */
+        margin: 0 auto; /* Center the header horizontally */
+        margin-bottom: 10px;
+        border-radius: 5px; /* Rounded corners */
     }
 </style>
 
