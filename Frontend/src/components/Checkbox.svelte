@@ -1,30 +1,32 @@
-<script>
-  const daysOfWeek = [
-    'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'
-  ];
-</script>
+<!-- The form control div acts as a container for your label and checkbox elements -->
+<div class="form-control">
+  <!-- Label wraps the text and the checkbox to bind them together semantically and for better UX -->
+  <label class="label cursor-pointer" style="display: flex; align-items: center;">
+    <!-- This is your label text -->
+    <span class="label-text">Remember me</span>
+    <!-- The checkbox input, already checked by default -->
+    <input type="checkbox" checked="checked" class="checkbox" />
+  </label>
+</div>
 
 <style>
-  .checkbox-list {
-    display: flex; /* Align items in a horizontal row */
-    justify-content: center; /* Center align the checkboxes */
-    gap: 10px; /* Add some space between each checkbox */
+  /* Styling for the label to display its children inline using flex, and aligning items for consistency */
+  .label {
+    display: flex;
+    align-items: center;
+    /* Removes any inherent space between inline or inline-block elements */
+    font-size: 0;
   }
-  .checkbox-container {
-    display: flex; /* Use flexbox for alignment */
-    flex-direction: column; /* Stack items vertically */
-    align-items: center; /* Center-align the content */
-  }
+
+  /* Styling for the label text, reducing right margin to bring it closer to the checkbox */
   .label-text {
-    margin-bottom: 5px; /* Space between label text and checkbox */
+    margin-left: 2px; /* Reduced space between label text and checkbox */
+    font-size: 16px; /* Reset font size after setting it to 0 in .label */
+  }
+
+  /* Styling for the checkbox, scaling it down and removing margins */
+  .checkbox {
+    transform: scale(0.75); /* Scales down the checkbox to make it smaller */
+    margin-left: 2px; /* Adjusts space on the left of the checkbox */
   }
 </style>
-
-<div class="checkbox-list">
-  {#each daysOfWeek as day, index (day)}
-    <div class="checkbox-container" key={index}>
-      <span class="label-text">{day}</span>
-      <input type="checkbox" id={day} class="checkbox" />
-    </div>
-  {/each}
-</div>
