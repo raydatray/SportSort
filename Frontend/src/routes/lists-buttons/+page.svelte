@@ -83,7 +83,6 @@
 
     /* Apply background color when hovering over list item */
     .list-item:hover {
-        background-color: lightblue; /* Change background color on hover */
         border-radius: 5px; /* Rounded corners for the highlight box */
         font-size: 18px; /* Increase font size */
     }
@@ -91,8 +90,7 @@
     /* Style for check and delete buttons */
     .buttons {
         display: flex; /* Use flexbox */
-        padding-right: 10px;
-        margin: 0px; /* Space between  */
+        margin-right: 5px; /* Space between  */
         border: none; /* Remove default border */
         cursor: pointer; /* Change cursor to pointer on hover */
     }
@@ -100,16 +98,16 @@
     .check-button {
         padding-left: 8px;
         padding-right: 8px;
-        margin-left: 4px; /* Add margin between buttons */
-        border-radius: 7px; /* Make button background circular */
+        margin-left: 5px; /* Add margin between buttons */
+        border-radius: 10px; /* Make button background circular */
     }
 
     .delete-button {
-        padding-left: 8px;
-        padding-right: 8px;
-        margin-left: 4px;
+        padding-left: 9px;
+        padding-right: 9px;
+        margin-left: 5px;
         font-size: 1.2em; /* Increase font size */
-        border-radius: 7px; /* Make button background circular */
+        border-radius: 10px; /* Make button background circular */
     }
 
     /* Style for check and delete buttons */

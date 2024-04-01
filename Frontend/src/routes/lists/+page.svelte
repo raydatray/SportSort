@@ -62,7 +62,6 @@
 
     /* Apply background color when hovering over list item */
     .list-item:hover {
-        background-color: lightblue; /* Change background color on hover */
         border-radius: 5px; /* Rounded corners for the highlight box */
         font-size: 18px; /* Increase font size */
     }
