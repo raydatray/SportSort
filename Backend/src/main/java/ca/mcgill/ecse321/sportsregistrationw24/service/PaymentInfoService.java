@@ -1,10 +1,11 @@
 package ca.mcgill.ecse321.sportsregistrationw24.service;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dao.CustomerAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.PaymentInfoRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.PaymentInfo;
-import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities;
+import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
+import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,22 +17,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.getUserFromToken;
+
 @Service
 public class PaymentInfoService {
   @Autowired
   private PaymentInfoRepository paymentInfoRepository;
   @Autowired
-  private CustomerAccountRepository customerAccountRepository;
-
-
+  private UserAccountRepository userAccountRepository;
 
   @Transactional
-  public PaymentInfo createPaymentInfo(PaymentInfo.PaymentType aPaymentType, Integer aCardNumber, Integer aCvv, Integer aExpirationYear, Integer aExpirationMonth, String aToken) {
-    /*
-    if (aCardNumber.toString().length() != 16 || aCardNumber == null) {
-      throw new IllegalArgumentException("This is not a valid credit/debit card number");
-    }
-    */
+  public PaymentInfo createPaymentInfo(String userToken, PaymentInfo.PaymentType aPaymentType, String aCardNumber, Integer aCvv, Integer aExpirationYear, Integer aExpirationMonth) {
+    UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     if (aCvv == null || aCvv.toString().length() != 3) {
       throw new IllegalArgumentException("This is not a valid credit/debit card cvv");
@@ -54,14 +51,7 @@ public class PaymentInfoService {
     newPaymentInfo.setCvv(aCvv);
     newPaymentInfo.setExpirationYear(aExpirationYear);
     newPaymentInfo.setExpirationMonth(aExpirationMonth);
-
-    CustomerAccount fetchedCustomer = customerAccountRepository.findByToken(aToken).orElse(null);
-    if (fetchedCustomer == null) {
-      throw new IllegalArgumentException("CustomerAccount not found");
-    }
-    else {
-      newPaymentInfo.setCustomerAccount(fetchedCustomer);
-    }
+    newPaymentInfo.setCustomerAccount((CustomerAccount) user);
 
     paymentInfoRepository.save(newPaymentInfo);
 
@@ -69,23 +59,8 @@ public class PaymentInfoService {
   }
 
   @Transactional
-  public void updatePaymentInfo (Integer aID, PaymentInfo.PaymentType newPaymentType, Integer newCardNumber, Integer newCvv, Integer newExpirationYear, Integer newExpirationMonth) {
-     /*
-    if (aCardNumber == null || aCardNumber.toString().length() != 16) {
-      throw new IllegalArgumentException("This is not a valid credit/debit card number");
-    }
-    */
-
-    if (newCvv == null || newCvv.toString().length() != 3) {
-      throw new IllegalArgumentException("This is not a valid credit/debit card cvv");
-    }
-
-    if (newExpirationYear == null || newExpirationMonth == null) {
-      throw new IllegalArgumentException("Cannot have a null month/year");
-    }
-
-    Optional<PaymentInfo> wrappedPaymentInfo = paymentInfoRepository.findById(aID);
-    PaymentInfo paymentInfo = wrappedPaymentInfo.orElseThrow(() -> new IllegalArgumentException("There is no paymentInfo with this id"));
+  public void updatePaymentInfo (String userToken, Integer aId, Integer newExpirationYear, Integer newExpirationMonth) {
+    UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     YearMonth currYearMonth = YearMonth.now();
     YearMonth inputYearMonth = YearMonth.of(newExpirationYear, newExpirationMonth);
@@ -94,45 +69,45 @@ public class PaymentInfoService {
       throw new IllegalArgumentException("This credit card is expired");
     }
 
-    paymentInfo.setPaymentType(newPaymentType);
-    paymentInfo.setCardNumber(newCardNumber);
-    paymentInfo.setCvv(newCvv);
-    paymentInfo.setExpirationYear(newExpirationYear);
-    paymentInfo.setExpirationMonth(newExpirationMonth);
+    PaymentInfo foundPaymentInfo = paymentInfoRepository.findById(aId).orElse(null);
 
-    paymentInfoRepository.save(paymentInfo);
+    if (foundPaymentInfo == null) {
+      throw new IllegalArgumentException("Payment Info not found");
+    }
+
+    if (!foundPaymentInfo.getCustomerAccount().getId().equals(user.getId())) {
+      throw new IllegalArgumentException("This payment info does not belong to the user");
+    }
+
+    foundPaymentInfo.setExpirationYear(newExpirationYear);
+    foundPaymentInfo.setExpirationMonth(newExpirationMonth);
+
+    paymentInfoRepository.save(foundPaymentInfo);
   }
 
   @Transactional
-  public PaymentInfo getPaymentInfo(Integer aID) { return paymentInfoRepository.findById(aID).orElseThrow(() -> new IllegalArgumentException("payment info with this ID doesn't exist")); }
+  public List<PaymentInfo> getAllPaymentInfos(String userToken) {
+    UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-  @Transactional
-  public List<PaymentInfo> getAllPaymentInfoPerCustomer(String token, Integer paymentType) {
-    Utilities utilities = new Utilities();
-    ArrayList<PaymentInfo> allPaymentInfos = utilities.iterableToArrayList(paymentInfoRepository.findAll());
+    List<PaymentInfo> foundPaymentInfos = paymentInfoRepository.findByCustomerAccount((CustomerAccount) user).orElse(null);
 
-    ArrayList<PaymentInfo> filteredPaymentInfos = new ArrayList<>();
-    CustomerAccount targetCustomer = customerAccountRepository.findByToken(token).orElseThrow(() -> new IllegalArgumentException("Customer not found"));
-
-    for (PaymentInfo info: allPaymentInfos) {
-      if (info.getCustomerAccount().equals(targetCustomer)) {
-        filteredPaymentInfos.add(info);
-      }
-    }
-
-    if (paymentType.equals(0)) {
-      filteredPaymentInfos.removeIf(info -> info.getPaymentType().toString().equals("Debit"));
-    }
-    else if (paymentType.equals(1)) {
-      filteredPaymentInfos.removeIf(info -> info.getPaymentType().toString().equals("Credit"));
-    }
-    return filteredPaymentInfos;
+    return foundPaymentInfos;
   }
 
   @Transactional
-  public void deletePaymentInfo(Integer aID) {
-    Optional<PaymentInfo> wrappedPaymentInfo = paymentInfoRepository.findById(aID);
-    paymentInfoRepository.delete(wrappedPaymentInfo.orElseThrow(() -> new IllegalArgumentException("There is no PaymentInfo with this id")));
-  }
+  public void deletePaymentInfo(String userToken, Integer aId) {
+    UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
+    PaymentInfo foundPaymentInfo = paymentInfoRepository.findById(aId).orElse(null);
+
+    if (foundPaymentInfo == null) {
+      throw new IllegalArgumentException("Payment Info not found");
+    }
+
+    if (!foundPaymentInfo.getCustomerAccount().getId().equals(user.getId())) {
+      throw new IllegalArgumentException("This payment info does not belong to the user");
+    }
+
+    paymentInfoRepository.delete(foundPaymentInfo);
+  }
 }

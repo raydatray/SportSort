@@ -14,24 +14,18 @@ public class SportCenter {
   private Time openingHour;
   private Time closingHour;
 
+  public SportCenter() {}
   public SportCenter(String aName, Time aOpeningHour, Time aClosingHour) {
     this.name = aName;
     this.openingHour = aOpeningHour;
     this.closingHour = aClosingHour;
   }
 
-  public SportCenter() {}
-
   public void setName(String aName) { this.name = aName; }
-
   public void setOpeningHour(Time aOpeningHour) { this.openingHour = aOpeningHour; }
-
   public void setClosingHour(Time aClosingHour) { this.closingHour = aClosingHour; }
 
   public String getName() { return this.name; }
-
   public Time getOpeningHour() { return this.openingHour; }
-
   public Time getClosingHour() { return this.closingHour; }
-
 }

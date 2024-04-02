@@ -25,7 +25,7 @@ public class RegistrationRestController {
     })
     public ResponseEntity<?> createRegistration(@RequestBody RegistrationCO registrationCO) {
       try {
-        Registration registration = registrationService.createRegistration(
+        registrationService.createRegistration(
           registrationCO.getCourseOfferingId(),
           registrationCO.getCustomerAccountId(),
           registrationCO.getPaymentInfoId(),

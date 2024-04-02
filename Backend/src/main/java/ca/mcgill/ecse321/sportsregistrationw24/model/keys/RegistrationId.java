@@ -12,7 +12,6 @@ public class RegistrationId implements Serializable {
     private Integer courseOfferingId;
 
     public RegistrationId () {}
-
     public RegistrationId (Integer customerAccountId, Integer courseOfferingId) {
         this.customerAccountId = customerAccountId;
         this.courseOfferingId = courseOfferingId;

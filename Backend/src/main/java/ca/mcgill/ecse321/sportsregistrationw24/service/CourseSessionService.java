@@ -21,10 +21,8 @@ import java.util.HashMap;
 
 @Service
 public class CourseSessionService {
-
     @Autowired
     private CourseSessionRepository courseSessionRepository;
-
     @Autowired
     private CourseOfferingRepository courseOfferingRepository;
 

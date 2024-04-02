@@ -1,7 +1,7 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dto.courseOffering.CourseOfferingDto;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.courseOffering.CourseOfferingCO;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseOffering.CourseOfferingDto;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseOffering.CourseOfferingCO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
 import ca.mcgill.ecse321.sportsregistrationw24.service.CourseOfferingService;
 import org.springframework.beans.factory.annotation.Autowired;

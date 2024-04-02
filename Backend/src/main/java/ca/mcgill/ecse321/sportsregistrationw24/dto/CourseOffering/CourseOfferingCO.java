@@ -1,5 +1,4 @@
-package ca.mcgill.ecse321.sportsregistrationw24.dto.courseOffering;
-
+package ca.mcgill.ecse321.sportsregistrationw24.dto.CourseOffering;
 
 import java.sql.Date;
 import java.time.DayOfWeek;
@@ -13,8 +12,7 @@ public class CourseOfferingCO {
   private Integer roomId;
   private Integer courseTypeId;
 
-  public CourseOfferingCO() {
-  }
+  public CourseOfferingCO() {}
 
   public CourseOfferingCO(Date aStartDate, Date aEndDate, List<DayOfWeek> aDaysOffered, String aInstructorToken, Integer aRoomId, Integer aCourseTypeId) {
     this.startDate = aStartDate;

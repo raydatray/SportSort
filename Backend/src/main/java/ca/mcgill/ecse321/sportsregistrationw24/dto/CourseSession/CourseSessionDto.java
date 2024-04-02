@@ -1,4 +1,4 @@
-package ca.mcgill.ecse321.sportsregistrationw24.dto.courseSession;
+package ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession;
 
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseSession;
 

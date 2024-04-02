@@ -1,7 +1,9 @@
 package ca.mcgill.ecse321.sportsregistrationw24.service;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.CustomerAccountRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
+import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,48 +12,62 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.getUserFromToken;
 
+@Deprecated
 @Service
 public class CustomerAccountService {
-
   @Autowired
   private CustomerAccountRepository customerAccountRepository;
+  @Autowired
+  private UserAccountRepository userAccountRepository;
 
   @Transactional
-  public CustomerAccount createCustomerAccount(String email, String password, String name) {
-    if (email == null || password == null || name == null){
-      throw new IllegalArgumentException("Null value detected!");
+  public void createCustomerAccount(String aName, String aEmail, String aPassword) {
+    if (aName.trim().isEmpty()){
+      throw new IllegalArgumentException("Name cannot be empty!");
     }
-    CustomerAccount existingCustomeraccount = getCustomerAccountByEmail(email);
-    if (existingCustomeraccount != null) {
-      throw new IllegalArgumentException("Customer email is already in use!");
+
+    if (aEmail.trim().isEmpty()){
+      throw new IllegalArgumentException("Email cannot be empty!");
     }
+
+    if (aPassword.trim().isEmpty()){
+      throw new IllegalArgumentException("Password cannot be empty!");
+    }
+
+    UserAccount existingUserAccount = userAccountRepository.findUserByEmail(aEmail).orElse(null);
+
+    if (existingUserAccount != null) {
+      throw new IllegalArgumentException("Email is already in use!");
+    }
+
     CustomerAccount customerAccount = new CustomerAccount();
-    customerAccount.setEmail(email);
-    customerAccount.setPassword(password);
-    customerAccount.setName(name);
-    customerAccountRepository.save(customerAccount);
-    return customerAccount;
+
+    customerAccount.setName(aName);
+    customerAccount.setEmail(aEmail);
+    customerAccount.setPassword(aPassword);
+
+    userAccountRepository.save(customerAccount);
   }
 
   @Transactional
-  public void updateCustomerEmail(String newEmail, String token) {
-    CustomerAccount customerAccount = customerAccountRepository.findByToken(token).orElse(null);
-    // Customer with this email does not exist
-    if (customerAccount == null) {
-      throw new IllegalArgumentException("Customer account does not exist!");
-    }
+  public void updateCustomerEmail(String userToken, String newEmail) {
+    UserAccount userAccount = getUserFromToken(userAccountRepository, userToken);
+
     // Customer's old email matches new email
-    if (customerAccount.getEmail().equals(newEmail)) {
+    if (userAccount.getEmail().equals(newEmail)) {
       throw new IllegalArgumentException("New email matches old email!");
     }
     // New email is already in use
-    Optional<CustomerAccount> existingCustomer = customerAccountRepository.findByEmail(newEmail);
-    if (existingCustomer.isPresent()) {
-      throw new IllegalArgumentException("New email is already in use!");
+    UserAccount existingUserAccount = userAccountRepository.findUserByEmail(newEmail).orElse(null);
+
+    if (existingUserAccount != null) {
+      throw new IllegalArgumentException("Customer email is already in use!");
     }
-    customerAccount.setEmail(newEmail);
-    customerAccountRepository.save(customerAccount);
+
+    userAccount.setEmail(newEmail);
+    userAccountRepository.save(userAccount);
   }
 
   @Transactional

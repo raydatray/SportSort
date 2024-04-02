@@ -1,9 +1,9 @@
 package ca.mcgill.ecse321.sportsregistrationw24.integration;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.*;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.courseSession.CourseSessionDto;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.courseSession.multipleClassSessionsCO;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.courseSession.singleCourseSessionCO;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.CourseSessionDto;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.multipleClassSessionsCO;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.singleCourseSessionCO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseType;
 import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;

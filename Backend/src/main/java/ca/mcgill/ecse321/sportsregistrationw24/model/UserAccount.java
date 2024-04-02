@@ -1,7 +1,6 @@
 package ca.mcgill.ecse321.sportsregistrationw24.model;
 
 import jakarta.persistence.*;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Entity
 @Table(name = "userAccounts")
@@ -16,13 +15,12 @@ public abstract class UserAccount {
   private String password;
   private String token;
 
+  public UserAccount() {}
   public UserAccount(String aName, String aEmail, String aPassword) {
     this.name = aName;
     this.email = aEmail;
     this.password = aPassword;
   }
-
-  public UserAccount() {}
 
   public void setId (Integer id) { this.id = id;}
   public void setName(String name) { this.name = name; }
@@ -44,7 +42,6 @@ public abstract class UserAccount {
     return this.password;
   }
   public String getToken() { return this.token; }
-
   @Transient
   public String getUserType() { return this.getClass().getAnnotation(DiscriminatorValue.class).value(); }
 }

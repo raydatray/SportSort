@@ -1,11 +1,11 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dto.courseSession.CourseSessionDto;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.CourseSessionDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseSession;
 import ca.mcgill.ecse321.sportsregistrationw24.service.CourseSessionService;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dto.courseSession.singleCourseSessionCO;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.courseSession.multipleClassSessionsCO;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.singleCourseSessionCO;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.multipleClassSessionsCO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

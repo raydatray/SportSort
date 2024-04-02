@@ -6,12 +6,11 @@ import jakarta.persistence.Entity;
 @Entity
 @DiscriminatorValue("CUSTOMER")
 public class CustomerAccount extends UserAccount {
+  public CustomerAccount() {
+    super();
+  }
   public CustomerAccount(String aName, String aEmail, String aPassword)
   {
     super(aName, aEmail, aPassword);
-  }
-
-  public CustomerAccount() {
-    super();
   }
 }
