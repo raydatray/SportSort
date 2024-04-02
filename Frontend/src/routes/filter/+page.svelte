@@ -1,17 +1,22 @@
 <!-- DropdownCheckbox.svelte -->
 <script>
+
+
     import CheckboxFilterField from './CheckboxFilterField.svelte'
-    import getCheckedStates from './CheckboxFilterField.svelte'
+    //import getCheckedStates from './CheckboxFilterField.svelte'
 
     import DateFilterField from './DateFilterField.svelte'
-    import onClick from 'svelte'
+    
     let courseTypes = ["Swimming", "Weightlifting"]
     const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     
-    let checkedCourseTypes = getCheckedStates();
-    let checkedDaysOffered = getCheckedStates();
+    let checkedCourseTypes;
+    let checkedDaysOffered;
     let apiString = '/courseOffering/getAll/filter?courseTypes='
 
+    let startDate;
+    let endDate;
+    /*
     // @TODO FIX THIS
     function updateCheckedStates() {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -19,6 +24,7 @@
         checkboxes.forEach((checkbox, index) => {
             if (checkbox instanceof HTMLInputElement && checkbox.type === 'checkbox') {
             const isChecked = checkbox.checked;
+            // @ts-ignore
             const label = checkbox.parentNode.querySelector('label').innerText;
 
             if (label === 'Course Types') {
@@ -29,13 +35,11 @@
             }
         });
     }
+    */
     /* HOW TF DO I ACCESS INSTANCE VARIABLES?????? */
     // @TODO FINISH THIS
-    /**
-     * Takes all inputs and returns a string to be sent to the backend
-     * @param {void}
-     * @return {void} 
-    */
+
+   /*
     function apiStringBuilder() {
         updateCheckedStates();
         if (checkedCourseTypes != null) {
@@ -47,28 +51,58 @@
         }
 
         if (!checkedDaysOffered) {
-            apiString = apiString + "&daysOffered="
-            checkedDaysOffered.forEach((day) => {
-                apiString = apiString + day + ","
+            let allFalse = true;
+            let tempString = '';
+            checkedDaysOffered.forEach((dayIncluded, index) => {
+                if (dayIncluded) {
+                    tempString = apiString + daysOfWeek[index] + ",";
+                    allFalse = false;
+                }
             })
+            if (!allFalse) {
+                apiString = apiString + "&daysOffered=" + tempString;
+            }
         }
 
-        if(!)
+        if () {
+
+        }
+
 
 
     }
+    */
     // @TODO FIGURE OUT HOW TO SEND REQUEST TO BACKEND AND SAME FOR COMPONENTS
+    /**
+     * Handles the event when a date is selected from a DateFilterField component.
+     * @param {CustomEvent} event - The custom event containing the selected date and key.
+     * @returns {void}
+     */
+    /*
+    function handleDateSelected(event) {
+        const { key, date } = event.detail;
+        if (key === 'date1') {
+            startDate = new Date(date);
+        } else if (key === 'date2') {
+            endDate = new Date(date);
+        }
+    }
+    */
 </script>
 
 <div class="container">
     <CheckboxFilterField fieldTitle="Course Types" />
     <CheckboxFilterField fieldTitle="Days Offered" params={daysOfWeek} />
     <!-- need to do a calendar picker for these two. Idk how-->
-    <DateFilterField fieldTitle="Start Date" />
-    <DateFilterField fieldTitle="End Date" />
+    
+    <!-- <DateFilterField fieldTitle="Start Date" key="start" on:dateSelected={handleDateSelected} />
+    <DateFilterField fieldTitle="End Date" key="end" on:dateSelected={handleDateSelected} /> -->
+
+    <DateFilterField fieldTitle="Start Date" key="start" />
+    <DateFilterField fieldTitle="End Date" key="end" />
 </div>
 <!-- @TODO FIGURE THIS SHIT OUT-->
-<button on:click={apiStringBuilder}>Apply!</button>
+<button>Apply!</button>
 
 <style>
     .container {
