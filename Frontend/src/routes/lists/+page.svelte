@@ -34,14 +34,14 @@
 <div class="list-container">
     <div class="scrollable-list">
         <!-- Background wrapper for list header -->
-        <div class="list-header-bg">
+        <div class="bg-secondary list-header-bg">
             <h1 class="list-header">List of Courses</h1>
             <!-- Dropdown for sorting -->
         </div>
         <div style="width: 100%;">
             <div class="dropdown dropdown-bottom">
-                <div tabindex="0" role="button" class="btn m-1">Sort by Date</div>
-                <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                <div tabindex="0" role="button" class="bg-slate-300 btn m-1">Sort by Date</div>
+                <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-slate-300 rounded-box w-52">
                     <li><a on:click={() => { sortOrder = "ascending"; sortItems(); }}>Ascending</a></li>
                     <li><a on:click={() => { sortOrder = "descending"; sortItems(); }}>Descending</a></li>
                 </ul>
@@ -59,7 +59,7 @@
         </div>
         <!-- Render list items -->
         {#each items as item}
-            <div class="list-item" on:mouseover={() => hoveredItem = item} on:mouseleave={() => hoveredItem = {"courseType": "", "startDate": ""}}>
+            <div class="bg-accent list-item" on:mouseover={() => hoveredItem = item} on:mouseleave={() => hoveredItem = {"courseType": "", "startDate": ""}}>
                 <span>{item.courseType}</span> <!-- Display course type -->
                 <span>{item.startDate}</span> <!-- Display start date -->
             </div>
@@ -100,7 +100,6 @@
     /* Style for list items */
     .list-item {
         margin-bottom: 5px;
-        background-color: lavender;
         border-radius: 5px; /* Rounded corners for the highlight box */
         padding: 5px; /* Add padding to the list item */
         transition: background-color 0.4s; /* Smooth transition for hover effect */
@@ -133,7 +132,6 @@
     }
 
     .list-header-bg {
-        background-color: lightblue; /* Set the background color */
         width: 75%; /* Set the width to occupy 75% of the space */
         margin: 0 auto 10px;
         border-radius: 5px; /* Rounded corners */
@@ -158,7 +156,6 @@
     .dropdown-content {
         display: none;
         position: absolute;
-        background-color: #f9f9f9;
         min-width: 160px;
         box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
         z-index: 1;
@@ -169,10 +166,6 @@
         padding: 12px 16px;
         text-decoration: none;
         display: block;
-    }
-
-    .dropdown-content a:hover {
-        background-color: #f1f1f1;
     }
 
     .dropdown:hover .dropdown-content {
