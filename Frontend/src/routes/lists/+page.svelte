@@ -34,7 +34,7 @@
 <div class="list-container">
     <div class="scrollable-list">
         <!-- Background wrapper for list header -->
-        <div class="bg-secondary list-header-bg">
+        <div class="bg-secondary/50 list-header-bg">
             <h1 class="list-header">List of Courses</h1>
             <!-- Dropdown for sorting -->
         </div>
@@ -59,7 +59,7 @@
         </div>
         <!-- Render list items -->
         {#each items as item}
-            <div class="bg-accent list-item" on:mouseover={() => hoveredItem = item} on:mouseleave={() => hoveredItem = {"courseType": "", "startDate": ""}}>
+            <div class="bg-accent/50 list-item" on:mouseover={() => hoveredItem = item} on:mouseleave={() => hoveredItem = {"courseType": "", "startDate": ""}}>
                 <span>{item.courseType}</span> <!-- Display course type -->
                 <span>{item.startDate}</span> <!-- Display start date -->
             </div>

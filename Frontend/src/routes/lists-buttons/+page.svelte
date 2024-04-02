@@ -13,12 +13,12 @@
 
 <div class="list-container">
     <div class="scrollable-list">
-        <div class="list-header-bg"> <!-- Background wrapper for list header -->
+        <div class="bg-secondary/50 list-header-bg"> <!-- Background wrapper for list header -->
             <h1 class="list-header">List of Items</h1>
         </div>
         <!-- Render list items -->
         {#each items as item}
-            <div class="list-item" on:mouseover={() => hoveredItem = item} on:mouseleave={() => hoveredItem = ""}>
+            <div class="bg-secondary-content/5 list-item" on:mouseover={() => hoveredItem = item} on:mouseleave={() => hoveredItem = ""}>
                 {item}
                 <div class="buttons">
                     <button class="check-button" on:click={() => { clickedItem = item; clickedButton = 'check' }}>✓</button>
@@ -71,7 +71,6 @@
     /* Style for list items */
     .list-item {
         margin-bottom: 5px;
-        background-color: lavender;
         border-radius: 5px; /* Rounded corners for the highlight box */
         padding-left: 5px; /* Add left padding to create space */
         transition: background-color 0.3s; /* Smooth transition for hover effect */
@@ -148,7 +147,6 @@
     }
 
     .list-header-bg {
-        background-color: lightblue; /* Set the background color */
         width: 75%; /* Set the width to occupy 75% of the space */
         margin: 0 auto; /* Center the header horizontally */
         margin-bottom: 10px;
