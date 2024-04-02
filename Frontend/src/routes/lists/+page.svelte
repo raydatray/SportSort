@@ -1,6 +1,13 @@
 <!-- +page.svelte -->
 <script>
-    // Array of dictionaries with course type and start date
+    /**
+     * Represents an item in the list of courses.
+     * @typedef {Object} CourseItem
+     * @property {string} courseType - The type of course.
+     * @property {string} startDate - The start date of the course.
+     */
+
+    /** @type {CourseItem[]} */
     let items = [
         {"courseType": "Swimming", "startDate": "2024-03-05"},
         {"courseType": "Yoga", "startDate": "2024-03-10"},
@@ -10,17 +17,30 @@
         {"courseType": "Pickle Ball", "startDate": "2024-03-30"},
         {"courseType": "Tennis", "startDate": "2024-04-01"},
         {"courseType": "Ping Pong", "startDate": "2024-04-05"},
-        {"courseType": "Golf", "startDate": "2024-04-10"},
+        {"courseType": "Golf", "startDate": "2024-04-10"}
         // Add more items as needed
     ];
 
-    // Variable to store the hovered item
+    /**
+     * Represents a hovered item.
+     * @typedef {Object} HoveredItem
+     * @property {string} courseType - The type of the hovered course.
+     * @property {string} startDate - The start date of the hovered course.
+     */
+
+    /** @type {HoveredItem} */
     let hoveredItem = {"courseType": "", "startDate": ""};
 
-    // Variable to store the sorting order
+    /**
+     * Represents the sorting order.
+     * @type {string}
+     */
     let sortOrder = "ascending";
 
-    // Function to sort the items based on start date
+    /**
+     * Sorts the items based on the start date.
+     * @returns {void}
+     */
     function sortItems() {
         if (sortOrder === "ascending") {
             items = items.sort((a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime());
@@ -28,6 +48,7 @@
             items = items.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
         }
     }
+
 
 </script>
 
