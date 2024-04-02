@@ -1,14 +1,32 @@
 <!-- +page.svelte -->
 <script>
-    // an array of items
-    let items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8',
-        'Item 9', 'Item 10', 'Item 11', 'Item 12', 'Item 13', 'Item 14', 'Item 15', 'Item 16', 'Item 17',];
-    // variable to store the hovered item
+    /**
+     * An array of items.
+     * @type {string[]}
+     */
+    let items = [
+        'Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8',
+        'Item 9', 'Item 10', 'Item 11', 'Item 12', 'Item 13', 'Item 14', 'Item 15', 'Item 16', 'Item 17'
+    ];
+
+    /**
+     * Represents the hovered item.
+     * @type {string}
+     */
     let hoveredItem = "";
-    // variable to store the clicked item
+
+    /**
+     * Represents the clicked item.
+     * @type {string}
+     */
     let clickedItem = "";
-    // variable to store which button was clicked
+
+    /**
+     * Represents the button that was clicked.
+     * @type {string}
+     */
     let clickedButton = "";
+
 </script>
 
 <div class="list-container">
