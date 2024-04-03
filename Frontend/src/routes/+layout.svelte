@@ -59,6 +59,7 @@
     display: flex;
     justify-content: center;
     margin: 1em 0;
+    margin-top: 8%;
   }
 
   .logo {
