@@ -1,15 +1,14 @@
-package ca.mcgill.ecse321.sportsregistrationw24.dto;
-@Deprecated
-public class RoomDto {
+package ca.mcgill.ecse321.sportsregistrationw24.dto.Room;
 
+public class RoomCO {
   private String name;
   private Integer floorNumber;
   private Integer roomNumber;
   private Integer capacity;
 
-  public RoomDto() {}
+  public RoomCO() {}
 
-  public RoomDto(String name, Integer floorNumber, Integer roomNumber, Integer capacity) {
+  public RoomCO(String name, Integer floorNumber, Integer roomNumber, Integer capacity) {
     this.name = name;
     this.floorNumber = floorNumber;
     this.roomNumber = roomNumber;

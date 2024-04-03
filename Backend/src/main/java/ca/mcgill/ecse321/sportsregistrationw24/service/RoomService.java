@@ -109,7 +109,7 @@ public class RoomService {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     if (user.getUserType().equals("CUSTOMER")){
-      throw new IllegalArgumentException("Only owners can view rooms!");
+      throw new IllegalArgumentException("Only instructors and owners can view rooms!");
     }
     List<Room> foundRooms = roomRepository.findRoomsByFilters(floorNumber, capacityLow, capacityHigh).orElse(null);
     if (foundRooms == null) {

@@ -5,12 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.*;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.RegistrationCO;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.Registration.RegistrationCO;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.RegistrationDto;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.RegistrationIdDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.*;
-import ca.mcgill.ecse321.sportsregistrationw24.model.keys.RegistrationId;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.RegistrationRepository;
 
-import java.net.URI;
 import java.sql.Date;
 import java.time.DayOfWeek;
 import java.util.ArrayList;

@@ -27,11 +27,17 @@ public class RegistrationService {
   private PaymentInfoRepository paymentInfoRepository;
 
   @Transactional
-  public void createRegistration(String userToken, Integer courseOfferingId, Integer paymentInfoId, Date registrationDate) {
+  public void createRegistration(String userToken, Integer courseOfferingId, Integer paymentInfoId, Integer pricePaid, Date registrationDate) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     if (!user.getUserType().equals("CUSTOMER")) {
       throw new IllegalArgumentException("Only customers can register for courses!");
+    }
+
+    Registration duplicateRegistration = registrationRepository.findById(new RegistrationId(((CustomerAccount) user).getId(), courseOfferingId)).orElse(null);
+
+    if (duplicateRegistration != null) {
+      throw new IllegalArgumentException("You have already registered for this course offering!");
     }
 
     CourseOffering courseOffering = courseOfferingRepository.findById(courseOfferingId).orElse(null);
@@ -53,9 +59,14 @@ public class RegistrationService {
       throw new IllegalArgumentException("You must register for a course offering at most one day before it starts!");
     }
 
-    Registration newRegistration = new Registration(registrationDate, courseOffering, (CustomerAccount) user, paymentInfo);
+    Registration registration = new Registration();
+    registration.setCourseOffering(courseOffering);
+    registration.setCustomerAccount((CustomerAccount) user);
+    registration.setPaymentInfo(paymentInfo);
+    registration.setRegisteredDate(registrationDate);
+    registration.setPricePaid(pricePaid);
 
-    registrationRepository.save(newRegistration);
+    registrationRepository.save(registration);
   }
 
   //Do we need this?
@@ -89,14 +100,24 @@ public class RegistrationService {
   }
 
   @Transactional
-  public List<Registration> getAllRegistrations(String userToken) {
+  public List<Registration> getAllRegistrations(String userToken, Date lowRegistrationDate, Date highRegistrationDate, List<Integer> courseOfferingIDs, String customerEmail) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     if (!user.getUserType().equals("OWNER")) {
       throw new IllegalArgumentException("Only owners can view all registrations!");
     }
 
-    return iterableToArrayList(registrationRepository.findAll());
+    List<CourseOffering> courseOfferings = courseOfferingIDs.stream().map(id -> courseOfferingRepository.findById(id).orElse(null)).toList();
+
+    CustomerAccount customerAccount = customerEmail == null ? null : (CustomerAccount) userAccountRepository.findUserByEmail(customerEmail).orElseThrow();
+
+    List<Registration> foundRegistrations = registrationRepository.findByFilters(courseOfferings, customerAccount, lowRegistrationDate, highRegistrationDate).orElse(null);
+
+    if (foundRegistrations == null) {
+      throw new IllegalArgumentException("No registrations were found with the provided information!");
+    }
+
+    return foundRegistrations;
   }
 
   @Transactional

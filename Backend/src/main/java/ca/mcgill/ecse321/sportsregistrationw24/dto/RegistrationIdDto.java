@@ -1,7 +1,7 @@
 package ca.mcgill.ecse321.sportsregistrationw24.dto;
 
 import ca.mcgill.ecse321.sportsregistrationw24.model.Registration;
-
+@Deprecated
 public class RegistrationIdDto  {
   private Integer customerAccountId;
   private Integer courseOfferingId;

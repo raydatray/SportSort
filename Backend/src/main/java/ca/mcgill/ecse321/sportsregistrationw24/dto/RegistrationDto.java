@@ -4,7 +4,7 @@ import ca.mcgill.ecse321.sportsregistrationw24.model.Registration;
 import ca.mcgill.ecse321.sportsregistrationw24.model.keys.RegistrationId;
 
 import java.sql.Date;
-
+@Deprecated
 public class RegistrationDto {
   String courseTypeName;
   RegistrationId registrationId;
