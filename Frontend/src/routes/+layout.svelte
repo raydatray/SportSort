@@ -43,6 +43,7 @@
     grid-template-columns: 240px 1fr;
     min-height: 100vh;
     overflow-x: hidden;
+    bottom: 0;
   }
 
   .menu {
@@ -50,6 +51,8 @@
     height: 100vh;
     overflow-y: auto;
     margin: 0;
+    bottom: 0;
+    border-radius: 10px;
   }
 
   .logo-container {
@@ -78,10 +81,13 @@
     flex-direction: column;
     justify-content: space-between;
     overflow-y: auto;
+    margin-top: 0.75%;
   }
 
   .footer {
     margin-top: auto;
+    margin-bottom: 0.75%;
+    border-radius: 10px;
   }
 
   @media (max-width: 768px) {
