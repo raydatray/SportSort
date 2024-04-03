@@ -60,8 +60,8 @@
 </script>
 
   <!-- DropdownCheckbox component -->
-  <div class="big-container">
-      <h2>{fieldTitle}</h2>
+  <div class="bg-base-300 big-container">
+      <h2 class="bg-title">{fieldTitle}</h2>
       <div class="content">
           {#each params as courseType, index (courseType)}
               <div>
@@ -74,7 +74,7 @@
 
 
 
-<style>
+<style lang="postcss">
   h2 {
       font-size: large;
       padding-left: 5px;
@@ -84,8 +84,8 @@
   }
   .big-container {
       width: 150px;
-      border-color: aquamarine;
-      border-width: 5px;
+      border-width: 2px;
+      border-radius: 5px;
   }
   .content {
       display: flex;

@@ -29,12 +29,12 @@ export { checked, label };
 <!-- Checkbox component -->
 <label class="checkbox-label">
 <!-- <input type="checkbox" bind:checked on:click={toggleCheckbox} /> -->
-<input type="checkbox" bind:checked />
+<input class="checkbox" type="checkbox" bind:checked />
 {label}
 </label>
 
   
-<style>
+<style lang="postcss">
   /* Styling for the label to display its children inline using flex, and aligning items for consistency */
   .label {
     display: flex;
@@ -50,8 +50,10 @@ export { checked, label };
   }
 
   /* Styling for the checkbox, scaling it down and removing margins */
+
   .checkbox {
-    transform: scale(0.75); /* Scales down the checkbox to make it smaller */
-    margin-left: 2px; /* Adjusts space on the left of the checkbox */
+    transform: scale(0.75);
+    align-items: center; 
+    /* margin-left: 2px; */
   }
 </style>

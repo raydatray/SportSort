@@ -28,17 +28,17 @@
   
   </script>
   
-    <div class="big-container">
-        <h2>{fieldTitle}</h2>
+    <div class="bg-base-300 big-container">
+        <h2 class="bg-title">{fieldTitle}</h2>
         <div class="content">
             <!-- <input type="date" bind:value={selectedDate} on:change={handleDateChange} min="2024-01-01" max="2025-04-10" /> -->
-            <input type="date" bind:value={selectedDate} min="2024-01-01" max="2025-04-10" />
+            <input class="bg-base-100 datepicker" type="date" bind:value={selectedDate} min="2024-01-01" max="2025-04-10" />
         </div>
     </div>
   
   
   
-  <style>
+  <style lang="postcss">
     h2 {
         font-size: large;
         padding-left: 5px;
@@ -48,8 +48,8 @@
     }
     .big-container {
         width: 150px;
-        border-color: aquamarine;
-        border-width: 5px;
+        border-width: 2px;
+        border-radius: 5px;
     }
     .content {
         display: flex;
@@ -58,5 +58,9 @@
         padding-right: 5px;
         padding-bottom: 5px;
         gap: 5px;
+    }
+    .datepicker {
+        padding: 2px;
+        border-radius: 5px;
     }
   </style>

@@ -18,16 +18,18 @@
 	let courseSessions = [session1, session2];
 </script>
 
-<style>
+<style lang="postcss">
 	.card-container {
 		display: flex;
 		flex-direction: row;
+		border-radius: 5px;
+		border-width: 2px;
 	}
 </style>
 
 <div class="card-container"> 
 	{#each courseSessions as session, index (session)}
-	<div class="card w-96 bg-base-100 shadow-xl">
+	<div class="card bg-base-100 shadow-xl">
 		<div class="card-body">
 			<div class="card-actions justify-end">
 				<button class="btn btn-square btn-sm">

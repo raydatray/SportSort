@@ -2,12 +2,12 @@
 <script>
 
 
-    import CheckboxFilterField from './CheckboxFilterField.svelte'
+    import CheckboxFilterField from '../../components/CheckboxFilterField.svelte'
     //import getCheckedStates from './CheckboxFilterField.svelte'
 
-    import DateFilterField from './DateFilterField.svelte'
+    import DateFilterField from '../../components/DateFilterField.svelte'
     
-    let courseTypes = ["Swimming", "Weightlifting"]
+    let courseTypes = ['Swimming', 'Weightlifting']
     const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     
     let checkedCourseTypes;
@@ -90,8 +90,8 @@
     */
 </script>
 
-<div class="container">
-    <CheckboxFilterField fieldTitle="Course Types" />
+<div class="divide-primary container">
+    <CheckboxFilterField fieldTitle="Course Types" params={courseTypes}/>
     <CheckboxFilterField fieldTitle="Days Offered" params={daysOfWeek} />
     <!-- need to do a calendar picker for these two. Idk how-->
     
@@ -102,11 +102,19 @@
     <DateFilterField fieldTitle="End Date" key="end" />
 </div>
 <!-- @TODO FIGURE THIS SHIT OUT-->
-<button>Apply!</button>
+<button class="btn btn-accent-content">Apply!</button>
 
-<style>
+<style lang="postcss">
     .container {
         max-width: fit-content;
         max-height: fit-content;
+        border-radius: 5px;
+    }
+
+    button {
+        padding-bottom: 10px;
+        padding-top: 10px;
+        border-radius: 5px;
+        text-align: center;
     }
 </style>
