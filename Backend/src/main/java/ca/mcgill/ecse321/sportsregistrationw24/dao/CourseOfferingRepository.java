@@ -9,8 +9,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,16 +27,20 @@ public interface CourseOfferingRepository extends CrudRepository<CourseOffering,
       "(:startDate is null or c.startDate >= :startDate) and " +
       "(:endDate is null or c.endDate <= :endDate) and " +
       "(:courseType is null or c.courseType = :courseType) and " +
-      "(:dayOffered is null or :dayOffered member of c.daysOffered) and " +
+      "(COALESCE(:daysOffered, null) is null or c.daysOffered ALL :daysOffered) and " +
       "(:startTime is null or s.startTime >= :startTime) and " +
       "(:endTime is null or s.endTime <= :endTime) and " +
+      "(:lowPrice is null or s.price >= :lowPrice) and " +
+      "(:highPrice is null or s.price <= :highPrice) and " +
       "(:instructor is null or c.instructorAccount = :instructor)")
-    List<CourseOffering> findCourseOfferingsByFilters(@Param("startDate") Date startDate,
+    Optional<List<CourseOffering>> findCourseOfferingsByFilters(@Param("startDate") Date startDate,
                                                       @Param("endDate") Date endDate,
+                                                      @Param("startTime") Time startTime,
+                                                      @Param("endTime") Time endTime,
+                                                      @Param("lowPrice") Integer lowPrice,
+                                                      @Param("highPrice") Integer highPrice,
                                                       @Param("courseType") CourseType courseType,
-                                                      @Param("dayOffered") DayOfWeek dayOffered,
-                                                      @Param("startTime") LocalTime startTime,
-                                                      @Param("endTime") LocalTime endTime,
+                                                      @Param("dayOffered") List<DayOfWeek> daysOffered,
                                                       @Param("instructor") InstructorAccount instructor);
 
 }

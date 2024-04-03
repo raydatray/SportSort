@@ -5,23 +5,23 @@ import ca.mcgill.ecse321.sportsregistrationw24.model.CourseSession;
 import java.sql.Time;
 import java.sql.Date;
 
-public class CourseSessionDto {
+public class CourseSessionDTO {
   private Integer id;
   private Date date;
   private Time startTime;
   private Time endTime;
   private Integer courseOfferingId;
 
-  public CourseSessionDto() {}
+  public CourseSessionDTO() {}
 
-  public CourseSessionDto(Integer id, Date date, Time startTime, Time endTime, Integer courseOfferingId) {
+  public CourseSessionDTO(Integer id, Date date, Time startTime, Time endTime, Integer courseOfferingId) {
     this.id = id;
     this.date = date;
     this.startTime = startTime;
     this.endTime = endTime;
   }
 
-  public CourseSessionDto(CourseSession aCourseSession) {
+  public CourseSessionDTO(CourseSession aCourseSession) {
     this(aCourseSession.getId(), aCourseSession.getDate(), aCourseSession.getStartTime(), aCourseSession.getEndTime(), aCourseSession.getCourseOffering().getId());
   }
 

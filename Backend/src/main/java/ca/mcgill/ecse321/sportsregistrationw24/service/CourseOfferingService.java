@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Date;
 
+import java.sql.Time;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Service
 public class CourseOfferingService {
@@ -27,7 +27,7 @@ public class CourseOfferingService {
   private RoomRepository roomRepository;
 
   @Transactional
-  public void createCourseOffering(String userToken, Date aStartDate, Date aEndDate, List<DayOfWeek> aDaysOffered, Integer aRoomId, Integer aCourseTypeId){
+  public void createCourseOffering(String userToken, Date aStartDate, Date aEndDate, Integer aPrice, List<DayOfWeek> aDaysOffered, Integer aRoomId, Integer aCourseTypeId){
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     if (!user.getUserType().equals("INSTRUCTOR")){
@@ -58,6 +58,7 @@ public class CourseOfferingService {
 
     courseOffering.setStartDate(aStartDate);
     courseOffering.setEndDate(aEndDate);
+    courseOffering.setPrice(aPrice);
     courseOffering.setDaysOffered(aDaysOffered);
     courseOffering.setInstructorAccount((InstructorAccount) user);
     courseOffering.setRoom(foundRoom);
@@ -67,6 +68,7 @@ public class CourseOfferingService {
   }
 
   //Do we need this?
+  @Deprecated
   @Transactional
   public CourseOffering getCourseOfferingById(String userToken, Integer aId) {
     CourseOffering foundCourseOffering = courseOfferingRepository.findById(aId).orElse(null);
@@ -96,9 +98,21 @@ public class CourseOfferingService {
   }
 
   @Transactional
-  public List<CourseOffering> getAllCourseOfferings(){
-    //FIX TO ADD FILTERS
-    return iterableToArrayList(courseOfferingRepository.findAll());
+  public List<CourseOffering> getAllCourseOfferings(Date lowDate, Date highDate,
+                                                    Integer lowPrice, Integer highPrice,
+                                                    Time lowTime, Time highTime,
+                                                    List<DayOfWeek> daysOffered,
+                                                    Integer courseTypeId,
+                                                    Integer instructorId){
+    CourseType courseType = courseTypeRepository.findById(courseTypeId).orElse(null);
+    InstructorAccount instructor = (InstructorAccount) userAccountRepository.findById(instructorId).orElse(null);
+    List<CourseOffering> foundOfferings = courseOfferingRepository.findCourseOfferingsByFilters(lowDate, highDate, lowTime, highTime, lowPrice, highPrice, courseType, daysOffered, instructor).orElse(null);
+
+    if (foundOfferings == null) {
+      throw new IllegalArgumentException("No course offerings found with the provided information!");
+    }
+
+    return foundOfferings;
   }
 
   @Transactional

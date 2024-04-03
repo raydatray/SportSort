@@ -7,18 +7,18 @@ import java.util.List;
 public class CourseOfferingCO {
   private Date startDate;
   private Date endDate;
+  private Integer price;
   private List<DayOfWeek> daysOffered;
-  private String instructorToken;
   private Integer roomId;
   private Integer courseTypeId;
 
   public CourseOfferingCO() {}
 
-  public CourseOfferingCO(Date aStartDate, Date aEndDate, List<DayOfWeek> aDaysOffered, String aInstructorToken, Integer aRoomId, Integer aCourseTypeId) {
+  public CourseOfferingCO(Date aStartDate, Date aEndDate, Integer aPrice, List<DayOfWeek> aDaysOffered, Integer aRoomId, Integer aCourseTypeId) {
     this.startDate = aStartDate;
     this.endDate = aEndDate;
+    this.price = aPrice;
     this.daysOffered = aDaysOffered;
-    this.instructorToken = aInstructorToken;
     this.roomId = aRoomId;
     this.courseTypeId = aCourseTypeId;
   }
@@ -28,8 +28,8 @@ public class CourseOfferingCO {
   public Date getEndDate() {
     return this.endDate;
   }
+  public Integer getPrice() { return this.price; }
   public List<DayOfWeek> getDaysOffered() { return this.daysOffered; }
-  public String getInstructorToken() { return this.instructorToken; }
   public Integer getRoomId() {return this.roomId; }
   public Integer getCourseTypeId() { return this.courseTypeId; }
 }

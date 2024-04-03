@@ -28,7 +28,7 @@ public class CourseSessionService {
 
     @Transactional
     //Use when you are creating a singular courseSession (Course Offerings where you know for a fact will only have one associated session)
-    public CourseSession createCourseSession (Date aDate, Time aStartTime, Time aEndTime, Integer aCourseOfferindId) {
+    public void createCourseSession (Date aDate, Time aStartTime, Time aEndTime, Integer aCourseOfferindId) {
         // NULL POINTER CHECKS
         if (aDate == null) {
             throw new IllegalArgumentException("Date field cannot be null");
@@ -46,11 +46,13 @@ public class CourseSessionService {
             throw new IllegalArgumentException("Session start time cannot be after session end time");
         }
         // SESSION DURATION CHECK (CANNOT BE OVER 1 HOUR)
-        long sessionDuration = Math.abs(aStartTime.getTime() - aEndTime.getTime());
-        long oneHour = 60 * 60 * 1000;
-        if (sessionDuration > oneHour) {
-            throw new IllegalArgumentException("Course sessions cannot last for over an hour");
-        }
+        /**
+         long sessionDuration = Math.abs(aStartTime.getTime() - aEndTime.getTime());
+         long oneHour = 60 * 60 * 1000;
+         if (sessionDuration > oneHour) {
+         throw new IllegalArgumentException("Course sessions cannot last for over an hour");
+         }
+         **/
 
         CourseOffering foundCourseOffering = courseOfferingRepository.findById(aCourseOfferindId).orElse(null);
 
@@ -72,13 +74,11 @@ public class CourseSessionService {
         newCourseSession.setCourseOffering(foundCourseOffering);
 
         courseSessionRepository.save(newCourseSession);
-
-        return newCourseSession;
     }
 
     @Transactional
     //Use when you are creating courseSessions from a courseOffering with recurring sessions
-    public ArrayList<CourseSession> createCourseSessions (HashMap<DayOfWeek, ArrayList<Time>> dayTimeMapping, Integer aCourseOfferingID) {
+    public void createCourseSessions (HashMap<DayOfWeek, ArrayList<Time>> dayTimeMapping, Integer aCourseOfferingID) {
         if (dayTimeMapping == null) {
             throw new IllegalArgumentException("Day time mapping field cannot be null");
         } else if (aCourseOfferingID == null) {
@@ -105,8 +105,6 @@ public class CourseSessionService {
             generatedDate = generatedDate.plusDays(1);
         }
 
-        ArrayList<CourseSession> generatedCourseSessions = new ArrayList<CourseSession>();
-
         for (Date sessionDate : sessionDates) {
             CourseSession newCourseSession = new CourseSession();
 
@@ -115,12 +113,9 @@ public class CourseSessionService {
             newCourseSession.setEndTime(dayTimeMapping.get(sessionDate.toLocalDate().getDayOfWeek()).get(1));
             newCourseSession.setCourseOffering(foundCourseOffering);
 
-            generatedCourseSessions.add(newCourseSession);
-
             courseSessionRepository.save(newCourseSession);
         }
 
-        return generatedCourseSessions;
     }
 
     @Deprecated

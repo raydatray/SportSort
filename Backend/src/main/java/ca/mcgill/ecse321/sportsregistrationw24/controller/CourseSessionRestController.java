@@ -1,6 +1,6 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.CourseSessionDto;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.CourseSessionDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseSession;
 import ca.mcgill.ecse321.sportsregistrationw24.service.CourseSessionService;
 
@@ -21,33 +21,27 @@ public class CourseSessionRestController {
   @Autowired
   private CourseSessionService service;
 
-  @PostMapping(value = {
-    "courseSession/createSession",
-    "courseSession/createSession/"
-  })
-  public ResponseEntity<?> createCourseSession(@RequestBody singleCourseSessionCO courseSessionCO) {
+  @PostMapping(value = {"courseSessions/createSession"})
+  public ResponseEntity<?> createCourseSession(@RequestHeader String userToken, @RequestBody singleCourseSessionCO courseSessionCO) {
     try {
-      CourseSession createdCourseSession = service.createCourseSession(courseSessionCO.getDate(), courseSessionCO.getStartTime(), courseSessionCO.getEndTime(), courseSessionCO.getCourseOfferingId());
-      return ResponseEntity.status(HttpStatus.CREATED).body(new CourseSessionDto(createdCourseSession));
+      service.createCourseSession(courseSessionCO.getDate(), courseSessionCO.getStartTime(), courseSessionCO.getEndTime(), courseSessionCO.getCourseOfferingId());
+      return ResponseEntity.status(HttpStatus.CREATED).body("Course session created successfully");
     } catch (Exception e) {
       return ResponseEntity. badRequest().body(e.getMessage());
     }
   }
 
-  @PostMapping(value = {
-    "courseSession/createSessions",
-    "courseSession/createSessions/"
-  })
+  @PostMapping(value = {"courseSession/createSessions"})
   public ResponseEntity<?> createCourseSessions(@RequestBody multipleClassSessionsCO courseSessionsCO) {
      try {
-       ArrayList<CourseSession> createdCourseSessions = service.createCourseSessions(courseSessionsCO.getDayTimeMapping(), courseSessionsCO.getCourseOfferingId());
-       List<CourseSessionDto> courseSessionDtos = new ArrayList<>();
+       service.createCourseSessions(courseSessionsCO.getDayTimeMapping(), courseSessionsCO.getCourseOfferingId());
+       List<CourseSessionDTO> courseSessionDTOS = new ArrayList<>();
 
        for (CourseSession courseSession : createdCourseSessions) {
-         courseSessionDtos.add(new CourseSessionDto(courseSession));
+         courseSessionDTOS.add(new CourseSessionDTO(courseSession));
        }
 
-       return ResponseEntity.status(HttpStatus.CREATED).body(courseSessionDtos);
+       return ResponseEntity.status(HttpStatus.CREATED).body("Course sessions created successfully");
      } catch (Exception e) {
        return ResponseEntity.badRequest().body(e.getMessage());
      }
@@ -60,13 +54,13 @@ public class CourseSessionRestController {
   //Owner ONLY
   public ResponseEntity<?> getAllSessions() {
     ArrayList<CourseSession> allCourseSessions = service.getAllCourseSessions();
-    List<CourseSessionDto> courseSessionDtos = new ArrayList<>();
+    List<CourseSessionDTO> courseSessionDTOS = new ArrayList<>();
 
     for (CourseSession courseSession : allCourseSessions) {
-      courseSessionDtos.add(new CourseSessionDto(courseSession));
+      courseSessionDTOS.add(new CourseSessionDTO(courseSession));
     }
 
-    return ResponseEntity.ok().body(courseSessionDtos);
+    return ResponseEntity.ok().body(courseSessionDTOS);
   }
 
   @GetMapping(value = {
@@ -76,7 +70,7 @@ public class CourseSessionRestController {
   public ResponseEntity<?> getSession(@RequestParam Integer courseSessionId) {
     try {
       CourseSession courseSession = service.getCourseSession(courseSessionId);
-      return ResponseEntity.ok().body(new CourseSessionDto(courseSession));
+      return ResponseEntity.ok().body(new CourseSessionDTO(courseSession));
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
@@ -90,13 +84,13 @@ public class CourseSessionRestController {
   public ResponseEntity<?> getSessionsByOffering(@RequestParam Integer courseOfferingId) {
     try {
       ArrayList<CourseSession> allCourseSessions = service.getCourseSessionsByCourseOfferingID(courseOfferingId);
-      List<CourseSessionDto> courseSessionDtos = new ArrayList<>();
+      List<CourseSessionDTO> courseSessionDTOS = new ArrayList<>();
 
       for (CourseSession courseSession : allCourseSessions) {
-        courseSessionDtos.add(new CourseSessionDto(courseSession));
+        courseSessionDTOS.add(new CourseSessionDTO(courseSession));
       }
 
-      return ResponseEntity.ok().body(courseSessionDtos);
+      return ResponseEntity.ok().body(courseSessionDTOS);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }

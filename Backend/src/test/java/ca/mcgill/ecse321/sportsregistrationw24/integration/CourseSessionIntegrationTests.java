@@ -1,7 +1,7 @@
 package ca.mcgill.ecse321.sportsregistrationw24.integration;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.*;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.CourseSessionDto;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.CourseSessionDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.multipleClassSessionsCO;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.singleCourseSessionCO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
@@ -92,7 +92,7 @@ public class CourseSessionIntegrationTests {
   }
 
   private int testCreateCourseSession(Date date, Time startTime, Time endTime, Integer courseOfferingId) {
-    ResponseEntity<CourseSessionDto> response = client.postForEntity("/courseSession/createSession", new singleCourseSessionCO(date, startTime, endTime, courseOfferingId), CourseSessionDto.class);
+    ResponseEntity<CourseSessionDTO> response = client.postForEntity("/courseSession/createSession", new singleCourseSessionCO(date, startTime, endTime, courseOfferingId), CourseSessionDTO.class);
 
     assertNotNull(response);
     assertEquals(HttpStatus.CREATED, response.getStatusCode(), "Response has correct status");
@@ -106,7 +106,7 @@ public class CourseSessionIntegrationTests {
   }
 
   private void testGetCourseSession(int id) {
-    ResponseEntity<CourseSessionDto> response = client.getForEntity("/courseSession/getSession?courseSessionId=" + id, CourseSessionDto.class);
+    ResponseEntity<CourseSessionDTO> response = client.getForEntity("/courseSession/getSession?courseSessionId=" + id, CourseSessionDTO.class);
 
     assertNotNull(response);
     assertEquals(HttpStatus.OK, response.getStatusCode(), "Response has correct status");
