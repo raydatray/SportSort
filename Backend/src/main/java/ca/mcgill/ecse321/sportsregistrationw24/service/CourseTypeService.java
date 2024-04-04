@@ -98,7 +98,7 @@ public class CourseTypeService {
       throw new IllegalArgumentException("Customers cannot view course types!");
     }
 
-    List<CourseType> foundCourseTypes = courseTypeRepository.findByInstructorAccount((InstructorAccount) user).orElse(null);
+    List<CourseType> foundCourseTypes = courseTypeRepository.findByStaffAccount((StaffAccount) user).orElse(null);
 
     if (foundCourseTypes == null) {
       throw new IllegalArgumentException("No proposed course types found!");

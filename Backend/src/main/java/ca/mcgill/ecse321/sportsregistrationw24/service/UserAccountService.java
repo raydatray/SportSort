@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.service;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 
+import ca.mcgill.ecse321.sportsregistrationw24.model.OwnerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
@@ -12,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -141,7 +145,7 @@ public class UserAccountService {
     if (discriminators == null) {
       return iterableToArrayList(userAccountRepository.findAll());
     } else {
-      List<UserAccount> foundUsers = userAccountRepository.findByUserType(discriminators).orElse(null);
+      List<UserAccount> foundUsers = userAccountRepository.findByUserType(mapDiscriminatorsToClasses(discriminators)).orElse(null);
 
       if (foundUsers == null) {
         throw new IllegalArgumentException("No users found with discriminator: " + discriminators);
@@ -166,5 +170,22 @@ public class UserAccountService {
     }
 
     userAccountRepository.delete(existingUserAccount);
+  }
+
+  private List<Class<?>> mapDiscriminatorsToClasses(List<String> discriminators) {
+    Map<String, Class<?>> discriminatorMap = new HashMap<>();
+    discriminatorMap.put("CUSTOMER", CustomerAccount.class);
+    discriminatorMap.put("OWNER", OwnerAccount.class);
+    discriminatorMap.put("INSTRUCTOR", InstructorAccount.class);
+
+    List<Class<?>> classes = new ArrayList<>();
+    for (String discriminator : discriminators) {
+      Class<?> clazz = discriminatorMap.get(discriminator);
+      if (clazz != null) {
+        classes.add(clazz);
+      }
+    }
+
+    return classes;
   }
 }

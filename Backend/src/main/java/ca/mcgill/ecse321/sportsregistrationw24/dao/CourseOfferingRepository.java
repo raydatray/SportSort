@@ -27,12 +27,13 @@ public interface CourseOfferingRepository extends CrudRepository<CourseOffering,
       "(:startDate is null or c.startDate >= :startDate) and " +
       "(:endDate is null or c.endDate <= :endDate) and " +
       "(:courseType is null or c.courseType = :courseType) and " +
-      "(COALESCE(:daysOffered, null) is null or c.daysOffered ALL :daysOffered) and " +
+      "(COALESCE(:daysOffered, null) is null or (SELECT COUNT(d) FROM c.daysOffered d WHERE d NOT IN :daysOffered) = 0) and " +
       "(:startTime is null or s.startTime >= :startTime) and " +
       "(:endTime is null or s.endTime <= :endTime) and " +
-      "(:lowPrice is null or s.price >= :lowPrice) and " +
-      "(:highPrice is null or s.price <= :highPrice) and " +
+      "(:lowPrice is null or c.price >= :lowPrice) and " +
+      "(:highPrice is null or c.price <= :highPrice) and " +
       "(:instructor is null or c.instructorAccount = :instructor)")
+
     Optional<List<CourseOffering>> findCourseOfferingsByFilters(@Param("startDate") Date startDate,
                                                       @Param("endDate") Date endDate,
                                                       @Param("startTime") Time startTime,
@@ -40,7 +41,7 @@ public interface CourseOfferingRepository extends CrudRepository<CourseOffering,
                                                       @Param("lowPrice") Integer lowPrice,
                                                       @Param("highPrice") Integer highPrice,
                                                       @Param("courseType") CourseType courseType,
-                                                      @Param("dayOffered") List<DayOfWeek> daysOffered,
+                                                      @Param("daysOffered") List<DayOfWeek> daysOffered,
                                                       @Param("instructor") InstructorAccount instructor);
 
 }

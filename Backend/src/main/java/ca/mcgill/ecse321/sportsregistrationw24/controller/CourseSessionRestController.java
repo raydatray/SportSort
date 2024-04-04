@@ -12,6 +12,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class CourseSessionRestController {
   @PostMapping(value = {"courseSessions/createSession"})
   public ResponseEntity<?> createCourseSession(@RequestHeader String userToken, @RequestBody singleCourseSessionCO courseSessionCO) {
     try {
-      service.createCourseSession(courseSessionCO.getDate(), courseSessionCO.getStartTime(), courseSessionCO.getEndTime(), courseSessionCO.getCourseOfferingId());
+      service.createCourseSession(userToken, courseSessionCO.getDate(), courseSessionCO.getStartTime(), courseSessionCO.getEndTime(), courseSessionCO.getCourseOfferingId());
       return ResponseEntity.status(HttpStatus.CREATED).body("Course session created successfully");
     } catch (Exception e) {
       return ResponseEntity. badRequest().body(e.getMessage());
@@ -32,28 +34,25 @@ public class CourseSessionRestController {
   }
 
   @PostMapping(value = {"courseSession/createSessions"})
-  public ResponseEntity<?> createCourseSessions(@RequestBody multipleClassSessionsCO courseSessionsCO) {
+  public ResponseEntity<?> createCourseSessions(@RequestHeader String userToken, @RequestBody multipleClassSessionsCO courseSessionsCO) {
      try {
-       service.createCourseSessions(courseSessionsCO.getDayTimeMapping(), courseSessionsCO.getCourseOfferingId());
-       List<CourseSessionDTO> courseSessionDTOS = new ArrayList<>();
-
-       for (CourseSession courseSession : createdCourseSessions) {
-         courseSessionDTOS.add(new CourseSessionDTO(courseSession));
-       }
-
+       service.createCourseSessions(userToken, courseSessionsCO.getDayTimeMapping(), courseSessionsCO.getCourseOfferingId());
        return ResponseEntity.status(HttpStatus.CREATED).body("Course sessions created successfully");
      } catch (Exception e) {
        return ResponseEntity.badRequest().body(e.getMessage());
      }
   }
 
-  @GetMapping(value = {
-    "courseSession/getAllSessions",
-    "courseSession/getAllSessions/"
-  })
+  @GetMapping(value = {"courseSession/getAllSessions"})
   //Owner ONLY
-  public ResponseEntity<?> getAllSessions() {
-    ArrayList<CourseSession> allCourseSessions = service.getAllCourseSessions();
+  public ResponseEntity<?> getAllSessions(@RequestHeader String userToken,
+                                          @RequestParam(required = false) Date lD,
+                                          @RequestParam(required = false) Date uD,
+                                          @RequestParam(required = false) Time lT,
+                                          @RequestParam(required = false) Time uT,
+                                          @RequestParam(required = false) Integer iId
+                                          ){
+    List<CourseSession> allCourseSessions = service.getAllCourseSessions(userToken, lD, uD, lT, uT, iId);
     List<CourseSessionDTO> courseSessionDTOS = new ArrayList<>();
 
     for (CourseSession courseSession : allCourseSessions) {
@@ -63,10 +62,7 @@ public class CourseSessionRestController {
     return ResponseEntity.ok().body(courseSessionDTOS);
   }
 
-  @GetMapping(value = {
-    "courseSession/getSession",
-    "courseSession/getSession/"
-  })
+  /**
   public ResponseEntity<?> getSession(@RequestParam Integer courseSessionId) {
     try {
       CourseSession courseSession = service.getCourseSession(courseSessionId);
@@ -74,16 +70,13 @@ public class CourseSessionRestController {
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
-
   }
+   **/
 
-  @GetMapping(value = {
-          "courseSession/getSessionsByOffering",
-          "courseSession/getSessionsByOffering/"
-  })
+  @GetMapping(value = {"courseSession/getSessionsByOffering"})
   public ResponseEntity<?> getSessionsByOffering(@RequestParam Integer courseOfferingId) {
     try {
-      ArrayList<CourseSession> allCourseSessions = service.getCourseSessionsByCourseOfferingID(courseOfferingId);
+      List<CourseSession> allCourseSessions = service.getCourseSessionsByCourseOfferingID(courseOfferingId);
       List<CourseSessionDTO> courseSessionDTOS = new ArrayList<>();
 
       for (CourseSession courseSession : allCourseSessions) {
@@ -96,22 +89,16 @@ public class CourseSessionRestController {
     }
   }
 
-  @DeleteMapping(value = {
-    "courseSession/deleteSession",
-    "courseSession/deleteSession/"
-  })
-  public ResponseEntity<?> deleteSession(@RequestParam Integer sessionId) {
-    service.deleteCourseSessionByID(sessionId);
+  @DeleteMapping(value = {"courseSession/deleteSession"})
+  public ResponseEntity<?> deleteSession(@RequestHeader String userToken, @RequestParam Integer sessionId) {
+    service.deleteCourseSessionByID(userToken, sessionId);
     return ResponseEntity.ok().body("Course Session deleted successfully");
   }
 
-  @DeleteMapping(value = {
-    "courseSession/deleteSessionsByOffering",
-    "courseSession/deleteSessionsByOffering/"
-  })
-  public ResponseEntity<?> deleteSessionsByOffering(@RequestParam Integer courseOfferingId) {
+  @DeleteMapping(value = {"courseSession/deleteSessionsByOffering"})
+  public ResponseEntity<?> deleteSessionsByOffering(@RequestHeader String userToken, @RequestParam Integer courseOfferingId) {
     try {
-      service.deleteCourseSessionsByCourseOfferingID(courseOfferingId);
+      service.deleteCourseSessionsByCourseOfferingID(userToken, courseOfferingId);
       return ResponseEntity.ok().body("Course Sessions deleted successfully");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());

@@ -2,7 +2,6 @@ package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dto.PaymentInfo.PaymentInfoCO;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.PaymentInfo.PaymentInfoDTO;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.PaymentInfo.PaymentInfoDto;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.PaymentInfo.PaymentInfoUpdateCO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.PaymentInfo;
 import ca.mcgill.ecse321.sportsregistrationw24.service.PaymentInfoService;

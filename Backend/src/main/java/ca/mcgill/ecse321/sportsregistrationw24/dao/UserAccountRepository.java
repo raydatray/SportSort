@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface UserAccountRepository extends CrudRepository<UserAccount, Integer> {
   Optional<UserAccount> findUserByEmail(String newEmail);
   Optional<UserAccount> findUserByToken(String token);
-  @Query("SELECT u FROM UserAccount u WHERE TYPE(u) IN :discriminators")
-  Optional<List<UserAccount>> findByUserType(@Param("discriminator") List<String> discriminators);
+  @Query("SELECT u FROM UserAccount u WHERE TYPE(u) IN :types")
+  Optional<List<UserAccount>> findByUserType(@Param("types") List<Class<?>> types);
   void deleteByEmail(String email);
 }
