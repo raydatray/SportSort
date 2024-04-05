@@ -6,7 +6,7 @@
 
 <div class="h-screen grid grid-cols-[240px_1fr] gap-x-1 p-2" data-theme="north">
   <nav class="menu justify-items-center">
-  <ul class="p-3.5 m-1 menu-horizontal md:menu-vertical bg-base-200 rounded-box gap-y-0.5">
+  <ul class="p-3.5 m-1 menu-horizontal md:menu-vertical bg-base-300 rounded-box gap-y-0.5">
     <li class="flex-row justify-center">
       <img class = "max-h-100px" src={Logo} alt="Logo"/>
     </li>
