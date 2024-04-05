@@ -10,5 +10,6 @@
         height: 100%;
         margin-bottom: 0.75%;
         padding: 1%;
+        right: 0;
     }
 </style>

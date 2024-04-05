@@ -4,23 +4,21 @@
   import Logo from "../assets/logo.png";
 </script>
 
-<div class="container" data-theme="north">
-  <nav class="menu">
-    <ul class="menu-horizontal md:menu-vertical bg-base-200 rounded-box">
-      <li class="logo-container">
-        <img src={Logo} alt="Logo" class="logo"/>
-      </li>
-      <li class="spacer1"></li>
-      <li><a> <IconHome /> Home </a></li>
-      <li><a> <IconSchool /> Course Offerings </a></li>
-      <li><a> <IconHistory /> Course History </a></li>
-      <li><a> <IconTicket /> Registrations </a></li>
-      <li class="spacer bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
-      <li class="spacer2"></li> <!-- This spacer will now push the settings and logout to the bottom -->
-      <li><a> <IconSettings /> Account Settings </a></li>
-      <li><a> <IconLogout /> Logout </a></li>
-    </ul>
-  </nav>
+<div class="h-screen grid grid-cols-[240px_1fr] gap-x-1 p-2" data-theme="north">
+  <ul class="p-4 m-2 menu-horizontal md:menu-vertical bg-base-200 rounded-box gap-y-1">
+    <li class="flex-row justify-center p-2 m-1">
+      <img class = "max-h-100px" src={Logo} alt="Logo"/>
+    </li>
+    <li class="h-0.5 spacer2 bg-base-300"></li> 
+    <li class = "gap-y-.5 m-2"><a class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
+    <li class = "gap-y-.5 m-2"><a class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
+    <li class = "gap-y-.5 m-2"><a class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
+    <li class = "gap-y-.5 m-2"><a class = "flex items-center space-x-2 p-0.2"> <IconTicket /> Registrations </a></li>
+    <li class="spacer bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
+    <li class="h-0.5 spacer2 bg-base-300"></li> 
+    <li class = "gap-y-.5 m-2"><a class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
+    <li class = "gap-y-.5 m-2"><a class = "flex items-center space-x-2 p-0.2"> <IconLogout /> Logout </a></li>
+  </ul>
   <div class="content">
     <slot />
     <footer class="p-4 footer bg-base-300 text-base-content">
@@ -32,20 +30,15 @@
 </div>
 
 <style lang="postcss">
-  html, body {
-    overflow-x: hidden;
-    height: 100%;
-    margin: 0;
-  }
-
   .container {
     display: grid;
     grid-template-columns: 240px 1fr;
+    grid-template-areas: "menu content";
     min-height: 100vh;
     overflow-x: hidden;
-    bottom: 0;
+    width: 100vw; /* Use viewport width to ensure full width coverage */
   }
-
+  
   .menu {
     background-color: rgba(255, 255, 255, 0.05);
     height: 100vh;
