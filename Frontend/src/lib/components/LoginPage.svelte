@@ -25,15 +25,15 @@
 <style>
     /* Add any extra styles here */
     h1 {
-        font-size: 42px;
-        margin-bottom: 50px;
-        letter-spacing: 3px;
+        font-size: 3rem;
+        margin-bottom: 4rem;
+        letter-spacing: 0.2rem;
         font-weight: bold;
     }
 
     button {
         width: 60%;
-        margin-top: 25px;
+        margin-top: 2rem;
     }
 
     label {
@@ -53,11 +53,12 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        gap: 22px;
-        padding: 50px;
+        gap: 1.2rem;
+        padding: 4rem;
+        border-radius: 22px;
     }
 
     .sign-up-footer {
-        margin-top: 50px;
+        margin-top: 4rem;
     }
 </style>
