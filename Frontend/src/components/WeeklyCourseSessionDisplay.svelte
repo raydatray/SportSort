@@ -32,8 +32,8 @@
 		display: grid;
 
         flex-wrap: wrap;
-		border-radius: 5px;
-		border-width: 2px;
+		border-radius: 0.3125rem;
+		border-width: 0.125rem;
 	}
 
     .card {
