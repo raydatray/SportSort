@@ -29,31 +29,19 @@ export { checked, label };
 <!-- Checkbox component -->
 <label class="checkbox-label">
 <!-- <input type="checkbox" bind:checked on:click={toggleCheckbox} /> -->
-<input class="checkbox" type="checkbox" bind:checked />
+<input class="checkbox checkbox-xs" type="checkbox" bind:checked />
 {label}
 </label>
 
   
 <style lang="postcss">
-  /* Styling for the label to display its children inline using flex, and aligning items for consistency */
-  .label {
-    display: flex;
-    align-items: center;
-    /* Removes any inherent space between inline or inline-block elements */
-    font-size: 0;
-  }
-
-  /* Styling for the label text, reducing right margin to bring it closer to the checkbox */
-  .label-text {
-    margin-left: 2px; /* Reduced space between label text and checkbox */
-    font-size: 16px; /* Reset font size after setting it to 0 in .label */
-  }
-
-  /* Styling for the checkbox, scaling it down and removing margins */
-
   .checkbox {
-    transform: scale(0.75);
+    /* transform: scale(0.75); */
     align-items: center; 
-    /* margin-left: 2px; */
+    margin-left: 0.125rem;
+  }
+
+  .checkbox-label {
+    align-items: center;
   }
 </style>

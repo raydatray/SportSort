@@ -29,10 +29,10 @@
   </script>
   
     <div class="bg-base-300 big-container">
-        <h2 class="bg-title">{fieldTitle}</h2>
+        <h2 class="px-1 pt-2 pb-1">{fieldTitle}</h2>
         <div class="content">
             <!-- <input type="date" bind:value={selectedDate} on:change={handleDateChange} min="2024-01-01" max="2025-04-10" /> -->
-            <input class="bg-base-100 datepicker" type="date" bind:value={selectedDate} min="2024-01-01" max="2025-04-10" />
+            <input class="bg-base-200 datepicker" type="date" bind:value={selectedDate} min="2024-01-01" max="2025-04-10" />
         </div>
     </div>
   
@@ -41,26 +41,23 @@
   <style lang="postcss">
     h2 {
         font-size: large;
-        padding-left: 5px;
-        padding-right: 5px;
-        padding-top: 5px;
-        padding-bottom: 10px;
+        font-weight: 500;
     }
     .big-container {
-        width: 150px;
-        border-width: 2px;
-        border-radius: 5px;
+        width: 10rem;
+        border-width: 0.125rem;
+        border-radius: 0.3125rem;
     }
     .content {
         display: flex;
         flex-direction: column;
-        padding-left: 5px;
-        padding-right: 5px;
-        padding-bottom: 5px;
-        gap: 5px;
+        padding-left: 0.3125rem;
+        padding-right: 0.3125rem;
+        padding-bottom: 0.3125rem;
+        gap: 0.3125rem;
     }
     .datepicker {
-        padding: 2px;
-        border-radius: 5px;
+        padding: 0.125rem;
+        border-radius: 0.3125rem;
     }
   </style>
