@@ -38,7 +38,7 @@ public class RoomService {
       throw new IllegalArgumentException("A room with this capacity cannot exist");
     }
 
-    if (aRoomNumber < 0) {
+    if (aRoomNumber <= 0) {
       throw new IllegalArgumentException("Room number cannot be negative");
     }
 

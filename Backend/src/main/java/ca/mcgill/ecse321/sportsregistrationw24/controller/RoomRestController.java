@@ -21,8 +21,8 @@ public class RoomRestController {
   @Autowired
   private RoomService service;
 
-  @PostMapping(value = {"/room/create"})
-  public ResponseEntity<?> createRoom(@RequestParam String userToken, @RequestBody RoomCO roomCO) {
+  @PostMapping(value = {"/rooms/create"})
+  public ResponseEntity<?> createRoom(@RequestHeader String userToken, @RequestBody RoomCO roomCO) {
     try {
       String name = roomCO.getName();
       Integer floorNumber = roomCO.getFloorNumber();
@@ -36,8 +36,8 @@ public class RoomRestController {
     }
   }
 
-  @PutMapping(value = {"/room/update"})
-  public ResponseEntity<?> updateRoom(@RequestParam String userToken, @RequestBody RoomUpdateCO roomUpdateCO) {
+  @PutMapping(value = {"/rooms/update"})
+  public ResponseEntity<?> updateRoom(@RequestHeader String userToken, @RequestBody RoomUpdateCO roomUpdateCO) {
     try {
       Integer id = roomUpdateCO.getId();
       String name = roomUpdateCO.getName();
@@ -62,7 +62,7 @@ public class RoomRestController {
   }
   **/
 
-  @GetMapping(value = {"/room/getAll"})
+  @GetMapping(value = {"/rooms/getAll"})
   public ResponseEntity<?> getRooms(@RequestHeader String userToken,
                                     @RequestParam(required = false) Integer floorNumber,
                                     @RequestParam(required = false) Integer lowCapacity,
@@ -77,7 +77,7 @@ public class RoomRestController {
     }
   }
 
-  @DeleteMapping(value = {"/room/delete"})
+  @DeleteMapping(value = {"/rooms/delete"})
   public ResponseEntity<?> deleteRoom(@RequestHeader String userToken, @RequestParam Integer id) {
     try {
       service.deleteRoom(userToken, id);

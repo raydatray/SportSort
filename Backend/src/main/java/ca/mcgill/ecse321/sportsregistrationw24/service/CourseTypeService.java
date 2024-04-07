@@ -43,6 +43,7 @@ public class CourseTypeService {
 
     CourseType courseType = new CourseType();
     courseType.setCourseName(aCourseName);
+    courseType.setStaffAccount((StaffAccount) user);
     courseTypeRepository.save(courseType);
   }
 
@@ -60,7 +61,7 @@ public class CourseTypeService {
   }
 
   @Transactional
-  public List<CourseType> getAllCourseTypes(String userToken, boolean approved, boolean rejected, Integer staffId) {
+  public List<CourseType> getAllCourseTypes(String userToken, Boolean approved, Boolean rejected, Integer staffId) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     // Customers cannot view course types
@@ -68,7 +69,15 @@ public class CourseTypeService {
       throw new IllegalArgumentException("Customers cannot view course types!");
     }
 
-    UserAccount staff = userAccountRepository.findById(staffId).orElse(null);
+    UserAccount staff = null;
+
+    if (staffId != null) {
+      staff = userAccountRepository.findById(staffId).orElse(null);
+
+      if (staff == null) {
+        throw new IllegalArgumentException("Staff does not exist!");
+      }
+    }
 
     List<CourseType> foundCourseTypes = courseTypeRepository.findByFilters(approved, rejected, (StaffAccount) staff).orElse(null);
 
@@ -120,6 +129,10 @@ public class CourseTypeService {
 
     if (courseType == null) {
       throw new IllegalArgumentException("Course Type does not exist!");
+    }
+
+    if (courseType.getRejected()){
+      throw new IllegalArgumentException("Course Type has been rejected!");
     }
 
     courseType.setApproved(!courseType.getApproved());

@@ -43,8 +43,8 @@ public class CourseTypeRestController {
 
   @GetMapping(value = {"/courseTypes/getAll"})
   public ResponseEntity<?> getAllCourseTypes(@RequestHeader String userToken,
-                                             @RequestParam(required = false) boolean approved,
-                                             @RequestParam(required = false) boolean rejected,
+                                             @RequestParam(required = false) Boolean approved,
+                                             @RequestParam(required = false) Boolean rejected,
                                              @RequestParam(required = false) Integer instructorId){
     try {
       List<CourseType> courseTypes = service.getAllCourseTypes(userToken, approved, rejected, instructorId);
