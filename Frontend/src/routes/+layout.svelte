@@ -2,6 +2,7 @@
   import "../app.css";
   import { IconHome, IconSchool, IconHistory, IconTicket, IconSettings, IconLogout } from '@tabler/icons-svelte';
   import Logo from "../assets/logo.png";
+  import RegistrationFilter from "$lib/components/RegistrationFilter.svelte";
 </script>
 
 <div class="h-screen grid grid-cols-[240px_1fr] gap-x-1 p-2 mr-2" data-theme="north">
@@ -22,6 +23,7 @@
   </ul>
 </nav>
   <div class="content">
+      <RegistrationFilter/>
     <slot />
     <footer class="p-4 footer bg-base-300 text-base-content">
       <aside>

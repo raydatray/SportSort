@@ -99,37 +99,48 @@ public class CourseOfferingService {
 
   @Transactional
   public List<CourseOffering> getAllCourseOfferings(Date lowDate, Date highDate,
-                                                    Integer lowPrice, Integer highPrice,
+                                                    Integer highPrice,
                                                     Time lowTime, Time highTime,
                                                     List<DayOfWeek> daysOffered,
-                                                    Integer courseTypeId,
-                                                    Integer roomId,
-                                                    Integer instructorId){
-    CourseType courseType = null;
-    if (courseTypeId != null) {
-      courseType = courseTypeRepository.findById(courseTypeId).orElse(null);
-      if (courseType == null) {
-        throw new IllegalArgumentException("Course Type not found!");
+                                                    List<Integer> courseTypeIds,
+                                                    List<Integer> roomIds,
+                                                    List<Integer> instructorIds){
+
+    List<CourseType> foundTypes = new ArrayList<>();
+    if (courseTypeIds != null) {
+      for (Integer courseTypeId : courseTypeIds) {
+        CourseType foundType = courseTypeRepository.findById(courseTypeId).orElse(null);
+        if (foundType == null) {
+          throw new IllegalArgumentException("Course Type not found!");
+        }
+        foundTypes.add(foundType);
       }
     }
 
-    Room room = null;
-    if (roomId != null) {
-      room = roomRepository.findById(roomId).orElse(null);
-      if (room == null) {
-        throw new IllegalArgumentException("Room not found!");
+    List<Room> foundRooms = new ArrayList<>();
+    if (roomIds != null) {
+      for (Integer roomId : roomIds) {
+        Room foundRoom = roomRepository.findById(roomId).orElse(null);
+        if (foundRoom == null) {
+          throw new IllegalArgumentException("Room not found!");
+        }
+        foundRooms.add(foundRoom);
       }
     }
 
-    InstructorAccount instructor = null;
-    if (instructorId != null) {
-      instructor = (InstructorAccount) userAccountRepository.findById(instructorId).orElse(null);
-      if (instructor == null) {
-        throw new IllegalArgumentException("Instructor not found!");
+    List<InstructorAccount> foundInstructors = new ArrayList<>();
+    if (instructorIds != null) {
+      for (Integer instructorId : instructorIds) {
+        InstructorAccount foundInstructor = (InstructorAccount) userAccountRepository.findById(instructorId).orElse(null);
+        if (foundInstructor == null) {
+          throw new IllegalArgumentException("Instructor not found!");
+        }
+        foundInstructors.add(foundInstructor);
       }
     }
 
-    List<CourseOffering> foundOfferings = courseOfferingRepository.findCourseOfferingsByFilters(lowDate, highDate, lowTime, highTime, lowPrice, highPrice, courseType, daysOffered, room, instructor).orElse(null);
+
+    List<CourseOffering> foundOfferings = courseOfferingRepository.findCourseOfferingsByFilters(lowDate, highDate, lowTime, highTime, highPrice, foundTypes, daysOffered, foundRooms, foundInstructors).orElse(null);
 
     if (foundOfferings == null) {
       throw new IllegalArgumentException("No course offerings found with the provided information!");

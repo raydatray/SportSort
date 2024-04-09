@@ -26,11 +26,11 @@ public class CourseOfferingRepositoryImpl implements CourseOfferingRepositoryCus
   @Override
   public Optional<List<CourseOffering>> findCourseOfferingsByFilters(Date startDate, Date endDate,
                                                                      Time startTime, Time endTime,
-                                                                     Integer lowPrice, Integer highPrice,
-                                                                     CourseType courseType,
+                                                                      Integer highPrice,
+                                                                     List<CourseType> courseTypes,
                                                                      List<DayOfWeek> daysOffered,
-                                                                     Room room,
-                                                                     InstructorAccount instructor) {
+                                                                     List<Room> rooms,
+                                                                     List<InstructorAccount> instructors) {
     CriteriaBuilder cb = entityManager.getCriteriaBuilder();
     CriteriaQuery<CourseOffering> cq = cb.createQuery(CourseOffering.class);
     Root<CourseOffering> courseOffering = cq.from(CourseOffering.class);
@@ -48,24 +48,22 @@ public class CourseOfferingRepositoryImpl implements CourseOfferingRepositoryCus
     if (endTime != null) {
       predicates.add(cb.lessThanOrEqualTo(courseOffering.join("courseSessions").get("endTime"), endTime));
     }
-    if (lowPrice != null) {
-      predicates.add(cb.greaterThanOrEqualTo(courseOffering.get("price"), lowPrice));
-    }
     if (highPrice != null) {
       predicates.add(cb.lessThanOrEqualTo(courseOffering.get("price"), highPrice));
-    }
-    if (courseType != null) {
-      predicates.add(cb.equal(courseOffering.get("courseType"), courseType));
     }
     if (daysOffered != null && !daysOffered.isEmpty()) {
       predicates.add(courseOffering.join("daysOffered").in(daysOffered));
     }
-    if (room != null) {
-      predicates.add(cb.equal(courseOffering.get("room"), room));
+    if (courseTypes != null && !courseTypes.isEmpty()) {
+      predicates.add(courseOffering.get("courseType").in(courseTypes));
     }
-    if (instructor != null) {
-      predicates.add(cb.equal(courseOffering.get("instructorAccount"), instructor));
+    if (rooms != null && !rooms.isEmpty()) {
+      predicates.add(courseOffering.get("room").in(rooms));
     }
+    if (instructors != null && !instructors.isEmpty()) {
+      predicates.add(courseOffering.get("instructorAccount").in(instructors));
+    }
+
 
     cq.where(cb.and(predicates.toArray(new Predicate[0])));
     List<CourseOffering> result = entityManager.createQuery(cq).getResultList();
