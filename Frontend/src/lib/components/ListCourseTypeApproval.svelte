@@ -30,10 +30,11 @@
 </script>
 
 <div class="list-container">
+    <div class="bg-secondary/50 list-header-bg"> <!-- Background wrapper for list header -->
+        <h1 class="list-header">List of Items</h1>
+    </div>
     <div class="scrollable-list">
-        <div class="bg-secondary/50 list-header-bg"> <!-- Background wrapper for list header -->
-            <h1 class="list-header">List of Items</h1>
-        </div>
+
         <!-- Render list items -->
         {#each items as item}
             <div class="bg-secondary-content/5 list-item" on:mouseover={() => hoveredItem = item} on:mouseleave={() => hoveredItem = ""}>
@@ -76,7 +77,7 @@
 
     /* Add CSS styles for the scrollable list */
     .scrollable-list {
-        max-height: 70vh; /* Limit the height of the list */
+        max-height: 60vh; /* Limit the height of the list */
         max-width: 100%;
         overflow-y: auto; /* Enable vertical scrolling */
         border-radius: 10px; /* Rounded corners */
@@ -166,8 +167,10 @@
     }
 
     .list-header-bg {
+
         width: 75%; /* Set the width to occupy 75% of the space */
         margin: 0 auto; /* Center the header horizontally */
+        margin-top: 10px;
         margin-bottom: 10px;
         border-radius: 5px; /* Rounded corners */
     }
