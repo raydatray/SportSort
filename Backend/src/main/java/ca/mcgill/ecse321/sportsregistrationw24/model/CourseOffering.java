@@ -17,9 +17,10 @@ public class CourseOffering {
   private Integer id;
   private Date startDate;
   private Date endDate;
+  private Integer price;
   @ElementCollection
   @Enumerated(EnumType.STRING)
-  @Fetch(FetchMode.JOIN) // Add this line
+  @Fetch(FetchMode.JOIN)
   private List<DayOfWeek> daysOffered;
   @OneToOne
   private Room room;
@@ -27,30 +28,30 @@ public class CourseOffering {
   private CourseType courseType;
   @ManyToOne
   private InstructorAccount instructorAccount;
+  @OneToMany(
+    mappedBy = "courseOffering",
+    cascade = CascadeType.ALL,
+    fetch = FetchType.LAZY
+  )
+  private List<CourseSession> courseSessions;
 
-  public CourseOffering(Date aStartDate, Date aEndDate, ArrayList<DayOfWeek> someDaysOffered, Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount) {
+  public CourseOffering() {}
+  public CourseOffering(Date aStartDate, Date aEndDate, Integer aPrice, ArrayList<DayOfWeek> someDaysOffered, Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount) {
     this.startDate = aStartDate;
     this.endDate = aEndDate;
+    this.price = aPrice;
     this.daysOffered = someDaysOffered;
     this.room = aRoom;
     this.courseType = aCourseType;
     this.instructorAccount = aInstructorAccount;
   }
-  public CourseOffering() {}
-
-
-  public void setId(Integer aId) { this.id = aId; }
 
   public void setStartDate(Date aStartDate) { this.startDate = aStartDate; }
-
   public void setEndDate(Date aEndDate) { this.endDate = aEndDate; }
-
+  public void setPrice(Integer aPrice) { this.price = aPrice; }
   public void setDaysOffered(List<DayOfWeek> aDaysOffered) { this.daysOffered = aDaysOffered; }
-
   public void setInstructorAccount(InstructorAccount instructor) { this.instructorAccount = instructor; }
-
   public void setRoom(Room aNewRoom) { this.room = aNewRoom; }
-
   public void setCourseType(CourseType aCourseType) { this.courseType = aCourseType; }
 
 
@@ -58,33 +59,26 @@ public class CourseOffering {
   {
     return this.id;
   }
-
   public Date getStartDate()
   {
     return this.startDate;
   }
-
   public Date getEndDate()
   {
     return this.endDate;
   }
-
+  public Integer getPrice() { return this.price; }
   public Room getRoom()
   {
     return this.room;
   }
-
   public ArrayList<DayOfWeek> getDaysOffered() { return new ArrayList<>(this.daysOffered); }
-
   public CourseType getCourseType()
   {
     return this.courseType;
   }
-
   public InstructorAccount getInstructorAccount()
   {
     return this.instructorAccount;
   }
-
-
 }

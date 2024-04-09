@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 @CrossOrigin(origins = "*")
 @RestController
 public class OwnerAccountRestController {

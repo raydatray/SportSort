@@ -11,17 +11,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 @CrossOrigin(origins = "*")
 @RestController
 public class CustomerAccountRestController {
-
   @Autowired
   private CustomerAccountService service;
 
-  @PostMapping(value = {
-    "/customerAccounts/create",
-    "/customerAccounts/create/"
-  })
+  @PostMapping(value = {"/customerAccounts/create"})
   public ResponseEntity<?> createCustomerAccount(@RequestBody CustomerAccountDto customerAccountDto) {
     try {
       String email = customerAccountDto.getEmail();

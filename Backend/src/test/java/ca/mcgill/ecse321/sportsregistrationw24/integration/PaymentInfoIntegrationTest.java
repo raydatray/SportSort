@@ -1,8 +1,7 @@
 package ca.mcgill.ecse321.sportsregistrationw24.integration;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.PaymentInfoRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.PaymentInfoDto;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.RoomDto;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.PaymentInfo.PaymentInfoDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.PaymentInfo;
 import ca.mcgill.ecse321.sportsregistrationw24.service.AuthenticationService;

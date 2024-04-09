@@ -1,9 +1,14 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
+import ca.mcgill.ecse321.sportsregistrationw24.dto.Room.RoomCO;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.Room.RoomDTO;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.Room.RoomUpdateCO;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.RoomDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
 import ca.mcgill.ecse321.sportsregistrationw24.service.RoomService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,48 +21,36 @@ public class RoomRestController {
   @Autowired
   private RoomService service;
 
-  @PostMapping(value = {
-    "/room/create",
-    "/room/create/"
-  })
-  public ResponseEntity<?> createRoom(@RequestBody RoomDto roomDto) {
+  @PostMapping(value = {"/rooms/create"})
+  public ResponseEntity<?> createRoom(@RequestHeader String userToken, @RequestBody RoomCO roomCO) {
     try {
-      String name = roomDto.getName();
-      Integer floorNumber = roomDto.getFloorNumber();
-      Integer roomNumber = roomDto.getRoomNumber();
-      Integer capacity = roomDto.getCapacity();
+      String name = roomCO.getName();
+      Integer floorNumber = roomCO.getFloorNumber();
+      Integer roomNumber = roomCO.getRoomNumber();
+      Integer capacity = roomCO.getCapacity();
 
-      Room room = service.createRoom(name, floorNumber, roomNumber, capacity);
-
-      return ResponseEntity.ok().body(room);
+      service.createRoom(userToken, name, floorNumber, roomNumber, capacity);
+      return ResponseEntity.status(HttpStatus.CREATED).body("Room created successfully");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
 
-  @PutMapping(value = {
-    "/room/update",
-    "/room/update/"
-  })
-  public ResponseEntity<?> updateRoom(@RequestBody RoomDto roomDto) {
+  @PutMapping(value = {"/rooms/update"})
+  public ResponseEntity<?> updateRoom(@RequestHeader String userToken, @RequestBody RoomUpdateCO roomUpdateCO) {
     try {
-      String newName = roomDto.getName();
-      Integer aFloorNumber = roomDto.getFloorNumber();
-      Integer aRoomNumber = roomDto.getRoomNumber();
-      Integer newCapacity = roomDto.getCapacity();
+      Integer id = roomUpdateCO.getId();
+      String name = roomUpdateCO.getName();
+      Integer capacity = roomUpdateCO.getCapacity();
 
-      service.updateRoom(newName, aFloorNumber, aRoomNumber, newCapacity);
-
-      return ResponseEntity.ok().body(roomDto);
+      service.updateRoom(userToken, id, name, capacity);
+      return ResponseEntity.ok().body("Room updated successfully");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
 
-  @GetMapping(value = {
-    "/room/get",
-    "/room/get/"
-  })
+  /**
   public ResponseEntity<?> getRoom(@RequestParam Integer aFloorNumber, @RequestParam Integer aRoomNumber) {
     try {
       RoomDto roomDto = convertToDto(service.getRoom(aFloorNumber, aRoomNumber));
@@ -67,43 +60,30 @@ public class RoomRestController {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
+  **/
 
-  @GetMapping(value = {
-    "/room/getAll",
-    "/room/getAll/"
-  })
-  public ResponseEntity<?> getRooms(@RequestParam Integer aFloorNumber, @RequestParam Integer aRoomNumber) {
+  @GetMapping(value = {"/rooms/getAll"})
+  public ResponseEntity<?> getRooms(@RequestHeader String userToken,
+                                    @RequestParam(required = false) Integer floorNumber,
+                                    @RequestParam(required = false) Integer lowCapacity,
+                                    @RequestParam(required = false) Integer highCapacity) {
     try {
-      List<RoomDto> filteredRoomDtos = new ArrayList<>();
-      for (Room room: service.getAllRooms(aFloorNumber, aRoomNumber)) {
-        filteredRoomDtos.add(convertToDto(room));
-      }
+      List<Room> rooms = service.getAllRooms(userToken, floorNumber, lowCapacity, highCapacity);
+      List<RoomDTO> roomDTOS = rooms.stream().map(RoomDTO::new).toList();
 
-      return ResponseEntity.ok().body(filteredRoomDtos);
+      return ResponseEntity.ok().body(roomDTOS);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
 
-  @DeleteMapping(value = {
-    "/room/delete",
-    "/room/delete/"
-  })
-  public ResponseEntity<?> deleteRoom(@RequestBody RoomDto roomDto) {
+  @DeleteMapping(value = {"/rooms/delete"})
+  public ResponseEntity<?> deleteRoom(@RequestHeader String userToken, @RequestParam Integer id) {
     try {
-      service.deleteRoom(roomDto.getFloorNumber(), roomDto.getRoomNumber());
-
+      service.deleteRoom(userToken, id);
       return ResponseEntity.ok().body("Room successfully deleted");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
-  }
-
-  private RoomDto convertToDto(Room room) {
-    if (room == null) {
-      throw new IllegalArgumentException("There is no such room");
-    }
-    return new RoomDto(room.getName(), room.getFloorNumber(),
-            room.getRoomNumber(), room.getCapacity());
   }
 }

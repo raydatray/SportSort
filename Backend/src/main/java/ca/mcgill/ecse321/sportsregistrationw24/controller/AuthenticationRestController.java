@@ -1,7 +1,7 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dto.AuthenticationCO;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.AuthenticationDto;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.Authentication.AuthenticationCO;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.Authentication.AuthenticationDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.service.AuthenticationService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,27 +14,21 @@ public class AuthenticationRestController {
   @Autowired
   private AuthenticationService authenticationService;
 
-  @PostMapping(value = {
-          "/login",
-          "/login/"
-  })
+  @PostMapping(value = {"/login"})
   public ResponseEntity<?> login(@RequestBody AuthenticationCO authenticationCO) {
     try {
-      AuthenticationDto generatedToken = authenticationService.login(authenticationCO.getEmail(), authenticationCO.getPassword());
-      return ResponseEntity.ok().body(generatedToken);
+      AuthenticationDTO generatedToken = authenticationService.login(authenticationCO.getEmail(), authenticationCO.getPassword());
+      return ResponseEntity.accepted().body(generatedToken);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
 
-  @DeleteMapping(value = {
-          "/logout",
-          "/logout/"
-  })
+  @PostMapping(value = {"/logout"})
   public ResponseEntity<?> logout(@RequestHeader String token) {
     try {
       authenticationService.logout(token);
-      return ResponseEntity.ok().body("Logout Successful");
+      return ResponseEntity.accepted().body("Logout successful");
     } catch (Exception e){
       return ResponseEntity.badRequest().body(e.getMessage());
     }

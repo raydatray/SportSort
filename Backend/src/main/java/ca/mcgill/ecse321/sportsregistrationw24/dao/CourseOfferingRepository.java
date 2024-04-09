@@ -4,13 +4,17 @@ import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseType;
 import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.sql.Date;
+import java.sql.Time;
+import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Optional;
 
-public interface CourseOfferingRepository extends CrudRepository<CourseOffering, Integer> {
+public interface CourseOfferingRepository extends CrudRepository<CourseOffering, Integer>, CourseOfferingRepositoryCustom {
     Optional<List<CourseOffering>> findByInstructorAccount(InstructorAccount instructor);
     Optional<List<CourseOffering>> findByCourseType(CourseType courseType);
     Optional<List<CourseOffering>> findByRoom(Room room);

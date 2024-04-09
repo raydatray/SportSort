@@ -2,9 +2,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.integration;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseTypeRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.courseSession.CourseSessionDto;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.courseType.CourseTypeCO;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.courseType.CourseTypeDto;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseTypeDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseType;
 import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.OwnerAccount;
@@ -16,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -87,7 +83,7 @@ public class CourseTypeIntegrationTests {
 
     String requestURL = "/courseTypes/get?id=" + courseTypeID;
 
-    ResponseEntity<CourseTypeDto> response2 = client.exchange(requestURL, HttpMethod.GET, entity, CourseTypeDto.class);
+    ResponseEntity<CourseTypeDTO> response2 = client.exchange(requestURL, HttpMethod.GET, entity, CourseTypeDTO.class);
 
     assertNotNull(response2);
     assertEquals(HttpStatus.OK, response2.getStatusCode());
