@@ -3,11 +3,8 @@ package ca.mcgill.ecse321.sportsregistrationw24.service;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseOfferingRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseSessionRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
-import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
-import ca.mcgill.ecse321.sportsregistrationw24.model.CourseSession;
+import ca.mcgill.ecse321.sportsregistrationw24.model.*;
 
-import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
-import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities;
 import jakarta.transaction.Transactional;
 import org.apache.catalina.User;
@@ -157,15 +154,54 @@ public class CourseSessionService {
     }
 
     @Transactional
-    public List<CourseSession> getAllCourseSessions (String userToken, Date lowDate, Date highDate, Time lowTime, Time highTime, Integer instructorId) {
+    public List<CourseSession> getAllCourseSessions (String userToken,
+                                                     Date lowDate, Date highDate,
+                                                     Time lowTime, Time highTime,
+                                                     List<DayOfWeek> daysOffered,
+                                                     Integer courseTypeId,
+                                                     Integer courseOfferingId,
+                                                     Integer roomId,
+                                                     Integer instructorId) {
         UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
         if (!user.getUserType().equals("OWNER")) {
             throw new IllegalArgumentException("Only owners can view all course sessions");
         }
-        InstructorAccount instructor = (InstructorAccount) userAccountRepository.findById(instructorId).orElse(null);
 
-        List<CourseSession> foundCourseSessions = courseSessionRepository.findByFilters(lowDate, highDate, lowTime, highTime, instructor).orElse(null);
+        InstructorAccount instructor = null;
+        if (instructorId != null) {
+            instructor = (InstructorAccount) userAccountRepository.findById(instructorId).orElse(null);
+            if (instructor == null) {
+                throw new IllegalArgumentException("Instructor not found");
+            }
+        }
+
+        CourseType courseType = null;
+        if (courseTypeId != null) {
+            courseType = courseOfferingRepository.findById(courseTypeId).orElse(null).getCourseType();
+            if (courseType == null) {
+                throw new IllegalArgumentException("Course Type not found");
+            }
+        }
+
+        CourseOffering c = null;
+        if (courseOfferingId != null) {
+            c = courseOfferingRepository.findById(courseOfferingId).orElse(null);
+            if (c == null) {
+                throw new IllegalArgumentException("Course Offering not found");
+            }
+        }
+
+        Room room = null;
+        if (roomId != null) {
+            room = courseOfferingRepository.findById(roomId).orElse(null).getRoom();
+            if (room == null) {
+                throw new IllegalArgumentException("Room not found");
+            }
+        }
+
+
+        List<CourseSession> foundCourseSessions = courseSessionRepository.findCourseSessionsByFilters(lowDate, highDate, lowTime, highTime, courseType, daysOffered, c, room, instructor).orElse(null);
 
         if(foundCourseSessions == null){
             throw new IllegalArgumentException("No course sessions found with the provided information");

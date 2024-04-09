@@ -30,4 +30,12 @@ public class CourseOfferingDTO {
   public CourseOfferingDTO(CourseOffering aCourseOffering) {
     this (aCourseOffering.getId(), aCourseOffering.getStartDate(), aCourseOffering.getEndDate(), aCourseOffering.getDaysOffered(), aCourseOffering.getInstructorAccount().getId(), aCourseOffering.getRoom().getId(), aCourseOffering.getCourseType().getId());
   }
+
+  public Integer getId() { return this.id; }
+  public Date getStartDate() { return this.startDate; }
+  public Date getEndDate() { return this.endDate; }
+  public List<DayOfWeek> getDaysOffered() { return this.daysOffered; }
+  public Integer getInstructorId() { return this.instructorId; }
+  public Integer getRoomId() { return this.roomId; }
+  public Integer getCourseTypeId() { return this.courseTypeId; }
 }

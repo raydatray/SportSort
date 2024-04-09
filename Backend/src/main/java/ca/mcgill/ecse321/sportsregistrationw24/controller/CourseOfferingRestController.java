@@ -68,9 +68,10 @@ public class CourseOfferingRestController {
                                                  @RequestParam(required = false) Time hT,
                                                  @RequestParam(required = false) List<DayOfWeek> dO,
                                                  @RequestParam(required = false) Integer cT,
+                                                 @RequestParam(required = false) Integer rId,
                                                  @RequestParam(required = false) Integer iI){
     try {
-      List<CourseOffering> courseOfferings = service.getAllCourseOfferings(lD, hD, lP, hP, lT, hT, dO, cT, iI);
+      List<CourseOffering> courseOfferings = service.getAllCourseOfferings(lD, hD, lP, hP, lT, hT, dO, cT, rId, iI);
       List<CourseOfferingDTO> courseOfferingDTOs = courseOfferings.stream().map(CourseOfferingDTO::new).toList();
 
       return ResponseEntity.ok().body(courseOfferingDTOs);

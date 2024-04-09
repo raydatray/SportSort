@@ -103,10 +103,33 @@ public class CourseOfferingService {
                                                     Time lowTime, Time highTime,
                                                     List<DayOfWeek> daysOffered,
                                                     Integer courseTypeId,
+                                                    Integer roomId,
                                                     Integer instructorId){
-    CourseType courseType = courseTypeRepository.findById(courseTypeId).orElse(null);
-    InstructorAccount instructor = (InstructorAccount) userAccountRepository.findById(instructorId).orElse(null);
-    List<CourseOffering> foundOfferings = courseOfferingRepository.findCourseOfferingsByFilters(lowDate, highDate, lowTime, highTime, lowPrice, highPrice, courseType, daysOffered, instructor).orElse(null);
+    CourseType courseType = null;
+    if (courseTypeId != null) {
+      courseType = courseTypeRepository.findById(courseTypeId).orElse(null);
+      if (courseType == null) {
+        throw new IllegalArgumentException("Course Type not found!");
+      }
+    }
+
+    Room room = null;
+    if (roomId != null) {
+      room = roomRepository.findById(roomId).orElse(null);
+      if (room == null) {
+        throw new IllegalArgumentException("Room not found!");
+      }
+    }
+
+    InstructorAccount instructor = null;
+    if (instructorId != null) {
+      instructor = (InstructorAccount) userAccountRepository.findById(instructorId).orElse(null);
+      if (instructor == null) {
+        throw new IllegalArgumentException("Instructor not found!");
+      }
+    }
+
+    List<CourseOffering> foundOfferings = courseOfferingRepository.findCourseOfferingsByFilters(lowDate, highDate, lowTime, highTime, lowPrice, highPrice, courseType, daysOffered, room, instructor).orElse(null);
 
     if (foundOfferings == null) {
       throw new IllegalArgumentException("No course offerings found with the provided information!");
