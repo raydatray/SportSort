@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.DayOfWeek;
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "*")

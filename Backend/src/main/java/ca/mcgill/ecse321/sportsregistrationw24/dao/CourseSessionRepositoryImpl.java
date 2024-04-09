@@ -33,6 +33,7 @@ public class CourseSessionRepositoryImpl implements CourseSessionRepositoryCusto
     CriteriaQuery<CourseSession> cq = cb.createQuery(CourseSession.class);
     Root<CourseSession> courseSession = cq.from(CourseSession.class);
     List<Predicate> predicates = new ArrayList<>();
+    List<CourseSession> daysOfferedResult = new ArrayList<>();
 
     if (startDate != null) {
       predicates.add(cb.greaterThanOrEqualTo(courseSession.get("date"), startDate));
@@ -57,11 +58,9 @@ public class CourseSessionRepositoryImpl implements CourseSessionRepositoryCusto
 
       // Create a native query to check if the day of the week of the course session's date is in daysOffered
       String sql = "SELECT * FROM CourseSession WHERE EXTRACT(DOW FROM date) IN (:daysOffered)";
-      List<CourseSession> result = entityManager.createNativeQuery(sql, CourseSession.class)
+      daysOfferedResult = entityManager.createNativeQuery(sql, CourseSession.class)
         .setParameter("daysOffered", daysOfferedInt)
         .getResultList();
-
-      return Optional.ofNullable(result.isEmpty() ? null : result);
     }
     if (courseOffering != null) {
       predicates.add(cb.equal(courseSession.get("courseOffering"), courseOffering));
@@ -75,7 +74,7 @@ public class CourseSessionRepositoryImpl implements CourseSessionRepositoryCusto
 
     cq.where(predicates.toArray(new Predicate[0]));
     List<CourseSession> result= entityManager.createQuery(cq).getResultList();
+    result.addAll(daysOfferedResult);
     return Optional.ofNullable(result.isEmpty() ? null : result);
   }
-
 }

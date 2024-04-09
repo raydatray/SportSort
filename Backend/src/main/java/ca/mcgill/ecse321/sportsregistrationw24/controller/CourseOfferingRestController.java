@@ -1,7 +1,8 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseOffering.CourseOfferingDTO;
+
 import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseOffering.CourseOfferingCO;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseOffering.CourseOfferingDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
 import ca.mcgill.ecse321.sportsregistrationw24.service.CourseOfferingService;
 
