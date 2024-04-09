@@ -56,10 +56,14 @@ public class CourseSessionRestController {
                                           @RequestParam(required = false) Integer rId,
                                           @RequestParam(required = false) Integer iId
                                           ){
-    List<CourseSession> allCourseSessions = service.getAllCourseSessions(userToken, lD, uD, lT, uT, d, cTId, cOId, rId, iId);
-    List<CourseSessionDTO> courseSessionDTOs = allCourseSessions.stream().map(CourseSessionDTO::new).toList();
+    try {
+      List<CourseSession> allCourseSessions = service.getAllCourseSessions(userToken, lD, uD, lT, uT, d, cTId, cOId, rId, iId);
+      List<CourseSessionDTO> courseSessionDTOs = allCourseSessions.stream().map(CourseSessionDTO::new).toList();
 
-    return ResponseEntity.ok().body(courseSessionDTOs);
+      return ResponseEntity.ok().body(courseSessionDTOs);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
   }
 
   /**

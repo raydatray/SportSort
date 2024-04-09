@@ -1,8 +1,6 @@
 package ca.mcgill.ecse321.sportsregistrationw24.service;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseOfferingRepository;
-import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseSessionRepository;
-import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.*;
 import ca.mcgill.ecse321.sportsregistrationw24.model.*;
 
 import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities;
@@ -26,11 +24,15 @@ import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.getUse
 @Service
 public class CourseSessionService {
     @Autowired
+    private CourseTypeRepository courseTypeRepository;
+    @Autowired
     private CourseSessionRepository courseSessionRepository;
     @Autowired
     private CourseOfferingRepository courseOfferingRepository;
     @Autowired
     private UserAccountRepository userAccountRepository;
+    @Autowired
+    private RoomRepository roomRepository;
 
     @Transactional
     //Use when you are creating a singular courseSession (Course Offerings where you know for a fact will only have one associated session)
@@ -178,7 +180,7 @@ public class CourseSessionService {
 
         CourseType courseType = null;
         if (courseTypeId != null) {
-            courseType = courseOfferingRepository.findById(courseTypeId).orElse(null).getCourseType();
+            courseType = courseTypeRepository.findById(courseTypeId).orElse(null);
             if (courseType == null) {
                 throw new IllegalArgumentException("Course Type not found");
             }
@@ -194,7 +196,7 @@ public class CourseSessionService {
 
         Room room = null;
         if (roomId != null) {
-            room = courseOfferingRepository.findById(roomId).orElse(null).getRoom();
+            room = roomRepository.findById(roomId).orElse(null);
             if (room == null) {
                 throw new IllegalArgumentException("Room not found");
             }

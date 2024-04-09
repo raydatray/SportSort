@@ -12,9 +12,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.DayOfWeek;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CourseSessionRepositoryImpl implements CourseSessionRepositoryCustom{
@@ -29,52 +27,58 @@ public class CourseSessionRepositoryImpl implements CourseSessionRepositoryCusto
                                                                    CourseOffering courseOffering,
                                                                    Room room,
                                                                    InstructorAccount instructor) {
-    CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-    CriteriaQuery<CourseSession> cq = cb.createQuery(CourseSession.class);
-    Root<CourseSession> courseSession = cq.from(CourseSession.class);
-    List<Predicate> predicates = new ArrayList<>();
-    List<CourseSession> daysOfferedResult = new ArrayList<>();
+    // Initialize the SQL query and the parameters list
+    String sql = "SELECT * FROM CourseSession WHERE 1=1";
+    Map<String, Object> parameters = new HashMap<>();
 
+    // Add conditions to the SQL query and the parameters list
     if (startDate != null) {
-      predicates.add(cb.greaterThanOrEqualTo(courseSession.get("date"), startDate));
+      sql += " AND date >= :startDate";
+      parameters.put("startDate", startDate);
     }
     if (endDate != null) {
-      predicates.add(cb.lessThanOrEqualTo(courseSession.get("date"), endDate));
+      sql += " AND date <= :endDate";
+      parameters.put("endDate", endDate);
     }
     if (startTime != null) {
-      predicates.add(cb.greaterThanOrEqualTo(courseSession.get("startTime"), startTime));
+      sql += " AND start_time >= :startTime";
+      parameters.put("startTime", startTime);
     }
     if (endTime != null) {
-      predicates.add(cb.lessThanOrEqualTo(courseSession.get("endTime"), endTime));
+      sql += " AND end_time <= :endTime";
+      parameters.put("endTime", endTime);
     }
     if (courseType != null) {
-      predicates.add(cb.equal(courseSession.get("courseOffering").get("courseType"), courseType));
+      sql += " AND course_offering_id IN (SELECT id FROM courseoffering WHERE course_type_id = :courseType)";
+      parameters.put("courseType", courseType.getId());
     }
     if (daysOffered != null && !daysOffered.isEmpty()) {
-      // Convert DayOfWeek to corresponding integer values
       List<Integer> daysOfferedInt = daysOffered.stream()
-        .map(day -> day.getValue() % 7) // Adjust DayOfWeek values for PostgreSQL
+        .map(day -> day.getValue() % 7)
         .collect(Collectors.toList());
-
-      // Create a native query to check if the day of the week of the course session's date is in daysOffered
-      String sql = "SELECT * FROM CourseSession WHERE EXTRACT(DOW FROM date) IN (:daysOffered)";
-      daysOfferedResult = entityManager.createNativeQuery(sql, CourseSession.class)
-        .setParameter("daysOffered", daysOfferedInt)
-        .getResultList();
+      sql += " AND EXTRACT(DOW FROM date) IN (:daysOffered)";
+      parameters.put("daysOffered", daysOfferedInt);
     }
     if (courseOffering != null) {
-      predicates.add(cb.equal(courseSession.get("courseOffering"), courseOffering));
+      sql += " AND course_offering_id = :courseOffering";
+      parameters.put("courseOffering", courseOffering.getId());
     }
     if (room != null) {
-      predicates.add(cb.equal(courseSession.get("room"), room));
+      sql += " AND course_offering_id IN (SELECT id FROM courseoffering WHERE room_id = :room)";
+      parameters.put("room", room.getId());
     }
     if (instructor != null) {
-      predicates.add(cb.equal(courseSession.get("instructor"), instructor));
+      sql += " AND course_offering_id IN (SELECT id FROM courseoffering WHERE instructor_account_id = :instructor)";
+      parameters.put("instructor", instructor.getId());
     }
 
-    cq.where(predicates.toArray(new Predicate[0]));
-    List<CourseSession> result= entityManager.createQuery(cq).getResultList();
-    result.addAll(daysOfferedResult);
+    // Execute the SQL query with the parameters
+    List<CourseSession> result = entityManager.createNativeQuery(sql, CourseSession.class)
+      .unwrap(org.hibernate.query.Query.class)
+      .setProperties(parameters)
+      .getResultList();
+
     return Optional.ofNullable(result.isEmpty() ? null : result);
   }
+
 }

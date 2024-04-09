@@ -11,5 +11,4 @@ public class Sportsregistrationw24Application {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 		SpringApplication.run(Sportsregistrationw24Application.class, args);
 	}
-
 }
