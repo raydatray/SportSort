@@ -10,61 +10,37 @@ public class PaymentInfo {
   private Integer id;
   public enum PaymentType { Credit, Debit }
   private PaymentType paymentType;
-  private int cardNumber;
-  private int cvv;
-  private int expirationYear;
-  private int expirationMonth;
-
+  private String cardNumber;
+  private Integer cvv;
+  private Integer expirationYear;
+  private Integer expirationMonth;
   @ManyToOne
   @JoinColumn(name = "customer_account_id")
   private CustomerAccount customerAccount;
 
-  public PaymentInfo(PaymentType aPaymentType, Integer aCardNumber, Integer aCvv, Integer aExpirationYear, Integer aExpirationMonth, CustomerAccount aCustomerAccount) {
+  public PaymentInfo() {}
+  public PaymentInfo(PaymentType aPaymentType, String aCardNumber, Integer aCvv, Integer aExpirationYear, Integer aExpirationMonth, CustomerAccount aCustomerAccount) {
     this.paymentType = aPaymentType;
     this.cardNumber = aCardNumber;
     this.cvv = aCvv;
     this.expirationYear = aExpirationYear;
     this.expirationMonth = aExpirationMonth;
-    if (!setCustomerAccount(aCustomerAccount)) {
-      throw new RuntimeException("Unable to create PaymentInfo due to aCustomerAccount. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
+    this.customerAccount = aCustomerAccount;
   }
-
-  public PaymentInfo() {}
-
-  public void setId(Integer aID) { this.id = aID; }
 
   public void setPaymentType(PaymentType aPaymentType) { this.paymentType = aPaymentType; }
-
-  public void setCardNumber(Integer aCardNumber) { this.cardNumber = aCardNumber; }
-
+  public void setCardNumber(String aCardNumber) { this.cardNumber = aCardNumber; }
   public void setCvv(Integer aCvv) { this.cvv = aCvv; }
-
   public void setExpirationYear(Integer aExpirationYear) { this.expirationYear = aExpirationYear; }
-
   public void setExpirationMonth(Integer aExpirationMonth) { this.expirationMonth = aExpirationMonth; }
-
-  public boolean setCustomerAccount(CustomerAccount aNewCustomerAccount) {
-    boolean wasSet = false;
-    if (aNewCustomerAccount != null) {
-      customerAccount = aNewCustomerAccount;
-      wasSet = true;
-    }
-    return wasSet;
-  }
+  public void setCustomerAccount(CustomerAccount aCustomerAccount) { this.customerAccount = aCustomerAccount; }
 
   public Integer getId() { return this.id; }
-
   public PaymentType getPaymentType() { return this.paymentType; }
-
-  public Integer getCardNumber() { return this.cardNumber; }
-
+  public String getCardNumber() { return this.cardNumber; }
+  public Integer getTrailingFourDigits() { return Integer.parseInt(this.cardNumber.substring(this.cardNumber.length() - 4)); }
   public Integer getCvv() { return this.cvv; }
-
   public Integer getExpirationYear() { return this.expirationYear; }
-
   public Integer getExpirationMonth() { return this.expirationMonth; }
-
   public CustomerAccount getCustomerAccount() { return this.customerAccount; }
-
 }

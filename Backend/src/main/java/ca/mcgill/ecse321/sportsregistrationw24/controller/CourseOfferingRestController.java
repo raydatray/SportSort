@@ -1,15 +1,17 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dto.courseOffering.CourseOfferingDto;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.courseOffering.CourseOfferingCO;
+
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseOffering.CourseOfferingCO;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseOffering.CourseOfferingDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
 import ca.mcgill.ecse321.sportsregistrationw24.service.CourseOfferingService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Time;
 import java.time.DayOfWeek;
-import java.util.ArrayList;
 import java.util.List;
 import java.sql.Date;
 
@@ -19,30 +21,24 @@ import java.sql.Date;
 public class CourseOfferingRestController {
   @Autowired
   private CourseOfferingService service;
-  @PostMapping(value = {
-    "/courseOfferings/create",
-    "/courseOfferings/create/"
-  })
-  public ResponseEntity<?> createCourseOffering(@RequestBody CourseOfferingCO courseOfferingCO) {
+  @PostMapping(value = {"/courseOfferings/create"})
+  public ResponseEntity<?> createCourseOffering(@RequestHeader String userToken, @RequestBody CourseOfferingCO courseOfferingCO) {
     try {
       Date startDate = courseOfferingCO.getStartDate();
       Date endDate = courseOfferingCO.getEndDate();
+      Integer price = courseOfferingCO.getPrice();
       List<DayOfWeek> daysOffered = courseOfferingCO.getDaysOffered();
-      String instructorToken = courseOfferingCO.getInstructorToken();
       Integer roomId = courseOfferingCO.getRoomId();
       Integer courseTypeId = courseOfferingCO.getCourseTypeId();
 
-      service.createCourseOffering(startDate, endDate, daysOffered, instructorToken, roomId, courseTypeId);
-      return ResponseEntity.ok().body("Course offering created successfully!");
+      service.createCourseOffering(userToken, startDate, endDate, price, daysOffered, roomId, courseTypeId);
+      return ResponseEntity.ok().body("Course offering created successfully");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
 
-  @GetMapping(value = {
-    "/courseOfferings/get",
-    "/courseOfferings/get/"
-  })
+  /**
   public ResponseEntity<?> getCourseOffering(@RequestParam Integer id, @RequestHeader String userToken) {
     try {
       CourseOffering courseOffering = service.getCourseOfferingById(id, userToken);
@@ -51,42 +47,48 @@ public class CourseOfferingRestController {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
+   **/
 
-  @GetMapping(value = {
-    "/courseOfferings/getAll",
-    "/courseOfferings/getAll/"
-  })
-  public ResponseEntity<?> getAllCourseOfferings(@RequestHeader String userToken) {
+  @GetMapping(value = {"courseOfferings/getByInstructor"})
+  public ResponseEntity<?> getCourseOfferingsByInstructor(@RequestHeader String userToken) {
     try {
-      List<CourseOfferingDto> courseOfferingDtos = new ArrayList<>();
-      for (CourseOffering courseOffering : service.getAllCourseOfferings(userToken)) {
-        courseOfferingDtos.add(convertToDto(courseOffering));
-      }
-      return ResponseEntity.ok().body(courseOfferingDtos);
+      List<CourseOffering> courseOfferings = service.getCourseOfferingsByInstructor(userToken);
+      List<CourseOfferingDTO> courseOfferingDTOs = courseOfferings.stream().map(CourseOfferingDTO::new).toList();
+      return ResponseEntity.ok().body(courseOfferingDTOs);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
 
-
-  @DeleteMapping(value = {
-    "/courseOfferings/delete",
-    "/courseOfferings/delete/"
-  })
-  public ResponseEntity<?> deleteCourseOffering(@RequestParam Integer id, @RequestHeader String userToken) {
+  @GetMapping(value = {"/courseOfferings/getAll"})
+  public ResponseEntity<?> getAllCourseOfferings(@RequestParam(required = false) Date lD,
+                                                 @RequestParam(required = false) Date hD,
+                                                 @RequestParam(required = false) Integer lP,
+                                                 @RequestParam(required = false) Integer hP,
+                                                 @RequestParam(required = false) Time lT,
+                                                 @RequestParam(required = false) Time hT,
+                                                 @RequestParam(required = false) List<DayOfWeek> dO,
+                                                 @RequestParam(required = false) Integer cT,
+                                                 @RequestParam(required = false) Integer rId,
+                                                 @RequestParam(required = false) Integer iI){
     try {
-      service.deleteCourseOffering(id, userToken);
+      List<CourseOffering> courseOfferings = service.getAllCourseOfferings(lD, hD, lP, hP, lT, hT, dO, cT, rId, iI);
+      List<CourseOfferingDTO> courseOfferingDTOs = courseOfferings.stream().map(CourseOfferingDTO::new).toList();
+
+      return ResponseEntity.ok().body(courseOfferingDTOs);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
+
+  @DeleteMapping(value = {"/courseOfferings/delete"})
+  public ResponseEntity<?> deleteCourseOffering(@RequestHeader String userToken, @RequestParam Integer id) {
+    try {
+      service.deleteCourseOffering(userToken, id);
       return ResponseEntity.ok().body("Course offering deleted successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
 
-  private CourseOfferingDto convertToDto(CourseOffering courseOffering) {
-    if (courseOffering == null) {
-      throw new IllegalArgumentException("There is no such course offering!");
-    }
-    return new CourseOfferingDto(courseOffering.getId(), courseOffering.getStartDate(),
-      courseOffering.getEndDate(), courseOffering.getDaysOffered(), courseOffering.getInstructorAccount(), courseOffering.getRoom());
-  }
 }

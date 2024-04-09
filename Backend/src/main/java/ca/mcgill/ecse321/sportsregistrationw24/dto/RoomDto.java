@@ -1,5 +1,5 @@
 package ca.mcgill.ecse321.sportsregistrationw24.dto;
-
+@Deprecated
 public class RoomDto {
 
   private String name;

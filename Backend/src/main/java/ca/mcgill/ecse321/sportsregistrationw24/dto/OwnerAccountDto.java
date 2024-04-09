@@ -1,5 +1,5 @@
 package ca.mcgill.ecse321.sportsregistrationw24.dto;
-
+@Deprecated
 public class OwnerAccountDto {
   private String email;
   private String password;

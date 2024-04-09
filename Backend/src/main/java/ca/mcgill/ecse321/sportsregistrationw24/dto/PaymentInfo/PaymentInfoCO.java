@@ -1,27 +1,17 @@
-package ca.mcgill.ecse321.sportsregistrationw24.dto;
+package ca.mcgill.ecse321.sportsregistrationw24.dto.PaymentInfo;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dao.CustomerAccountRepository;
-import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.PaymentInfo;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import org.springframework.beans.factory.annotation.Autowired;
 
-public class PaymentInfoDto {
-
+public class PaymentInfoCO {
   private Integer id;
-  //public enum PaymentType { Credit, Debit }
   private PaymentInfo.PaymentType paymentType;
-  private Integer cardNumber;
+  private String cardNumber;
   private Integer cvv;
   private Integer expirationYear;
   private Integer expirationMonth;
 
-
-
-  public PaymentInfoDto() {}
-
-  public PaymentInfoDto(Integer id, PaymentInfo.PaymentType paymentType, Integer cardNumber, Integer cvv, Integer expirationYear, Integer expirationMonth) {
+  public PaymentInfoCO() {}
+  public PaymentInfoCO(Integer id, PaymentInfo.PaymentType paymentType, String cardNumber, Integer cvv, Integer expirationYear, Integer expirationMonth) {
     this.id = id;
     this.paymentType = paymentType;
     this.cardNumber = cardNumber;
@@ -32,9 +22,8 @@ public class PaymentInfoDto {
 
   public Integer getId() { return this.id; }
   public PaymentInfo.PaymentType getPaymentType() { return this.paymentType; }
-  public Integer getCardNumber() { return this.cardNumber; }
+  public String getCardNumber() { return this.cardNumber; }
   public Integer getCvv() { return this.cvv; }
   public Integer getExpirationYear() { return this.expirationYear; }
   public Integer getExpirationMonth() { return this.expirationMonth; }
-
 }
