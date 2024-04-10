@@ -115,7 +115,14 @@
           const response4 = await AXIOS.get('/courseTypes/getAllApproved')
           /** @type {CourseType[]} */
           courseTypes = response4.data;
-          console.log(courseTypes);
+
+          // Filter out course offerings that aren't over yet
+          courseOfferings = courseOfferings.filter(offering => {
+              const endDate = new Date(offering.endDate);
+              const today = new Date();
+              // Compare endDate with today's date
+              return endDate < today;
+          });
 
           courseOfferings.forEach(offering => {
               /** @type {Instructor | undefined} */
@@ -177,7 +184,7 @@
             <td>{item.id}</td>
             <td>{item.startDate}</td>
             <td>{item.endDate}</td>
-            <td on:click={console.log(item.instructorId)}>{item.instructorId}</td>
+            <td>{item.instructorId}</td>
             <td>{item.courseTypeId}</td>
             <td>{item.daysOffered}</td>
             <td>{item.roomId}</td>
