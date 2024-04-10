@@ -42,8 +42,14 @@
       // Close modal
       closeModal();
     }
+
+    // Function to handle account deletion
+    function deleteAccount() {
+        // Placeholder for delete account logic
+        console.log('Account deletion requested.');
+        // Implement deletion logic here
+    }
   </script>
-  
   
 <!-- Account Settings Display -->
 <div class="page-container">
@@ -61,6 +67,7 @@
       </label>
     </div>
     <button class="btn btn-custom" on:click={openModal}>Edit Account Details</button>
+    <button class="btn btn-delete" on:click={deleteAccount}>Delete Account</button>
   </div>
   
   <!-- Modal Component -->
@@ -85,13 +92,13 @@
         <button class="btn btn-custom" on:click={closeModal}>Close</button>
       </div>
     </div>
-  </dialog>
-  {/if}
+</dialog>
+{/if}
 
   <style>
     .page-container {
-      max-width: 640px; /* Adjust the width as needed */
-      margin: 0 auto;
+      max-width: 90vw; /* Percentage of the viewport's width */
+      margin: 2rem auto; /* Top and bottom margin with auto horizontal */
       padding: 2rem;
     }
   
@@ -112,7 +119,7 @@
     }
   
     .btn-custom {
-      background-color: #5c6ac4; /* Example button color */
+      background-color: #5c6ac4;
       color: white;
       padding: 0.5rem 1rem;
       border: none;
@@ -125,12 +132,35 @@
     }
   
     .modal-box {
-      margin: auto; /* To make the modal width responsive */
-      max-width: 400px;
+      width: 80%; /* Dynamic width based on the parent container */
+      min-width: 300px; /* Minimum width to ensure usability */
+      max-width: 90vw; /* Maximum width as a percentage of the viewport width */
+      margin: auto; /* Center the modal */
       padding: 2rem;
+      box-sizing: border-box; /* Include padding in the width calculation */
     }
   
     .modal-action {
       margin-top: 0.5rem;
+    }
+  
+    /* Responsive adjustments */
+    @media (min-width: 768px) {
+      .modal-box {
+        width: 50%; /* Larger screens can have a smaller percentage width */
+        max-width: 600px; /* Adjust maximum width as appropriate */
+      }
+    }
+
+    .btn-delete {
+        background-color: #ff4b55; /* Red color for delete button */
+        color: white;
+        padding: 0.5rem 1rem;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-delete:hover {
+        background-color: #ff6b75; /* Lighter red on hover */
     }
   </style>
