@@ -22,7 +22,7 @@ public class CourseOffering {
   @Enumerated(EnumType.STRING)
   @Fetch(FetchMode.JOIN)
   private List<DayOfWeek> daysOffered;
-  @OneToOne
+  @ManyToOne
   private Room room;
   @ManyToOne
   private CourseType courseType;
