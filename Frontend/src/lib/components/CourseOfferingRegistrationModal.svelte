@@ -109,9 +109,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {#each paymentInfos as paymentInfo}
+                                {#each paymentInfos as paymentInfo, index}
                                     <tr>
-                                        <td><input type="checkbox" class="checkbox" bind:this={paymentOptions[paymentInfo.id]} bind:value={paymentInfo.id} on:click={mutexPayments}></td>
+                                        <td><input type="checkbox" class="checkbox" bind:this={paymentOptions[index]} bind:value={paymentInfo.id} on:click={mutexPayments}></td>
                                         <td>{paymentInfo.cardNumber}</td>
                                         <td>{paymentInfo.expirationYear}/{paymentInfo.expirationMonth}</td>
                                     </tr>
