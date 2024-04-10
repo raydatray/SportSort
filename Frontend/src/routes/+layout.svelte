@@ -1,6 +1,6 @@
 <script>
   import "../app.css";
-  import { IconHome, IconSchool, IconHistory, IconTicket, IconSettings, IconLogout, IconDoor, IconUsers, IconUserScreen, IconBallFootball } from '@tabler/icons-svelte';
+  import { IconLogin, IconHome, IconSchool, IconHistory, IconTicket, IconSettings, IconLogout, IconDoor, IconUsers, IconUserScreen, IconBallFootball } from '@tabler/icons-svelte';
   import Logo from "../assets/logo.png";
   import { onMount } from "svelte";
 
@@ -65,7 +65,7 @@
       <li class = "m-1 "><a href="/guestCourseOfferings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
       <li class="h-3/4 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
-      <li class = "m-1 "><a href="/login" class = "flex items-center space-x-2 p-0.2"> <IconLogout /> Login </a></li>
+      <li class = "m-1 "><a href="/login" class = "flex items-center space-x-2 p-0.2"> <IconLogin /> Login </a></li>
     {/if}
   </ul>
 </nav>
