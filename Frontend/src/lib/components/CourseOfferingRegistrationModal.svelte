@@ -26,6 +26,40 @@
             dialog.showModal();
         }
     });
+
+    let paymentOptions = [];
+
+    function mutexPayments(event) {
+        paymentOptions.forEach((checkbox) => {
+            if (checkbox !== event.target) {
+                checkbox.checked = false;
+            }
+        });
+        console.log(paymentOptions);
+    }
+
+    async function registerForCourseOffering() {
+        console.log("u clickd this!!!");
+        let selectedPaymentOption = paymentOptions.find((paymentOption) => paymentOption.checked);
+        if (selectedPaymentOption) {
+            try {
+                const registerForCourseOffering = await axios.post('http://localhost:8080/registrations/create', {
+                    courseOfferingId: selectedCourseOffering.id,
+                    paymentInfoId: selectedPaymentOption.value,
+                    pricePaid: 69,
+                    registrationDate: new Date().toISOString()
+                }, {
+                    headers: {
+                        userToken: 'token'
+                    }
+                });
+                console.log(registerForCourseOffering.data);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    }
+
 </script>
 
 <dialog bind:this={dialog} class="modal">
@@ -64,20 +98,34 @@
                         </table>
                     </div>
                 </div>
-                <div>
-                    {#each paymentInfos as paymentInfo}
-                        <div class="rounded-box bg-base-200">
-                            <strong>Card Number:</strong> <span>{paymentInfo.cardNumber}</span> <br>
-                            <strong>Card Type:</strong> <span>{paymentInfo.paymentType}</span> <br>
-                            <strong>Expiration Date:</strong> <span>{paymentInfo.expirationYear}/{paymentInfo.expirationMonth}</span> <br>
-                        </div>
-                    {/each}
+                <div class = "rounded-box overflow-auto bg-base-200">
+                    <div class="overflow-auto">
+                        <table class = "table">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Card Number</th>
+                                    <th>Expiration Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {#each paymentInfos as paymentInfo}
+                                    <tr>
+                                        <td><input type="checkbox" class="checkbox" bind:this={paymentOptions[paymentInfo.id]} bind:value={paymentInfo.id} on:click={mutexPayments}></td>
+                                        <td>{paymentInfo.cardNumber}</td>
+                                        <td>{paymentInfo.expirationYear}/{paymentInfo.expirationMonth}</td>
+                                    </tr>
+                                {/each}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
-            <div class="modal-action">
+            <div class="modal-action gap-x-4">
                 <form method="dialog">
                     <!-- if there is a button, it will close the modal -->
-                    <button class="btn">Close</button>
+                    <button class="btn">Cancel</button>
+                    <button class="btn" on:click|preventDefault={registerForCourseOffering}>Register</button>
                 </form>
             </div>
         </div>
