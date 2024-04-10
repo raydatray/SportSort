@@ -1,7 +1,5 @@
 <script>
-    import ListInfiniteScroll from "$lib/components/ListCourseTypeApproval.svelte";
     import { onMount } from 'svelte';
-    import { writable } from 'svelte/store';
     import axios from 'axios';
 
     const backendUrl = 'http://127.0.0.1:8080/';
@@ -10,17 +8,6 @@
         headers: { 'Access-Control-Allow-Origin': 'http://localhost:5173/' }
     });
 
-    /**
-     * Represents the clicked item.
-     * @type {string}
-     */
-    let clickedItem = "";
-
-    /**
-     * Represents the button that was clicked.
-     * @type {string}
-     */
-    let clickedButton = "";
     /**
      * An array of items.
      * @type {string[]}
