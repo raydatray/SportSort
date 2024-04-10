@@ -130,6 +130,36 @@
             });
     }
 
+    /**
+     * Handles the check button click event.
+     * @param {string} type - The type of course to be approved.
+     */
+    function handleX(type) {
+        const id = getClickedID(type);
+        AXIOS.put(`/courseTypes/updateRejection?id=${id}`, {}, {
+            headers:{
+                'userToken': 'wasd'
+            }
+        })
+            .then(response => {
+                console.log(getClickedID(type));
+                // Remove type and its ID from itemsType and itemsTypeID
+                const index = itemsType.indexOf(type);
+                if (index !== -1) {
+                    itemsType.splice(index, 1);
+                    itemsTypeID.splice(index, 1);
+                }
+
+                // Update the UI lists
+                itemsType = [...itemsType];
+                itemsTypeID = [...itemsTypeID];
+            })
+            .catch(e => {
+                errorType = e;
+                console.error(e);
+            });
+    }
+
 </script>
 
 
@@ -161,7 +191,7 @@
                         {type}
                         <div class="buttons-type">
                             <button class="check-button-type" on:click={() => { handleCheck(type)}}>✓</button>
-                            <button class="delete-button-type" on:click={() => { clickedItem = type; clickedButton = 'delete' }}>×</button>
+                            <button class="delete-button-type" on:click={() => { handleX(type) }}>×</button>
                         </div>
                     </div>
                 {/each}
