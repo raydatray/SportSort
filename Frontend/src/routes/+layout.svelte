@@ -35,7 +35,7 @@
       <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconTicket /> Registrations </a></li>
       <li class="spacer bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
-      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
+      <li class = "m-1 "><a href="/AccountSettings" class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
       <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconLogout /> Logout </a></li>
 
     {:else if userType === "OWNER"}
@@ -47,7 +47,7 @@
       <li class="h-3 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-2/5 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
-      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
+      <li class = "m-1 "><a href="/AccountSettings" class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
       <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconLogout /> Logout </a></li>
 
     {:else if userType === "INSTRUCTOR"}
@@ -60,7 +60,7 @@
       <li class="h-2 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-2/5 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
-      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
+      <li class = "m-1 "><a href="/AccountSettings" class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
       <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconLogout /> Logout </a></li>
 
     {:else}
