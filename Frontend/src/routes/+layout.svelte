@@ -2,21 +2,23 @@
   import "../app.css";
   import { IconLogin, IconHome, IconSchool, IconHistory, IconTicket, IconSettings, IconLogout, IconDoor, IconUsers, IconUserScreen, IconBallFootball } from '@tabler/icons-svelte';
   import Logo from "../assets/logo.png";
-  import { onMount } from "svelte";
 
-  let userType = 'CUSTOMER';
-  let token;
+  // Check if sessionStorage is available
+  const isSessionStorageAvailable = typeof sessionStorage !== 'undefined';
 
-  // onMount(() => {
-  //   if (typeof window !== 'undefined') {
-  //     token = localStorage.getItem('token');
-  //     // Decode the token to determine the user type
-  //     // Assuming you have a function to decode the token and get the user type
-  //     userType = decodeToken(token); // Implement decodeToken according to your token structure
-  //   }
-  // });
+  // Access sessionStorage if available
+  let userType = null;
+  if (isSessionStorageAvailable) {
+      userType = sessionStorage.getItem('role');
+  }
 
-
+  function logout() {
+      sessionStorage.removeItem('role');
+      sessionStorage.removeItem('token');
+      console.log('role');
+      console.log('token');
+      window.location.reload();
+  }
 </script>
 
 <div class="h-screen grid grid-cols-[240px_1fr] gap-x-1 p-2 mr-2" data-theme="north">
@@ -36,7 +38,7 @@
       <li class="spacer bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
       <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
-      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconLogout /> Logout </a></li>
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2" on:click={logout}> <IconLogout /> Logout </a></li>
 
     {:else if userType === "OWNER"}
       <li class = "m-1 "><a href="/" class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
@@ -48,7 +50,7 @@
       <li class="h-2/5 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
       <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
-      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconLogout /> Logout </a></li>
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2" on:click={logout}> <IconLogout /> Logout </a></li>
 
     {:else if userType === "INSTRUCTOR"}
       <li class = "m-1 "><a href="/" class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
@@ -56,7 +58,7 @@
       <li class = "m-1 "><a href="/courseHistory" class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
       <li class="m-1"><a href="/CourseTypeSubmission" class="flex items-center space-x-2 p-0.2"> <IconBallFootball /> Course Types </a></li>
       <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconTicket /> Registrations </a></li>
-      <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconUsers /> Manage Customers </a></li>
+      <li class="m-1"><a class="flex items-center space-x-2 p-0.2" on:click={logout}> <IconUsers /> Manage Customers </a></li>
       <li class="h-2 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-2/5 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
