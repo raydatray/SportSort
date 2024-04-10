@@ -12,11 +12,9 @@ import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionalEventListener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -153,6 +151,17 @@ public class UserAccountService {
 
       return foundUsers;
     }
+  }
+
+  @Transactional
+  public List<UserAccount> getAllInstructors(){
+    List<UserAccount> foundUsers = userAccountRepository.findByUserType(Collections.singletonList(InstructorAccount.class)).orElse(null);
+
+    if (foundUsers == null) {
+      throw new IllegalArgumentException("No instructors found!");
+    }
+
+    return foundUsers;
   }
 
   @Transactional

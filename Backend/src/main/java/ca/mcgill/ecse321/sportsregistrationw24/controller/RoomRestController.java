@@ -63,12 +63,11 @@ public class RoomRestController {
   **/
 
   @GetMapping(value = {"/rooms/getAll"})
-  public ResponseEntity<?> getRooms(@RequestHeader String userToken,
-                                    @RequestParam(required = false) Integer floorNumber,
+  public ResponseEntity<?> getRooms(@RequestParam(required = false) Integer floorNumber,
                                     @RequestParam(required = false) Integer lowCapacity,
                                     @RequestParam(required = false) Integer highCapacity) {
     try {
-      List<Room> rooms = service.getAllRooms(userToken, floorNumber, lowCapacity, highCapacity);
+      List<Room> rooms = service.getAllRooms(floorNumber, lowCapacity, highCapacity);
       List<RoomDTO> roomDTOS = rooms.stream().map(RoomDTO::new).toList();
 
       return ResponseEntity.ok().body(roomDTOS);

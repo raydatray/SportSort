@@ -14,9 +14,9 @@ import java.util.Optional;
 public interface CourseOfferingRepositoryCustom {
   Optional<List<CourseOffering>> findCourseOfferingsByFilters(Date startDate, Date endDate,
                                                               Time startTime, Time endTime,
-                                                              Integer lowPrice, Integer highPrice,
-                                                              CourseType courseType,
+                                                              Integer highPrice,
+                                                              List<CourseType> courseTypes,
                                                               List<DayOfWeek> daysOffered,
-                                                              Room room,
-                                                              InstructorAccount instructor);
+                                                              List<Room> rooms,
+                                                              List<InstructorAccount> instructors);
 }
