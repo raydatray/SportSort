@@ -1,11 +1,20 @@
 <script>
     import { onMount } from 'svelte';
     import axios from 'axios';
+    import Hero from '../assets/homepage.png';
+    import Discord from '../assets/discord.png';
+    import Nike from '../assets/nike.png';
+    import Intel from '../assets/int.png';
+    import Yonex from '../assets/yonex.png';
+    import VSC from '../assets/vsc.png';
+    import Postman from '../assets/postman.png';
+    import Github from '../assets/github.png';
 
     const frontendUrl = 'http://localhost:5173';
     const backendUrl = 'http://127.0.0.1:8080';
     let sportCenter;
-    let users = [];
+    let instructors = [];
+    let courseTypes = [];
     let errorPerson;
 
     const AXIOS = axios.create({
@@ -21,15 +30,17 @@
         .catch(e => {
             errorPerson = e;
         });
-        AXIOS.get('/accounts/getAll', {
-            headers: {
-                'userToken': 'asdf'
-            }
-        })
+        AXIOS.get('/accounts/getInstructors')
         .then(response => {
-            // Filter the response to include only users with type 'INSTRUCTOR'
-            users = response.data.filter(user => user.type === 'INSTRUCTOR');
-            console.log(users);
+            instructors = response.data
+            console.log(instructors);
+        })
+        .catch(e => {
+            errorPerson = e;
+        });
+        AXIOS.get('/courseTypes/getAllApproved')
+        .then(response => {
+            courseTypes = response.data;
         })
         .catch(e => {
             errorPerson = e;
@@ -48,73 +59,215 @@
     <p class="text-xs welcome-text">Working Out Just Got Better</p>
 </div>
 
-<div class="h-0.5 m-4 spacer bg-base-300" />
+<div class="justify-center w-full h-4 -ml-px spacer2 bg-base-300"/>
 
 <div class="dashboard">
-    <div class="rounded-lg shadow-lg stat">
-        <div class="stat-title">Total Page Views</div>
-        <div class="stat-value">89,400</div>
-        <div class="stat-desc">21% more than last month</div>
+    <div class="flex-row">
+    <div class="p-2 card">
+        <div class="m-1 rounded-lg hero bg-base-200">
+            <div class="flex flex-col-reverse items-center hero-content lg:flex-row-reverse lg:items-start">
+                <img src={Hero} class="rounded-lg shadow-2xl size-4/12" />
+                <div class="mt-12">
+                    {#if sportCenter}
+                        <h1 class="mb-5 text-5xl font-bold">{sportCenter.name}</h1>
+                    {:else}
+                        <h1 class="mb-5 text-5xl font-bold">Loading...</h1>
+                    {/if}
+                    <div class="-ml-7 info-section">
+                        <div class="hours">
+                            <h1 class="mb-2 text-xl font-bold">Opening Hours</h1>
+                            {#if sportCenter}
+                                <p> Every Day: {sportCenter.openingHour} - {sportCenter.closingHour}</p>
+                            {:else}
+                                <p> Loading...</p>
+                            {/if}
+                        </div>
+                        <div class="general-info">
+                            <h1 class="mb-2 text-xl font-bold">General Information</h1>
+                            {#if sportCenter}
+                                <p> {sportCenter.address}</p>
+                                <p> {sportCenter.phoneNumber}</p>
+                            {:else}
+                                <p> Loading...</p>
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  
-    <div class="card agenda">
-      <!-- Content for Agenda -->
-      <h2>Agenda (120 sessions)</h2>
-      <!-- Agenda items here -->
-      <button>View</button>
-    </div>
-  
-    <div class="overflow-x-auto">
-        <table class="table">
+
+    <div class="card">
+        <h1 class="text-xl font-extrabold">
+            Instructors
+        </h1>
+        <div class="size-1/2 stats-container">
+            <div class="rounded-lg shadow-lg stat place-items-center">
+                <div class="stat-title">Total Instructors</div>
+                <div class="stat-value">{instructors.length}</div>
+                <div class="stat-desc">Numerous!</div>
+            </div>
+            <div class="rounded-lg shadow-lg stat place-items-center">
+                <div class="stat-title">Open Since</div>
+                <div class="stat-value">1908</div> <!-- Example data -->
+                <div class="stat-desc">At your service!</div>
+            </div>
+        </div>
+        <table class="table overflow-y-scroll">
             <!-- head -->
             <thead>
             <tr>
-                <th></th>
+                <th>#</th>
                 <th>Name</th>
-                <th>Job</th>
-                <th>Favorite Color</th>
             </tr>
             </thead>
             <tbody>
-            <!-- row 1 -->
-            <tr>
-                <th>1</th>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-            </tr>
-            <!-- row 2 -->
-            <tr class="hover">
-                <th>2</th>
-                <td>Hart Hagerty</td>
-                <td>Desktop Support Technician</td>
-                <td>Purple</td>
-            </tr>
-            <!-- row 3 -->
-            <tr>
-                <th>3</th>
-                <td>Brice Swyre</td>
-                <td>Tax Accountant</td>
-                <td>Red</td>
-            </tr>
+            <!-- Use Svelte's each block to iterate over instructors -->
+            {#each instructors as instructor, index}
+                <tr>
+                    <th>{index + 1}</th>
+                    <td>{instructor.name}</td>
+                </tr>
+            {/each}
             </tbody>
         </table>
     </div>
+
+    </div>
+    <div class="flex-row">
+        <div class="card courses">
+            <h1 class="mb-1 font-extrabold">Courses Offered ({courseTypes.length} sessions)</h1>
+            <h2 class="mb-3">Includes all hobbies!</h2>
+            <div class="p-4 space-x-4 carousel carousel-center bg-neutral rounded-box">
+                {#each courseTypes as courseType}
+                    <div class="carousel-item">
+                        <h3>{courseType.courseName}</h3>
+                    </div>
+                {/each}
+            </div>
+        </div>
   
     <div class="card sponsors">
       <!-- Content for Sponsors -->
-      <h2>Sponsors</h2>
-      <!-- List of sponsors here -->
-      <button>View</button>
+      <h1 class="mb-1 font-extrabold">Sponsors</h1>
+        <h2 class="mb-3">Thank you to our generous sponsors</h2>
+        <div class="p-4 space-x-4 carousel carousel-center bg-neutral rounded-box">
+            <div class="carousel-item">
+              <img src={Discord} class="rounded-box" />
+            </div> 
+            <div class="carousel-item">
+              <img src={Yonex} class="rounded-box" />
+            </div> 
+            <div class="carousel-item">
+              <img src={Nike} class="rounded-box" />
+            </div> 
+            <div class="carousel-item">
+              <img src={Intel} class="rounded-box" />
+            </div> 
+            <div class="carousel-item">
+              <img src={Postman} class="rounded-box" />
+            </div> 
+            <div class="carousel-item">
+                <img src={VSC} class="rounded-box" />
+            </div> 
+            <div class="carousel-item">
+                <img src={Github} class="rounded-box" />
+            </div> 
+          </div>
+      
     </div>
   </div>
+</div>
   
-  <style>
+<style>
+    .carousel {
+        display: flex;
+        overflow-x: auto;
+    }
+
+    .carousel-item {
+        flex: 0 0 auto; /* Do not grow or shrink */
+        width: 120px; /* Set a fixed width */
+        height: 120px; /* Set height equal to width for square aspect */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #f3f4f6;
+    }
+
+    .carousel-item img {
+        max-width: 100%; /* Ensure the image is responsive and fits within its container */
+        max-height: 100%; /* Ensure the image height does not exceed the container */
+        object-fit: contain; /* Keep the aspect ratio of the image */
+    }
+
+    .dashboard {
+        display: flex;
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .flex-row {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: #f3f4f6;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        overflow-x: hidden; /* Prevent horizontal overflow */
+        overflow-y: auto; /* Add vertical scrollbar when needed */
+    }
+
+    .flex-row:first-child > .card {
+        flex: 3 2 0; /* 3/4 of the space for the first card */
+    }
+
+    .flex-row:first-child > .card:last-child {
+        flex: 2 3 0; /* 1/4 of the space for the second card */
+    }
+
+    .flex-row:last-child > .card:first-child {
+        flex: 2 1 0; /* 2/5 of the space for the first card in the second row */
+    }
+
+    .flex-row:last-child > .card:last-child {
+        flex: 3 1 0; /* 3/5 of the space for the second card in the second row */
+    }
+
+    .stats-container {
+        display: flex;
+        justify-content: space-around; /* Or 'space-between' as per your design needs */
+        padding: 10px;
+        gap: 20px;
+    }
+
+    .stat {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff; /* or any color that fits your design */
+        width: 100%; /* Ensures equal width distribution if you have more than two stats */
+    }
+    
     .header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 8px;
+        margin-bottom: 5px;
         padding: 0 20px; /* Aligns with the grid padding */
     }
 
@@ -122,7 +275,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px; /* Spacing between the header and the grid */
+        margin-bottom: 13px; /* Spacing between the header and the grid */
         padding: 0 20px; /* Aligns with the grid padding */
     }
 
@@ -136,33 +289,22 @@
         max-height: 100px; /* Set a max-height for your gif to make sure it's not too large */
         margin-left: 20px; /* Adds some space between the text and the gif */
     }
-    
-    .dashboard {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-      padding: 20px;
+
+    .spacer2 {
+        height: 2px;
     }
-    
-    .card {
-      border-radius: 10px;
-      padding: 20px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+    .info-section {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+        gap: 20px; /* Adjust gap as necessary */
     }
-  
-    button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 15px;
+
+    .hours, .general-info {
+        padding: 10px;
+        background-color: #f0f0f0; /* Light grey background, change as needed */
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
-  
-    button:hover {
-      background-color: #0056b3;
-    }
-  
-    /* Add additional styling as needed */
-  </style>
+</style>
