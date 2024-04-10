@@ -122,6 +122,8 @@
               const instructor = instructors.find(inst => inst.id === offering.instructorId);
               if (instructor) {
                   offering.instructorId = instructor.name;
+              } else {
+                  offering.instructorId = "N/A"
               }
           })
 
@@ -130,6 +132,8 @@
               const room = rooms.find(r => r.id === offering.roomId);
               if (room) {
                   offering.roomId = room.name;
+              } else {
+                  offering.roomId = "N/A";
               }
           })
 
@@ -138,6 +142,8 @@
               const courseType = courseTypes.find(cT => cT.id === offering.courseTypeId);
               if (courseType) {
                   offering.courseTypeId = courseType.courseName;
+              } else {
+                  offering.courseTypeId = "N/A";
               }
           })
 
