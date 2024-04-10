@@ -9,6 +9,7 @@
     import VSC from '../assets/vsc.png';
     import Postman from '../assets/postman.png';
     import Github from '../assets/github.png';
+    import Ratings from '../assets/ratings.png';
 
     const frontendUrl = 'http://localhost:5173';
     const backendUrl = 'http://127.0.0.1:8080';
@@ -108,7 +109,12 @@
                 <div class="stat-desc">Numerous!</div>
             </div>
             <div class="rounded-lg shadow-lg stat place-items-center">
-                <div class="stat-title">Open Since</div>
+                <div class="mb-1 stat-title">Over 10000 People Rated Us</div>
+                <div class="mb-1 stat-value"><img src={Ratings}></div> <!-- Example data -->
+                <div class="stat-desc">Satisfaction Garanteed</div>
+            </div>
+            <div class="rounded-lg shadow-lg stat place-items-center">
+                <div class="stat-title">Serving You Since</div>
                 <div class="stat-value">1908</div> <!-- Example data -->
                 <div class="stat-desc">At your service!</div>
             </div>
