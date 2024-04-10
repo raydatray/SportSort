@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.getUserFromToken;
+import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.iterableToArrayList;
 
 @Service
 public class RoomService {
@@ -105,14 +106,18 @@ public class RoomService {
   }
 
   @Transactional
-  public List<Room> getAllRooms(String userToken, Integer floorNumber, Integer capacityLow, Integer capacityHigh) {
-    UserAccount user = getUserFromToken(userAccountRepository, userToken);
-
-    if (user.getUserType().equals("CUSTOMER")){
-      throw new IllegalArgumentException("Only instructors and owners can view rooms!");
-    }
+  public List<Room> getAllRooms(Integer floorNumber, Integer capacityLow, Integer capacityHigh) {
     List<Room> foundRooms = roomRepository.findRoomsByFilters(floorNumber, capacityLow, capacityHigh).orElse(null);
     if (foundRooms == null) {
+      throw new IllegalArgumentException("No rooms found with these filters");
+    }
+    return foundRooms;
+  }
+
+  @Transactional
+  public List<Room> getRoomsForFilters() {
+    List<Room> foundRooms = iterableToArrayList(roomRepository.findAll());
+    if (foundRooms.isEmpty()) {
       throw new IllegalArgumentException("No rooms found with these filters");
     }
     return foundRooms;

@@ -63,16 +63,15 @@ public class CourseOfferingRestController {
   @GetMapping(value = {"/courseOfferings/getAll"})
   public ResponseEntity<?> getAllCourseOfferings(@RequestParam(required = false) Date lD,
                                                  @RequestParam(required = false) Date hD,
-                                                 @RequestParam(required = false) Integer lP,
                                                  @RequestParam(required = false) Integer hP,
                                                  @RequestParam(required = false) Time lT,
                                                  @RequestParam(required = false) Time hT,
                                                  @RequestParam(required = false) List<DayOfWeek> dO,
-                                                 @RequestParam(required = false) Integer cT,
-                                                 @RequestParam(required = false) Integer rId,
-                                                 @RequestParam(required = false) Integer iI){
+                                                 @RequestParam(required = false) List<Integer> cT,
+                                                 @RequestParam(required = false) List<Integer> rId,
+                                                 @RequestParam(required = false) List<Integer> iI){
     try {
-      List<CourseOffering> courseOfferings = service.getAllCourseOfferings(lD, hD, lP, hP, lT, hT, dO, cT, rId, iI);
+      List<CourseOffering> courseOfferings = service.getAllCourseOfferings(lD, hD, hP, lT, hT, dO, cT, rId, iI);
       List<CourseOfferingDTO> courseOfferingDTOs = courseOfferings.stream().map(CourseOfferingDTO::new).toList();
 
       return ResponseEntity.ok().body(courseOfferingDTOs);

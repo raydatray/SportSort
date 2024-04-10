@@ -1,9 +1,11 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
+import ca.mcgill.ecse321.sportsregistrationw24.dto.UserAccounts.InstructorDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.UserAccounts.UserAccountCO;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.UserAccounts.UserAccountDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.service.UserAccountService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,6 +65,18 @@ public class UserAccountRestController {
       List<UserAccountDTO> userAccountDTOs = userAccounts.stream().map(UserAccountDTO::new).toList(); //wtf?
 
       return ResponseEntity.ok().body(userAccountDTOs);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
+
+  @GetMapping(value = {"/accounts/getInstructors"})
+  public ResponseEntity<?> getInstructors(){
+    try{
+      List<UserAccount> userAccounts = service.getAllInstructors();
+      List<InstructorDTO> instructorDTOs = userAccounts.stream().map(InstructorDTO::new).toList();
+
+      return ResponseEntity.ok().body(instructorDTOs);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
