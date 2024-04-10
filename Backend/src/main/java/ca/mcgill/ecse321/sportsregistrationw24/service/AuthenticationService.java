@@ -32,7 +32,7 @@ public class AuthenticationService {
     foundUser.setToken(generatedToken);
     userAccountRepository.save(foundUser);
 
-    return new AuthenticationDTO(foundUser.getToken(), foundUser.getUserType());
+    return new AuthenticationDTO(foundUser.getToken(), foundUser.getUserType(), foundUser.getEmail(), foundUser.getName());
   }
 
   @Transactional
