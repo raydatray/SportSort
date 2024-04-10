@@ -20,4 +20,9 @@ public class PaymentInfoDTO {
   public PaymentInfoDTO(PaymentInfo aPaymentInfo) {
     this(aPaymentInfo.getId(), aPaymentInfo.getPaymentType(), aPaymentInfo.getTrailingFourDigits(),  aPaymentInfo.getExpirationYear(), aPaymentInfo.getExpirationMonth(), aPaymentInfo.getCustomerAccount().getId());
   }
+  public Integer getId() { return this.id; }
+  public PaymentInfo.PaymentType getPaymentType() { return this.paymentType; }
+  public Integer getCardNumber() { return this.cardNumber; }
+  public Integer getExpirationYear() { return this.expirationYear; }
+  public Integer getExpirationMonth() { return this.expirationMonth; }
 }

@@ -66,6 +66,8 @@ public class RegistrationService {
     registration.setRegisteredDate(registrationDate);
     registration.setPricePaid(pricePaid);
 
+    registration.setId(new RegistrationId(((CustomerAccount) user).getId(), courseOfferingId));
+
     registrationRepository.save(registration);
   }
 

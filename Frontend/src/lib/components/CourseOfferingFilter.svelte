@@ -65,16 +65,16 @@
 
 <div class = "flex-col space-y-.5">
     <div class = "join join-vertical">
-    <div class = "p-4 text-lg font-medium join-item bg-base-200 rounded-3xl">Filters</div>
+    <div class = "join-item text-lg font-medium p-4 bg-base-200 rounded-3xl">Filters</div>
     <div class = "join-item collapse collapse-arrow bg-base-200">
         <input type = "checkbox"/>
-        <div class = "font-medium collapse-title text-md">
+        <div class = "collapse-title text-md font-medium">
             Course Types
         </div>
         <div class = "collapse-content">
             {#each courseTypes as courseType}
-                <label class = "flex form-control">
-                    <label class = "justify-start cursor-pointer label gap-x-3">
+                <label class = "form-control flex">
+                    <label class = "label justify-start gap-x-3 cursor-pointer">
                         <input type = "checkbox" bind:this={courseTypeCheckboxes[courseType.id]} bind:value={courseType.id} on:change = {handleFilterChange} class = "checkbox"/>
                         <span class = "label-text">{courseType.courseName}</span>
                     </label>
@@ -85,16 +85,16 @@
 
     <div class = "join-item collapse collapse-arrow bg-base-200">
         <input type = "checkbox"/>
-        <div class = "font-medium collapse-title text-md">
+        <div class = "collapse-title text-md font-medium">
             Price
         </div>
         <div class = "collapse-content">
-            <form class = "grid justify-center grid-flow-col space-x-5 auto-cols-max" >
+            <form class = "grid grid-flow-col auto-cols-max space-x-5 justify-center" >
                 <div>
                     <input type = "range"  min = "0" max = "1000" bind:value={price} on:change = {handleFilterChange} class = "range"/>
                 </div>
                 <div>
-                    <input type = "number"  min = "0" max = "1000" bind:value={price} on:change = {handleFilterChange} class = "w-full max-w-xs input input-bordered input-xs"/>
+                    <input type = "number"  min = "0" max = "1000" bind:value={price} on:change = {handleFilterChange} class = "input input-bordered input-xs w-full max-w-xs"/>
                 </div>
             </form>
 
@@ -103,13 +103,13 @@
 
     <div class = "join-item collapse collapse-arrow bg-base-200">
         <input type = "checkbox"/>
-        <div class = "font-medium collapse-title text-md">
+        <div class = "collapse-title text-md font-medium">
             Days Offered
         </div>
         <div class = "collapse-content">
             {#each daysOfWeek as day, index}
                 <div class = "form-control">
-                    <label class = "justify-start cursor-pointer label gap-x-3">
+                    <label class = "label justify-start gap-x-3 cursor-pointer">
                         <input type = "checkbox" bind:this={daysCheckboxes[index]} bind:value={day} on:change = {handleFilterChange} class = "checkbox"/>
                         <span class ="label-text">{day}</span>
                     </label>
@@ -120,16 +120,16 @@
 
     <div class = "join-item collapse collapse-arrow bg-base-200">
         <input type = "checkbox"/>
-        <div class = "font-medium collapse-title text-md">
+        <div class = "collapse-title text-md font-medium">
             Course Dates
         </div>
         <div class = "collapse-content">
-            <form class = "grid justify-center grid-flow-row space-y-5 auto-rows-max" >
+            <form class = "grid grid-flow-row auto-rows-max space-y-5 justify-center" >
                 <div>
-                    <input type = "date" bind:value={startDate} on:change={handleFilterChange} class = "w-full max-w-xs input input-bordered input-sm"/>
+                    <input type = "date" bind:value={startDate} on:change={handleFilterChange} class = "input input-bordered input-sm w-full max-w-xs"/>
                 </div>
                 <div>
-                    <input type = "date" bind:value={endTime} on:change={handleFilterChange} class = "w-full max-w-xs input input-bordered input-sm"/>
+                    <input type = "date" bind:value={endTime} on:change={handleFilterChange} class = "input input-bordered input-sm w-full max-w-xs"/>
                 </div>
             </form>
         </div>
@@ -137,16 +137,16 @@
 
     <div class = "join-item collapse collapse-arrow bg-base-200">
         <input type = "checkbox"/>
-        <div class = "font-medium collapse-title text-md">
+        <div class = "collapse-title text-md font-medium">
             Course Times
         </div>
         <div class = "collapse-content">
-            <form class = "grid justify-center grid-flow-row space-y-5 auto-rows-max" >
+            <form class = "grid grid-flow-row auto-rows-max space-y-5 justify-center" >
                 <div>
-                    <input type = "time" bind:value={startTime} on:change={handleFilterChange} class = "w-full max-w-xs input input-bordered input-sm"/>
+                    <input type = "time" bind:value={startTime} on:change={handleFilterChange} class = "input input-bordered input-sm w-full max-w-xs"/>
                 </div>
                 <div>
-                    <input type = "time" bind:value={endTime} on:change={handleFilterChange} class = "w-full max-w-xs input input-bordered input-sm"/>
+                    <input type = "time" bind:value={endTime} on:change={handleFilterChange} class = "input input-bordered input-sm w-full max-w-xs"/>
                 </div>
             </form>
         </div>
@@ -154,13 +154,13 @@
 
     <div class = "join-item collapse collapse-arrow bg-base-200">
         <input type = "checkbox"/>
-        <div class = "font-medium collapse-title text-md">
+        <div class = "collapse-title text-md font-medium">
             Instructors
         </div>
         <div class = "collapse-content">
             {#each instructors as instructor}
                 <div class = "form-control">
-                    <label class = "justify-start cursor-pointer label gap-x-3">
+                    <label class = "label justify-start gap-x-3 cursor-pointer">
                         <input type = "checkbox" bind:this={instructorCheckboxes[instructor.id]} bind:value={instructor.id} on:change = {handleFilterChange} class = "checkbox"/>
                         <span class ="label-text">{instructor.name}</span>
                     </label>
@@ -171,13 +171,13 @@
 
     <div class = "join-item collapse collapse-arrow bg-base-200 rounded-3xl">
         <input type = "checkbox"/>
-        <div class = "font-medium collapse-title text-md">
+        <div class = "collapse-title text-md font-medium">
             Rooms
         </div>
         <div class = "collapse-content">
             {#each rooms as room}
                 <label class = "form-control">
-                    <label class = "justify-start cursor-pointer label gap-x-3">
+                    <label class = "label justify-start gap-x-3 cursor-pointer">
                         <input type = "checkbox" bind:this={roomCheckboxes[room.id]} bind:value = {room.id} on:change = {handleFilterChange} class = "checkbox"/>
                         <span class = "label-text">{room.name}</span>
                     </label>
