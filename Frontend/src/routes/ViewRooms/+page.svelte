@@ -130,7 +130,7 @@
         <tbody>
           <!-- row 1 -->
           {#each rooms as room, index (room)}
-          <tr class="hover" on:click={rowClicked(room.floorNumber, room.roomNumber, room.name, room.capacity)}>
+          <tr class="hover" on:click={() => rowClicked(room.floorNumber, room.roomNumber, room.name, room.capacity)}>
             <th>{index+1}</th>
             <th>{room.name}</th>
             <th>{room.floorNumber}</th>

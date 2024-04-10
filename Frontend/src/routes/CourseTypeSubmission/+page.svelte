@@ -100,7 +100,7 @@
         placeholder="Enter CourseType here"
       />
       <div class="flex justify-end mt-2">
-        <button class="btn" on:click={handleClick(value)}>Submit CourseType</button>
+        <button class="btn" on:click={() => handleClick(value)}>Submit CourseType</button>
       </div>
     </div>
     <div class="listInstructor">
