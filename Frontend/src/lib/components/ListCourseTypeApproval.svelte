@@ -4,16 +4,10 @@
      * An array of items.
      * @type {string[]}
      */
-    let items = [
-        'Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8',
+    export let items = []
+    /*    'Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8',
         'Item 9', 'Item 10', 'Item 11', 'Item 12', 'Item 13', 'Item 14', 'Item 15', 'Item 16', 'Item 17'
-    ];
-
-    /**
-     * Represents the hovered item.
-     * @type {string}
-     */
-    let hoveredItem = "";
+    ]; */
 
     /**
      * Represents the clicked item.
@@ -45,15 +39,6 @@
                 </div>
             </div>
         {/each}
-    </div>
-    <!-- Display hovered item in a textbox -->
-    <div class="hovered-item">
-        {#if hoveredItem}
-            Hovered Item: {hoveredItem}
-        {:else}
-            <!-- Display something when nothing is hovered over -->
-            Hovered Item: Item x
-        {/if}
     </div>
     <!-- Display clicked item in a textbox -->
     <div class="clicked-item">
@@ -144,16 +129,6 @@
         font-size: 2.9vh;
         text-align: center; /* Center the header text horizontally */
         width: 100%; /* Ensure header spans the full width */
-    }
-
-    /* Style for hovered item textbox */
-    .hovered-item {
-        margin: 10px; /* Add margin on top */
-        padding: 5px;
-        /*background-color: #FFFF;*/
-        border: 2px solid #ccc;
-        border-radius: 5px; /* Rounded corners */
-        text-align: center; /* Center text horizontally */
     }
 
     /* Style for clicked item textbox */
