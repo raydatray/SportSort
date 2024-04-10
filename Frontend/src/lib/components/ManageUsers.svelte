@@ -176,7 +176,7 @@
   }
 
   function createInstructor() {
-  const userToken = 'asdf'; // Replace with your actual token retrieval logic
+  const userToken = sessionStorage.getItem('token'); // Replace with your actual token retrieval logic
 
   const newInstructorDetails = {
     name: newName,
@@ -227,7 +227,7 @@
 
   function saveUpdatedDetails() {
   if (currentInstructorIndex !== null) {
-    const userToken = 'asdf'; //TODO This needs to be updated to the actual instructor's TOKEN or it's gonna keep updating the OWNER
+    const userToken = sessionStorage.getItem('token'); //TODO This needs to be updated to the actual instructor's TOKEN or it's gonna keep updating the OWNER
 
     const updatedDetails = {
       name: updatedName,
@@ -260,7 +260,7 @@
 }
 
   function deleteInstructor(email) {
-    const userToken = 'asdf'; // Adjust this to your actual user token management
+    const userToken = sessionStorage.getItem('token'); // Adjust this to your actual user token management
 
     AXIOS.delete('/accounts/delete', {
       headers: {

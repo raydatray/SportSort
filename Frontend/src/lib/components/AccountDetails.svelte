@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import axios from 'axios';
-  import { IconMail } from "@tabler/icons-svelte";
+  import { IconEye, IconMail } from "@tabler/icons-svelte";
 
   // Reactive variables for the current user
   let currentUser = {
@@ -9,10 +9,15 @@
       email: '',
   };
 
+  let passwordVisible = false; // Reactive variable for password visibility
+  // Related to updating 
+  let tempPassword = ''; // New variable for the updated password
+
   let error; // To hold any errors during fetching
   let modalOpen = false;
 
   // Temporary state to store changes while editing
+  let tempName = currentUser.name;
   let tempEmail = currentUser.email;
 
   const AXIOS = axios.create({
@@ -21,7 +26,7 @@
   });
 
   onMount(() => {
-      const loggedInToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob3VtYW4iLCJpYXQiOjE3MTI3NzQ4OTIsImV4cCI6MTcxMjgxODA5Mn0._rOD3ythpSAlmuBg1Cx4h2xS8SfuAObzHm44QZFjO3o";
+      const loggedInToken =  sessionStorage.getItem('token');
       AXIOS.get('/accounts/getAll', {
           headers: {
               'userToken': 'asdf' // Adjusted to use the stored token
@@ -48,7 +53,6 @@
   function openModal() {
       modalOpen = true;
       // Set temporary state to current values
-      tempEmail = currentUser.email;
   }
 
   // Function to close the modal without saving
@@ -58,10 +62,42 @@
 
   // Function to save changes and close the modal
   function saveChanges() {
-      // Save temporary state back to permanent state
-      currentUser.email = tempEmail;
-      // Close modal
-      closeModal();
+  // Prepare the request body with the new user details
+  const userUpdateDetails = {
+    name: tempName,
+    email: tempEmail,
+    password: tempPassword,
+  };
+
+  // The userToken should be retrieved or stored somewhere accessible
+  // This is just a placeholder; you need to replace it with the actual token
+  const userToken = sessionStorage.getItem('token');
+
+
+  // Send the PUT request to the backend
+  AXIOS.put('/accounts/update', userUpdateDetails, {
+    headers: {
+      'userToken': userToken, // Include the token in the request headers
+    }
+  })
+  .then(response => {
+    // Handle success
+    console.log('Account updated successfully:', response.data);
+    // Update the currentUser object with the new details
+    currentUser.name = tempName;
+    currentUser.email = tempEmail;
+    // Close the modal
+    closeModal();
+  })
+  .catch(error => {
+    // Handle error
+    console.error('Error updating account:', error.response ? error.response.data : error.message);
+    // Optionally update the UI to show the error
+  });
+}
+
+  function togglePassword() {
+    passwordVisible = !passwordVisible;
   }
 
   // Function to handle account deletion
@@ -86,19 +122,30 @@
   <button class="btn btn-delete" on:click={deleteAccount}>Delete Account</button>
 </div>
 
-<!-- Modal Component for Editing Email -->
+
+<!-- Modal Component -->
 {#if modalOpen}
 <dialog open class="modal">
   <div class="modal-box"> 
-      <h3 class="font-bold text-lg">Edit Account Details</h3>
-      <label class="input input-bordered flex items-center gap-2 mb-4">
-          <IconMail/>
-          <input type="email" bind:value={tempEmail} class="grow" placeholder="Email" />
-      </label>
-      <div class="modal-action">
-          <button class="btn btn-custom" on:click={saveChanges}>Save</button>
-          <button class="btn btn-custom" on:click={closeModal}>Close</button>
-      </div>
+    <h3 class="font-bold text-lg">Edit Account Details</h3>
+    <label class="input input-bordered flex items-center gap-2 mb-4">
+      <input type="email" bind:value={tempName} class="grow" placeholder={currentUser.name} />
+    </label>
+    <label class="input input-bordered flex items-center gap-2 mb-4">
+      <input type="email" bind:value={tempEmail} class="grow" placeholder={currentUser.email} />
+    </label>
+    <label class="input input-bordered flex items-center gap-2">
+      {#if passwordVisible}
+        <input type="text" bind:value={tempPassword} class="grow" placeholder="Password" />
+      {:else}
+        <input type="password" bind:value={tempPassword} class="grow" placeholder="Password" />
+      {/if}
+      <button on:click={togglePassword} class="btn-neutral"><IconEye color = "black"/></button>
+    </label>
+    <div class="modal-action">
+      <button class="btn btn-custom" on:click={saveChanges}>Save</button>
+      <button class="btn btn-custom" on:click={closeModal}>Close</button>
+    </div>
   </div>
 </dialog>
 {/if}
