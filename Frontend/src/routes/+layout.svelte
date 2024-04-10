@@ -1,22 +1,41 @@
 <script>
-  import "../app.css";
-  import { IconLogin, IconHome, IconSchool, IconHistory, IconTicket, IconSettings, IconLogout, IconDoor, IconUsers, IconUserScreen, IconBallFootball } from '@tabler/icons-svelte';
-  import Logo from "../assets/logo.png";
-  import { onMount } from "svelte";
+    import "../app.css";
+    import { IconLogin, IconHome, IconSchool, IconHistory, IconTicket, IconSettings, IconLogout, IconDoor, IconUsers, IconUserScreen, IconBallFootball } from '@tabler/icons-svelte';
+    import Logo from "../assets/logo.png";
+    import axios from "axios";
 
-  let userType = 'CUSTOMER';
-  let token;
+    const backendUrl = 'http://127.0.0.1:8080/';
 
-  // onMount(() => {
-  //   if (typeof window !== 'undefined') {
-  //     token = localStorage.getItem('token');
-  //     // Decode the token to determine the user type
-  //     // Assuming you have a function to decode the token and get the user type
-  //     userType = decodeToken(token); // Implement decodeToken according to your token structure
-  //   }
-  // });
+    const AXIOS = axios.create({
+        baseURL: backendUrl,
+        headers: { 'Access-Control-Allow-Origin': 'http://localhost:5173/' }
+    });
 
+    // Check if sessionStorage is available
+    const isSessionStorageAvailable = typeof sessionStorage !== 'undefined';
 
+    // Access sessionStorage if available
+    let userType = null;
+    if (isSessionStorageAvailable) {
+        userType = sessionStorage.getItem('role');
+    }
+
+    function logout() {
+        console.log(sessionStorage.getItem('token'));
+        AXIOS.post("/logout", null, {
+            headers : {
+                'token' : sessionStorage.getItem('token')
+            }
+        })
+        .then(response => {
+            sessionStorage.removeItem('role');
+            sessionStorage.removeItem('token');
+            window.location.reload();
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
 </script>
 
 <div class="h-screen grid grid-cols-[240px_1fr] gap-x-1 p-2 mr-2" data-theme="north">
@@ -28,7 +47,7 @@
       </a>  
     </li>
     <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
-    {#if userType === 'CUSTOMER'}\
+    {#if userType === 'CUSTOMER'}
       <li class = "m-1 "><a href="/customerHomePage" class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
       <li class = "m-1 "><a href="/courseOfferings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
       <li class = "m-1 "><a href="/courseHistory" class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
@@ -36,7 +55,7 @@
       <li class="spacer bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
       <li class = "m-1 "><a href="/AccountSettings" class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
-      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconLogout /> Logout </a></li>
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2" on:click={logout}> <IconLogout /> Logout </a></li>
 
     {:else if userType === "OWNER"}
       <li class = "m-1 "><a href="/" class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
@@ -48,7 +67,7 @@
       <li class="h-2/5 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
       <li class = "m-1 "><a href="/AccountSettings" class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
-      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconLogout /> Logout </a></li>
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2" on:click={logout}> <IconLogout /> Logout </a></li>
 
     {:else if userType === "INSTRUCTOR"}
       <li class = "m-1 "><a href="/" class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
@@ -61,7 +80,7 @@
       <li class="h-2/5 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
       <li class = "m-1 "><a href="/AccountSettings" class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
-      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconLogout /> Logout </a></li>
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2" on:click={logout}> <IconLogout /> Logout </a></li>
 
     {:else}
       <li class = "m-1 "><a href="/guestCourseOfferings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
