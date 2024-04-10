@@ -6,10 +6,10 @@
     //import getCheckedStates from './CheckboxFilterField.svelte'
 
     import DateFilterField from './DateFilterField.svelte'
-
+    
     let courseTypes = ['Swimming', 'Weightlifting']
     const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-
+    
     let checkedCourseTypes;
     let checkedDaysOffered;
     let apiString = '/courseOffering/getAll/filter?courseTypes='
@@ -20,7 +20,7 @@
     // @TODO FIX THIS
     function updateCheckedStates() {
         const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-
+        
         checkboxes.forEach((checkbox, index) => {
             if (checkbox instanceof HTMLInputElement && checkbox.type === 'checkbox') {
             const isChecked = checkbox.checked;
@@ -94,7 +94,7 @@
     <CheckboxFilterField fieldTitle="Course Types" params={courseTypes}/>
     <CheckboxFilterField fieldTitle="Days Offered" params={daysOfWeek} />
     <!-- need to do a calendar picker for these two. Idk how-->
-
+    
     <!-- <DateFilterField fieldTitle="Start Date" key="start" on:dateSelected={handleDateSelected} />
     <DateFilterField fieldTitle="End Date" key="end" on:dateSelected={handleDateSelected} /> -->
 

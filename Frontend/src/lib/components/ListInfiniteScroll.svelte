@@ -1,3 +1,4 @@
+<!-- ListInfiniteScroll.svelte -->
 <script>
     /**
      * Represents an item in the list of courses.
@@ -16,12 +17,7 @@
         {"courseType": "Pickle Ball", "startDate": "2024-03-30"},
         {"courseType": "Tennis", "startDate": "2024-04-01"},
         {"courseType": "Ping Pong", "startDate": "2024-04-05"},
-        {"courseType": "Golf", "startDate": "2024-04-10"},
-        {"courseType": "Basketball", "startDate": "2024-04-15"},
-        {"courseType": "Pickle Ball", "startDate": "2024-04-20"},
-        {"courseType": "Tennis", "startDate": "2024-04-25"},
-        {"courseType": "Ping Pong", "startDate": "2024-04-30"},
-        {"courseType": "Golf", "startDate": "2024-05-05"},
+        {"courseType": "Golf", "startDate": "2024-04-10"}
         // Add more items as needed
     ];
 
@@ -52,34 +48,36 @@
             items = items.sort((a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime());
         }
     }
+
+
 </script>
 
 <div class="list-container">
-    <!-- Background wrapper for list header -->
-    <div class="bg-secondary/50 list-header-bg">
-        <h1 class="list-header">List of Courses</h1>
-        <!-- Dropdown for sorting -->
-    </div>
-    <div class="dropdown-container">
-        <div class="dropdown dropdown-bottom">
-            <div tabindex="0" role="button" class="bg-slate-300 btn m-1">Sort by Date</div>
-            <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-slate-300 rounded-box w-52">
-                <li><a on:click={() => { sortOrder = "ascending"; sortItems(); }}>Ascending</a></li>
-                <li><a on:click={() => { sortOrder = "descending"; sortItems(); }}>Descending</a></li>
-            </ul>
-        </div>
-        <div class="sorted-order">
-            {#if sortOrder === "ascending"}
-                Ascending
-            {:else if sortOrder === "descending"}
-                Descending
-            {:else}
-                <!-- Display something when nothing is hovered over -->
-                Hovered Item: No course selected
-            {/if}
-        </div>
-    </div>
     <div class="scrollable-list">
+        <!-- Background wrapper for list header -->
+        <div class="bg-secondary/50 list-header-bg">
+            <h1 class="list-header">List of Courses</h1>
+            <!-- Dropdown for sorting -->
+        </div>
+        <div style="width: 100%;">
+            <div class="dropdown dropdown-bottom">
+                <div tabindex="0" role="button" class="bg-slate-300 btn m-1">Sort by Date</div>
+                <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-slate-300 rounded-box w-52">
+                    <li><a on:click={() => { sortOrder = "ascending"; sortItems(); }}>Ascending</a></li>
+                    <li><a on:click={() => { sortOrder = "descending"; sortItems(); }}>Descending</a></li>
+                </ul>
+            </div>
+            <div class="sorted-order">
+                {#if sortOrder === "ascending"}
+                    Ascending
+                {:else if sortOrder === "descending"}
+                    Descending
+                {:else}
+                    <!-- Display something when nothing is hovered over -->
+                    Hovered Item: No course selected
+                {/if}
+            </div>
+        </div>
         <!-- Render list items -->
         {#each items as item}
             <div class="bg-accent/50 list-item" on:mouseover={() => hoveredItem = item} on:mouseleave={() => hoveredItem = {"courseType": "", "startDate": ""}}>
@@ -106,18 +104,18 @@
         padding-bottom: 1%; /* Add padding to the bottom of the container */
         width: 100%;
         height: 100%;
-        display: flex; /* Use flexbox */
-        flex-direction: column; /* Arrange items vertically */
-        align-items: center; /* Center items horizontally */
     }
 
     /* Add CSS styles for the scrollable list */
     .scrollable-list {
-        max-height: 55vh; /* Limit the height of the list */
-        width: 100%;
+        max-height: 100%; /* Limit the height of the list */
+        max-width: 100%;
         overflow-y: auto; /* Enable vertical scrolling */
         border-radius: 10px; /* Rounded corners */
         padding: 10px ;
+        display: flex; /* Use flexbox */
+        flex-direction: column; /* Arrange items vertically */
+        align-items: flex-start; /* Center items horizontally */
         list-style-type: none; /* Remove list-style (bullets) */
     }
 
@@ -168,14 +166,12 @@
         padding-top: 16px;
     }
     /* Style for dropdown */
-    .dropdown-container {
-        width: 100%;
-        display: flex;
-        justify-content: left;
-    }
-
     .dropdown {
-        padding-left: 10px;
+        float: left;
+        position: relative;
+        padding-left: 0px;
+        margin-left: 0%;
+        margin-bottom: 4px;
         margin-right: 10px;
     }
 

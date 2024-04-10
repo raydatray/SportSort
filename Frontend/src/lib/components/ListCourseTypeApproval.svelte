@@ -4,16 +4,10 @@
      * An array of items.
      * @type {string[]}
      */
-    let items = [
-        'Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8',
+    export let items = []
+    /*    'Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8',
         'Item 9', 'Item 10', 'Item 11', 'Item 12', 'Item 13', 'Item 14', 'Item 15', 'Item 16', 'Item 17'
-    ];
-
-    /**
-     * Represents the hovered item.
-     * @type {string}
-     */
-    let hoveredItem = "";
+    ]; */
 
     /**
      * Represents the clicked item.
@@ -30,11 +24,10 @@
 </script>
 
 <div class="list-container">
-    <div class="bg-secondary/50 list-header-bg"> <!-- Background wrapper for list header -->
-        <h1 class="list-header">List of Items</h1>
-    </div>
     <div class="scrollable-list">
-
+        <div class="bg-secondary/50 list-header-bg"> <!-- Background wrapper for list header -->
+            <h1 class="list-header">List of Items</h1>
+        </div>
         <!-- Render list items -->
         {#each items as item}
             <div class="bg-secondary-content/5 list-item" on:mouseover={() => hoveredItem = item} on:mouseleave={() => hoveredItem = ""}>
@@ -45,15 +38,6 @@
                 </div>
             </div>
         {/each}
-    </div>
-    <!-- Display hovered item in a textbox -->
-    <div class="hovered-item">
-        {#if hoveredItem}
-            Hovered Item: {hoveredItem}
-        {:else}
-            <!-- Display something when nothing is hovered over -->
-            Hovered Item: Item x
-        {/if}
     </div>
     <!-- Display clicked item in a textbox -->
     <div class="clicked-item">
@@ -77,7 +61,7 @@
 
     /* Add CSS styles for the scrollable list */
     .scrollable-list {
-        max-height: 60vh; /* Limit the height of the list */
+        max-height: 70vh; /* Limit the height of the list */
         max-width: 100%;
         overflow-y: auto; /* Enable vertical scrolling */
         border-radius: 10px; /* Rounded corners */
@@ -146,16 +130,6 @@
         width: 100%; /* Ensure header spans the full width */
     }
 
-    /* Style for hovered item textbox */
-    .hovered-item {
-        margin: 10px; /* Add margin on top */
-        padding: 5px;
-        /*background-color: #FFFF;*/
-        border: 2px solid #ccc;
-        border-radius: 5px; /* Rounded corners */
-        text-align: center; /* Center text horizontally */
-    }
-
     /* Style for clicked item textbox */
     .clicked-item {
         margin: 10px; /* Add margin on top */
@@ -167,10 +141,8 @@
     }
 
     .list-header-bg {
-
         width: 75%; /* Set the width to occupy 75% of the space */
         margin: 0 auto; /* Center the header horizontally */
-        margin-top: 10px;
         margin-bottom: 10px;
         border-radius: 5px; /* Rounded corners */
     }
