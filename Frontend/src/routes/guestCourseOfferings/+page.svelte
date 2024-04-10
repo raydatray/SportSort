@@ -2,19 +2,19 @@
     import Calendar from '@event-calendar/core';
     import TimeGrid from '@event-calendar/time-grid';
     import '@event-calendar/core/index.css';
-
+    import { goto } from '$app/navigation';
     import axios from 'axios';
     import qs from 'qs';
     import { onMount } from 'svelte';
 
     import CourseOfferingFilter from "$lib/components/CourseOfferingFilter.svelte";
-    import CourseOfferingRegistrationModal from "$lib/components/CourseOfferingRegistrationModal.svelte";
 
     let courseOfferings = [];
     let courseSessions = new Map();
     let courseOfferingsAsResources = [];
     let courseSessionsAsEvents = [];
-
+    let courseTypes = []; // Store for approved course types
+    
     let plugins = [TimeGrid];
     let dataLoaded = false; // Step 1: Define a loading state
     $: options = {
@@ -28,8 +28,14 @@
 
     onMount(async () => {
         try {
-            const getOfferings = await axios.get('http://localhost:8080/courseOfferings/getAll');
-            courseOfferings = getOfferings.data;
+            const getOfferings = axios.get('http://localhost:8080/courseOfferings/getAll');
+            const getApprovedCourseTypes = axios.get('http://localhost:8080/courseTypes/getAllApproved');
+
+            // Fetch both offerings and approved course types concurrently
+            const [offeringsResponse, courseTypesResponse] = await Promise.all([getOfferings, getApprovedCourseTypes]);
+
+            courseOfferings = offeringsResponse.data;
+            courseTypes = courseTypesResponse.data;
 
             courseOfferingsAsResources = courseOfferings.map(offering => ({
                 id: offering.id,
@@ -119,19 +125,11 @@
         }
     }
 
-    let showModal = false;
-    let selectedCourseOffering = null;
-    let associatedCourseSessions = null;
-
-    function openModal(courseOffering) {
-        console.log("u clicked something.");
-        selectedCourseOffering = courseOffering;
-        associatedCourseSessions = courseSessions.get(courseOffering.id);
-        console.log(courseSessions)
-        console.log(associatedCourseSessions);
-        showModal = true;
+    function goToLogin() {
+        // Navigate to the login page
+        goto('/login');
     }
-</script>
+    </script>
 <div>
     <h1 class="p-4 text-lg font-medium bg-base-200 rounded-box">Course Offerings</h1>
     <div class= "grid grid-cols-[min-content_1fr] gap-4 pt-4">
@@ -157,16 +155,16 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {#each courseOfferings as offering, index}
-                            <tr on:click={() => openModal(offering)} class="cursor-pointer">
-                                <th>{index + 1}</th>
-                                <td>{offering.title}</td>
-                                <td>{offering.daysOffered}</td>
-                                <td>{offering.startDate}</td>
-                                <td>{offering.endDate}</td>
-                                <td>{offering.price}</td>
-                            </tr>
-                        {/each}
+                        {#each courseOfferings as offering, index}
+                        <tr on:click={() => goToLogin()} class="cursor-pointer">
+                            <th>{index + 1}</th>
+                            <td>{courseTypes.find(type => type.id === offering.courseTypeId)?.courseName || 'Unknown Type'}</td>
+                            <td>{offering.daysOffered}</td>
+                            <td>{offering.startDate}</td>
+                            <td>{offering.endDate}</td>
+                            <td>{courseTypes.find(type => type.id === offering.courseTypeId)?.courseName || 'Unknown Type'}</td>
+                        </tr>
+                    {/each}
                     </tbody>
                 </table>
             </div>
@@ -174,9 +172,6 @@
     </div>
 </div>
 
-{#if showModal}
-    <CourseOfferingRegistrationModal {selectedCourseOffering} {associatedCourseSessions} onClose={() => showModal = false}/>
-{/if}
 <style>
     :root {
         --ec-text-color: #333; /* Text color */
