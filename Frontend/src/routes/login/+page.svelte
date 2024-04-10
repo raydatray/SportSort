@@ -1,9 +1,46 @@
 <script>
     import Character from "../../assets/characters.png";
     import Logo from "../../assets/logo.png";
+    import axios from 'axios';
+    import { pushState } from '$app/navigation';
+
+    const backendUrl = 'http://127.0.0.1:8080/';
+
+    const AXIOS = axios.create({
+      baseURL: backendUrl,
+      headers: { 'Access-Control-Allow-Origin': 'http://localhost:5173/' }
+    });
+
+    let errorMsg = "";
+    let email = "";
+    let password = "";
 
     function login() {
-        console.log("Clicked");
+      if (email.trim() === "" || password.trim() === "") {
+        errorMsg = "Please fill in empty fields!"
+        return;
+      }
+
+      AXIOS.post('/login', {
+        email: email,
+        password: password
+      })
+      .then(response => {
+        sessionStorage.setItem('token', response.data.token);
+        sessionStorage.setItem('role', response.data.role);
+          // Get the base URL of the website
+          const baseURL = window.location.protocol + '//' + window.location.host + '/';
+          // Replace '/login' from the current URL with the base URL
+          const newURL = window.location.href.replace(window.location.pathname, '/');
+          // Update the URL without '/login'
+          history.replaceState({}, document.title, newURL);
+          // Reload the page
+          window.location.reload();
+      })
+      .catch(error => {
+        console.log(error);
+        errorMsg = "Email or password is wrong!";
+      })
     }
 </script>
 
@@ -16,13 +53,14 @@
     <div class="login-form">
       <label class="input input-bordered flex items-center gap-2">
         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-mail"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z" /><path d="M3 7l9 6l9 -6" /></svg>
-        <input type="text" class="grow" placeholder="Email" />
+        <input type="text" class="grow" placeholder="Email" bind:value={email} />
       </label>
       <label class="input input-bordered flex items-center gap-2">
         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-key"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M16.555 3.843l3.602 3.602a2.877 2.877 0 0 1 0 4.069l-2.643 2.643a2.877 2.877 0 0 1 -4.069 0l-.301 -.301l-6.558 6.558a2 2 0 0 1 -1.239 .578l-.175 .008h-1.172a1 1 0 0 1 -.993 -.883l-.007 -.117v-1.172a2 2 0 0 1 .467 -1.284l.119 -.13l.414 -.414h2v-2h2v-2l2.144 -2.144l-.301 -.301a2.877 2.877 0 0 1 0 -4.069l2.643 -2.643a2.877 2.877 0 0 1 4.069 0z" /><path d="M15 9h.01" /></svg>
-        <input type="password" class="grow" placeholder="Password" />
+        <input type="password" class="grow" placeholder="Password" bind:value={password} />
       </label>
       <button class="btn bg-accent" on:click={login}>Login</button>
+      <p class="error-msg">{errorMsg}</p>
       <p class="sign-up-footer">Don't have an account? <a href="/createAccount" class="underline">Sign up</a></p>
     </div>
     <!-- Image/Logo Section -->
@@ -66,8 +104,7 @@
     }
 
     .page-title {
-        height: 20%;
-        margin-bottom: -3%;
+        height: 15%;
     }
 
     .page-content {
@@ -75,7 +112,7 @@
         justify-content: center;
         align-content: center;
         width: 100%;
-        height: 80%;
+        height: 85%;
         border-radius: 10px;
     }
 
@@ -87,6 +124,10 @@
         gap: 1rem;
         padding: 3rem;
         width: 60%;
+    }
+
+    .error-msg {
+        color: #ef1414;
     }
 
     .image {

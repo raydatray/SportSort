@@ -15,14 +15,28 @@
   let newFloorNumber = 0;
   let newRoomNumber = 0;
 
-  onMount(async () => {
+  const frontendUrl = 'http://localhost:5173';
+  const backendUrl = 'http://127.0.0.1:8080';
+
+
+    const AXIOS = axios.create({
+        baseURL: backendUrl,
+        headers: { 'Access-Control-Allow-Origin': frontendUrl }
+    });
+
+    onMount(async () => {
     try {
-      const getRooms = await axios.get('/room/getAll')
-      rooms = getRooms.data;
+      const response = await AXIOS.get('/rooms/getAll', {
+        // Include the userToken in the request if necessary
+        headers: userToken ? { 'userToken': userToken } : {}
+      });
+      rooms = response.data; // Assuming response.data contains the rooms data
+      console.log(rooms);
     } catch (error) {
       console.log(error);
     }
   });
+
 
 
   // check if a row is clicked so that i know whether to display the update or create panel
@@ -108,7 +122,7 @@
   }
 </script>
 
-<h1 class="text-2xl font-bold p-2">Manage Rooms</h1>
+<h1 class="p-2 text-2xl font-bold">Manage Rooms</h1>
 <div class="grid grid-col-2">
 
   <!-- COLUMN 1 -->
@@ -149,7 +163,7 @@
     {#if roomRowClicked}
       <h1 class="text-lg">Update Room:</h1>
       <div class="grid grid-row-2 gap-y-4">
-        <div class="row-start-1 grid grid-row-2">
+        <div class="grid row-start-1 grid-row-2">
           <label for="textInput" class="text-sm start-row-1">New Name</label>
           <input
             type="text"
@@ -158,7 +172,7 @@
             bind:value={updatedName}
           />
         </div>
-        <div class="row-start-2 grid grid-row-2">
+        <div class="grid row-start-2 grid-row-2">
           <label for="numInput" class="text-sm start-row-1">New Capacity</label>
           <input
             type="number"
@@ -174,7 +188,7 @@
     {:else}
       <h1 class="text-lg mb-2.5">Create Room:</h1>
       <div class="grid grid-row-4 gap-y-4">
-        <div class="row-start-1 grid grid-row-2">
+        <div class="grid row-start-1 grid-row-2">
           <label for="nameInput" class="text-sm start-row-1">Name</label>
           <input
             type="text"
@@ -184,7 +198,7 @@
             placeholder="Enter name here"
           />
         </div>
-        <div class="row-start-2 grid grid-row-2">
+        <div class="grid row-start-2 grid-row-2">
           <label for="capacityInput" class="text-sm start-row-1">Capacity</label>
           <input
             type="number"
@@ -194,7 +208,7 @@
             placeholder="0, 1, 2, ..."
           />
         </div>
-        <div class="row-start-3 grid grid-row-2">
+        <div class="grid row-start-3 grid-row-2">
           <label for="floorNumInput" class="text-sm start-row-1">Floor Number</label>
           <input
             type="number"
@@ -204,7 +218,7 @@
             placeholder="0, 1, 2, ..."
           />
         </div>
-        <div class="row-start-4 grid grid-row-2">
+        <div class="grid row-start-4 grid-row-2">
           <label for="roomNumInput" class="text-sm start-row-1">Room Number</label>
           <input
             type="number"

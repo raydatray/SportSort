@@ -109,14 +109,9 @@
                 <div class="stat-desc">Numerous!</div>
             </div>
             <div class="rounded-lg shadow-lg stat place-items-center">
-                <div class="mb-1 stat-title">Over 10000 People Rated Us</div>
+                <div class="mb-1 stat-title">10000 People Rated Us</div>
                 <div class="mb-1 stat-value"><img src={Ratings}></div> <!-- Example data -->
                 <div class="stat-desc">Satisfaction Garanteed</div>
-            </div>
-            <div class="rounded-lg shadow-lg stat place-items-center">
-                <div class="stat-title">Serving You Since</div>
-                <div class="stat-value">1908</div> <!-- Example data -->
-                <div class="stat-desc">At your service!</div>
             </div>
         </div>
         <table class="table overflow-y-scroll">
@@ -312,5 +307,9 @@
         background-color: #f0f0f0; /* Light grey background, change as needed */
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .table::-webkit-scrollbar {
+        display: none; /* For Chrome, Safari, and Opera */
     }
 </style>
