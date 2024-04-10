@@ -23,7 +23,6 @@
   </ul>
 </nav>
   <div class="content">
-      <RegistrationFilter/>
     <slot />
     <footer class="p-4 footer bg-base-300 text-base-content">
       <aside>

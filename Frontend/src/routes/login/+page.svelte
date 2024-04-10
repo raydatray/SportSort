@@ -1,14 +1,43 @@
 <script>
     import Character from "../../assets/characters.png";
     import Logo from "../../assets/logo.png";
+    import axios from 'axios';
+    import { pushState } from '$app/navigation';
 
+    const backendUrl = 'http://127.0.0.1:8080/';
+
+    const AXIOS = axios.create({
+      baseURL: backendUrl,
+      headers: { 'Access-Control-Allow-Origin': 'http://localhost:5173/' }
+    });
+
+    /**
+     * @var String role
+     */
     let errorMsg = "";
     let email = "";
     let password = "";
 
     function login() {
-        console.log("Email:", email);
-        console.log("Password:", password);
+      if (email.trim() === "" || password.trim() === "") {
+        errorMsg = "Please fill in empty fields!"
+        return;
+      }
+
+      AXIOS.post('/login', {
+        email: email,
+        password: password
+      })
+      .then(response => {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('role', response.data.role);
+        pushState("/courseHistory", {});
+        window.location.reload();
+      })
+      .catch(error => {
+        console.log(error);
+        errorMsg = "Email or password is wrong!";
+      })
     }
 </script>
 
