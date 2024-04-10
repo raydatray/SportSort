@@ -2,18 +2,19 @@
   import "../app.css";
   import { IconHome, IconSchool, IconHistory, IconTicket, IconSettings, IconLogout } from '@tabler/icons-svelte';
   import Logo from "../assets/logo.png";
-  import RegistrationFilter from "$lib/components/RegistrationFilter.svelte";
 </script>
 
 <div class="h-screen grid grid-cols-[240px_1fr] gap-x-1 p-2 mr-2" data-theme="north">
   <nav class="menu justify-items-center">
   <ul class="p-3.5 m-1 menu-horizontal md:menu-vertical bg-base-300 rounded-box gap-y-0.5">
     <li class="flex-row justify-center">
-      <img class = "max-h-100px" src={Logo} alt="Logo"/>
+      <a href="/">
+        <img class = "max-h-100px" src={Logo} alt="Logo"/>
+      </a>
     </li>
     <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
     <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
-    <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
+    <li class = "m-1 "><a href="/course-offerings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
     <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
     <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconTicket /> Registrations </a></li>
     <li class="spacer bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
@@ -23,7 +24,6 @@
   </ul>
 </nav>
   <div class="content">
-      <RegistrationFilter/>
     <slot />
     <footer class="p-4 footer bg-base-300 text-base-content">
       <aside>
@@ -58,7 +58,7 @@
     flex-direction: column;
     justify-content: space-between;
     overflow-y: auto;
-    margin-top: 0.75%;
+    margin-top: 1%;
   }
 
   .footer {
