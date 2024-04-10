@@ -11,9 +11,6 @@
       headers: { 'Access-Control-Allow-Origin': 'http://localhost:5173/' }
     });
 
-    /**
-     * @var String role
-     */
     let errorMsg = "";
     let email = "";
     let password = "";
@@ -29,8 +26,8 @@
         password: password
       })
       .then(response => {
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('role', response.data.role);
+        sessionStorage.setItem('token', response.data.token);
+        sessionStorage.setItem('role', response.data.role);
         pushState("/courseHistory", {});
         window.location.reload();
       })
