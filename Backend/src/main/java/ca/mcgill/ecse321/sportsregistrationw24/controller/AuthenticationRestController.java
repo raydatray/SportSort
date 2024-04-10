@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class AuthenticationRestController {
   @Autowired
-  private AuthenticationService authenticationService;
+  private AuthenticationService service;
 
   @PostMapping(value = {"/login"})
   public ResponseEntity<?> login(@RequestBody AuthenticationCO authenticationCO) {
     try {
-      AuthenticationDTO generatedToken = authenticationService.login(authenticationCO.getEmail(), authenticationCO.getPassword());
+      AuthenticationDTO generatedToken = service.login(authenticationCO.getEmail(), authenticationCO.getPassword());
       return ResponseEntity.accepted().body(generatedToken);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -27,7 +27,7 @@ public class AuthenticationRestController {
   @PostMapping(value = {"/logout"})
   public ResponseEntity<?> logout(@RequestHeader String token) {
     try {
-      authenticationService.logout(token);
+      service.logout(token);
       return ResponseEntity.accepted().body("Logout successful");
     } catch (Exception e){
       return ResponseEntity.badRequest().body(e.getMessage());
