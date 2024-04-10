@@ -1,6 +1,14 @@
 <script>
     import Logo from "../../assets/logo.png";
     import Character from "../../assets/characters.png";
+    import axios from "axios";
+
+    const backendUrl = 'http://127.0.0.1:8080/';
+
+    const AXIOS = axios.create({
+        baseURL: backendUrl,
+        headers: { 'Access-Control-Allow-Origin': 'http://localhost:5173/' }
+    });
 
     let errorMsg = "";
     let email = "";
@@ -42,10 +50,18 @@
           return;
       }
 
-      console.log("Email:", email);
-      console.log("Name:", name);
-      console.log("Password:", password);
-      console.log("Confirm Password:", confirmPassword);
+      AXIOS.post('/accounts/createCustomer', {
+          email: email,
+          password: password,
+          name: name
+      }).
+          then(response => {
+              errorMsg = "Account created successfully!";
+      })
+          .catch(error => {
+              errorMsg = "An error occured!";
+              console.log(error);
+          })
   }
 </script>
 
@@ -117,8 +133,7 @@
   }
 
   .page-title {
-      height: 20%;
-      margin-bottom: -3%;
+      height: 15%;
   }
 
   .page-content {
@@ -126,7 +141,7 @@
       justify-content: center;
       align-content: center;
       width: 100%;
-      height: 80%;
+      height: 85%;
       border-radius: 10px;
   }
 

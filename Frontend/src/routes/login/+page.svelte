@@ -98,8 +98,7 @@
     }
 
     .page-title {
-        height: 20%;
-        margin-bottom: -3%;
+        height: 15%;
     }
 
     .page-content {
@@ -107,7 +106,7 @@
         justify-content: center;
         align-content: center;
         width: 100%;
-        height: 80%;
+        height: 85%;
         border-radius: 10px;
     }
 
