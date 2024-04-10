@@ -17,6 +17,7 @@
         AXIOS.get('/getSportCenter')
         .then(response => {
             sportCenter = response.data;
+            localStorage.setItem('sportCenter', JSON.stringify(sportCenter));
         })
         .catch(e => {
             errorPerson = e;
