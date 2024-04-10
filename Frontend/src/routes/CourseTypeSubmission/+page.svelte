@@ -64,57 +64,41 @@
         baseURL: 'http://127.0.0.1:8080/', // Adjust this to your actual backend URL
         headers: { 'Access-Control-Allow-Origin': 'http://localhost:5173/' }
     });
-    onMount(async () => {
-      await AXIOS.get('/courseTypes/getAll', {
-          headers: {
-              'userToken': 'wasd'
-          }
-      })
-        .then(response => {
-          proposedCourseTypes = response.data;
-        })
-        .catch(e => {
-            errorPerson = e;
-        });
-      console.log(proposedCourseTypes);
-      const reqHeader = {
-          'userToken': userToken
-      }
 
-      await AXIOS.get('/courseTypes/getProposed', {
-          headers: reqHeader
-      })
-        .then(response => {
-            instructorProposedCourseTypes = response.data;
+    async function refreshTables() {
+        await AXIOS.get('/courseTypes/getAll', {
+            headers: {
+                'userToken': userToken
+            }
         })
-        .catch(e => {
-            errorPerson = e;
-        });
-
-      await AXIOS.get('/accounts/getInstructors')
-        .then(response => {
-            /** @type {Instructor[]} */
-            instructors = response.data;
-        })
-        .catch(e => {
-            errorPerson = e;
-        });
-      console.log(instructors);
-
-      proposedCourseTypes.forEach(courseType => {
-        /** @type {Instructor | undefined} */
-        const instructor = instructors.find(inst => inst.id === courseType.staffName);
-        if (instructor) {
-            courseType.staffName = instructor.name;
-        } else {
-            courseType.staffName = "N/A"
+            .then(response => {
+                proposedCourseTypes = response.data;
+            })
+            .catch(e => {
+                errorPerson = e;
+            });
+        console.log(proposedCourseTypes);
+        const reqHeader = {
+            'userToken': userToken
         }
-      })
+
+        await AXIOS.get('/courseTypes/getProposed', {
+            headers: reqHeader
+        })
+            .then(response => {
+                instructorProposedCourseTypes = response.data;
+            })
+            .catch(e => {
+                errorPerson = e;
+            });
+    }
+
+
+    onMount(async () => {
+        refreshTables();
     });
 
-    // async function getInstructorName(instructorID) {
-    //     await
-    // }
+
 
     /**
      * Determines the status based on the approval and denial flags.
@@ -145,19 +129,19 @@
       const reqParam = {
           'courseTypeName': value
       }
-      await AXIOS.post("/courseTypes/create", {
-          headers: reqHead,
-          params: reqParam
-        })
-          .then(response => {
-              createdCT = response.data;
-          })
-          .catch(e => {
-            errorPerson = e;
+        try {
+          const response = await AXIOS.post("/courseTypes/create", null, {
+              headers: reqHead,
+              params: reqParam
           });
 
-      proposedCourseTypes.push(createdCT);
-      instructorProposedCourseTypes.push(createdCT);
+          createdCT = response.data;
+      } catch(error) {
+          errorPerson = error;
+      }
+
+      refreshTables();
+
       console.log(proposedCourseTypes);
       
       return void 0;
