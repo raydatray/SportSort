@@ -1,10 +1,10 @@
 <script>
   import "../app.css";
-  import { IconHome, IconSchool, IconHistory, IconTicket, IconSettings, IconLogout, IconDoor, IconUsers, IconUserScreen } from '@tabler/icons-svelte';
+  import { IconHome, IconSchool, IconHistory, IconTicket, IconSettings, IconLogout, IconDoor, IconUsers, IconUserScreen, IconBallFootball } from '@tabler/icons-svelte';
   import Logo from "../assets/logo.png";
   import { onMount } from "svelte";
 
-  let userType = 'OWNER';
+  let userType = 'INSTRUCTOR';
   let token;
 
   // onMount(() => {
@@ -32,13 +32,17 @@
     <li class = "m-1 "><a href="/course-offerings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
     <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
     <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconTicket /> Registrations </a></li>
-    {#if userType !== 'OWNER'}
+    {#if userType === 'CUSTOMER'}
       <li class="spacer bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
-    {:else}
+    {:else if userType === "OWNER"}
       <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconUsers /> Manage Customers </a></li>
       <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconUserScreen /> Manage Instructors </a></li>
       <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconDoor /> Rooms </a></li>
       <li class="h-1/3 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
+    {:else}
+      <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconUsers /> Manage Customers </a></li>
+      <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconBallFootball /> Course Types </a></li>
+      <li class="h-2/5 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
     {/if}
     <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
     <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
