@@ -142,6 +142,7 @@
 <div>
     <h1 class="p-4 text-lg font-medium bg-base-200 rounded-box">Course Offerings</h1>
     <div class= "grid grid-cols-[min-content_1fr] gap-4 pt-4">
+        <CourseOfferingFilter on:filterChange={handleFilterChange}/>
         <div class="grid h-full grid-rows-2 gap-4">
             <div class = "overflow-y-scroll">
                 {#if dataLoaded}
