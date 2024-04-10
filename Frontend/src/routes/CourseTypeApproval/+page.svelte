@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import axios from 'axios';
+    let userToken = sessionStorage.getItem("token");
 
     const backendUrl = 'http://127.0.0.1:8080/';
     const AXIOS = axios.create({
@@ -33,7 +34,7 @@
     onMount(() => {
         AXIOS.get('/courseTypes/getAll',{
             headers:{
-                'userToken': 'wasd'
+                'userToken': userToken
             }
         })
             .then(response => {
@@ -89,7 +90,7 @@
         const id = getClickedID(type);
         AXIOS.put(`/courseTypes/updateApproval?id=${id}`, {}, {
             headers:{
-                'userToken': 'wasd'
+                'userToken': userToken
             }
         })
             .then(response => {
@@ -125,7 +126,7 @@
         const id = getClickedID(type);
         AXIOS.put(`/courseTypes/updateRejection?id=${id}`, {}, {
             headers:{
-                'userToken': 'wasd'
+                'userToken': userToken
             }
         })
             .then(response => {
