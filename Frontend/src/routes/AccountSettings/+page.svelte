@@ -29,7 +29,7 @@
       const loggedInToken =  sessionStorage.getItem('token');
       AXIOS.get('/accounts/getAll', {
           headers: {
-              'userToken': 'asdf' // Adjusted to use the stored token
+              'userToken': loggedInToken // Adjusted to use the stored token
           }
       })
       .then(response => {

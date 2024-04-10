@@ -145,7 +145,7 @@
   onMount(() => {
     AXIOS.get('/accounts/getAll', {
       headers: {
-        'userToken': 'asdf' // You'll need to adjust how you handle authentication
+        'userToken': sessionStorage.getItem('token') // You'll need to adjust how you handle authentication
       }
     })
     .then(response => {
