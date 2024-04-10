@@ -71,6 +71,12 @@
   </dialog>
   {/if}
   
+  {#if showAlert}
+    <div role="alert" class="alert alert-error modal-alert" in:fade={{ duration: 300 }} out:fade={{ duration: 300 }}>
+      <span>{alertMessage}</span>
+    </div>
+  {/if}
+  
   <!-- New Modal for Updating an Instructor's Email -->
   {#if updateModalOpen}
   <dialog open class="modal">
@@ -104,11 +110,11 @@
   {/if}
   
   
-  
   <script>
     import { onMount } from 'svelte';
     import axios from 'axios';
     import { IconEye } from "@tabler/icons-svelte";
+    import { fade } from 'svelte/transition';
   
     let modalOpen = false;
     // Related to creating
@@ -116,6 +122,8 @@
     let newEmail = '';
     let newPassword = '';
     let passwordVisible = false; // Reactive variable for password visibility
+    let alertMessage = ''; // Holds the success or error message
+    let showAlert = false; // Controls the visibility of the alert
   
     // Related to updating 
     let updatedName = ''; // New variable for the updated name
@@ -183,9 +191,9 @@
       }
     })
     .then(response => {
-      console.log(response.data);
-      // Optionally, update your local state to include the new instructor
-      // instructors = [...instructors, newInstructorDetails];
+      // Assuming the server returns the created instructor account data
+      const createdInstructor = response.data;
+      instructors = [...instructors, createdInstructor]; // Add the new instructor to the local state
       closeModal(); // Close the modal after successful creation
       // Clear the form fields
       newName = '';
@@ -193,8 +201,8 @@
       newPassword = '';
     })
     .catch(error => {
-      console.error('Error creating instructor account:', error);
-      // Handle error, show user feedback
+      const message = error.response?.data || "An error occurred while creating the instructor.";
+      displayAlert(message);
     });
   }
   
@@ -219,7 +227,7 @@
   
     function saveUpdatedDetails() {
     if (currentInstructorIndex !== null) {
-      const userToken = 'asdf'; // Replace this with your actual token retrieval method
+      const userToken = 'asdf'; //TODO This needs to be updated to the actual instructor's TOKEN or it's gonna keep updating the instructor
   
       const updatedDetails = {
         name: updatedName,
@@ -234,24 +242,22 @@
         }
       })
       .then(response => {
-        console.log(response.data);
-        // Update the local instructors array to reflect the change
-        let instructor = instructors[currentInstructorIndex];
-        instructor.name = updatedName;
-        instructor.email = updatedEmail;
-        // Don't store the password in the local state for security reasons
+        console.log('Update response:', response.data); // Log the response
+  
+        // Assuming the server returns the updated instructor, use the response to update
+        instructors[currentInstructorIndex] = response.data;
+  
         // Trigger a UI update
         instructors = [...instructors];
   
         closeUpdateModal();
       })
       .catch(error => {
-        console.error('Error updating the account:', error);
-        // Handle error, possibly updating UI to show the error message
+        const message = error.response?.data || "An error occurred while creating the instructor.";
+        displayAlert(message);
       });
     }
   }
-  
   
     function deleteInstructor(email) {
       const userToken = 'asdf'; // Adjust this to your actual user token management
@@ -274,6 +280,15 @@
         // Update the UI or state to reflect any error here
       });
     }
+  
+    function displayAlert(message) {
+    alertMessage = message;
+    showAlert = true;
+    setTimeout(() => {
+      showAlert = false;
+    }, 2000);
+  }
+  
   
   </script>
   
@@ -321,6 +336,17 @@
     .delete-btn {
       background-color: #f44336; /* Red background for delete */
       color: white; /* White text */
+    }
+  
+    .modal-alert {
+      position: absolute; /* Position it absolutely to align it with the modal */
+      width: 50%; /* Make it as wide as the modal */
+      left: 50%; /* Center it horizontally */
+      transform: translateX(-50%); /* Adjust horizontal position */
+      bottom: 20%; /* Adjust vertical position to be below the modal */
+      z-index: 100; /* Ensure it's above the modal background */
+      box-sizing: border-box;
+      padding: 1rem;
     }
   </style>
   
