@@ -1,99 +1,108 @@
 <script>
-    // Imports
-    import { IconEye, IconMail } from "@tabler/icons-svelte";
+  import { onMount } from 'svelte';
+  import axios from 'axios';
+  import { IconMail } from "@tabler/icons-svelte";
+
+  // Reactive variables for the current user
+  let currentUser = {
+      name: '',
+      email: '',
+  };
+
+  let error; // To hold any errors during fetching
+  let modalOpen = false;
+
+  // Temporary state to store changes while editing
+  let tempEmail = currentUser.email;
+
+  const AXIOS = axios.create({
+      baseURL: 'http://127.0.0.1:8080', // Adjust this to your actual backend URL
+      headers: { 'Access-Control-Allow-Origin': 'http://localhost:5173/' }
+  });
+
+  onMount(() => {
+      const loggedInToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob3VtYW4iLCJpYXQiOjE3MTI3NzQ4OTIsImV4cCI6MTcxMjgxODA5Mn0._rOD3ythpSAlmuBg1Cx4h2xS8SfuAObzHm44QZFjO3o";
+      AXIOS.get('/accounts/getAll', {
+          headers: {
+              'userToken': 'asdf' // Adjusted to use the stored token
+          }
+      })
+      .then(response => {
+          const users = response.data;
+          // Assuming users include a property to match with the token, which is not typical for security reasons
+          const loggedInUser = users.find(user => user.token === loggedInToken);
+          console.log(loggedInToken)
+          console.log(loggedInUser)
+          if (loggedInUser) {
+              currentUser.name = loggedInUser.name;
+              currentUser.email = loggedInUser.email;
+          }
+      })
+      .catch(e => {
+          error = e.message;
+      });
+  });
   
-    // Reactive variables
-    let name = 'John Doe';
-    let email = 'john.doe@example.com';
-    let password = 'hashed_password';
-    let passwordVisible = false;
-    let modalOpen = false;
-  
-    // Temporary state to store changes while editing
-    let tempEmail = email;
-    let tempPassword = password;
-  
-    // Function to toggle password visibility
-    function togglePassword() {
-      passwordVisible = !passwordVisible;
-    }
-  
-    // Function to open the modal
-    function openModal() {
+  console.log(currentUser)
+  // Function to open the modal
+  function openModal() {
       modalOpen = true;
       // Set temporary state to current values
-      tempEmail = email;
-      tempPassword = password;
-    }
-  
-    // Function to close the modal without saving
-    function closeModal() {
+      tempEmail = currentUser.email;
+  }
+
+  // Function to close the modal without saving
+  function closeModal() {
       modalOpen = false;
-      // Reset temporary state to ensure discarded changes are not shown
-      tempEmail = email;
-      tempPassword = password;
-    }
-  
-    // Function to save changes and close the modal
-    function saveChanges() {
+  }
+
+  // Function to save changes and close the modal
+  function saveChanges() {
       // Save temporary state back to permanent state
-      email = tempEmail;
-      password = tempPassword;
+      currentUser.email = tempEmail;
       // Close modal
       closeModal();
-    }
+  }
 
-    // Function to handle account deletion
-    function deleteAccount() {
-        // Placeholder for delete account logic
-        console.log('Account deletion requested.');
-        // Implement deletion logic here
-    }
-  </script>
-  
+  // Function to handle account deletion
+  function deleteAccount() {
+      console.log('Account deletion requested.');
+      // Placeholder for actual deletion logic
+  }
+</script>
+
 <!-- Account Settings Display -->
 <div class="page-container">
-    <h1 class="section-title">Account Settings</h1>
-    <div class="account-detail">Name: {name}</div>
-    <div class="account-detail">Email: {email}</div>
-    <div class="input-label">
-      <label class="input input-bordered flex items-center gap-2 w-full">
-        {#if passwordVisible}
-        <input type="text" value={password} class="grow" readonly />
-        {:else}
-        <input type="password" value="hashed_password" class="grow bg-300" readonly />
-        {/if}
-        <button on:click={togglePassword} class="btn-neutral"><IconEye color="black"/></button>
-      </label>
-    </div>
-    <button class="btn btn-custom" on:click={openModal}>Edit Account Details</button>
-    <button class="btn btn-delete" on:click={deleteAccount}>Delete Account</button>
-  </div>
+  <h1 class="section-title">Account Settings</h1>
+  {#if currentUser}
+    <div class="account-detail">Name: {currentUser.name}</div>
+    <div class="account-detail">Email: {currentUser.email}</div>
+  {:else}
+    <div class="account-detail">Name: Loading...</div>
+    <div class="account-detail">Email: Loading...</div>
+  {/if}
   
-  <!-- Modal Component -->
-  {#if modalOpen}
-  <dialog open class="modal">
-    <div class="modal-box"> 
+  <button class="btn btn-custom" on:click={openModal}>Edit Account Details</button>
+  <button class="btn btn-delete" on:click={deleteAccount}>Delete Account</button>
+</div>
+
+<!-- Modal Component for Editing Email -->
+{#if modalOpen}
+<dialog open class="modal">
+  <div class="modal-box"> 
       <h3 class="font-bold text-lg">Edit Account Details</h3>
       <label class="input input-bordered flex items-center gap-2 mb-4">
-        <IconMail/>
-        <input type="email" bind:value={tempEmail} class="grow" placeholder="Email" />
-      </label>
-      <label class="input input-bordered flex items-center gap-2">
-        {#if passwordVisible}
-          <input type="text" bind:value={tempPassword} class="grow" placeholder="Password" />
-        {:else}
-          <input type="password" bind:value={tempPassword} class="grow" placeholder="Password" />
-        {/if}
-        <button on:click={togglePassword} class="btn-neutral"><IconEye color = "black"/></button>
+          <IconMail/>
+          <input type="email" bind:value={tempEmail} class="grow" placeholder="Email" />
       </label>
       <div class="modal-action">
-        <button class="btn btn-custom" on:click={saveChanges}>Save</button>
-        <button class="btn btn-custom" on:click={closeModal}>Close</button>
+          <button class="btn btn-custom" on:click={saveChanges}>Save</button>
+          <button class="btn btn-custom" on:click={closeModal}>Close</button>
       </div>
-    </div>
+  </div>
 </dialog>
 {/if}
+
 
   <style>
     .page-container {
