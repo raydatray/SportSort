@@ -1,30 +1,120 @@
 <script>
     import { onMount } from 'svelte';
     import axios from 'axios';
-    let proposedCourseTypes = []; // Reactive variable to hold the fetched data
-    let instructorProposedCourseTypes = []
-    let errorPerson;
-    let userToken; // subscribe to alex's store when its up -> LOOK AT DISCORD DMS WITH HIM FOR HOW
+    /**
+     * @typedef {Object} CourseType
+     * @property {boolean} approvalStatus
+     * @property {string} courseName
+     * @property {number} id
+     * @property {boolean} rejectedStatus
+     * @property {number} staffAccountId
+     * @property {string} staffName
+     */
 
-    onMount(() => {
-      axios.get('/courseTypes/getAll')
+    /**
+     * Array containing course type objects.
+     * @type {Array<{
+     * approvalStatus: boolean,
+     * courseName: string,
+     * id: number,
+     * rejectedStatus: boolean,
+     * staffAccountId: number,
+     * staffName: string
+     * }>}
+     */
+    let proposedCourseTypes = []; // Reactive variable to hold the fetched data
+
+    /**
+     * Array containing course offering objects.
+     * @type {Array<{
+     * approvalStatus: boolean,
+     * courseName: string,
+     * id: number,
+     * rejectedStatus: boolean,
+     * staffAccountId: number,
+     * staffName: string
+     * }>}
+     */
+    let instructorProposedCourseTypes = []
+
+    /**
+     * @typedef {Object} Instructor
+     * @property {string} id
+     * @property {string} name
+     */
+    let instructor;
+
+    /**
+     * Array containing instructor objects.
+     * @type {Array<{
+     *   id: string,
+     *   name: string,
+     * }>}
+     */
+    let instructors = [];
+
+    let createdCT;
+
+    let errorPerson;
+    let userToken = 'wasd'; // subscribe to alex's store when its up -> LOOK AT DISCORD DMS WITH HIM FOR HOW
+    let value = '';
+    let staffAccID = 1;
+
+    const AXIOS = axios.create({
+        baseURL: 'http://127.0.0.1:8080/', // Adjust this to your actual backend URL
+        headers: { 'Access-Control-Allow-Origin': 'http://localhost:5173/' }
+    });
+    onMount(async () => {
+      await AXIOS.get('/courseTypes/getAll', {
+          headers: {
+              'userToken': 'wasd'
+          }
+      })
         .then(response => {
           proposedCourseTypes = response.data;
         })
         .catch(e => {
             errorPerson = e;
         });
+      console.log(proposedCourseTypes);
+      const reqHeader = {
+          'userToken': userToken
+      }
 
-      axios.get('/courseTypes/getProposed')
+      await AXIOS.get('/courseTypes/getProposed', {
+          headers: reqHeader
+      })
         .then(response => {
             instructorProposedCourseTypes = response.data;
         })
         .catch(e => {
             errorPerson = e;
         });
+
+      await AXIOS.get('/accounts/getInstructors')
+        .then(response => {
+            /** @type {Instructor[]} */
+            instructors = response.data;
+        })
+        .catch(e => {
+            errorPerson = e;
+        });
+      console.log(instructors);
+
+      proposedCourseTypes.forEach(courseType => {
+        /** @type {Instructor | undefined} */
+        const instructor = instructors.find(inst => inst.id === courseType.staffName);
+        if (instructor) {
+            courseType.staffName = instructor.name;
+        } else {
+            courseType.staffName = "N/A"
+        }
+      })
     });
 
-    let value = '';
+    // async function getInstructorName(instructorID) {
+    //     await
+    // }
 
     /**
      * Determines the status based on the approval and denial flags.
@@ -48,13 +138,27 @@
 
     }
 
-    function handleClick(stringVal) {
-      axios.post("/courseTypes/create", stringVal, {
-        headers: userToken
-      })
-        .catch(e => {
+    async function handleClick() {
+      const reqHead = {
+          'userToken': userToken
+      }
+      const reqParam = {
+          'courseTypeName': value
+      }
+      await AXIOS.post("/courseTypes/create", {
+          headers: reqHead,
+          params: reqParam
+        })
+          .then(response => {
+              createdCT = response.data;
+          })
+          .catch(e => {
             errorPerson = e;
-        });
+          });
+
+      proposedCourseTypes.push(createdCT);
+      instructorProposedCourseTypes.push(createdCT);
+      console.log(proposedCourseTypes);
       
       return void 0;
     }
@@ -70,20 +174,20 @@
         <!-- head -->
         <thead>
           <tr>
-            <th></th>
+<!--            <th></th>-->
             <th>Proposed CourseType</th>
-            <th>Associated Instructor</th>
+            <th>Associated Instructor ID</th>
             <th>Status</th>
           </tr>
         </thead>
         <tbody>
           <!-- row 1 -->
-          {#each proposedCourseTypes as courseType, index (courseType)}
+          {#each proposedCourseTypes as courseType}<!--{#each proposedCourseTypes as courseType, index (courseType)}-->
           <tr class="hover">
-            <th>{index+1}</th>
-            <th>{courseType.name}</th>
-            <th>{courseType.instructor}</th>
-            <th>{displayStatus(courseType.approval, courseType.rejected)}</th>
+<!--            <th>{index+1}</th>-->
+            <th>{courseType.courseName}</th>
+            <th>{courseType.staffAccountId}</th>
+            <th>{displayStatus(courseType.approvalStatus, courseType.rejectedStatus)}</th>
           </tr>
           {/each}
         </tbody>
@@ -100,7 +204,7 @@
         placeholder="Enter CourseType here"
       />
       <div class="flex justify-end mt-2">
-        <button class="btn" on:click={() => handleClick(value)}>Submit CourseType</button>
+        <button class="btn" on:click={handleClick}>Submit CourseType</button>
       </div>
     </div>
     <div class="listInstructor">
@@ -120,8 +224,8 @@
 						{#each instructorProposedCourseTypes as courseType, index (courseType)}
 						<tr class="hover">
 							<th>{index+1}</th>
-							<th>{courseType.name}</th>
-							<th>{displayStatus(courseType.approval, courseType.rejected)}</th>
+							<th>{courseType.courseName}</th>
+							<th>{displayStatus(courseType.approvalStatus, courseType.rejectedStatus)}</th>
 						</tr>
 						{/each}
 					</tbody>
