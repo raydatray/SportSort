@@ -1,8 +1,7 @@
 <script>
-    import ListInfiniteScroll from "$lib/components/ListCourseTypeApproval.svelte";
     import { onMount } from 'svelte';
-    import { writable } from 'svelte/store';
     import axios from 'axios';
+    let userToken = sessionStorage.getItem("token");
 
     const backendUrl = 'http://127.0.0.1:8080/';
     const AXIOS = axios.create({
@@ -10,17 +9,6 @@
         headers: { 'Access-Control-Allow-Origin': 'http://localhost:5173/' }
     });
 
-    /**
-     * Represents the clicked item.
-     * @type {string}
-     */
-    let clickedItem = "";
-
-    /**
-     * Represents the button that was clicked.
-     * @type {string}
-     */
-    let clickedButton = "";
     /**
      * An array of items.
      * @type {string[]}
@@ -46,7 +34,7 @@
     onMount(() => {
         AXIOS.get('/courseTypes/getAll',{
             headers:{
-                'userToken': 'wasd'
+                'userToken': userToken
             }
         })
             .then(response => {
@@ -102,7 +90,7 @@
         const id = getClickedID(type);
         AXIOS.put(`/courseTypes/updateApproval?id=${id}`, {}, {
             headers:{
-                'userToken': 'wasd'
+                'userToken': userToken
             }
         })
             .then(response => {
@@ -138,7 +126,7 @@
         const id = getClickedID(type);
         AXIOS.put(`/courseTypes/updateRejection?id=${id}`, {}, {
             headers:{
-                'userToken': 'wasd'
+                'userToken': userToken
             }
         })
             .then(response => {

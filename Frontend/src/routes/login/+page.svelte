@@ -28,8 +28,14 @@
       .then(response => {
         sessionStorage.setItem('token', response.data.token);
         sessionStorage.setItem('role', response.data.role);
-        pushState("/courseHistory", {});
-        window.location.reload();
+          // Get the base URL of the website
+          const baseURL = window.location.protocol + '//' + window.location.host + '/';
+          // Replace '/login' from the current URL with the base URL
+          const newURL = window.location.href.replace(window.location.pathname, '/');
+          // Update the URL without '/login'
+          history.replaceState({}, document.title, newURL);
+          // Reload the page
+          window.location.reload();
       })
       .catch(error => {
         console.log(error);
@@ -98,8 +104,7 @@
     }
 
     .page-title {
-        height: 20%;
-        margin-bottom: -3%;
+        height: 15%;
     }
 
     .page-content {
@@ -107,7 +112,7 @@
         justify-content: center;
         align-content: center;
         width: 100%;
-        height: 80%;
+        height: 85%;
         border-radius: 10px;
     }
 
