@@ -4,7 +4,7 @@
   import Logo from "../assets/logo.png";
   import { onMount } from "svelte";
 
-  let userType = 'OWNER';
+  let userType = 'CUSTOMER';
   let token;
 
   // onMount(() => {
@@ -31,7 +31,7 @@
     {#if userType === 'CUSTOMER'}\
       <li class = "m-1 "><a href="/customerHomePage" class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
       <li class = "m-1 "><a href="/courseOfferings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
-      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
+      <li class = "m-1 "><a href="/courseHistory" class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
       <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconTicket /> Registrations </a></li>
       <li class="spacer bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
@@ -40,8 +40,8 @@
 
     {:else if userType === "OWNER"}
       <li class = "m-1 "><a href="/" class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
-      <li class = "m-1 "><a href="/course-offerings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
-      <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconBallFootball /> Course Types </a></li>
+      <li class = "m-1 "><a href="/courseOfferings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
+      <li class="m-1"><a href="/CourseTypeApproval" class="flex items-center space-x-2 p-0.2"> <IconBallFootball /> Course Types </a></li>
       <li class="m-1"><a href="/ManageUsers" class="flex items-center space-x-2 p-0.2"> <IconUsers /> Manage Users </a></li>
       <li class="m-1"><a href="/ViewRooms" class="flex items-center space-x-2 p-0.2"> <IconDoor /> Rooms </a></li>
       <li class="h-3 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
@@ -52,9 +52,9 @@
 
     {:else if userType === "INSTRUCTOR"}
       <li class = "m-1 "><a href="/" class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
-      <li class = "m-1 "><a href="/course-offerings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
-      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
-      <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconBallFootball /> Course Types </a></li>
+      <li class = "m-1 "><a href="/courseOfferings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
+      <li class = "m-1 "><a href="/courseHistory" class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
+      <li class="m-1"><a href="/CourseTypeSubmission" class="flex items-center space-x-2 p-0.2"> <IconBallFootball /> Course Types </a></li>
       <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconTicket /> Registrations </a></li>
       <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconUsers /> Manage Customers </a></li>
       <li class="h-2 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
