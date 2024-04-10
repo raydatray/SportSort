@@ -1,26 +1,21 @@
 <script>
     import { onMount } from 'svelte';
     import axios from 'axios';
-    const backendUrl = 'http://127.0.0.1:8080/';
     let proposedCourseTypes = []; // Reactive variable to hold the fetched data
     let instructorProposedCourseTypes = []
     let errorPerson;
-
-    const AXIOS = axios.create({
-        baseURL: backendUrl,
-        headers: { 'Access-Control-Allow-Origin': 'http://localhost:5173/' }
-    });
+    let userToken; // subscribe to alex's store when its up -> LOOK AT DISCORD DMS WITH HIM FOR HOW
 
     onMount(() => {
-        AXIOS.get('/courseTypes/getAll')
-            .then(response => {
-              proposedCourseTypes = response.data;
-            })
-            .catch(e => {
-                errorPerson = e;
-            });
+      axios.get('/courseTypes/getAll')
+        .then(response => {
+          proposedCourseTypes = response.data;
+        })
+        .catch(e => {
+            errorPerson = e;
+        });
 
-        AXIOS.get('/courseTypes/getProposed')
+      axios.get('/courseTypes/getProposed')
         .then(response => {
             instructorProposedCourseTypes = response.data;
         })
@@ -31,10 +26,6 @@
 
     let value = '';
 
-    function handleClick() {
-        // Perform any action when the button is clicked
-        console.log('Button clicked!');
-    }
     /**
      * Determines the status based on the approval and denial flags.
      * @param {boolean} approvedBool - A boolean indicating whether the request is approved.
@@ -42,25 +33,38 @@
      * @returns {string} The status of the request.
      */
     function displayStatus(approvedBool, deniedBool) {
-        if (!approvedBool && !deniedBool) {
-            return "Under Review";
-        }
-        else if (approvedBool && !deniedBool) {
-            return "Approved";
-        }
-        else if (!approvedBool && deniedBool) {
-            return "Denied";
-        }
-        else {
-            return "Hmm... Something went wrong";
-        }
+      if (!approvedBool && !deniedBool) {
+        return "Under Review";
+      }
+      else if (approvedBool && !deniedBool) {
+        return "Approved";
+      }
+      else if (!approvedBool && deniedBool) {
+        return "Denied";
+      }
+      else {
+        return "Hmm... Something went wrong";
+      }
+
+    }
+
+    function handleClick(stringVal) {
+      axios.post("/courseTypes/create", stringVal, {
+        headers: userToken
+      })
+        .catch(e => {
+            errorPerson = e;
+        });
+      
+      return void 0;
     }
 
 </script>
 
-<h1>Course Type Management</h1>
+<h1 class="text-2xl font-bold p-2">Course Type Management</h1>
 <div class="content">
-  <div class="listAll">
+  <div class="listAll p-2">
+    <h1 class="text-lg">All Course Types</h1>
     <div class="overflow-x-auto">
       <table class="table">
         <!-- head -->
@@ -76,7 +80,7 @@
           <!-- row 1 -->
           {#each proposedCourseTypes as courseType, index (courseType)}
           <tr class="hover">
-            <th>{index}</th>
+            <th>{index+1}</th>
             <th>{courseType.name}</th>
             <th>{courseType.instructor}</th>
             <th>{displayStatus(courseType.approval, courseType.rejected)}</th>
@@ -88,16 +92,19 @@
   </div>
   <div class="last-col">
     <div class="newCourseType">
-      <label for="textInput">Insert New CourseType:</label>
+      <label for="textInput" class="text-lg">Insert New CourseType:</label>
       <input
         type="text"
         id="textInput"
         bind:value={value}
         placeholder="Enter CourseType here"
       />
-      <button class="btn" on:click={handleClick}>Submit CourseType</button>
+      <div class="flex justify-end mt-2">
+        <button class="btn" on:click={handleClick(value)}>Submit CourseType</button>
+      </div>
     </div>
     <div class="listInstructor">
+      <h1 class="text-lg">Your Course Types</h1>
       <div class="overflow-x-auto">
 				<table class="table">
 					<!-- head -->
@@ -105,17 +112,15 @@
 						<tr>
 							<th></th>
 							<th>Proposed CourseType</th>
-							<th>Associated Instructor</th>
 							<th>Status</th>
 						</tr>
 					</thead>
 					<tbody>
 						<!-- row 1 -->
-						{#each proposedCourseTypes as courseType, index (courseType)}
+						{#each instructorProposedCourseTypes as courseType, index (courseType)}
 						<tr class="hover">
-							<th>{index}</th>
+							<th>{index+1}</th>
 							<th>{courseType.name}</th>
-							<th>{courseType.instructor}</th>
 							<th>{displayStatus(courseType.approval, courseType.rejected)}</th>
 						</tr>
 						{/each}
@@ -172,6 +177,8 @@
       grid-area: "listInstructor";
       /* overflow-y: scroll; */
       height: 70%;
+      margin-bottom: 0.625rem; /* Add margin to separate multiple instances of the component */
+      padding: 1rem;
     }
 
     .listAll {
