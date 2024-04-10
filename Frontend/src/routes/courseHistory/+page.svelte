@@ -116,6 +116,14 @@
           /** @type {CourseType[]} */
           courseTypes = response4.data;
 
+          // Filter out course offerings that aren't over yet
+          courseOfferings = courseOfferings.filter(offering => {
+              const endDate = new Date(offering.endDate);
+              const today = new Date();
+              // Compare endDate with today's date
+              return endDate < today;
+          });
+
           courseOfferings.forEach(offering => {
               /** @type {Instructor | undefined} */
               const instructor = instructors.find(inst => inst.id === offering.instructorId);
