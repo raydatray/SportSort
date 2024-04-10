@@ -43,35 +43,38 @@
         let selectedRooms = roomCheckboxes.filter(checkbox => checkbox.checked).map(checkbox => checkbox.value);
 
 
+
         let params = {
-            lD: startDate || null,
-            hD: endDate || null,
-            lT: startTime || null,
-            hT: endTime || null,
             hP: price,
             dO: selectedDays,
             iI: selectedInstructors,
             cT: selectedCourseTypes,
-            rI: selectedRooms
+            rId: selectedRooms
         }
 
-        dispatch('fitlerChange', params);
+        if (startDate) params.lD = startDate;
+        if (endDate) params.hD = endDate;
+        if (startTime) params.lT = startTime;
+        if (endTime) params.hT = endTime;
+
+        dispatch('filterChange', params);
         console.log(params);
     }
 
 </script>
 
 <div class = "flex-col space-y-.5">
-    <div class = "text-lg font-medium bg-base-200 border-2xl">Filters</div>
-    <div class = "collapse collapse-arrow bg-base-200">
-        <input type = "checkbox" checked/>
-        <div class = "collapse-title text-md font-medium">
+    <div class = "join join-vertical">
+    <div class = "p-4 text-lg font-medium join-item bg-base-200 rounded-3xl">Filters</div>
+    <div class = "join-item collapse collapse-arrow bg-base-200">
+        <input type = "checkbox"/>
+        <div class = "font-medium collapse-title text-md">
             Course Types
         </div>
         <div class = "collapse-content">
             {#each courseTypes as courseType}
-                <label class = "form-control">
-                    <label class = "label cursor-pointer">
+                <label class = "flex form-control">
+                    <label class = "justify-start cursor-pointer label gap-x-3">
                         <input type = "checkbox" bind:this={courseTypeCheckboxes[courseType.id]} bind:value={courseType.id} on:change = {handleFilterChange} class = "checkbox"/>
                         <span class = "label-text">{courseType.courseName}</span>
                     </label>
@@ -80,33 +83,33 @@
         </div>
     </div>
 
-    <div class = "collapse collapse-arrow bg-base-200">
-        <input type = "checkbox" checked/>
-        <div class = "collapse-title text-md font-medium">
+    <div class = "join-item collapse collapse-arrow bg-base-200">
+        <input type = "checkbox"/>
+        <div class = "font-medium collapse-title text-md">
             Price
         </div>
         <div class = "collapse-content">
-            <form class = "grid grid-flow-col auto-cols-max space-x-5 justify-center" >
+            <form class = "grid justify-center grid-flow-col space-x-5 auto-cols-max" >
                 <div>
                     <input type = "range"  min = "0" max = "1000" bind:value={price} on:change = {handleFilterChange} class = "range"/>
                 </div>
                 <div>
-                    <input type = "number"  min = "0" max = "1000" bind:value={price} on:change = {handleFilterChange} class = "input input-bordered input-xs w-full max-w-xs"/>
+                    <input type = "number"  min = "0" max = "1000" bind:value={price} on:change = {handleFilterChange} class = "w-full max-w-xs input input-bordered input-xs"/>
                 </div>
             </form>
 
         </div>
     </div>
 
-    <div class = "collapse collapse-arrow bg-base-200">
-        <input type = "checkbox" checked/>
-        <div class = "collapse-title text-md font-medium">
+    <div class = "join-item collapse collapse-arrow bg-base-200">
+        <input type = "checkbox"/>
+        <div class = "font-medium collapse-title text-md">
             Days Offered
         </div>
         <div class = "collapse-content">
             {#each daysOfWeek as day, index}
                 <div class = "form-control">
-                    <label class = "label cursor-pointer">
+                    <label class = "justify-start cursor-pointer label gap-x-3">
                         <input type = "checkbox" bind:this={daysCheckboxes[index]} bind:value={day} on:change = {handleFilterChange} class = "checkbox"/>
                         <span class ="label-text">{day}</span>
                     </label>
@@ -115,49 +118,49 @@
         </div>
     </div>
 
-    <div class = "collapse collapse-arrow bg-base-200">
-        <input type = "checkbox" checked/>
-        <div class = "collapse-title text-md font-medium">
+    <div class = "join-item collapse collapse-arrow bg-base-200">
+        <input type = "checkbox"/>
+        <div class = "font-medium collapse-title text-md">
             Course Dates
         </div>
         <div class = "collapse-content">
-            <form class = "grid grid-flow-col auto-cols-max space-x-5 justify-center" >
+            <form class = "grid justify-center grid-flow-row space-y-5 auto-rows-max" >
                 <div>
-                    <input type = "date" bind:value={startDate} on:change={handleFilterChange} class = "input input-bordered input-sm w-full max-w-xs"/>
+                    <input type = "date" bind:value={startDate} on:change={handleFilterChange} class = "w-full max-w-xs input input-bordered input-sm"/>
                 </div>
                 <div>
-                    <input type = "date" bind:value={endTime} on:change={handleFilterChange} class = "input input-bordered input-sm w-full max-w-xs"/>
+                    <input type = "date" bind:value={endTime} on:change={handleFilterChange} class = "w-full max-w-xs input input-bordered input-sm"/>
                 </div>
             </form>
         </div>
     </div>
 
-    <div class = "collapse collapse-arrow bg-base-200">
-        <input type = "checkbox" checked/>
-        <div class = "collapse-title text-md font-medium">
+    <div class = "join-item collapse collapse-arrow bg-base-200">
+        <input type = "checkbox"/>
+        <div class = "font-medium collapse-title text-md">
             Course Times
         </div>
         <div class = "collapse-content">
-            <form class = "grid grid-flow-col auto-cols-max space-x-5 justify-center" >
+            <form class = "grid justify-center grid-flow-row space-y-5 auto-rows-max" >
                 <div>
-                    <input type = "time" bind:value={startTime} on:change={handleFilterChange} class = "input input-bordered input-sm w-full max-w-xs"/>
+                    <input type = "time" bind:value={startTime} on:change={handleFilterChange} class = "w-full max-w-xs input input-bordered input-sm"/>
                 </div>
                 <div>
-                    <input type = "time" bind:value={endTime} on:change={handleFilterChange} class = "input input-bordered input-sm w-full max-w-xs"/>
+                    <input type = "time" bind:value={endTime} on:change={handleFilterChange} class = "w-full max-w-xs input input-bordered input-sm"/>
                 </div>
             </form>
         </div>
     </div>
 
-    <div class = "collapse collapse-arrow bg-base-200">
-        <input type = "checkbox" checked/>
-        <div class = "collapse-title text-md font-medium">
+    <div class = "join-item collapse collapse-arrow bg-base-200">
+        <input type = "checkbox"/>
+        <div class = "font-medium collapse-title text-md">
             Instructors
         </div>
         <div class = "collapse-content">
             {#each instructors as instructor}
                 <div class = "form-control">
-                    <label class = "label cursor-pointer">
+                    <label class = "justify-start cursor-pointer label gap-x-3">
                         <input type = "checkbox" bind:this={instructorCheckboxes[instructor.id]} bind:value={instructor.id} on:change = {handleFilterChange} class = "checkbox"/>
                         <span class ="label-text">{instructor.name}</span>
                     </label>
@@ -166,20 +169,21 @@
         </div>
     </div>
 
-    <div class = "collapse collapse-arrow bg-base-200">
-        <input type = "checkbox" checked/>
-        <div class = "collapse-title text-md font-medium">
+    <div class = "join-item collapse collapse-arrow bg-base-200 rounded-3xl">
+        <input type = "checkbox"/>
+        <div class = "font-medium collapse-title text-md">
             Rooms
         </div>
         <div class = "collapse-content">
             {#each rooms as room}
                 <label class = "form-control">
-                    <label class = "label cursor-pointer">
-                        <input type = "checkbox" bind:this = {roomCheckboxes[room.id]} bind:value = {room.id} on:change = {handleFilterChange} class = "checkbox"/>
+                    <label class = "justify-start cursor-pointer label gap-x-3">
+                        <input type = "checkbox" bind:this={roomCheckboxes[room.id]} bind:value = {room.id} on:change = {handleFilterChange} class = "checkbox"/>
                         <span class = "label-text">{room.name}</span>
                     </label>
                 </label>
             {/each}
         </div>
+    </div>
     </div>
 </div>

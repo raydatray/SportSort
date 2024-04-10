@@ -4,7 +4,7 @@
   import Logo from "../assets/logo.png";
   import { onMount } from "svelte";
 
-  let userType = 'INSTRUCTOR';
+  let userType = 'GUEST';
   let token;
 
   // onMount(() => {
@@ -21,32 +21,54 @@
 
 <div class="h-screen grid grid-cols-[240px_1fr] gap-x-1 p-2 mr-2" data-theme="north">
   <nav class="menu justify-items-center">
-  <ul class="p-3.5 m-1 menu-horizontal md:menu-vertical bg-base-300 rounded-box gap-y-0.5">
+  <ul class="p-3 m-1 menu-horizontal md:menu-vertical bg-base-300 rounded-box gap-y-0.5">
     <li class="flex-row justify-center">
       <a href="/">
         <img class = "max-h-100px" src={Logo} alt="Logo"/>
       </a>
     </li>
     <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
-    <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
-    <li class = "m-1 "><a href="/course-offerings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
-    <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
-    <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconTicket /> Registrations </a></li>
     {#if userType === 'CUSTOMER'}
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
+      <li class = "m-1 "><a href="/course-offerings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconTicket /> Registrations </a></li>
       <li class="spacer bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
+      <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconLogout /> Logout </a></li>
     {:else if userType === "OWNER"}
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
+      <li class = "m-1 "><a href="/course-offerings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
+      <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconBallFootball /> Course Types </a></li>
       <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconUsers /> Manage Customers </a></li>
       <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconUserScreen /> Manage Instructors </a></li>
       <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconDoor /> Rooms </a></li>
-      <li class="h-1/3 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
-    {:else}
-      <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconUsers /> Manage Customers </a></li>
-      <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconBallFootball /> Course Types </a></li>
       <li class="h-2/5 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
+      <li class="h-2 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
+      <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconLogout /> Logout </a></li>
+    {:else if userType === "INSTRUCTOR"}
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
+      <li class = "m-1 "><a href="/course-offerings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
+      <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconBallFootball /> Course Types </a></li>
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconTicket /> Registrations </a></li>
+      <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconUsers /> Manage Customers </a></li>
+      <li class="h-2 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
+      <li class="h-2/5 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
+      <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconLogout /> Logout </a></li>
+    {:else}
+      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
+      <li class = "m-1 "><a href="/course-offerings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
+      <li class="h-2/3 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
+      <li class="h-5 spacer3 bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
+      <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
+      <li class = "m-1 "><a href="/login" class = "flex items-center space-x-2 p-0.2"> <IconLogout /> Login </a></li>
     {/if}
-    <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
-    <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
-    <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconLogout /> Logout </a></li>
   </ul>
 </nav>
   <div class="content">
