@@ -161,79 +161,40 @@
   });
 </script>
 
-<div class="h-full course-history-page bg-secondary">
-  <div class="page-title">
-    <h1>COURSE HISTORY</h1>
-  </div>
-  <div class="page-content bg-base-100 overflow-x-scroll">
-    <table class="table">
-      <thead>
+<h1 class="text-2xl font-bold p-2">Course History</h1>
+<div class="content">
+  <div class="listAll p-2">
+    <div class="overflow-x-auto">
+      <table class="table">
+        <thead>
         <tr>
           <th>Course Offering ID</th>
+          <th>Course Instructor</th>
+          <th>Course Type</th>
           <th>Start Date</th>
           <th>End Date</th>
-          <th>Instructor</th>
-          <th>Course Type</th>
-          <th>Days Offered</th>
           <th>Room</th>
+          <th>Days Offered</th>
         </tr>
-      </thead>
-      <tbody style="min-height: 100px;">
-        {#each courseOfferings as item}
-          <tr class="hover">
-            <td>{item.id}</td>
-            <td>{item.startDate}</td>
-            <td>{item.endDate}</td>
-            <td>{item.instructorId}</td>
-            <td>{item.courseTypeId}</td>
-            <td>{item.daysOffered}</td>
-            <td>{item.roomId}</td>
-          </tr>
-        {/each}
-        {#if courseOfferings.length < 10}
-          {#each Array(10 - courseOfferings.length) as _}
-            <tr><td colspan="6"></td></tr>
+        </thead>
+        <tbody>
+          {#each courseOfferings as courseOffering}
+            <tr class="hover">
+              <th class="font-normal">{courseOffering.id}</th>
+              <th class="font-normal">{courseOffering.instructorId}</th>
+              <th class="font-normal">{courseOffering.courseTypeId}</th>
+              <th class="font-normal">{courseOffering.startDate}</th>
+              <th class="font-normal">{courseOffering.endDate}</th>
+              <th class="font-normal">{courseOffering.roomId}</th>
+              <th class="font-normal">{courseOffering.daysOffered}</th>
+            </tr>
           {/each}
-        {/if}
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 
 <style>
-    h1 {
-        font-size: 3rem;
-        margin-bottom: 2rem;
-        letter-spacing: 0.2rem;
-        font-weight: bold;
-    }
 
-    .course-history-page {
-        border-radius: 10px;
-        height: 100%;
-        width: 100%;
-        margin-bottom: 0.75%;
-        padding: 2% 3%;
-        display: flex;
-        align-items: flex-start;
-        justify-content: center;
-        flex-direction: column;
-    }
-
-    .page-title {
-        height: 20%;
-        width: 100%;
-    }
-
-    .page-content {
-        display: flex;
-        justify-content: center;
-        align-content: center;
-        width: 100%;
-        height: 80%;
-    }
-
-    .table tr {
-        height: 40px; /* Set a fixed height for table rows */
-    }
 </style>
