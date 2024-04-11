@@ -114,6 +114,36 @@
     }
 
     function saveUpdatedDetails() {
+        const emailRegex = /^[a-z]{3,}@[a-z]+\.[a-z]+$/;
+        const lengthRegex = /^.{8,20}$/;
+        const uppercaseRegex = /[A-Z]/;
+        const lowercaseRegex = /[a-z]/;
+        const numberRegex = /\d/;
+        const specialCharRegex = /[!@#$%^&*()_+]/;
+
+        if (updatedEmail.trim() === "" || updatedPassword.trim() === "" || updatedName.trim() === "") {
+            displayAlert("Please fill in empty fields!");
+            return;
+        } else if (!emailRegex.test(updatedEmail)) {
+            displayAlert("The email provided is invalid!");
+            return;
+        } else if (!lengthRegex.test(updatedPassword)) {
+            displayAlert("The password must be between 8 and 20 characters long!");
+            return;
+        } else if (!uppercaseRegex.test(updatedPassword)) {
+            displayAlert("The password must contain an upper case letter!");
+            return;
+        } else if (!lowercaseRegex.test(updatedPassword)) {
+            displayAlert("The password must contain a lower case letter!");
+            return;
+        } else if (!numberRegex.test(updatedPassword)) {
+            displayAlert("The password must contain a number!");
+            return;
+        } else if (!specialCharRegex.test(updatedPassword)) {
+            displayAlert("The password must contain a special character!");
+            return;
+        }
+
         if (currentInstructorIndex !== null) {
             const userToken = sessionStorage.getItem('token');
 
