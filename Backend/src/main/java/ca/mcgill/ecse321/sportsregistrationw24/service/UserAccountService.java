@@ -122,6 +122,12 @@ public class UserAccountService {
 
   @Transactional
   public UserAccountDTO updateUserAccount(String userToken, String currEmail, String newName, String newEmail, String newPassword) {
+    UserAccount owner = getUserFromToken(userAccountRepository, userToken);
+
+    if (!owner.getUserType().equals("OWNER")) {
+      throw new IllegalArgumentException("Only owners can create instructor accounts!");
+    }
+
     UserAccount user = getUserByEmail(userToken, currEmail);
 
     if (user == null) {
@@ -158,8 +164,8 @@ public class UserAccountService {
   public UserAccount getUserByEmail(String userToken, String aEmail) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (!user.getUserType().equals("OWNER")) {
-      throw new IllegalArgumentException("Only owners can view user accounts!");
+    if (!user.getUserType().equals("OWNER") || !user.getEmail().equals(aEmail)) {
+      throw new IllegalArgumentException("Only owners and the user himself can view user accounts!");
     }
 
     UserAccount foundUser = userAccountRepository.findUserByEmail(aEmail).orElse(null);
