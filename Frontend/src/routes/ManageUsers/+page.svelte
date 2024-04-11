@@ -3,6 +3,7 @@
     import axios from 'axios';
     import { IconEye } from "@tabler/icons-svelte";
     import { fade } from 'svelte/transition';
+    import { IconPencil, IconTrash } from '@tabler/icons-svelte';
 
     let modalOpen = false;
     // Related to creating
@@ -235,16 +236,16 @@
             <td>Loading...</td>
           {/if}
           <td class="actions">
-            <button 
-              class="btn-small update-btn"
+            <button
+              class="btn"
               on:click={() => openUpdateModal(index)}
               disabled={instructor.userType !== 'INSTRUCTOR'}
               class:disabled={instructor.userType !== 'INSTRUCTOR'}
             >
-              Update
+              <IconPencil></IconPencil>
             </button>
             {#if instructor.userType !== 'OWNER'}
-              <button class="btn-small delete-btn" on:click={() => deleteInstructor(instructor.email)}>Delete</button>
+              <button class="btn" on:click={() => deleteInstructor(instructor.email)}><IconTrash></IconTrash></button>
             {/if}
           </td>
         </tr>
@@ -348,7 +349,7 @@
       }
     }
     
-  .btn-small.disabled {
+  .disabled {
     background-color: transparent; /* Make the button transparent */
     color: transparent; /* Make the text transparent */
     cursor: default; /* Reset the cursor to default instead of pointer */
@@ -363,33 +364,6 @@
     justify-content: flex-start; /* Align content to the left */
     align-items: left; /* Vertically center the content */
     gap: 10px; /* Maintain some space between buttons */
-  }
-
-  .btn-small {
-    padding: 5px 10px; /* Smaller padding for a compact look */
-    margin: 0; /* Removed margin to align buttons correctly */
-    font-size: 0.8rem; /* Smaller font size for text within the button */
-    cursor: pointer; /* Cursor indicates clickable button */
-    transition: background-color 0.3s; /* Smooth transition for background color */
-  }
-
-  /* Only apply hover styles to buttons that are not disabled */
-  .update-btn:not(.disabled):hover {
-    background-color: #66bb6a; /* Lighter green on hover */
-  }
-
-  .delete-btn:hover {
-    background-color: #ef5350; /* Lighter red on hover */
-  }
-
-  .update-btn {
-    background-color: #4CAF50; /* Green background for update */
-    color: white; /* White text */
-  }
-
-  .delete-btn {
-    background-color: #f44336; /* Red background for delete */
-    color: white; /* White text */
   }
 
   .modal-alert {
