@@ -55,7 +55,7 @@ public class UserAccountService {
   }
 
   @Transactional
-  public void createInstructorAccount(String userToken, String aName, String aEmail, String aPassword) {
+  public UserAccountDTO createInstructorAccount(String userToken, String aName, String aEmail, String aPassword) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     if (!user.getUserType().equals("OWNER")) {
@@ -87,6 +87,8 @@ public class UserAccountService {
     instructorAccount.setPassword(aPassword);
 
     userAccountRepository.save(instructorAccount);
+
+    return convertToDto(instructorAccount);
   }
 
   @Transactional
@@ -120,6 +122,12 @@ public class UserAccountService {
 
   @Transactional
   public UserAccountDTO updateUserAccount(String userToken, String currEmail, String newName, String newEmail, String newPassword) {
+    UserAccount owner = getUserFromToken(userAccountRepository, userToken);
+
+    if (!owner.getUserType().equals("OWNER")) {
+      throw new IllegalArgumentException("Only owners can create instructor accounts!");
+    }
+
     UserAccount user = getUserByEmail(userToken, currEmail);
 
     if (user == null) {
@@ -156,8 +164,8 @@ public class UserAccountService {
   public UserAccount getUserByEmail(String userToken, String aEmail) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (!user.getUserType().equals("OWNER")) {
-      throw new IllegalArgumentException("Only owners can view user accounts!");
+    if (!user.getUserType().equals("OWNER") || !user.getEmail().equals(aEmail)) {
+      throw new IllegalArgumentException("Only owners and the user himself can view user accounts!");
     }
 
     UserAccount foundUser = userAccountRepository.findUserByEmail(aEmail).orElse(null);

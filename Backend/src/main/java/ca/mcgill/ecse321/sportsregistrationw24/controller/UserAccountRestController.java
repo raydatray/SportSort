@@ -26,7 +26,7 @@ public class UserAccountRestController {
       String email = userAccountCO.getEmail();
       String password = userAccountCO.getPassword();
       service.createCustomerAccount(name, email, password);
-      return ResponseEntity.status(HttpStatus.CREATED).body("Customer account created successfully");
+      return ResponseEntity.status(HttpStatus.CREATED).body("Customer account created successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -38,8 +38,8 @@ public class UserAccountRestController {
       String name = userAccountCO.getName();
       String email = userAccountCO.getEmail();
       String password = userAccountCO.getPassword();
-      service.createInstructorAccount(userToken, name, email,password);
-      return ResponseEntity.status(HttpStatus.CREATED).body("Instructor account created successfully");
+      UserAccountDTO newUser = service.createInstructorAccount(userToken, name, email,password);
+      return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }

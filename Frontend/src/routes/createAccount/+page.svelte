@@ -60,7 +60,6 @@
       })
           .catch(error => {
               errorMsg = "An error occured!";
-              console.log(error);
           })
   }
 </script>

@@ -44,7 +44,6 @@
                     userType: userAccount.type,
                     email: userAccount.email,
                 }));
-                console.log(instructors)
             })
             .catch(e => {
                 error = e.message;
@@ -68,22 +67,21 @@
         const userToken = sessionStorage.getItem('token'); // Replace with your actual token retrieval logic
 
         const newInstructorDetails = {
-            name: newName,
             email: newEmail,
-            password: newPassword, // Ensure you're handling passwords securely!
+            password: newPassword,
+            name: newName
         };
 
         AXIOS.post('/accounts/createInstructor', newInstructorDetails, {
             headers: {
-                'Content-Type': 'application/json',
-                'userToken': userToken, // Include the user token in the request header
+                'userToken': userToken
             }
         })
             .then(response => {
-                // Assuming the server returns the created instructor account data
                 const createdInstructor = response.data;
-                instructors = [...instructors, createdInstructor]; // Add the new instructor to the local state
-                closeModal(); // Close the modal after successful creation
+                let newInstructor = { id: undefined, name: createdInstructor.name, userType: createdInstructor.type, email: createdInstructor.email };
+                instructors = [...instructors, newInstructor];
+                closeModal();
                 // Clear the form fields
                 newName = '';
                 newEmail = '';
@@ -116,6 +114,36 @@
     }
 
     function saveUpdatedDetails() {
+        const emailRegex = /^[a-z]{3,}@[a-z]+\.[a-z]+$/;
+        const lengthRegex = /^.{8,20}$/;
+        const uppercaseRegex = /[A-Z]/;
+        const lowercaseRegex = /[a-z]/;
+        const numberRegex = /\d/;
+        const specialCharRegex = /[!@#$%^&*()_+]/;
+
+        if (updatedEmail.trim() === "" || updatedPassword.trim() === "" || updatedName.trim() === "") {
+            displayAlert("Please fill in empty fields!");
+            return;
+        } else if (!emailRegex.test(updatedEmail)) {
+            displayAlert("The email provided is invalid!");
+            return;
+        } else if (!lengthRegex.test(updatedPassword)) {
+            displayAlert("The password must be between 8 and 20 characters long!");
+            return;
+        } else if (!uppercaseRegex.test(updatedPassword)) {
+            displayAlert("The password must contain an upper case letter!");
+            return;
+        } else if (!lowercaseRegex.test(updatedPassword)) {
+            displayAlert("The password must contain a lower case letter!");
+            return;
+        } else if (!numberRegex.test(updatedPassword)) {
+            displayAlert("The password must contain a number!");
+            return;
+        } else if (!specialCharRegex.test(updatedPassword)) {
+            displayAlert("The password must contain a special character!");
+            return;
+        }
+
         if (currentInstructorIndex !== null) {
             const userToken = sessionStorage.getItem('token');
 
@@ -136,8 +164,6 @@
                 }
             })
                 .then(response => {
-                    console.log('Update response:', response.data); // Log the response
-
                     let updatedInstructor = response.data;
                     instructors[currentInstructorIndex].email = updatedInstructor.email;
                     instructors[currentInstructorIndex].name = updatedInstructor.name;
@@ -163,7 +189,6 @@
             }
         })
             .then(response => {
-                console.log(response.data);
                 // Update the instructors array to reflect the deletion
                 instructors = instructors.filter(instructor => instructor.email !== email);
             })
