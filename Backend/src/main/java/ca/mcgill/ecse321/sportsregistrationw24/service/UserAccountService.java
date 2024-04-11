@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.service;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 
+import ca.mcgill.ecse321.sportsregistrationw24.dto.UserAccounts.UserAccountDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.OwnerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
@@ -12,7 +13,6 @@ import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.*;
 
@@ -52,7 +52,7 @@ public class UserAccountService {
   }
 
   @Transactional
-  public void createInstructorAccount(String userToken, String aName, String aEmail, String aPassword) {
+  public UserAccountDTO createInstructorAccount(String userToken, String aName, String aEmail, String aPassword) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     if (!user.getUserType().equals("OWNER")) {
@@ -84,6 +84,8 @@ public class UserAccountService {
     instructorAccount.setPassword(aPassword);
 
     userAccountRepository.save(instructorAccount);
+
+    return convertToDto(instructorAccount);
   }
 
   @Transactional
@@ -116,7 +118,7 @@ public class UserAccountService {
   }
 
   @Transactional
-  public void updateUserAccount(String userToken, String currEmail, String newName, String newEmail, String newPassword) {
+  public UserAccountDTO updateUserAccount(String userToken, String currEmail, String newName, String newEmail, String newPassword) {
     UserAccount user = getUserByEmail(userToken, currEmail);
 
     if (user == null) {
@@ -146,6 +148,12 @@ public class UserAccountService {
     user.setPassword(newPassword);
 
     userAccountRepository.save(user);
+    return convertToDto(user);
+  }
+
+  @Transactional
+  public UserAccount getUserByToken(String userToken) {
+    return getUserFromToken(userAccountRepository, userToken);
   }
 
   @Transactional
@@ -199,11 +207,11 @@ public class UserAccountService {
 
   @Transactional
   public void deleteUserAccount(String userToken, String aEmail) {
-//    UserAccount user = getUserFromToken(userAccountRepository, userToken);
-//
-//    if (!user.getUserType().equals("OWNER")) {
-//      throw new IllegalArgumentException("Only owners can delete user accounts!");
-//    }
+    UserAccount user = getUserFromToken(userAccountRepository, userToken);
+
+    if (!user.getUserType().equals("OWNER") || !user.getEmail().equals(aEmail)) {
+      throw new IllegalArgumentException("Only owner or yourself can delete this account!");
+    }
 
     UserAccount existingUserAccount = userAccountRepository.findUserByEmail(aEmail).orElse(null);
 
@@ -229,5 +237,12 @@ public class UserAccountService {
     }
 
     return classes;
+  }
+
+  private UserAccountDTO convertToDto(UserAccount userAccount) {
+    if (userAccount == null) {
+      throw new IllegalArgumentException("There is no such user account!");
+    }
+    return new UserAccountDTO(userAccount.getUserType(), userAccount.getEmail(), userAccount.getName(), userAccount.getToken());
   }
 }

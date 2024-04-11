@@ -1,13 +1,16 @@
 <script>
   import { onMount } from 'svelte';
   import axios from 'axios';
-  import { IconEye, IconMail } from "@tabler/icons-svelte";
+  import { IconEye} from "@tabler/icons-svelte";
+  import { fade } from 'svelte/transition';
 
   // Reactive variables for the current user
   let currentUser = {
       name: '',
       email: '',
   };
+
+  let userRole = '';
 
   let passwordVisible = false; // Reactive variable for password visibility
   // Related to updating 
@@ -16,38 +19,48 @@
   let error; // To hold any errors during fetching
   let modalOpen = false;
 
+  // Related to error alert
+  let alertMessage = ''; // Holds the success or error message
+  let showAlert = false; // Controls the visibility of the alert
+
   // Temporary state to store changes while editing
   let tempName = currentUser.name;
   let tempEmail = currentUser.email;
+
+  // Define reactive variables and imports
+  let holdTimer;
+  let holdProgress = 0; // Progress of the button hold from 0 to 100
+
+  // Define the duration to hold the button for deletion
+  const holdDuration = 2000; // 2000 milliseconds (2 seconds)
 
   const AXIOS = axios.create({
       baseURL: 'http://127.0.0.1:8080', // Adjust this to your actual backend URL
       headers: { 'Access-Control-Allow-Origin': 'http://localhost:5173/' }
   });
 
-  onMount(() => {
-      const loggedInToken =  sessionStorage.getItem('token');
-      AXIOS.get('/accounts/getAll', {
-          headers: {
-              'userToken': loggedInToken // Adjusted to use the stored token
-          }
-      })
-      .then(response => {
-          const users = response.data;
-          // Assuming users include a property to match with the token, which is not typical for security reasons
-          const loggedInUser = users.find(user => user.token === loggedInToken);
-          console.log(loggedInToken)
-          console.log(loggedInUser)
-          if (loggedInUser) {
-              currentUser.name = loggedInUser.name;
-              currentUser.email = loggedInUser.email;
-          }
-      })
-      .catch(e => {
-          error = e.message;
-      });
-  });
-  
+onMount(() => {
+    const loggedInToken =  sessionStorage.getItem('token');
+    userRole = sessionStorage.getItem('role');
+
+    AXIOS.get('/accounts/getAccount', {
+        headers: {
+            'userToken': loggedInToken // Adjusted to use the stored token
+        }
+    })
+    .then(response => {
+        const user = response.data;
+        
+        if (user) {
+            currentUser.name = user.name;
+            currentUser.email = user.email;
+        }
+    })
+    .catch(e => {
+        error = e.message;
+    });
+});
+
   console.log(currentUser)
   // Function to open the modal
   function openModal() {
@@ -59,6 +72,15 @@
   function closeModal() {
       modalOpen = false;
   }
+
+  // Error alert
+  function displayAlert(message) {
+        alertMessage = message;
+        showAlert = true;
+        setTimeout(() => {
+            showAlert = false;
+        }, 2000);
+    }
 
   // Function to save changes and close the modal
   function saveChanges() {
@@ -90,9 +112,8 @@
     closeModal();
   })
   .catch(error => {
-    // Handle error
-    console.error('Error updating account:', error.response ? error.response.data : error.message);
-    // Optionally update the UI to show the error
+    const message = error.response?.data || "An error occurred while creating the instructor.";
+    displayAlert(message);
   });
 }
 
@@ -100,17 +121,62 @@
     passwordVisible = !passwordVisible;
   }
 
-  // Function to handle account deletion
-  function deleteAccount() {
-      console.log('Account deletion requested.');
-      // Placeholder for actual deletion logic
+  function startHold() {
+    holdProgress = 0;
+    holdTimer = setInterval(() => {
+      holdProgress += 10; // Increase progress
+      if (holdProgress >= 100) {
+        completeHold();
+      }
+    }, holdDuration / 10);
   }
+
+  function endHold() {
+    clearInterval(holdTimer);
+    holdProgress = 0;
+  }
+
+  function completeHold() {
+    endHold();
+    deleteAccount(); // Call your delete account function
+  }
+
+  // Function to handle account deletion
+  // Function to handle account deletion
+function deleteAccount() {
+  const userToken = sessionStorage.getItem('token');
+  const userEmail = currentUser.email;
+
+  AXIOS.delete('/accounts/delete', {
+    headers: {
+      'userToken': userToken
+    },
+    params: {
+      email: userEmail
+    }
+  })
+  .then(response => {
+    console.log('Account deleted successfully:', response.data);
+    sessionStorage.removeItem('role'); // Handle session clearance and redirection as needed
+    sessionStorage.removeItem('token');
+    const newURL = window.location.href.replace(window.location.pathname, '/');
+    history.replaceState({}, document.title, newURL);
+    window.location.reload();
+  })
+  .catch(error => {
+    console.error('Error deleting account:', error.response ? error.response.data : error.message);
+    // Optionally update the UI to show the error
+  });
+
+}
+
 </script>
 
 <!-- Account Settings Display -->
 <div class="page-container">
   <h1 class="section-title">Account Settings</h1>
   {#if currentUser}
+  <div class="account-detail">Account Type: {userRole}</div>
     <div class="account-detail">Name: {currentUser.name}</div>
     <div class="account-detail">Email: {currentUser.email}</div>
   {:else}
@@ -119,7 +185,16 @@
   {/if}
   
   <button class="btn btn-custom" on:click={openModal}>Edit Account Details</button>
-  <button class="btn btn-delete" on:click={deleteAccount}>Delete Account</button>
+  {#if userRole !== 'OWNER' && userRole !== 'INSTRUCTOR'}
+  <button
+    class="btn btn-delete"
+    on:mousedown={startHold}
+    on:mouseup={endHold}
+    on:mouseleave={endHold}
+    style="--progress: {holdProgress}%;">
+    Hold to Delete
+  </button>
+{/if}
 </div>
 
 
@@ -148,6 +223,12 @@
     </div>
   </div>
 </dialog>
+{/if}
+
+{#if showAlert}
+  <div role="alert" class="alert alert-error modal-alert" in:fade={{ duration: 300 }} out:fade={{ duration: 300 }}>
+    <span>{alertMessage}</span>
+  </div>
 {/if}
 
 
@@ -188,12 +269,13 @@
     }
   
     .modal-box {
-      width: 80%; /* Dynamic width based on the parent container */
-      min-width: 300px; /* Minimum width to ensure usability */
-      max-width: 90vw; /* Maximum width as a percentage of the viewport width */
-      margin: auto; /* Center the modal */
+      width: 80%;
+      min-width: 300px;
+      max-width: 600px; /* You might adjust this as necessary */
       padding: 2rem;
-      box-sizing: border-box; /* Include padding in the width calculation */
+      box-sizing: border-box;
+      background-color: white; /* Optional: for visibility */
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Optional: for better visibility */
     }
   
     .modal-action {
@@ -209,14 +291,31 @@
     }
 
     .btn-delete {
-        background-color: #ff4b55; /* Red color for delete button */
-        color: white;
-        padding: 0.5rem 1rem;
-        border: none;
-        cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    background-color: #ff4b55;  /* Base red color */
+    color: white;
+    transition: background-color 0.3s;
+  }
+    .btn-delete::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: var(--progress, 0%);
+      background-color: rgba(255, 100, 100, 0.5); /* Light red background that fills up */
+      transition: width 0.2s linear;
     }
 
-    .btn-delete:hover {
-        background-color: #ff6b75; /* Lighter red on hover */
-    }
+    .modal-alert {
+    position: absolute; /* Position it absolutely to align it with the modal */
+    width: 50%; /* Make it as wide as the modal */
+    left: 50%; /* Center it horizontally */
+    transform: translateX(-50%); /* Adjust horizontal position */
+    bottom: 20%; /* Adjust vertical position to be below the modal */
+    z-index: 100; /* Ensure it's above the modal background */
+    box-sizing: border-box;
+    padding: 1rem;
+  }
   </style>
