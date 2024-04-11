@@ -104,10 +104,15 @@ public class UserAccountService {
       throw new IllegalArgumentException("Password cannot be empty!");
     }
 
-    UserAccount existingUserAccount = userAccountRepository.findUserByEmail(newEmail).orElse(null);
+    // Check if the new email is different from the current one and if it is already in use by another user
+    if (newEmail.equals(user.getEmail())) { // Only check for email existence if it's been changed
+        UserAccount existingUserAccount = userAccountRepository.findUserByEmail(newEmail).orElse(null);
 
-    if (existingUserAccount != null) {
-      throw new IllegalArgumentException("Email is already in use!");
+        String existingUserToken = existingUserAccount.getToken();
+
+        if (existingUserToken == null || !existingUserToken.equals(userToken)) {
+            throw new IllegalArgumentException("Email is already in use!");
+        }
     }
 
     user.setName(newName);
@@ -133,8 +138,8 @@ public class UserAccountService {
       throw new IllegalArgumentException("Email cannot be empty!");
     }
 
-    if (newPassword.trim().isEmpty()){
-      throw new IllegalArgumentException("Password cannot be empty!");
+    if (newPassword == null || newPassword.trim().isEmpty()){
+      newPassword = user.getPassword();
     }
 
     UserAccount existingUserAccount = userAccountRepository.findUserByEmail(newEmail).orElse(null);

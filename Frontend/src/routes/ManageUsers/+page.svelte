@@ -121,25 +121,25 @@
         const numberRegex = /\d/;
         const specialCharRegex = /[!@#$%^&*()_+]/;
 
-        if (updatedEmail.trim() === "" || updatedPassword.trim() === "" || updatedName.trim() === "") {
+        if (updatedEmail.trim() === "" || updatedName.trim() === "") {
             displayAlert("Please fill in empty fields!");
             return;
         } else if (!emailRegex.test(updatedEmail)) {
             displayAlert("The email provided is invalid!");
             return;
-        } else if (!lengthRegex.test(updatedPassword)) {
+        } else if (!lengthRegex.test(updatedPassword) && updatedPassword.trim() !== "") {
             displayAlert("The password must be between 8 and 20 characters long!");
             return;
-        } else if (!uppercaseRegex.test(updatedPassword)) {
+        } else if (!uppercaseRegex.test(updatedPassword) && updatedPassword.trim() !== "") {
             displayAlert("The password must contain an upper case letter!");
             return;
-        } else if (!lowercaseRegex.test(updatedPassword)) {
+        } else if (!lowercaseRegex.test(updatedPassword) && updatedPassword.trim() !== "") {
             displayAlert("The password must contain a lower case letter!");
             return;
-        } else if (!numberRegex.test(updatedPassword)) {
+        } else if (!numberRegex.test(updatedPassword) && updatedPassword.trim() !== "") {
             displayAlert("The password must contain a number!");
             return;
-        } else if (!specialCharRegex.test(updatedPassword)) {
+        } else if (!specialCharRegex.test(updatedPassword) && updatedPassword.trim() !== "") {
             displayAlert("The password must contain a special character!");
             return;
         }
@@ -347,7 +347,7 @@
         max-width: 600px; /* Adjust maximum width as appropriate */
       }
     }
-    
+
   .btn-small.disabled {
     background-color: transparent; /* Make the button transparent */
     color: transparent; /* Make the text transparent */
