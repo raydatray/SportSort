@@ -44,7 +44,6 @@
                     userType: userAccount.type,
                     email: userAccount.email,
                 }));
-                console.log(instructors)
             })
             .catch(e => {
                 error = e.message;
@@ -68,22 +67,21 @@
         const userToken = sessionStorage.getItem('token'); // Replace with your actual token retrieval logic
 
         const newInstructorDetails = {
-            name: newName,
             email: newEmail,
-            password: newPassword, // Ensure you're handling passwords securely!
+            password: newPassword,
+            name: newName
         };
 
         AXIOS.post('/accounts/createInstructor', newInstructorDetails, {
             headers: {
-                'Content-Type': 'application/json',
-                'userToken': userToken, // Include the user token in the request header
+                'userToken': userToken
             }
         })
             .then(response => {
-                // Assuming the server returns the created instructor account data
                 const createdInstructor = response.data;
-                instructors = [...instructors, createdInstructor]; // Add the new instructor to the local state
-                closeModal(); // Close the modal after successful creation
+                let newInstructor = { id: undefined, name: createdInstructor.name, userType: createdInstructor.type, email: createdInstructor.email };
+                instructors = [...instructors, newInstructor];
+                closeModal();
                 // Clear the form fields
                 newName = '';
                 newEmail = '';
@@ -136,8 +134,6 @@
                 }
             })
                 .then(response => {
-                    console.log('Update response:', response.data); // Log the response
-
                     let updatedInstructor = response.data;
                     instructors[currentInstructorIndex].email = updatedInstructor.email;
                     instructors[currentInstructorIndex].name = updatedInstructor.name;
@@ -163,7 +159,6 @@
             }
         })
             .then(response => {
-                console.log(response.data);
                 // Update the instructors array to reflect the deletion
                 instructors = instructors.filter(instructor => instructor.email !== email);
             })

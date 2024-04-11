@@ -55,7 +55,7 @@ public class UserAccountService {
   }
 
   @Transactional
-  public void createInstructorAccount(String userToken, String aName, String aEmail, String aPassword) {
+  public UserAccountDTO createInstructorAccount(String userToken, String aName, String aEmail, String aPassword) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     if (!user.getUserType().equals("OWNER")) {
@@ -87,6 +87,8 @@ public class UserAccountService {
     instructorAccount.setPassword(aPassword);
 
     userAccountRepository.save(instructorAccount);
+
+    return convertToDto(instructorAccount);
   }
 
   @Transactional
