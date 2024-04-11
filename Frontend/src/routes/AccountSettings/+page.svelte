@@ -36,20 +36,17 @@
 
 onMount(() => {
     const loggedInToken =  sessionStorage.getItem('token');
-    AXIOS.get('/accounts/getAll', {
+    AXIOS.get('/accounts/getAccount', {
         headers: {
             'userToken': loggedInToken // Adjusted to use the stored token
         }
     })
     .then(response => {
-        const users = response.data;
-        // Assuming users include a property to match with the token, which is not typical for security reasons
-        const loggedInUser = users.find(user => user.token === loggedInToken);
-        console.log(loggedInToken)
-        console.log(loggedInUser)
-        if (loggedInUser) {
-            currentUser.name = loggedInUser.name;
-            currentUser.email = loggedInUser.email;
+        const user = response.data;
+        
+        if (user) {
+            currentUser.name = user.name;
+            currentUser.email = user.email;
         }
     })
     .catch(e => {
