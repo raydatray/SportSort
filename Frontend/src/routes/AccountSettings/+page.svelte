@@ -36,6 +36,8 @@
 
 onMount(() => {
     const loggedInToken =  sessionStorage.getItem('token');
+    userRole = sessionStorage.getItem('role');
+
     AXIOS.get('/accounts/getAccount', {
         headers: {
             'userToken': loggedInToken // Adjusted to use the stored token
@@ -161,6 +163,7 @@ function deleteAccount() {
 <div class="page-container">
   <h1 class="section-title">Account Settings</h1>
   {#if currentUser}
+  <div class="account-detail">Account Type: {userRole}</div>
     <div class="account-detail">Name: {currentUser.name}</div>
     <div class="account-detail">Email: {currentUser.email}</div>
   {:else}
