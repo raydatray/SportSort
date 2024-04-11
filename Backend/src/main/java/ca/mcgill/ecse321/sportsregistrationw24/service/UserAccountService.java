@@ -211,11 +211,11 @@ public class UserAccountService {
 
   @Transactional
   public void deleteUserAccount(String userToken, String aEmail) {
-//    UserAccount user = getUserFromToken(userAccountRepository, userToken);
-//
-//    if (!user.getUserType().equals("OWNER")) {
-//      throw new IllegalArgumentException("Only owners can delete user accounts!");
-//    }
+    UserAccount user = getUserFromToken(userAccountRepository, userToken);
+
+    if (!user.getUserType().equals("OWNER") || !user.getEmail().equals(aEmail)) {
+      throw new IllegalArgumentException("Only owner or yourself can delete this account!");
+    }
 
     UserAccount existingUserAccount = userAccountRepository.findUserByEmail(aEmail).orElse(null);
 
