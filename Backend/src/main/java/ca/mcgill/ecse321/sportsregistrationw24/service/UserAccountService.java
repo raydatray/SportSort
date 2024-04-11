@@ -87,7 +87,7 @@ public class UserAccountService {
   }
 
   @Transactional
-  public void updateUserAccount(String userToken, String newName, String newEmail, String newPassword) {
+  public void updateAccount(String userToken, String newName, String newEmail, String newPassword) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     if (newName.trim().isEmpty()){
@@ -114,7 +114,40 @@ public class UserAccountService {
 
     userAccountRepository.save(user);
   }
-  @Deprecated
+
+  @Transactional
+  public void updateUserAccount(String userToken, String currEmail, String newName, String newEmail, String newPassword) {
+    UserAccount user = getUserByEmail(userToken, currEmail);
+
+    if (user == null) {
+      throw new IllegalArgumentException("User could not be found with provided email!");
+    }
+
+    if (newName.trim().isEmpty()){
+      throw new IllegalArgumentException("Name cannot be empty!");
+    }
+
+    if (newEmail.trim().isEmpty()){
+      throw new IllegalArgumentException("Email cannot be empty!");
+    }
+
+    if (newPassword.trim().isEmpty()){
+      throw new IllegalArgumentException("Password cannot be empty!");
+    }
+
+    UserAccount existingUserAccount = userAccountRepository.findUserByEmail(newEmail).orElse(null);
+
+    if (existingUserAccount != null) {
+      throw new IllegalArgumentException("Email is already in use!");
+    }
+
+    user.setName(newName);
+    user.setEmail(newEmail);
+    user.setPassword(newPassword);
+
+    userAccountRepository.save(user);
+  }
+
   @Transactional
   public UserAccount getUserByEmail(String userToken, String aEmail) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
@@ -166,11 +199,11 @@ public class UserAccountService {
 
   @Transactional
   public void deleteUserAccount(String userToken, String aEmail) {
-    UserAccount user = getUserFromToken(userAccountRepository, userToken);
-
-    if (!user.getUserType().equals("OWNER")) {
-      throw new IllegalArgumentException("Only owners can delete user accounts!");
-    }
+//    UserAccount user = getUserFromToken(userAccountRepository, userToken);
+//
+//    if (!user.getUserType().equals("OWNER")) {
+//      throw new IllegalArgumentException("Only owners can delete user accounts!");
+//    }
 
     UserAccount existingUserAccount = userAccountRepository.findUserByEmail(aEmail).orElse(null);
 

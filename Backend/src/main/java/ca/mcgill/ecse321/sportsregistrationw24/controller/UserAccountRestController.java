@@ -51,8 +51,22 @@ public class UserAccountRestController {
       String name = userAccountCO.getName();
       String email = userAccountCO.getEmail();
       String password = userAccountCO.getPassword();
-      service.updateUserAccount(userToken, name, email, password);
+      service.updateAccount(userToken, name, email, password);
       return ResponseEntity.ok().body("Account updated successfully");
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
+
+  @PutMapping(value = {"/accounts/updateUser"})
+  public ResponseEntity<?> updateUser(@RequestHeader String userToken, @RequestParam String userEmail, @RequestBody UserAccountCO userAccountCO) {
+    try {
+      String currEmail = userEmail;
+      String name = userAccountCO.getName();
+      String email = userAccountCO.getEmail();
+      String password = userAccountCO.getPassword();
+      service.updateUserAccount(userToken, currEmail, name, email, password);
+      return ResponseEntity.ok().body("User's account updated successfully");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -69,6 +83,7 @@ public class UserAccountRestController {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
+
 
   @GetMapping(value = {"/accounts/getInstructors"})
   public ResponseEntity<?> getInstructors(){

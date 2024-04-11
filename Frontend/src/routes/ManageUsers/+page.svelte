@@ -1,4 +1,186 @@
-<!-- HTML for the "Create Instructor" button and the table -->
+<script>
+    import { onMount } from 'svelte';
+    import axios from 'axios';
+    import { IconEye } from "@tabler/icons-svelte";
+    import { fade } from 'svelte/transition';
+
+    let modalOpen = false;
+    // Related to creating
+    let newName = '';
+    let newEmail = '';
+    let newPassword = '';
+    let passwordVisible = false; // Reactive variable for password visibility
+    let alertMessage = ''; // Holds the success or error message
+    let showAlert = false; // Controls the visibility of the alert
+    let currEmail = "";
+
+    // Related to updating
+    let updatedName = ''; // New variable for the updated name
+    let updatedPassword = ''; // New variable for the updated password
+
+    let updateModalOpen = false;
+    let updatedEmail = ''; // To hold the new email value for updating
+    let currentInstructorIndex = null; // To identify which instructor is being updated
+
+    // Replace your example instructors array with dynamic fetching
+    let instructors = []; // Now dynamically fetched from the backend
+    let error; // To hold any errors during fetching
+
+    const AXIOS = axios.create({
+        baseURL: 'http://127.0.0.1:8080', // Adjust this to your actual backend URL
+        headers: { 'Access-Control-Allow-Origin': 'http://localhost:5173/' }
+    });
+
+    onMount(() => {
+        AXIOS.get('/accounts/getAll', {
+            headers: {
+                'userToken': sessionStorage.getItem('token') // You'll need to adjust how you handle authentication
+            }
+        })
+            .then(response => {
+                instructors = response.data.map(userAccount => ({
+                    id: userAccount.id, // Adjust these properties based on your UserAccountDTO
+                    name: userAccount.name,
+                    userType: userAccount.type,
+                    email: userAccount.email,
+                }));
+                console.log(instructors)
+            })
+            .catch(e => {
+                error = e.message;
+            });
+    });
+
+    // Existing functions for creating an instructor
+    function openModal(index) {
+        modalOpen = true;
+        newName = '';
+        newEmail = '';
+        newPassword = '';
+        passwordVisible = false;
+    }
+
+    function closeModal() {
+        modalOpen = false;
+    }
+
+    function createInstructor() {
+        const userToken = sessionStorage.getItem('token'); // Replace with your actual token retrieval logic
+
+        const newInstructorDetails = {
+            name: newName,
+            email: newEmail,
+            password: newPassword, // Ensure you're handling passwords securely!
+        };
+
+        AXIOS.post('/accounts/createInstructor', newInstructorDetails, {
+            headers: {
+                'Content-Type': 'application/json',
+                'userToken': userToken, // Include the user token in the request header
+            }
+        })
+            .then(response => {
+                // Assuming the server returns the created instructor account data
+                const createdInstructor = response.data;
+                instructors = [...instructors, createdInstructor]; // Add the new instructor to the local state
+                closeModal(); // Close the modal after successful creation
+                // Clear the form fields
+                newName = '';
+                newEmail = '';
+                newPassword = '';
+            })
+            .catch(error => {
+                const message = error.response?.data || "An error occurred while creating the instructor.";
+                displayAlert(message);
+            });
+    }
+
+    function togglePassword() {
+        passwordVisible = !passwordVisible;
+    }
+
+    // New functions for updating an instructor's email
+    function openUpdateModal(index) {
+        updateModalOpen = true;
+        currentInstructorIndex = index;
+        let instructor = instructors[index];
+        updatedName = instructor.name;
+        updatedEmail = instructor.email;
+        updatedPassword = ''; // Assume the actual password isn't available or should be entered anew
+        passwordVisible = false; // Ensure the password field starts hidden
+        currEmail = instructor.email;  // Store the current email
+    }
+
+    function closeUpdateModal() {
+        updateModalOpen = false;
+    }
+
+    function saveUpdatedDetails() {
+        if (currentInstructorIndex !== null) {
+            const userToken = sessionStorage.getItem('token');
+
+            const updatedDetails = {
+                oldEmail: currEmail,
+                name: updatedName,
+                email: updatedEmail,
+                password: updatedPassword,
+                instrIndex: currentInstructorIndex
+            };
+
+            AXIOS.put('/accounts/updateUser', updatedDetails, {
+                headers: {
+                    'userToken': userToken
+                },
+                params: {
+                    'userEmail': currEmail
+                }
+            })
+                .then(response => {
+                    console.log('Update response:', response.data); // Log the response
+
+                    closeUpdateModal();
+
+                    instructors = instructors;
+                })
+                .catch(error => {
+                    const message = error.response?.data || "An error occurred while creating the instructor.";
+                    displayAlert(message);
+                });
+        }
+    }
+
+    function deleteInstructor(email) {
+        const userToken = sessionStorage.getItem('token'); // Adjust this to your actual user token management
+
+        AXIOS.delete('/accounts/delete', {
+            headers: {
+                'userToken': userToken
+            },
+            params: {
+                email: email
+            }
+        })
+            .then(response => {
+                console.log(response.data);
+                // Update the instructors array to reflect the deletion
+                instructors = instructors.filter(instructor => instructor.email !== email);
+            })
+            .catch(error => {
+                console.error('Error deleting the account:', error);
+                // Update the UI or state to reflect any error here
+            });
+    }
+
+    function displayAlert(message) {
+        alertMessage = message;
+        showAlert = true;
+        setTimeout(() => {
+            showAlert = false;
+        }, 2000);
+    }
+</script>
+
+
 <div style="align-self: flex-start; margin-bottom: 10px;">
   <button class="btn" on:click={openModal}>Create Instructor</button>
 </div>
@@ -16,9 +198,15 @@
       {#each instructors as instructor, index}
         <tr class="hover">
           <th>{index + 1}</th>
-          <td>{instructor.userType}</td>
-          <td>{instructor.name}</td>
-          <td>{instructor.email}</td>
+          {#if instructor}
+            <td>{instructor.userType}</td>
+            <td>{instructor.name}</td>
+            <td>{instructor.email}</td>
+          {:else}
+            <td>Loading...</td>
+            <td>Loading...</td>
+            <td>Loading...</td>
+          {/if}
           <td class="actions">
             <button 
               class="btn-small update-btn"
@@ -110,189 +298,6 @@
 {/if}
 
 
-<script>
-  import { onMount } from 'svelte';
-  import axios from 'axios';
-  import { IconEye } from "@tabler/icons-svelte";
-  import { fade } from 'svelte/transition';
-
-  let modalOpen = false;
-  // Related to creating
-  let newName = '';
-  let newEmail = '';
-  let newPassword = '';
-  let passwordVisible = false; // Reactive variable for password visibility
-  let alertMessage = ''; // Holds the success or error message
-  let showAlert = false; // Controls the visibility of the alert
-
-  // Related to updating 
-  let updatedName = ''; // New variable for the updated name
-  let updatedPassword = ''; // New variable for the updated password
-
-  let updateModalOpen = false;
-  let updatedEmail = ''; // To hold the new email value for updating
-  let currentInstructorIndex = null; // To identify which instructor is being updated
-
-  // Replace your example instructors array with dynamic fetching
-  let instructors = []; // Now dynamically fetched from the backend
-  let error; // To hold any errors during fetching
-
-  const AXIOS = axios.create({
-    baseURL: 'http://127.0.0.1:8080', // Adjust this to your actual backend URL
-    headers: { 'Access-Control-Allow-Origin': 'http://localhost:5173/' }
-    });
-
-  onMount(() => {
-    AXIOS.get('/accounts/getAll', {
-      headers: {
-        'userToken': 'asdf' // You'll need to adjust how you handle authentication
-      }
-    })
-    .then(response => {
-      instructors = response.data.map(userAccount => ({
-        id: userAccount.id, // Adjust these properties based on your UserAccountDTO
-        name: userAccount.name,
-        userType: userAccount.type,
-        email: userAccount.email,
-      }));
-      console.log(instructors)
-    })
-    .catch(e => {
-      error = e.message;
-    });
-  });
-
-  // Existing functions for creating an instructor
-  function openModal() {
-    modalOpen = true;
-    newName = '';
-    newEmail = '';
-    newPassword = '';
-    passwordVisible = false;
-  }
-
-  function closeModal() {
-    modalOpen = false;
-  }
-
-  function createInstructor() {
-  const userToken = sessionStorage.getItem('token'); // Replace with your actual token retrieval logic
-
-  const newInstructorDetails = {
-    name: newName,
-    email: newEmail,
-    password: newPassword, // Ensure you're handling passwords securely!
-  };
-
-  AXIOS.post('/accounts/createInstructor', newInstructorDetails, {
-    headers: {
-      'Content-Type': 'application/json',
-      'userToken': userToken, // Include the user token in the request header
-    }
-  })
-  .then(response => {
-    // Assuming the server returns the created instructor account data
-    const createdInstructor = response.data;
-    instructors = [...instructors, createdInstructor]; // Add the new instructor to the local state
-    closeModal(); // Close the modal after successful creation
-    // Clear the form fields
-    newName = '';
-    newEmail = '';
-    newPassword = '';
-  })
-  .catch(error => {
-    const message = error.response?.data || "An error occurred while creating the instructor.";
-    displayAlert(message);
-  });
-}
-
-  function togglePassword() {
-    passwordVisible = !passwordVisible;
-  }
-
-  // New functions for updating an instructor's email
-  function openUpdateModal(index) {
-    updateModalOpen = true;
-    currentInstructorIndex = index;
-    let instructor = instructors[index];
-    updatedName = instructor.name;
-    updatedEmail = instructor.email;
-    updatedPassword = ''; // Assume the actual password isn't available or should be entered anew
-    passwordVisible = false; // Ensure the password field starts hidden
-  }
-
-  function closeUpdateModal() {
-    updateModalOpen = false;
-  }
-
-  function saveUpdatedDetails() {
-  if (currentInstructorIndex !== null) {
-    const userToken = sessionStorage.getItem('token'); //TODO This needs to be updated to the actual instructor's TOKEN or it's gonna keep updating the OWNER
-
-    const updatedDetails = {
-      name: updatedName,
-      email: updatedEmail,
-      password: updatedPassword, // Ensure you're handling passwords securely!
-    };
-
-    AXIOS.put('/accounts/update', updatedDetails, {
-      headers: {
-        'Content-Type': 'application/json',
-        'userToken': userToken, // Authentication token
-      }
-    })
-    .then(response => {
-      console.log('Update response:', response.data); // Log the response
-
-      // Assuming the server returns the updated instructor, use the response to update
-      instructors[currentInstructorIndex] = response.data;
-
-      // Trigger a UI update
-      instructors = [...instructors];
-
-      closeUpdateModal();
-    })
-    .catch(error => {
-      const message = error.response?.data || "An error occurred while creating the instructor.";
-      displayAlert(message);
-    });
-  }
-}
-
-  function deleteInstructor(email) {
-    const userToken = sessionStorage.getItem('token'); // Adjust this to your actual user token management
-
-    AXIOS.delete('/accounts/delete', {
-      headers: {
-        'userToken': userToken
-      },
-      params: {
-        email: email
-      }
-    })
-    .then(response => {
-      console.log(response.data);
-      // Update the instructors array to reflect the deletion
-      instructors = instructors.filter(instructor => instructor.email !== email);
-    })
-    .catch(error => {
-      console.error('Error deleting the account:', error);
-      // Update the UI or state to reflect any error here
-    });
-  }
-
-  function displayAlert(message) {
-  alertMessage = message;
-  showAlert = true;
-  setTimeout(() => {
-    showAlert = false;
-  }, 2000);
-}
-
-
-</script>
-
-
 <style>
   .btn-small.disabled {
     background-color: transparent; /* Make the button transparent */
@@ -349,8 +354,3 @@
     padding: 1rem;
   }
 </style>
-
-
-
-
-
