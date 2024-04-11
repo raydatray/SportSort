@@ -214,7 +214,7 @@ public class UserAccountService {
   public void deleteUserAccount(String userToken, String aEmail) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (!user.getUserType().equals("OWNER") || !user.getEmail().equals(aEmail)) {
+    if (!user.getUserType().equals("OWNER") && !user.getEmail().equals(aEmail)) {
       throw new IllegalArgumentException("Only owner or yourself can delete this account!");
     }
 
