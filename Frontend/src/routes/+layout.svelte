@@ -30,6 +30,8 @@
         .then(response => {
             sessionStorage.removeItem('role');
             sessionStorage.removeItem('token');
+            const newURL = window.location.href.replace(window.location.pathname, '/');
+            history.replaceState({}, document.title, newURL);
             window.location.reload();
         })
         .catch(error => {
