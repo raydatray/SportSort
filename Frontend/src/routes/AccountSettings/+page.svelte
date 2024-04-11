@@ -143,8 +143,11 @@ function deleteAccount() {
   })
   .then(response => {
     console.log('Account deleted successfully:', response.data);
-    sessionStorage.clear(); // Handle session clearance and redirection as needed
-    // Add redirection or other UI updates here, for example, navigate to the login page
+    sessionStorage.removeItem('role'); // Handle session clearance and redirection as needed
+    sessionStorage.removeItem('token');
+    const newURL = window.location.href.replace(window.location.pathname, '/');
+    history.replaceState({}, document.title, newURL);
+    window.location.reload();
   })
   .catch(error => {
     console.error('Error deleting account:', error.response ? error.response.data : error.message);
