@@ -45,6 +45,7 @@ public class UserAccountRestController {
     }
   }
 
+  // This method modifies your own account information
   @PutMapping(value = {"/accounts/update"})
   public ResponseEntity<?> updateAccount(@RequestHeader String userToken, @RequestBody UserAccountCO userAccountCO) {
     try {
@@ -58,6 +59,7 @@ public class UserAccountRestController {
     }
   }
 
+  // This endpoint updates a user's account information --> OWNER ONLY
   @PutMapping(value = {"/accounts/updateUser"})
   public ResponseEntity<?> updateUser(@RequestHeader String userToken, @RequestParam String userEmail, @RequestBody UserAccountCO userAccountCO) {
     try {
@@ -65,8 +67,8 @@ public class UserAccountRestController {
       String name = userAccountCO.getName();
       String email = userAccountCO.getEmail();
       String password = userAccountCO.getPassword();
-      service.updateUserAccount(userToken, currEmail, name, email, password);
-      return ResponseEntity.ok().body("User's account updated successfully");
+      UserAccountDTO updatedAccount = service.updateUserAccount(userToken, currEmail, name, email, password);
+      return ResponseEntity.ok().body(updatedAccount);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }

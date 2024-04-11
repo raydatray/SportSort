@@ -2,6 +2,9 @@ package ca.mcgill.ecse321.sportsregistrationw24.service;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 
+import ca.mcgill.ecse321.sportsregistrationw24.dto.UserAccountSafeDto;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.UserAccounts.UserAccountCO;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.UserAccounts.UserAccountDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.OwnerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
@@ -116,7 +119,7 @@ public class UserAccountService {
   }
 
   @Transactional
-  public void updateUserAccount(String userToken, String currEmail, String newName, String newEmail, String newPassword) {
+  public UserAccountDTO updateUserAccount(String userToken, String currEmail, String newName, String newEmail, String newPassword) {
     UserAccount user = getUserByEmail(userToken, currEmail);
 
     if (user == null) {
@@ -146,6 +149,7 @@ public class UserAccountService {
     user.setPassword(newPassword);
 
     userAccountRepository.save(user);
+    return convertToDto(user);
   }
 
   @Transactional
@@ -229,5 +233,12 @@ public class UserAccountService {
     }
 
     return classes;
+  }
+
+  private UserAccountDTO convertToDto(UserAccount userAccount) {
+    if (userAccount == null) {
+      throw new IllegalArgumentException("There is no such user account!");
+    }
+    return new UserAccountDTO(userAccount.getUserType(), userAccount.getEmail(), userAccount.getName(), userAccount.getToken());
   }
 }

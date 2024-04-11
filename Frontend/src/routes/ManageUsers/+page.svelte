@@ -138,9 +138,11 @@
                 .then(response => {
                     console.log('Update response:', response.data); // Log the response
 
+                    let updatedInstructor = response.data;
+                    instructors[currentInstructorIndex].email = updatedInstructor.email;
+                    instructors[currentInstructorIndex].name = updatedInstructor.name;
+                    instructors[currentInstructorIndex].userType = updatedInstructor.type;
                     closeUpdateModal();
-
-                    instructors = instructors;
                 })
                 .catch(error => {
                     const message = error.response?.data || "An error occurred while creating the instructor.";
