@@ -240,7 +240,7 @@
               class="btn"
               on:click={() => openUpdateModal(index)}
               disabled={instructor.userType !== 'INSTRUCTOR'}
-              class:disabled={instructor.userType !== 'INSTRUCTOR'}
+              class:disabled={instructor.userType !== 'INSTRUCTOR' && instructor.userType !== 'CUSTOMER'}
             >
               <IconPencil></IconPencil>
             </button>
