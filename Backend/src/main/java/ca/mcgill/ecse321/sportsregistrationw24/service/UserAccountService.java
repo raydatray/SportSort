@@ -144,7 +144,7 @@ public class UserAccountService {
 
     UserAccount existingUserAccount = userAccountRepository.findUserByEmail(newEmail).orElse(null);
 
-    if (existingUserAccount != null) {
+    if (existingUserAccount != null && existingUserAccount != user) {
       throw new IllegalArgumentException("Email is already in use!");
     }
 
