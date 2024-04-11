@@ -2,8 +2,6 @@ package ca.mcgill.ecse321.sportsregistrationw24.service;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dto.UserAccountSafeDto;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.UserAccounts.UserAccountCO;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.UserAccounts.UserAccountDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.OwnerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
@@ -15,7 +13,6 @@ import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.util.*;
 
@@ -122,12 +119,6 @@ public class UserAccountService {
 
   @Transactional
   public UserAccountDTO updateUserAccount(String userToken, String currEmail, String newName, String newEmail, String newPassword) {
-    UserAccount owner = getUserFromToken(userAccountRepository, userToken);
-
-    if (!owner.getUserType().equals("OWNER")) {
-      throw new IllegalArgumentException("Only owners can create instructor accounts!");
-    }
-
     UserAccount user = getUserByEmail(userToken, currEmail);
 
     if (user == null) {
@@ -161,11 +152,16 @@ public class UserAccountService {
   }
 
   @Transactional
+  public UserAccount getUserByToken(String userToken) {
+    return getUserFromToken(userAccountRepository, userToken);
+  }
+
+  @Transactional
   public UserAccount getUserByEmail(String userToken, String aEmail) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (!user.getUserType().equals("OWNER") || !user.getEmail().equals(aEmail)) {
-      throw new IllegalArgumentException("Only owners and the user himself can view user accounts!");
+    if (!user.getUserType().equals("OWNER")) {
+      throw new IllegalArgumentException("Only owners can view user accounts!");
     }
 
     UserAccount foundUser = userAccountRepository.findUserByEmail(aEmail).orElse(null);
