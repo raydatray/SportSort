@@ -326,6 +326,28 @@
 
 
 <style>
+  .modal-box {
+      width: 80%;
+      min-width: 300px;
+      max-width: 600px; /* You might adjust this as necessary */
+      padding: 2rem;
+      box-sizing: border-box;
+      background-color: white; /* Optional: for visibility */
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Optional: for better visibility */
+    }
+  
+    .modal-action {
+      margin-top: 0.5rem;
+    }
+  
+    /* Responsive adjustments */
+    @media (min-width: 768px) {
+      .modal-box {
+        width: 50%; /* Larger screens can have a smaller percentage width */
+        max-width: 600px; /* Adjust maximum width as appropriate */
+      }
+    }
+    
   .btn-small.disabled {
     background-color: transparent; /* Make the button transparent */
     color: transparent; /* Make the text transparent */

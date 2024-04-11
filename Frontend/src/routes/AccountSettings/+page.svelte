@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import axios from 'axios';
   import { IconEye} from "@tabler/icons-svelte";
+  import { fade } from 'svelte/transition';
 
   // Reactive variables for the current user
   let currentUser = {
@@ -17,6 +18,10 @@
 
   let error; // To hold any errors during fetching
   let modalOpen = false;
+
+  // Related to error alert
+  let alertMessage = ''; // Holds the success or error message
+  let showAlert = false; // Controls the visibility of the alert
 
   // Temporary state to store changes while editing
   let tempName = currentUser.name;
@@ -56,7 +61,6 @@ onMount(() => {
     });
 });
 
-  
   console.log(currentUser)
   // Function to open the modal
   function openModal() {
@@ -68,6 +72,15 @@ onMount(() => {
   function closeModal() {
       modalOpen = false;
   }
+
+  // Error alert
+  function displayAlert(message) {
+        alertMessage = message;
+        showAlert = true;
+        setTimeout(() => {
+            showAlert = false;
+        }, 2000);
+    }
 
   // Function to save changes and close the modal
   function saveChanges() {
@@ -99,9 +112,8 @@ onMount(() => {
     closeModal();
   })
   .catch(error => {
-    // Handle error
-    console.error('Error updating account:', error.response ? error.response.data : error.message);
-    // Optionally update the UI to show the error
+    const message = error.response?.data || "An error occurred while creating the instructor.";
+    displayAlert(message);
   });
 }
 
@@ -155,6 +167,7 @@ function deleteAccount() {
     console.error('Error deleting account:', error.response ? error.response.data : error.message);
     // Optionally update the UI to show the error
   });
+
 }
 
 </script>
@@ -212,6 +225,12 @@ function deleteAccount() {
 </dialog>
 {/if}
 
+{#if showAlert}
+  <div role="alert" class="alert alert-error modal-alert" in:fade={{ duration: 300 }} out:fade={{ duration: 300 }}>
+    <span>{alertMessage}</span>
+  </div>
+{/if}
+
 
   <style>
     .page-container {
@@ -250,12 +269,13 @@ function deleteAccount() {
     }
   
     .modal-box {
-      width: 80%; /* Dynamic width based on the parent container */
-      min-width: 300px; /* Minimum width to ensure usability */
-      max-width: 90vw; /* Maximum width as a percentage of the viewport width */
-      margin: auto; /* Center the modal */
+      width: 80%;
+      min-width: 300px;
+      max-width: 600px; /* You might adjust this as necessary */
       padding: 2rem;
-      box-sizing: border-box; /* Include padding in the width calculation */
+      box-sizing: border-box;
+      background-color: white; /* Optional: for visibility */
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Optional: for better visibility */
     }
   
     .modal-action {
@@ -287,4 +307,15 @@ function deleteAccount() {
       background-color: rgba(255, 100, 100, 0.5); /* Light red background that fills up */
       transition: width 0.2s linear;
     }
+
+    .modal-alert {
+    position: absolute; /* Position it absolutely to align it with the modal */
+    width: 50%; /* Make it as wide as the modal */
+    left: 50%; /* Center it horizontally */
+    transform: translateX(-50%); /* Adjust horizontal position */
+    bottom: 20%; /* Adjust vertical position to be below the modal */
+    z-index: 100; /* Ensure it's above the modal background */
+    box-sizing: border-box;
+    padding: 1rem;
+  }
   </style>
