@@ -68,7 +68,7 @@
             <div class="grid grid-cols-3 pt-2 gap-x-2 h-5/6">
                 <div class="rounded-box bg-base-200 p-2">
                     <strong>Course Type:</strong> <span>{selectedCourseOffering.daysOffered}</span> <br>
-                    <strong>Price:</strong> <span>{selectedCourseOffering.daysOffered}</span> <br>
+                    <strong>Price:</strong> <span>{selectedCourseOffering.price}</span> <br>
                     <strong>Start Date:</strong> <span>{selectedCourseOffering.startDate}</span> <br>
                     <strong>End Date:</strong> <span>{selectedCourseOffering.endDate}</span> <br>
                     <strong>Days Offered:</strong> <span>{selectedCourseOffering.daysOffered}</span> <br>
