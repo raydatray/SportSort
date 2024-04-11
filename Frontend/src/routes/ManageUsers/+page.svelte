@@ -327,6 +327,18 @@
 
 
 <style>
+
+  .btn {
+      background-color: transparent; /* Set the button background to transparent */
+      border: none; /* Remove any borders */
+      color: inherit; /* Use the text color from the parent element */
+      padding: 8px 16px; /* Adjust padding as needed */
+      cursor: pointer; /* Ensure it shows a pointer on hover */
+    }
+
+  .btn:hover {
+    background-color: #f0f0f0; /* Change or remove this line if you don't want any hover effects */
+  }
   .modal-box {
       width: 80%;
       min-width: 300px;
