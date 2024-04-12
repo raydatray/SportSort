@@ -50,10 +50,9 @@
     </li>
     <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
     {#if userType === 'CUSTOMER'}
-      <li class = "m-1 "><a href="/customerHomePage" class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
-      <li class = "m-1 "><a href="/courseOfferings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
-      <li class = "m-1 "><a href="/courseHistory" class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
-      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconTicket /> Registrations </a></li>
+      <li class = "m-1 "><a href="/" class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
+      <li class = "m-1 "><a href="/CourseOfferings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
+      <li class = "m-1 "><a href="/Registrations" class = "flex items-center space-x-2 p-0.2"> <IconTicket /> Registrations </a></li>
       <li class="flex-grow bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
       <li class = "m-1 "><a href="/AccountSettings" class = "flex items-center space-x-2 p-0.2"> <IconSettings /> Account Settings </a></li>
@@ -61,9 +60,10 @@
 
     {:else if userType === "OWNER"}
       <li class = "m-1 "><a href="/" class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
-      <li class = "m-1 "><a href="/courseOfferings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
+      <li class = "m-1 "><a href="/CourseOfferings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
       <li class="m-1"><a href="/CourseTypeApproval" class="flex items-center space-x-2 p-0.2"> <IconBallFootball /> Course Types </a></li>
       <li class="m-1"><a href="/ManageUsers" class="flex items-center space-x-2 p-0.2"> <IconUsers /> Manage Users </a></li>
+      <li class = "m-1 "><a href="/CourseHistory" class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
       <li class="m-1"><a href="/ViewRooms" class="flex items-center space-x-2 p-0.2"> <IconDoor /> Rooms </a></li>
       <li class="flex-grow bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
@@ -72,8 +72,8 @@
 
     {:else if userType === "INSTRUCTOR"}
       <li class = "m-1 "><a href="/" class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
-      <li class = "m-1 "><a href="/courseOfferings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
-      <li class = "m-1 "><a href="/courseHistory" class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
+      <li class = "m-1 "><a href="/CourseOfferings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
+      <li class = "m-1 "><a href="/CourseHistory" class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
       <li class="m-1"><a href="/CourseTypeSubmission" class="flex items-center space-x-2 p-0.2"> <IconBallFootball /> Course Types </a></li>
 <!--      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconTicket /> Registrations </a></li>-->
 <!--      <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconUsers /> Manage Customers </a></li>-->
@@ -83,10 +83,10 @@
       <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2" on:click={logout}> <IconLogout /> Logout </a></li>
 
     {:else}
-      <li class = "m-1 "><a href="/guestCourseOfferings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
+      <li class = "m-1 "><a href="/GuestCourseOfferings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
       <li class="flex-grow bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-0.5 bg-base-400 justify-center"></li>
-      <li class = "m-1 "><a href="/login" class = "flex items-center space-x-2 p-0.2"> <IconLogin /> Login </a></li>
+      <li class = "m-1 "><a href="/Login" class = "flex items-center space-x-2 p-0.2"> <IconLogin /> Login </a></li>
     {/if}
   </ul>
 </nav>
