@@ -4,7 +4,10 @@ import ca.mcgill.ecse321.sportsregistrationw24.dto.Registration.RegistrationCust
 import ca.mcgill.ecse321.sportsregistrationw24.dto.Registration.RegistrationStaffDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.Registration.RegistrationCO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Registration;
+import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
+import ca.mcgill.ecse321.sportsregistrationw24.model.keys.RegistrationId;
 import ca.mcgill.ecse321.sportsregistrationw24.service.RegistrationService;
+import ca.mcgill.ecse321.sportsregistrationw24.service.UserAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +21,8 @@ import java.util.List;
 public class RegistrationRestController {
   @Autowired
   private RegistrationService service;
+  @Autowired
+  private UserAccountService userService;
 
   @PostMapping(value = {"/registrations/create"})
   public ResponseEntity<?> createRegistration(@RequestHeader String userToken, @RequestBody RegistrationCO registrationCO) {
@@ -81,16 +86,18 @@ public class RegistrationRestController {
     }
   }
 
-  //???
-  /**
-  public ResponseEntity<?> deleteRegistration(@RequestParam Integer customerAccountID, @RequestParam Integer courseOfferingID) {
+
+  public ResponseEntity<?> deleteRegistration(@RequestParam String userToken, @RequestParam Integer courseOfferingID) {
     try {
-      RegistrationId registrationId = new RegistrationId(customerAccountID, courseOfferingID);
+      UserAccount user = userService.getUserByToken(userToken);
+      Integer userId = user.getId();
+
+      RegistrationId registrationId = new RegistrationId(userId, courseOfferingID);
       service.deleteRegistration(registrationId);
       return ResponseEntity.ok().body("Registration has been successfully deleted!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
-  **/
+
 }
