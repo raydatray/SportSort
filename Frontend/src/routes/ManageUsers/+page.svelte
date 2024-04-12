@@ -27,6 +27,11 @@
     let instructors = []; // Now dynamically fetched from the backend
     let error; // To hold any errors during fetching
 
+    // Related to deleting
+    let activeDeleteTimer;
+    const holdDuration = 2000; // milliseconds
+
+
     const AXIOS = axios.create({
         baseURL: 'http://127.0.0.1:8080', // Adjust this to your actual backend URL
         headers: { 'Access-Control-Allow-Origin': 'http://localhost:5173/' }
@@ -44,6 +49,8 @@
                     name: userAccount.name,
                     userType: userAccount.type,
                     email: userAccount.email,
+                    isDeleting: false,
+                    deleteProgress: 0
                 }));
             })
             .catch(e => {
@@ -178,26 +185,51 @@
         }
     }
 
-    function deleteInstructor(email) {
-        const userToken = sessionStorage.getItem('token'); // Adjust this to your actual user token management
+    function startDelete(instructor) {
+    instructor.isDeleting = true;
+    instructor.deleteProgress = 0;
+    activeDeleteTimer = setInterval(() => {
+      if (instructor.deleteProgress < 100) {
+        instructor.deleteProgress += 5; // Increment progress
+        instructors = instructors.slice(); // Trigger reactivity
+      } else {
+        completeDelete(instructor);
+      }
+    }, holdDuration / 20); // Update interval
+  }
 
-        AXIOS.delete('/accounts/delete', {
-            headers: {
-                'userToken': userToken
-            },
-            params: {
-                email: email
-            }
-        })
-            .then(response => {
-                // Update the instructors array to reflect the deletion
-                instructors = instructors.filter(instructor => instructor.email !== email);
-            })
-            .catch(error => {
-                console.error('Error deleting the account:', error);
-                // Update the UI or state to reflect any error here
-            });
-    }
+  function endDelete(instructor) {
+    clearInterval(activeDeleteTimer);
+    instructor.isDeleting = false;
+    instructor.deleteProgress = 0;
+    instructors = instructors.slice(); // Reset progress and trigger reactivity
+  }
+
+  function completeDelete(instructor) {
+    endDelete(instructor);
+    deleteInstructor(instructor.email);
+  }
+
+  function deleteInstructor(email) {
+      const userToken = sessionStorage.getItem('token'); // Adjust this to your actual user token management
+
+      AXIOS.delete('/accounts/delete', {
+          headers: {
+              'userToken': userToken
+          },
+          params: {
+              email: email
+          }
+      })
+          .then(response => {
+              // Update the instructors array to reflect the deletion
+              instructors = instructors.filter(instructor => instructor.email !== email);
+          })
+          .catch(error => {
+              console.error('Error deleting the account:', error);
+              // Update the UI or state to reflect any error here
+          });
+  }
 
     function displayAlert(message) {
         alertMessage = message;
@@ -237,7 +269,7 @@
           {/if}
           <td class="actions">
             <button
-              class="btn"
+              class="btn btn-action"
               on:click={() => openUpdateModal(index)}
               disabled={instructor.userType !== 'INSTRUCTOR' && instructor.userType !== 'CUSTOMER'}
               class:disabled={instructor.userType !== 'INSTRUCTOR' && instructor.userType !== 'CUSTOMER'}
@@ -245,7 +277,10 @@
               <IconPencil></IconPencil>
             </button>
             {#if instructor.userType !== 'OWNER'}
-              <button class="btn" on:click={() => deleteInstructor(instructor.email)}><IconTrash></IconTrash></button>
+            <button class="btn btn-action" on:mousedown={() => startDelete(instructor)} on:mouseup={() => endDelete(instructor)} on:mouseleave={() => endDelete(instructor)} style="--progress: {instructor.deleteProgress}%;">
+              <IconTrash />
+              <div class="progress-bar" style="width: {instructor.deleteProgress}%;"></div>
+            </button>
             {/if}
           </td>
         </tr>
@@ -387,5 +422,24 @@
     z-index: 100; /* Ensure it's above the modal background */
     box-sizing: border-box;
     padding: 1rem;
+  }
+
+  .btn-action {
+    position: relative;
+    overflow: hidden;
+    background-color: transparent;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+
+  .btn-action .progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: red;
+    transition: width 0.1s linear;
   }
 </style>
