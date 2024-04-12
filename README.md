@@ -43,3 +43,5 @@ For key design decisions and meeting minutes, please refer to our [Project Wiki]
     - Create a database for the application
 - IDE Application Configuration
     - Using an IDE such as Intellij will allow you to view and modify your local database after connecting it to the IDE. Information on how to connect a Postgres databse to Intellij is available at [Intellij Documentation](https://www.jetbrains.com/help/idea/postgresql.html)
+- Frontend Package Configuration
+    - Run `npm install` to install all necessary Node.js packages on your computer.
