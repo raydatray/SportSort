@@ -133,7 +133,6 @@
       }
     })
     .then(response => {
-      console.log('Account deleted successfully:', response.data);
       sessionStorage.removeItem('role'); // Handle session clearance and redirection as needed
       sessionStorage.removeItem('token');
       const newURL = window.location.href.replace(window.location.pathname, '/');
@@ -192,7 +191,13 @@
       headers: { 'userToken': userToken }
     })
     .then(response => {
-      console.log('Payment info added successfully:', response.data);
+      let p = response.data;
+      let newPaymentInfo = { cardNumber: p.trailingFourDigits, deleteProgess: 0, expirationMonth: p.expirationMonth, expirationYear: p.expirationYear, id: p.id, isDeleting: false, paymentType: p.paymentType };
+      paymentInfos = [...paymentInfos, newPaymentInfo];
+      cardNumber = '';
+      cvv = '';
+      expirationYear = '';
+      expirationMonth = '';
       closePaymentModal();
     })
     .catch(error => {

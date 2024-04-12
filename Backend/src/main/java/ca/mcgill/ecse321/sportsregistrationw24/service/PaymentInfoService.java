@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.service;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.PaymentInfoRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.PaymentInfo.PaymentInfoDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.PaymentInfo;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
@@ -59,7 +60,7 @@ public class PaymentInfoService {
   }
 
   @Transactional
-  public void updatePaymentInfo (String userToken, Integer aId, Integer newExpirationYear, Integer newExpirationMonth) {
+  public PaymentInfoDTO updatePaymentInfo (String userToken, Integer aId, Integer newExpirationYear, Integer newExpirationMonth) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     YearMonth currYearMonth = YearMonth.now();
@@ -83,6 +84,8 @@ public class PaymentInfoService {
     foundPaymentInfo.setExpirationMonth(newExpirationMonth);
 
     paymentInfoRepository.save(foundPaymentInfo);
+
+    return convertToDto(foundPaymentInfo);
   }
 
   @Transactional
@@ -109,5 +112,9 @@ public class PaymentInfoService {
     }
 
     paymentInfoRepository.delete(foundPaymentInfo);
+  }
+
+  public PaymentInfoDTO convertToDto(PaymentInfo paymentInfo) {
+    return new PaymentInfoDTO(paymentInfo);
   }
 }

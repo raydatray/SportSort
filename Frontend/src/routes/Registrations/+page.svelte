@@ -63,7 +63,7 @@
     });
 </script>
 
-<h1 class="text-2xl font-bold p-2">Active Registrations</h1>
+<h1 class="text-2xl font-bold p-2">Registrations</h1>
 <div class="content">
     <div class="listAll p-2">
         <div class="overflow-x-auto">
