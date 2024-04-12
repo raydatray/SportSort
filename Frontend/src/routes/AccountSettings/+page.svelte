@@ -192,7 +192,7 @@
     })
     .then(response => {
       let p = response.data;
-      let newPaymentInfo = { cardNumber: p.trailingFourDigits, deleteProgess: 0, expirationMonth: p.expirationMonth, expirationYear: p.expirationYear, id: p.id, isDeleting: false, paymentType: p.paymentType };
+      let newPaymentInfo = { cardNumber: p.trailingFourDigits, deleteProgress: 0, expirationMonth: p.expirationMonth, expirationYear: p.expirationYear, id: p.id, isDeleting: false, paymentType: p.paymentType };
       paymentInfos = [...paymentInfos, newPaymentInfo];
       cardNumber = '';
       cvv = '';
