@@ -15,6 +15,7 @@
     let courseSessions = new Map();
     let courseOfferingsAsResources = [];
     let courseSessionsAsEvents = [];
+    let courseTypes = [];
 
     let plugins = [TimeGrid];
     let dataLoaded = false; // Step 1: Define a loading state
@@ -30,7 +31,13 @@
     onMount(async () => {
         try {
             const getOfferings = await axios.get('http://localhost:8080/courseOfferings/getAll');
-            courseOfferings = getOfferings.data;
+            const getApprovedCourseTypes = axios.get('http://localhost:8080/courseTypes/getAllApproved');
+
+            // Fetch both offerings and approved course types concurrently
+            const [offeringsResponse, courseTypesResponse] = await Promise.all([getOfferings, getApprovedCourseTypes]);
+
+            courseOfferings = offeringsResponse.data;
+            courseTypes = courseTypesResponse.data;
 
             courseOfferingsAsResources = courseOfferings.map(offering => ({
                 id: offering.id,
@@ -134,10 +141,10 @@
     }
 </script>
 <div>
-    <h1 class="text-lg font-medium p-4 bg-base-200 rounded-box">Course Offerings</h1>
+    <h1 class="p-4 text-lg font-medium bg-base-200 rounded-box">Course Offerings</h1>
     <div class="grid grid-cols-[min-content_1fr] gap-4 pt-4">
         <CourseOfferingFilter on:filterChange={handleFilterChange}/>
-        <div class="h-full grid grid-rows-2 gap-4">
+        <div class="grid h-full grid-rows-2 gap-4">
             <div class="overflow-y-scroll">
                 {#if dataLoaded}
                     <Calendar {plugins} {options}/>
@@ -161,7 +168,7 @@
                     {#each courseOfferings as offering, index}
                         <tr on:click={() => openModal(offering)} class="cursor-pointer">
                             <th>{index + 1}</th>
-                            <td>{offering.title}</td>
+                            <td>{courseTypes.find(type => type.id === offering.courseTypeId)?.courseName || 'Unknown Type'}</td>
                             <td>{offering.daysOffered}</td>
                             <td>{offering.startDate}</td>
                             <td>{offering.endDate}</td>

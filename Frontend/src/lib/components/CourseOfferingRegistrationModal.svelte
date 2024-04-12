@@ -12,7 +12,7 @@
         try{
             const getPaymentInfos = await axios.get('http://localhost:8080/paymentInfo/getAll', {
                 headers: {
-                    userToken: 'token'
+                    userToken: sessionStorage.getItem('token')
                 }
             });
             paymentInfos = getPaymentInfos.data;
@@ -63,10 +63,10 @@
 </script>
 
 <dialog bind:this={dialog} class="modal">
-    <div class="modal-box w-11/12 max-w-5xl h-2/3 bg-base-100 flex-col">
-        <div class="font-bold text-lg">Registering for Course Offering</div>
+    <div class="flex-col w-11/12 max-w-5xl modal-box h-2/3 bg-base-100">
+        <div class="text-lg font-bold">Registering for Course Offering</div>
             <div class="grid grid-cols-3 pt-2 gap-x-2 h-5/6">
-                <div class="rounded-box bg-base-200 p-2">
+                <div class="p-2 rounded-box bg-base-200">
                     <strong>Course Type:</strong> <span>{selectedCourseOffering.daysOffered}</span> <br>
                     <strong>Price:</strong> <span>{selectedCourseOffering.price}</span> <br>
                     <strong>Start Date:</strong> <span>{selectedCourseOffering.startDate}</span> <br>
@@ -74,7 +74,7 @@
                     <strong>Days Offered:</strong> <span>{selectedCourseOffering.daysOffered}</span> <br>
                     <strong>Room:</strong> <span>{selectedCourseOffering.roomId}</span>
                 </div>
-                <div class="rounded-box overflow-auto bg-base-200">
+                <div class="overflow-auto rounded-box bg-base-200">
                     <div class="overflow-auto">
                         <table class = "table">
                             <thead>
@@ -98,7 +98,7 @@
                         </table>
                     </div>
                 </div>
-                <div class = "rounded-box overflow-auto bg-base-200">
+                <div class = "overflow-auto rounded-box bg-base-200">
                     <div class="overflow-auto">
                         <table class = "table">
                             <thead>
