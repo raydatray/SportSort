@@ -3,6 +3,7 @@
   import axios from 'axios';
   import { IconEye} from "@tabler/icons-svelte";
   import { fade } from 'svelte/transition';
+  import { IconPencil, IconTrash } from '@tabler/icons-svelte';
 
   // Reactive variables for the current user
   let currentUser = {
@@ -225,13 +226,105 @@
     .then(response => {
         // This block will only be executed if the user is a customer
         if (response && response.data) {
-            paymentInfos = response.data;
+            paymentInfos = response.data.map(info => ({
+                ...info,
+                isDeleting: false,
+                deleteProgress: 0
+            })); // Add deletion state properties
         }
     })
     .catch(e => {
         error = e.message;
     });
 });
+
+
+// Additional reactive variables for updating payment info
+let updatePaymentModalOpen = false;
+  let selectedPaymentInfoId = null;
+  let selectedPaymentInfoExpirationYear = '';
+  let selectedPaymentInfoExpirationMonth = '';
+
+  // Function to open the update payment info modal
+  function openUpdatePaymentModal(paymentInfo) {
+    selectedPaymentInfoId = paymentInfo.id;
+    selectedPaymentInfoExpirationYear = paymentInfo.expirationYear;
+    selectedPaymentInfoExpirationMonth = paymentInfo.expirationMonth;
+    updatePaymentModalOpen = true;
+  }
+
+  // Function to close the update payment info modal
+  function closeUpdatePaymentModal() {
+    updatePaymentModalOpen = false;
+  }
+
+  // Function to handle the update of payment info
+  function updatePaymentInfo() {
+    const userToken = sessionStorage.getItem('token');
+    const paymentInfoUpdate = {
+      id: selectedPaymentInfoId,
+      expirationYear: parseInt(selectedPaymentInfoExpirationYear, 10),
+      expirationMonth: parseInt(selectedPaymentInfoExpirationMonth, 10),
+    };
+
+    AXIOS.put('/paymentInfo/update', paymentInfoUpdate, {
+      headers: { 'userToken': userToken }
+    })
+    .then(response => {
+      console.log('Payment info updated successfully:', response.data);
+      // Refresh the payment infos to reflect the update
+      closeUpdatePaymentModal();
+    })
+    .catch(error => {
+      console.error('Error updating payment info:', error.response ? error.response.data : error.message);
+    });
+  }
+
+  function deletePaymentInfo(paymentInfoId) {
+  const userToken = sessionStorage.getItem('token');
+
+  AXIOS.delete(`/paymentInfo/delete?id=${paymentInfoId}`, {
+    headers: {
+      'userToken': userToken
+    }
+  })
+  .then(response => {
+    console.log('Payment info deleted successfully:', response.data);
+    // Remove the deleted payment info from the list
+    paymentInfos = paymentInfos.filter(info => info.id !== paymentInfoId);
+  })
+  .catch(error => {
+    console.error('Error deleting payment info:', error.response ? error.response.data : error.message);
+  });
+}
+
+  let activeDeleteTimer;
+
+  function startDelete(paymentInfo) {
+    paymentInfo.isDeleting = true;
+    paymentInfo.deleteProgress = 0;
+    activeDeleteTimer = setInterval(() => {
+      if (paymentInfo.deleteProgress < 100) {
+        paymentInfo.deleteProgress += 5; // Increment progress
+        paymentInfos = paymentInfos.slice(); // Trigger reactivity
+      } else {
+        completeDelete(paymentInfo);
+      }
+    }, holdDuration / 20); // Update interval
+  }
+
+  function endDelete(paymentInfo) {
+    clearInterval(activeDeleteTimer);
+    paymentInfo.isDeleting = false;
+    paymentInfo.deleteProgress = 0;
+    paymentInfos = paymentInfos.slice(); // Reset progress and trigger reactivity
+  }
+
+  function completeDelete(paymentInfo) {
+    endDelete(paymentInfo);
+    deletePaymentInfo(paymentInfo.id);
+  }
+
 
 </script>
 
@@ -255,35 +348,45 @@
         Hold to Delete
       </button>
     {/if}
-
-    {#if userRole === 'CUSTOMER'}
-      <button class="btn btn-custom" on:click={openPaymentModal}>Add Payment Info</button>
-    {/if}
   </div>  
 </div>
 
+{#if userRole === 'CUSTOMER'}
+<button class="btn btn-custom" on:click={openPaymentModal}>Add Payment Info</button>
+{/if}
 <!-- Payment info table -->
-<div class="overflow-x-auto">
-  <table class="table w-full">
-    <!-- head -->
-    <thead>
-      <tr>
-        <th>Payment Type</th>
-        <th>Card Number</th>
-        <th>Expiration Date</th>
-      </tr>
-    </thead>
-    <tbody>
-      {#each paymentInfos as paymentInfo, index}
+{#if userRole === 'CUSTOMER'}
+  <div class="overflow-x-auto">
+    <table class="table w-full">
+      <!-- head -->
+      <thead>
         <tr>
-          <td>{paymentInfo.paymentType}</td>
-          <td>{paymentInfo.cardNumber}</td>
-          <td>{paymentInfo.expirationMonth}/{paymentInfo.expirationYear}</td>
+          <th>Payment Type</th>
+          <th>Card Number</th>
+          <th>Expiration Date</th>
         </tr>
-      {/each}
-    </tbody>
-  </table>
-</div>
+      </thead>
+      <tbody>
+        {#each paymentInfos as paymentInfo, index}
+          <tr>
+            <td>{paymentInfo.paymentType}</td>
+            <td>{paymentInfo.cardNumber}</td>
+            <td>{paymentInfo.expirationMonth}/{paymentInfo.expirationYear}</td>
+            <td>
+              <button class="btn btn-action" on:click={() => openUpdatePaymentModal(paymentInfo)}>
+                <IconPencil />
+              </button>
+              <button class="btn btn-action" on:mousedown={() => startDelete(paymentInfo)} on:mouseup={() => endDelete(paymentInfo)} on:mouseleave={() => endDelete(paymentInfo)} style="--progress: {paymentInfo.deleteProgress}%;">
+                <IconTrash />
+                <div class="progress-bar" style="width: {paymentInfo.deleteProgress}%;"></div>
+              </button>
+            </td> 
+          </tr>
+        {/each}
+      </tbody>
+    </table>
+  </div>
+{/if}
 
 {#if paymentModalOpen}
 <dialog open class="modal">
@@ -327,6 +430,37 @@
     <div class="modal-action">
       <button class="btn btn-custom" on:click={savePaymentInfo}>Save</button>
       <button class="btn btn-custom" on:click={closePaymentModal}>Close</button>
+    </div>
+  </div>
+</dialog>
+{/if}
+
+<!-- Update Payment Info Modal -->
+{#if updatePaymentModalOpen}
+<dialog open class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Update Payment Info</h3>
+    <!-- Update Expiration Year dropdown -->
+    <label class="input input-bordered flex items-center gap-2 mb-4">
+      <span>Expiration Year</span>
+      <select bind:value={selectedPaymentInfoExpirationYear}>
+        {#each years as year}
+          <option value={year}>{year}</option>
+        {/each}
+      </select>
+    </label>
+    <!-- Update Expiration Month dropdown -->
+    <label class="input input-bordered flex items-center gap-2 mb-4">
+      <span>Expiration Month</span>
+      <select bind:value={selectedPaymentInfoExpirationMonth}>
+        {#each months as month}
+          <option value={month.value}>{month.name}</option>
+        {/each}
+      </select>
+    </label>
+    <div class="modal-action">
+      <button class="btn btn-custom" on:click={updatePaymentInfo}>Update</button>
+      <button class="btn btn-custom" on:click={closeUpdatePaymentModal}>Close</button>
     </div>
   </div>
 </dialog>
@@ -432,6 +566,7 @@
     color: white;
     transition: background-color 0.3s;
   }
+
     .btn-delete::before {
       content: "";
       position: absolute;
@@ -453,4 +588,24 @@
     box-sizing: border-box;
     padding: 1rem;
   }
+
+  .btn-action {
+    position: relative;
+    overflow: hidden;
+    background-color: transparent;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+  }
+
+  .btn-action .progress-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: red;
+    transition: width 0.1s linear;
+  }
+    
   </style>
