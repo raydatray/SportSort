@@ -72,7 +72,7 @@
                     <strong>Start Date:</strong> <span>{selectedCourseOffering.startDate}</span> <br>
                     <strong>End Date:</strong> <span>{selectedCourseOffering.endDate}</span> <br>
                     <strong>Days Offered:</strong> <span>{selectedCourseOffering.daysOffered}</span> <br>
-                    <strong>Room:</strong> <span>{selectedCourseOffering.daysOffered}</span>
+                    <strong>Room:</strong> <span>{selectedCourseOffering.roomId}</span>
                 </div>
                 <div class="rounded-box overflow-auto bg-base-200">
                     <div class="overflow-auto">

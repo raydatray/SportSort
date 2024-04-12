@@ -39,29 +39,6 @@
       headers: { 'Access-Control-Allow-Origin': 'http://localhost:5173/' }
   });
 
-onMount(() => {
-    const loggedInToken =  sessionStorage.getItem('token');
-    userRole = sessionStorage.getItem('role');
-
-    AXIOS.get('/accounts/getAccount', {
-        headers: {
-            'userToken': loggedInToken // Adjusted to use the stored token
-        }
-    })
-    .then(response => {
-        const user = response.data;
-        
-        if (user) {
-            currentUser.name = user.name;
-            currentUser.email = user.email;
-        }
-    })
-    .catch(e => {
-        error = e.message;
-    });
-});
-
-  console.log(currentUser)
   // Function to open the modal
   function openModal() {
       modalOpen = true;
@@ -92,7 +69,6 @@ onMount(() => {
   };
 
   // The userToken should be retrieved or stored somewhere accessible
-  // This is just a placeholder; you need to replace it with the actual token
   const userToken = sessionStorage.getItem('token');
 
 
@@ -143,32 +119,119 @@ onMount(() => {
 
   // Function to handle account deletion
   // Function to handle account deletion
-function deleteAccount() {
-  const userToken = sessionStorage.getItem('token');
-  const userEmail = currentUser.email;
+  function deleteAccount() {
+    const userToken = sessionStorage.getItem('token');
+    const userEmail = currentUser.email;
 
-  AXIOS.delete('/accounts/delete', {
-    headers: {
-      'userToken': userToken
-    },
-    params: {
-      email: userEmail
-    }
-  })
-  .then(response => {
-    console.log('Account deleted successfully:', response.data);
-    sessionStorage.removeItem('role'); // Handle session clearance and redirection as needed
-    sessionStorage.removeItem('token');
-    const newURL = window.location.href.replace(window.location.pathname, '/');
-    history.replaceState({}, document.title, newURL);
-    window.location.reload();
-  })
-  .catch(error => {
-    console.error('Error deleting account:', error.response ? error.response.data : error.message);
-    // Optionally update the UI to show the error
-  });
+    AXIOS.delete('/accounts/delete', {
+      headers: {
+        'userToken': userToken
+      },
+      params: {
+        email: userEmail
+      }
+    })
+    .then(response => {
+      console.log('Account deleted successfully:', response.data);
+      sessionStorage.removeItem('role'); // Handle session clearance and redirection as needed
+      sessionStorage.removeItem('token');
+      const newURL = window.location.href.replace(window.location.pathname, '/');
+      history.replaceState({}, document.title, newURL);
+      window.location.reload();
+    })
+    .catch(error => {
+      console.error('Error deleting account:', error.response ? error.response.data : error.message);
+      // Optionally update the UI to show the error
+    });
+  } 
 
-}
+  let paymentModalOpen = false;
+  let cardNumber = '';
+  let cvv = '';
+  let expirationYear = '';
+  let expirationMonth = '';
+
+  let paymentInfos = []; // This will hold the payment information data
+  let paymentTypes = ['Credit', 'Debit']; // Add payment types array
+  let paymentType = 'Credit'; // Set a default payment type
+
+
+  const months = [{value: 1, name: "January"}, 
+  {value: 2, name: "February"},
+  {value: 3, name: "March"},
+  {value: 4, name: "April"},
+  {value: 5, name: "May"},
+  {value: 6, name: "June"},
+  {value: 7, name: "July"},
+  {value: 1, name: "August"},
+  {value: 1, name: "September"},
+  {value: 1, name: "November"},
+  {value: 12, name: "December"}]; // Define all months
+  const years = Array.from({length: 10}, (_, i) => new Date().getFullYear() + i); // Next 10 years
+
+  function openPaymentModal() {
+    paymentModalOpen = true;
+  }
+
+  function closePaymentModal() {
+    paymentModalOpen = false;
+  }
+
+  function savePaymentInfo() {
+    const userToken = sessionStorage.getItem('token');
+    const paymentInfo = {
+      paymentType: paymentType, // Assume a default or provide a way to select this
+      cardNumber,
+      cvv: parseInt(cvv),
+      expirationYear: parseInt(expirationYear),
+      expirationMonth: parseInt(expirationMonth),
+    };
+
+    AXIOS.post('/paymentInfo/create', paymentInfo, {
+      headers: { 'userToken': userToken }
+    })
+    .then(response => {
+      console.log('Payment info added successfully:', response.data);
+      closePaymentModal();
+    })
+    .catch(error => {
+      console.error('Error adding payment info:', error.response ? error.response.data : error.message);
+    });
+  }
+
+  onMount(() => {
+    const loggedInToken = sessionStorage.getItem('token');
+    userRole = sessionStorage.getItem('role');
+
+    // Fetch the user account information
+    AXIOS.get('/accounts/getAccount', {
+        headers: {
+            'userToken': loggedInToken // Use the stored token
+        }
+    })
+    .then(response => {
+        const user = response.data;
+        if (user) {
+            currentUser.name = user.name;
+            currentUser.email = user.email;
+        }
+        // Fetch payment info only if the user is a customer
+        if (userRole === 'CUSTOMER') {
+            return AXIOS.get('/paymentInfo/getAll', {
+                headers: { 'userToken': loggedInToken }
+            });
+        }
+    })
+    .then(response => {
+        // This block will only be executed if the user is a customer
+        if (response && response.data) {
+            paymentInfos = response.data;
+        }
+    })
+    .catch(e => {
+        error = e.message;
+    });
+});
 
 </script>
 
@@ -184,18 +247,90 @@ function deleteAccount() {
     <div class="account-detail">Email: Loading...</div>
   {/if}
   
-  <button class="btn btn-custom" on:click={openModal}>Edit Account Details</button>
-  {#if userRole !== 'OWNER' && userRole !== 'INSTRUCTOR'}
-  <button
-    class="btn btn-delete"
-    on:mousedown={startHold}
-    on:mouseup={endHold}
-    on:mouseleave={endHold}
-    style="--progress: {holdProgress}%;">
-    Hold to Delete
-  </button>
-{/if}
+  <div class="button-container">
+    <button class="btn btn-custom" on:click={openModal}>Edit Account Details</button>
+
+    {#if userRole !== 'OWNER' && userRole !== 'INSTRUCTOR'}
+      <button class="btn btn-delete" on:mousedown={startHold} on:mouseup={endHold} on:mouseleave={endHold} style="--progress: {holdProgress}%;">
+        Hold to Delete
+      </button>
+    {/if}
+
+    {#if userRole === 'CUSTOMER'}
+      <button class="btn btn-custom" on:click={openPaymentModal}>Add Payment Info</button>
+    {/if}
+  </div>  
 </div>
+
+<!-- Payment info table -->
+<div class="overflow-x-auto">
+  <table class="table w-full">
+    <!-- head -->
+    <thead>
+      <tr>
+        <th>Payment Type</th>
+        <th>Card Number</th>
+        <th>Expiration Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {#each paymentInfos as paymentInfo, index}
+        <tr>
+          <td>{paymentInfo.paymentType}</td>
+          <td>{paymentInfo.cardNumber}</td>
+          <td>{paymentInfo.expirationMonth}/{paymentInfo.expirationYear}</td>
+        </tr>
+      {/each}
+    </tbody>
+  </table>
+</div>
+
+{#if paymentModalOpen}
+<dialog open class="modal">
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Add Payment Info</h3>
+    <!-- Payment Type dropdown -->
+    <label class="input input-bordered flex items-center gap-2 mb-4">
+      <span>Payment Type</span>
+      <select bind:value={paymentType}>
+        {#each paymentTypes as type}
+          <option value={type}>{type}</option>
+        {/each}
+      </select>
+    </label>
+    <!-- Card Number input -->
+    <label class="input input-bordered flex items-center gap-2 mb-4">
+      <input type="text" bind:value={cardNumber} placeholder="Card Number" />
+    </label>
+    <!-- CVV input -->
+    <label class="input input-bordered flex items-center gap-2 mb-4">
+      <input type="number" bind:value={cvv} placeholder="CVV" />
+    </label>
+    <!-- Expiration Year dropdown -->
+    <label class="input input-bordered flex items-center gap-2 mb-4">
+      <span>Expiration Year</span>
+      <select bind:value={expirationYear}>
+        {#each years as year}
+          <option value={year}>{year}</option>
+        {/each}
+      </select>
+    </label>
+    <!-- Expiration Month dropdown -->
+    <label class="input input-bordered flex items-center gap-2 mb-4">
+      <span>Expiration Month</span>
+      <select bind:value={expirationMonth}>
+        {#each months as month}
+          <option value={month.value}>{month.name}</option>
+        {/each}
+      </select>
+    </label>
+    <div class="modal-action">
+      <button class="btn btn-custom" on:click={savePaymentInfo}>Save</button>
+      <button class="btn btn-custom" on:click={closePaymentModal}>Close</button>
+    </div>
+  </div>
+</dialog>
+{/if}
 
 
 <!-- Modal Component -->
@@ -231,7 +366,6 @@ function deleteAccount() {
   </div>
 {/if}
 
-
   <style>
     .page-container {
       max-width: 90vw; /* Percentage of the viewport's width */
@@ -262,6 +396,7 @@ function deleteAccount() {
       border: none;
       cursor: pointer;
       margin-top: 1rem;
+      max-width: 200px;
     }
   
     .btn-custom:hover {
