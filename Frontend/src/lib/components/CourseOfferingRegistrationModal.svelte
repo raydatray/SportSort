@@ -40,17 +40,18 @@
 
     async function registerForCourseOffering() {
         console.log("u clickd this!!!");
+        console.log(sessionStorage.getItem('token'))
         let selectedPaymentOption = paymentOptions.find((paymentOption) => paymentOption.checked);
         if (selectedPaymentOption) {
             try {
                 const registerForCourseOffering = await axios.post('http://localhost:8080/registrations/create', {
-                    courseOfferingId: selectedCourseOffering.id,
-                    paymentInfoId: selectedPaymentOption.value,
+                    courseOfferingId: 2,
+                    paymentInfoId: 1,
                     pricePaid: 69,
-                    registrationDate: new Date().toISOString()
+                    registrationDate: "2024-01-01"
                 }, {
                     headers: {
-                        userToken: 'token'
+                        'userToken': sessionStorage.getItem('token')
                     }
                 });
                 console.log(registerForCourseOffering.data);

@@ -17,7 +17,7 @@
     // Access sessionStorage if available
     let userType = null;
     if (isSessionStorageAvailable) {
-        userType = sessionStorage.getItem('role');
+        userType = sessionStorage.getItem('role')
     }
 
     function logout() {
