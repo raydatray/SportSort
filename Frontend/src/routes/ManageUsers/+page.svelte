@@ -87,13 +87,14 @@
         })
             .then(response => {
                 const createdInstructor = response.data;
-                let newInstructor = { id: undefined, name: createdInstructor.name, userType: createdInstructor.type, email: createdInstructor.email };
+                let newInstructor = { id: undefined, name: createdInstructor.name, userType: createdInstructor.type, email: createdInstructor.email, isDeleting:false, deleteProgress: 0 };
                 instructors = [...instructors, newInstructor];
                 closeModal();
                 // Clear the form fields
                 newName = '';
                 newEmail = '';
                 newPassword = '';
+
             })
             .catch(error => {
                 const message = error.response?.data || "An error occurred while creating the instructor.";
