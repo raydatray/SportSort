@@ -32,8 +32,7 @@ For key design decisions and meeting minutes, please refer to our [Project Wiki]
 - Navigate to the **Sportsregistrationw24Application.java** file and run it. This "starts" the database to make sure it is connected to the frontend.
 - Navigate to the terminal, `cd Frontend` and enter `npm run dev` to start the locally hosted website.
 -  Click on the link with "localhost" to access the application in your browser.
-  < img width="304" alt="image" src="https://github.com/McGill-ECSE321-Winter2024/project-group-15/assets/78813640/6cce3a5b-029a-430e-a311-ab6184075f40">
-
+ <img width="290" alt="image" src="https://github.com/McGill-ECSE321-Winter2024/project-group-15/assets/78813640/78c44e85-73ef-44ef-8f75-eb057121d6f0">
 
 ## Deployement Guide
 - Server Configuration
