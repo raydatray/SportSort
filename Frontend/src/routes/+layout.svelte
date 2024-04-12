@@ -75,7 +75,8 @@
       <li class = "m-1 "><a href="/CourseOfferings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
       <li class = "m-1 "><a href="/CourseHistory" class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
       <li class="m-1"><a href="/CourseTypeSubmission" class="flex items-center space-x-2 p-0.2"> <IconBallFootball /> Course Types </a></li>
-<!--      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconTicket /> Registrations </a></li>-->
+      <li class="m-1"><a href="/ManageCOInstructor" class="flex items-center space-x-2 p-0.2"> <IconUserScreen /> Manage Offerings </a></li>
+      <!--      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconTicket /> Registrations </a></li>-->
 <!--      <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconUsers /> Manage Customers </a></li>-->
       <li class="flex-grow bg-base-200"></li> <!-- This spacer will now push the settings and logout to the bottom -->
       <li class="h-0.5 -ml-px w-full spacer2 bg-base-400 justify-center"></li> 
