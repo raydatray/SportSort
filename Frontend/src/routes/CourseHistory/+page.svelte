@@ -99,10 +99,45 @@
    * @async
    */
   onMount(async () => {
+      const userRole = sessionStorage.getItem('role');
+
+      if (userRole === "OWNER") {
+          try {
+              // Fetch all course offerings
+              const response = await AXIOS.get('/courseOfferings/getAll');
+              /** @type {CourseOffering[]} */
+              courseOfferings = response.data;
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              courseOfferings = courseOfferings.filter(offering => {
+                  const endDate = new Date(offering.endDate);
+                  return endDate < today; // Keep only offerings whose end date is before today
+              });
+          } catch (error) {
+              console.log(error);
+          }
+      } else if (userRole === "INSTRUCTOR") {
+          try {
+              // Fetch all course offerings
+              const response = await AXIOS.get('/courseOfferings/getByInstructor',{
+                  headers: {
+                      'userToken': sessionStorage.getItem('token')
+                  }
+              });
+              /** @type {CourseOffering[]} */
+              courseOfferings = response.data;
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              courseOfferings = courseOfferings.filter(offering => {
+                  const endDate = new Date(offering.endDate);
+                  return endDate < today; // Keep only offerings whose end date is before today
+              });
+          } catch (error) {
+              console.log(error);
+          }
+      }
+
       try {
-          const response = await AXIOS.get('/courseOfferings/getAll');
-          /** @type {CourseOffering[]} */
-          courseOfferings = response.data;
           // Fetch all instructors
           const response2 = await AXIOS.get('/accounts/getInstructors');
           /** @type {Instructor[]} */
