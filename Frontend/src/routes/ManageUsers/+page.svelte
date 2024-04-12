@@ -295,16 +295,16 @@
 {#if modalOpen}
 <dialog open class="modal">
   <div class="modal-box">
-    <h3 class="font-bold text-lg">Create New Instructor</h3>
-    <label class="input input-bordered flex items-center gap-2 mb-4">
+    <h3 class="text-lg font-bold">Create New Instructor</h3>
+    <label class="flex items-center gap-2 mb-4 input input-bordered">
       Name:
       <input type="text" bind:value={newName} class="grow" placeholder="Name" />
     </label>
-    <label class="input input-bordered flex items-center gap-2 mb-4">
+    <label class="flex items-center gap-2 mb-4 input input-bordered">
       Email:
       <input type="email" bind:value={newEmail} class="grow" placeholder="Email" />
     </label>
-    <label class="input input-bordered flex items-center gap-2">
+    <label class="flex items-center gap-2 input input-bordered">
       Password:
       {#if passwordVisible}
         <input type="text" bind:value={newPassword} class="grow" placeholder="Password" />
@@ -333,16 +333,16 @@
 {#if updateModalOpen}
 <dialog open class="modal">
   <div class="modal-box">
-    <h3 class="font-bold text-lg">Update Instructor Details</h3>
-    <label class="input input-bordered flex items-center gap-2 mb-4">
+    <h3 class="text-lg font-bold">Update Instructor Details</h3>
+    <label class="flex items-center gap-2 mb-4 input input-bordered">
       New Name:
       <input type="text" bind:value={updatedName} class="grow" placeholder="Enter new name" />
     </label>
-    <label class="input input-bordered flex items-center gap-2 mb-4">
+    <label class="flex items-center gap-2 mb-4 input input-bordered">
       New Email:
       <input type="email" bind:value={updatedEmail} class="grow" placeholder="Enter new email" />
     </label>
-    <label class="input input-bordered flex items-center gap-2">
+    <label class="flex items-center gap-2 input input-bordered">
       New Password:
       {#if passwordVisible}
         <input type="text" bind:value={updatedPassword} class="grow" placeholder="Enter new password" />

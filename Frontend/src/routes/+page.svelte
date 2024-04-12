@@ -10,6 +10,8 @@
     import Postman from '../assets/postman.png';
     import Github from '../assets/github.png';
     import Ratings from '../assets/ratings.png';
+    import { IconClock, IconHome, IconPhone, IconEdit } from '@tabler/icons-svelte';
+
 
     const frontendUrl = 'http://localhost:5173';
     const backendUrl = 'http://127.0.0.1:8080';
@@ -17,6 +19,26 @@
     let instructors = [];
     let courseTypes = [];
     let errorPerson;
+
+    let updateModalOpen = false;
+    let updatedStartHour = '';
+    let updatedEndHour = '';
+    let updatedAddress = '';
+    let updatedPhoneNumber = '';
+    let alertMessage = ''; // Holds the success or error message
+    let showAlert = false; // Controls the visibility of the alert
+    let updatedSportCenter = null;
+
+    // Check if sessionStorage is available
+    const isSessionStorageAvailable = typeof sessionStorage !== 'undefined';
+
+    // Access sessionStorage if available
+    let userType = null;
+    let userToken = null;
+    if (isSessionStorageAvailable) {
+        userType = sessionStorage.getItem('role');
+        userToken = sessionStorage.getItem('token');
+    }
 
     const AXIOS = axios.create({
         baseURL: backendUrl,
@@ -47,7 +69,85 @@
             errorPerson = e;
         });
     });
+
+    function openUpdateModal() {
+        updateModalOpen = true;
+        updatedStartHour = sportCenter.openingHour;
+        updatedEndHour = sportCenter.closingHour;
+        updatedAddress = sportCenter.address;
+        updatedPhoneNumber = sportCenter.phoneNumber;
+    }
+
+    function closeUpdateModal() {
+        updateModalOpen = false;
+    }
+
+    function saveUpdatedDetails() {
+      const updatedDetails = {
+        name: sportCenter.name,
+        address: updatedAddress,
+        phoneNumber: updatedPhoneNumber,
+        openingHour: updatedStartHour,
+        closingHour: updatedEndHour
+      };
+
+      AXIOS.put('/updateSportCenter', updatedDetails, {
+          headers: {
+              'userToken': userToken
+          }
+      })
+          .then(response => {
+              updatedSportCenter = response.data;
+              sportCenter.name = updatedSportCenter.name;
+              sportCenter.address = updatedSportCenter.address;
+              sportCenter.phoneNumber = updatedSportCenter.phoneNumber;
+              sportCenter.openingHour = updatedSportCenter.openingHour;
+              sportCenter.closingHour = updatedSportCenter.closingHour;
+              closeUpdateModal();
+          })
+          .catch(error => {
+              const message = error.response?.data || "An error occurred while updating the sport center.";
+              displayAlert(message);
+          });
+
+  }
+
+  function displayAlert(message) {
+        alertMessage = message;
+        showAlert = true;
+        setTimeout(() => {
+            showAlert = false;
+        }, 2000);
+    }
 </script>
+
+{#if updateModalOpen}
+<dialog open class="modal">
+  <div class="modal-box">
+    <h3 class="text-lg font-bold">Update Sport Center Information</h3>
+    <label class="flex items-center gap-2 mb-4 input input-bordered">
+      New Address:
+      <input type="email" bind:value={updatedAddress} class="grow" placeholder="Enter new email" />
+    </label>
+    <label class="flex items-center gap-2 mb-4 input input-bordered">
+      New Phone Number:
+      <input type="email" bind:value={updatedPhoneNumber} class="grow" placeholder="Enter new email" />
+    </label>
+    <label class="flex items-center gap-2 mb-4 input input-bordered">
+      New Opening Hour:
+      <input type="email" bind:value={updatedStartHour} class="grow" placeholder="Enter new email" />
+    </label>
+    <label class="flex items-center gap-2 mb-4 input input-bordered">
+      New Closing Hour:
+      <input type="email" bind:value={updatedEndHour} class="grow" placeholder="Enter new email" />
+    </label>
+    <div class="modal-action">
+      <button class="btn btn-custom" on:click={saveUpdatedDetails}>Save</button>
+      <button class="btn btn-custom" on:click={closeUpdateModal}>Close</button>
+    </div>
+  </div>
+</dialog>
+{/if}
 
 <div class="font-extrabold header">
     {#if sportCenter}
@@ -60,8 +160,6 @@
     <p class="text-xs welcome-text">Working Out Just Got Better</p>
 </div>
 
-<div class="justify-center w-full h-4 -ml-px spacer2 bg-base-300"/>
-
 <div class="dashboard">
     <div class="flex-row">
     <div class="p-2 card">
@@ -70,24 +168,43 @@
                 <img src={Hero} class="rounded-lg shadow-2xl size-4/12" />
                 <div class="mt-12">
                     {#if sportCenter}
-                        <h1 class="mb-5 text-5xl font-bold">{sportCenter.name}</h1>
+                        <div class="flex items-center">
+                            <h1 class="mb-5 text-5xl font-bold">{sportCenter.name}</h1>
+                            {#if userType === 'OWNER'}
+                              <button
+                                class="btn btn-action"
+                                on:click={() => openUpdateModal()}
+                              >
+                                <IconEdit/>
+                              </button>
+                            {/if}
+                        </div>
                     {:else}
                         <h1 class="mb-5 text-5xl font-bold">Loading...</h1>
                     {/if}
-                    <div class="-ml-7 info-section">
-                        <div class="hours">
-                            <h1 class="mb-2 text-xl font-bold">Opening Hours</h1>
+                    <div class="flex flex-col space-y-4">
+                        <div class="p-2.5 bg-gray-100 rounded-lg shadow-md">
+                            <h1 class="mb-2 text-xl font-bold">Opening Hours </h1>
                             {#if sportCenter}
-                                <p> Every Day: {sportCenter.openingHour} - {sportCenter.closingHour}</p>
+                                <div class="flex items-center">
+                                    <IconClock class="mr-2" />
+                                    <p>{sportCenter.openingHour} - {sportCenter.closingHour}</p>
+                                </div>
                             {:else}
                                 <p> Loading...</p>
                             {/if}
                         </div>
-                        <div class="general-info">
-                            <h1 class="mb-2 text-xl font-bold">General Information</h1>
+                        <div class="p-2.5 bg-gray-100 rounded-lg shadow-md">
+                            <h1 class="mb-2 text-xl font-bold">General Information </h1>
                             {#if sportCenter}
-                                <p> {sportCenter.address}</p>
-                                <p> {sportCenter.phoneNumber}</p>
+                                <div class="flex items-center">
+                                    <IconHome class="mr-2" />
+                                    <p>{sportCenter.address}</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <IconPhone class="mr-2" />
+                                    <p>{sportCenter.phoneNumber}</p>
+                                </div>
                             {:else}
                                 <p> Loading...</p>
                             {/if}
@@ -284,29 +401,6 @@
         font-size: 24px; /* Or any other size you prefer */
         color: #333;
         margin: 0; /* Removes default margin from the h1 tag */
-    }
-
-    .welcome-gif {
-        max-height: 100px; /* Set a max-height for your gif to make sure it's not too large */
-        margin-left: 20px; /* Adds some space between the text and the gif */
-    }
-
-    .spacer2 {
-        height: 2px;
-    }
-
-    .info-section {
-        display: flex;
-        justify-content: space-between;
-        padding: 20px;
-        gap: 20px; /* Adjust gap as necessary */
-    }
-
-    .hours, .general-info {
-        padding: 10px;
-        background-color: #f0f0f0; /* Light grey background, change as needed */
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .table::-webkit-scrollbar {

@@ -41,7 +41,7 @@
 </script>
 
 <div class="h-screen grid grid-cols-[240px_1fr] gap-x-1 p-2 mr-2" data-theme="north">
-  <nav class="menu justify-items-center flex flex-col h-full">
+  <nav class="flex flex-col h-full menu justify-items-center">
   <ul class="flex flex-col flex-grow p-3 m-1 menu-horizontal md:menu-vertical bg-base-300 rounded-box gap-y-0.5">
     <li class="flex-row justify-center">
       <a href="/">
@@ -101,6 +101,11 @@
 </div>
 
 <style lang="postcss">
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .content::-webkit-scrollbar {
+    display: none;
+  }
+
   .container {
     display: grid;
     grid-template-columns: 240px 1fr;

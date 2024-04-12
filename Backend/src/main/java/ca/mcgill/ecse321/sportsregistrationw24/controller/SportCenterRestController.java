@@ -13,10 +13,10 @@ public class SportCenterRestController {
   private SportCenterService service;
 
   @PutMapping(value = {"/updateSportCenter"})
-  public ResponseEntity<?> updateSportsCenter(@RequestParam String userToken, @RequestBody SportsCenterDTO sportsCenterDTO) {
+  public ResponseEntity<?> updateSportsCenter(@RequestHeader String userToken, @RequestBody SportsCenterDTO sportsCenterDTO) {
     try {
-      service.updateSportsCenter(userToken, sportsCenterDTO.getName(), sportsCenterDTO.getAddress(), sportsCenterDTO.getPhoneNumber(), sportsCenterDTO.getOpeningHour(), sportsCenterDTO.getClosingHour());
-      return ResponseEntity.accepted().body("Sports center updated successfully");
+      SportsCenterDTO sportCenterDTO = service.updateSportsCenter(userToken, sportsCenterDTO.getName(), sportsCenterDTO.getAddress(), sportsCenterDTO.getPhoneNumber(), sportsCenterDTO.getOpeningHour(), sportsCenterDTO.getClosingHour());
+      return ResponseEntity.accepted().body(sportCenterDTO);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
