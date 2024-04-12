@@ -375,7 +375,7 @@ let updatePaymentModalOpen = false;
         {#each paymentInfos as paymentInfo, index}
           <tr>
             <td>{paymentInfo.paymentType}</td>
-            <td>{paymentInfo.cardNumber}</td>
+            <td>{"Card ending in " + paymentInfo.cardNumber}</td>
             <td>{paymentInfo.expirationMonth}/{paymentInfo.expirationYear}</td>
             <td>
               <button class="btn btn-action" on:click={() => openUpdatePaymentModal(paymentInfo)}>

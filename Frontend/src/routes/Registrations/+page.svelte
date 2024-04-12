@@ -15,6 +15,10 @@
 
     let paymentInfos = [];
 
+    let courseOfferings = [];
+
+    let courseTypes = [];
+
     /**
      * @typedef {Object} Registration
      * @property {string} courseOfferingId
@@ -48,12 +52,32 @@
             });
             paymentInfos = response2.data;
 
+            const response3 = await AXIOS.get('courseOfferings/getAll', {
+                headers: {
+                    'userToken': sessionStorage.getItem('token')
+                }
+            });
+            courseOfferings = response3.data;
+
+            const response4 = await AXIOS.get('courseTypes/getAllApproved');
+            courseTypes = response4.data;
+
             registrations.forEach(registration => {
                 const paymentInfo = paymentInfos.find(p => p.cardNumber === registration.paymentInfo);
                 if (paymentInfo) {
                     registration.paymentInfo = paymentInfo.paymentType + " ending in " + registration.paymentInfo;
                 }
                 registration.pricePaid += ".00";
+
+                const courseOffering = courseOfferings.find(c => c.id === registration.courseOfferingId)
+                if (courseOffering) {
+                    const courseType = courseTypes.find(t => t.id === courseOffering.courseTypeId);
+                    if (courseType) {
+                        registration.courseName = courseType.courseName;
+                        registration.startDate = courseOffering.startDate;
+                        registration.endDate = courseOffering.endDate;
+                    }
+                }
             })
 
             registrations = registrations;
@@ -71,18 +95,22 @@
                 <thead>
                 <tr>
                     <th>Registration Date</th>
-                    <th>Payment Information</th>
                     <th>Amount Paid</th>
-                    <th>Course Offering ID</th>
+                    <th>Course Name</th>
+                    <th>Course Offering Start Date</th>
+                    <th>Course Offering End Date</th>
+                    <th>Payment Information</th>
                 </tr>
                 </thead>
                 <tbody>
                 {#each registrations as registration}
                     <tr class="hover">
                         <th class="font-normal">{registration.registrationDate}</th>
-                        <th class="font-normal">{registration.paymentInfo}</th>
                         <th class="font-normal">{registration.pricePaid}</th>
-                        <th class="font-normal">{registration.courseOfferingId}</th>
+                        <th class="font-normal">{registration.courseName}</th>
+                        <th class="font-normal">{registration.startDate}</th>
+                        <th class="font-normal">{registration.endDate}</th>
+                        <th class="font-normal">{registration.paymentInfo}</th>
                     </tr>
                 {/each}
                 </tbody>
