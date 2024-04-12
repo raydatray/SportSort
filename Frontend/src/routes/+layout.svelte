@@ -74,7 +74,7 @@
       <li class = "m-1 "><a href="/" class = "flex items-center space-x-2 p-0.2"> <IconHome /> Home </a></li>
       <li class = "m-1 "><a href="/CourseOfferings" class = "flex items-center space-x-2 p-0.2"> <IconSchool /> Course Offerings </a></li>
       <li class = "m-1 "><a href="/CourseHistory" class = "flex items-center space-x-2 p-0.2"> <IconHistory /> Course History </a></li>
-      <li class="m-1"><a href="/CourseTypeSubmission" class="flex items-center space-x-2 p-0.2"> <IconBallFootball /> Course Types </a></li>
+      <li class="m-1"><a href="/CourseTypesInstructor" class="flex items-center space-x-2 p-0.2"> <IconBallFootball /> Course Types </a></li>
       <li class="m-1"><a href="/ManageCOInstructor" class="flex items-center space-x-2 p-0.2"> <IconUserScreen /> Manage Offerings </a></li>
       <!--      <li class = "m-1 "><a class = "flex items-center space-x-2 p-0.2"> <IconTicket /> Registrations </a></li>-->
 <!--      <li class="m-1"><a class="flex items-center space-x-2 p-0.2"> <IconUsers /> Manage Customers </a></li>-->

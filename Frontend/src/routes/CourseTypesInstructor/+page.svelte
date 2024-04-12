@@ -57,9 +57,16 @@
     let createdCT;
 
     let errorPerson;
-    let userToken = sessionStorage.getItem("token"); // subscribe to alex's store when its up -> LOOK AT DISCORD DMS WITH HIM FOR HOW
     let value = '';
     let staffAccID = 1;
+
+    const isSessionStorageAvailable = typeof sessionStorage !== 'undefined';
+
+    // Access sessionStorage if available
+    let userToken = null;
+    if (isSessionStorageAvailable) {
+        userToken = sessionStorage.getItem('token')
+    }
 
     const AXIOS = axios.create({
         baseURL: 'http://127.0.0.1:8080/', // Adjust this to your actual backend URL
