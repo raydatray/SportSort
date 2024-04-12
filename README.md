@@ -42,4 +42,4 @@ For key design decisions and meeting minutes, please refer to our [Project Wiki]
     - Log in to PostgresSQL using the psql command-line tool in your terminal
     - Create a database for the application
 - IDE Application Configuration
-    - Using an IDE such as Intellij will allow you to view and modify your local database after connecting it to the IDE
+    - Using an IDE such as Intellij will allow you to view and modify your local database after connecting it to the IDE. Information on how to connect a Postgres databse to Intellij is available at [Intellij Documentation](https://www.jetbrains.com/help/idea/postgresql.html)
