@@ -30,7 +30,7 @@ public class PaymentInfoRestController {
 
       PaymentInfo paymentInfo = service.createPaymentInfo(userToken, paymentType, cardNumber, cvv, expirationYear, expirationMonth);
 
-      return ResponseEntity.status(HttpStatus.CREATED).body("Payment info added successfully");
+      return ResponseEntity.status(HttpStatus.CREATED).body(paymentInfo);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }

@@ -61,7 +61,7 @@
       </label>
       <button class="btn bg-accent" on:click={login}>Login</button>
       <p class="error-msg">{errorMsg}</p>
-      <p class="sign-up-footer">Don't have an account? <a href="/createAccount" class="underline">Sign up</a></p>
+      <p class="sign-up-footer">Don't have an account? <a href="/CreateAccount" class="underline">Sign up</a></p>
     </div>
     <!-- Image/Logo Section -->
     <div class="image bg-base-100">

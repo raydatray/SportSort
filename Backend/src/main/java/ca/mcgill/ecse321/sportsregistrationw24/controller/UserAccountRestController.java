@@ -5,7 +5,6 @@ import ca.mcgill.ecse321.sportsregistrationw24.dto.UserAccounts.UserAccountCO;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.UserAccounts.UserAccountDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.service.UserAccountService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,7 @@ public class UserAccountRestController {
       String email = userAccountCO.getEmail();
       String password = userAccountCO.getPassword();
       service.createCustomerAccount(name, email, password);
-      return ResponseEntity.status(HttpStatus.CREATED).body("Customer account created successfully");
+      return ResponseEntity.status(HttpStatus.CREATED).body("Customer account created successfully!");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -38,21 +37,52 @@ public class UserAccountRestController {
       String name = userAccountCO.getName();
       String email = userAccountCO.getEmail();
       String password = userAccountCO.getPassword();
-      service.createInstructorAccount(userToken, name, email,password);
-      return ResponseEntity.status(HttpStatus.CREATED).body("Instructor account created successfully");
+      UserAccountDTO newUser = service.createInstructorAccount(userToken, name, email,password);
+      return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
 
+  // This method modifies your own account information
   @PutMapping(value = {"/accounts/update"})
   public ResponseEntity<?> updateAccount(@RequestHeader String userToken, @RequestBody UserAccountCO userAccountCO) {
     try {
       String name = userAccountCO.getName();
       String email = userAccountCO.getEmail();
       String password = userAccountCO.getPassword();
-      service.updateUserAccount(userToken, name, email, password);
+      service.updateAccount(userToken, name, email, password);
       return ResponseEntity.ok().body("Account updated successfully");
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
+
+  // This endpoint updates a user's account information --> OWNER ONLY
+  @PutMapping(value = {"/accounts/updateUser"})
+  public ResponseEntity<?> updateUser(@RequestHeader String userToken, @RequestParam String userEmail, @RequestBody UserAccountCO userAccountCO) {
+    try {
+      String currEmail = userEmail;
+      String name = userAccountCO.getName();
+      String email = userAccountCO.getEmail();
+      String password = userAccountCO.getPassword();
+      UserAccountDTO updatedAccount = service.updateUserAccount(userToken, currEmail, name, email, password);
+      return ResponseEntity.ok().body(updatedAccount);
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
+  }
+
+  @GetMapping(value = {"accounts/getAccount"})
+  public ResponseEntity<?> getAccount(@RequestHeader String userToken){
+    try{
+      UserAccount userAccount = service.getUserByToken(userToken);
+      String userEmail = userAccount.getEmail();
+      String userName = userAccount.getName();
+      String userType = userAccount.getUserType();
+
+      UserAccountDTO userAccountDTO = new UserAccountDTO(userType, userEmail, userName, userType);
+      return ResponseEntity.ok().body(userAccountDTO);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
@@ -69,6 +99,7 @@ public class UserAccountRestController {
       return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
+
 
   @GetMapping(value = {"/accounts/getInstructors"})
   public ResponseEntity<?> getInstructors(){

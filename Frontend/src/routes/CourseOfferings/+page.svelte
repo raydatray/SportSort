@@ -1,3 +1,4 @@
+
 <script>
     import Calendar from '@event-calendar/core';
     import TimeGrid from '@event-calendar/time-grid';
@@ -14,8 +15,8 @@
     let courseSessions = new Map();
     let courseOfferingsAsResources = [];
     let courseSessionsAsEvents = [];
-    let courseTypes = []; // Store for approved course types
-    
+    let courseTypes = [];
+
     let plugins = [TimeGrid];
     let dataLoaded = false; // Step 1: Define a loading state
     $: options = {
@@ -29,7 +30,7 @@
 
     onMount(async () => {
         try {
-            const getOfferings = axios.get('http://localhost:8080/courseOfferings/getAll');
+            const getOfferings = await axios.get('http://localhost:8080/courseOfferings/getAll');
             const getApprovedCourseTypes = axios.get('http://localhost:8080/courseTypes/getAllApproved');
 
             // Fetch both offerings and approved course types concurrently
@@ -141,37 +142,37 @@
 </script>
 <div>
     <h1 class="p-4 text-lg font-medium bg-base-200 rounded-box">Course Offerings</h1>
-    <div class= "grid grid-cols-[min-content_1fr] gap-4 pt-4">
+    <div class="grid grid-cols-[min-content_1fr] gap-4 pt-4">
         <CourseOfferingFilter on:filterChange={handleFilterChange}/>
         <div class="grid h-full grid-rows-2 gap-4">
-            <div class = "overflow-y-scroll">
+            <div class="overflow-y-scroll">
                 {#if dataLoaded}
-                    <Calendar {plugins} {options} />
+                    <Calendar {plugins} {options}/>
                 {:else}
                     <p>Loading...</p>
                 {/if}
             </div>
-            <div class = "overflow-x-auto">
-                <table class = "table">
+            <div class="overflow-x-auto">
+                <table class="table">
                     <thead>
-                        <tr>
-                            <th></th>
-                            <th>Course Type</th>
-                            <th>Days Offered</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Price</th>
-                        </tr>
+                    <tr>
+                        <th></th>
+                        <th>Course Type</th>
+                        <th>Days Offered</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Price</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {#each courseOfferings as offering, index}
+                    {#each courseOfferings as offering, index}
                         <tr on:click={() => openModal(offering)} class="cursor-pointer">
                             <th>{index + 1}</th>
                             <td>{courseTypes.find(type => type.id === offering.courseTypeId)?.courseName || 'Unknown Type'}</td>
                             <td>{offering.daysOffered}</td>
                             <td>{offering.startDate}</td>
                             <td>{offering.endDate}</td>
-                            <td>{courseTypes.find(type => type.id === offering.courseTypeId)?.courseName || 'Unknown Type'}</td>
+                            <td>{offering.price}</td>
                         </tr>
                     {/each}
                     </tbody>
@@ -182,7 +183,8 @@
 </div>
 
 {#if showModal}
-    <CourseOfferingRegistrationModal {selectedCourseOffering} {associatedCourseSessions} onClose={() => showModal = false}/>
+    <CourseOfferingRegistrationModal {selectedCourseOffering} {associatedCourseSessions}
+                                     onClose={() => showModal = false}/>
 {/if}
 <style>
     :root {

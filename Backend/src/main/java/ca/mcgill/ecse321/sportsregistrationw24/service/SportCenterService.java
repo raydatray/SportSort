@@ -2,6 +2,7 @@ package ca.mcgill.ecse321.sportsregistrationw24.service;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.SportCenterRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.SportsCenterDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.SportCenter;
 
 import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.*;
@@ -19,7 +20,7 @@ public class SportCenterService {
     @Autowired
     private UserAccountRepository userAccountRepository;
 
-    public void updateSportsCenter(String userToken, String name, String address, String phoneNumber, Time openingHour, Time closingHour) {
+    public SportsCenterDTO updateSportsCenter(String userToken, String name, String address, String phoneNumber, Time openingHour, Time closingHour) {
         UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
         if (!user.getUserType().equals("OWNER")) {
@@ -38,6 +39,8 @@ public class SportCenterService {
         sportCenter.setClosingHour(closingHour);
 
         sportCenterRepository.save(sportCenter);
+
+        return new SportsCenterDTO(sportCenter);
     }
 
     public SportCenter getSportCenter() {
