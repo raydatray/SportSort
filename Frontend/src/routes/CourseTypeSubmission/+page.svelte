@@ -1,5 +1,6 @@
 <script>
     import { onMount } from 'svelte';
+    import { fade } from 'svelte/transition'
     import axios from 'axios';
     /**
      * @typedef {Object} CourseType
@@ -56,7 +57,7 @@
     let createdCT;
 
     let errorPerson;
-    let userToken = 'wasd'; // subscribe to alex's store when its up -> LOOK AT DISCORD DMS WITH HIM FOR HOW
+    let userToken = sessionStorage.getItem("token"); // subscribe to alex's store when its up -> LOOK AT DISCORD DMS WITH HIM FOR HOW
     let value = '';
     let staffAccID = 1;
 
@@ -98,7 +99,15 @@
         refreshTables();
     });
 
-
+    let alertMessage = '';
+    let showAlert = false;
+    function displayAlert(message) {
+        alertMessage = message;
+        showAlert = true;
+        setTimeout(() => {
+            showAlert = false;
+        }, 2000);
+    }
 
     /**
      * Determines the status based on the approval and denial flags.
@@ -129,19 +138,24 @@
       const reqParam = {
           'courseTypeName': value
       }
-        try {
-          const response = await AXIOS.post("/courseTypes/create", null, {
-              headers: reqHead,
-              params: reqParam
-          });
 
+      await AXIOS.post("/courseTypes/create", null, {
+          headers: reqHead,
+          params: reqParam
+      })
+
+      .then(response => {
           createdCT = response.data;
-      } catch(error) {
-          errorPerson = error;
-      }
+      })
+
+      .catch(error => {
+          const message = error.response?.data || "An error occurred while proposing the course type.";
+          displayAlert(message);
+      });
+
 
       refreshTables();
-
+      value = '';
       console.log(proposedCourseTypes);
       
       return void 0;
@@ -150,10 +164,10 @@
 </script>
 
 <h1 class="text-2xl font-bold p-2">Course Type Management</h1>
-<div class="content">
-  <div class="listAll p-2">
+<div class="content grid gap-4 h-3/4 grid-cols-3">
+  <div class="col-start-1 col-span-2 p-2">
     <h1 class="text-lg">All Course Types</h1>
-    <div class="overflow-x-auto">
+    <div class="overflow-y-auto">
       <table class="table">
         <!-- head -->
         <thead>
@@ -178,8 +192,8 @@
       </table>
     </div>
   </div>
-  <div class="last-col">
-    <div class="newCourseType">
+  <div class="col-start-3 grid grid-rows-3">
+    <div class="row-start-1 flex p-4 flex-col mb-2.5">
       <label for="textInput" class="text-lg">Insert New CourseType:</label>
       <input
         type="text"
@@ -191,9 +205,9 @@
         <button class="btn" on:click={handleClick}>Submit CourseType</button>
       </div>
     </div>
-    <div class="listInstructor">
+    <div class="listInstructor row-start-2 row-span-2 h-3/4 p-4 mb-2.5">
       <h1 class="text-lg">Your Course Types</h1>
-      <div class="overflow-x-auto">
+      <div class="overflow-y-auto">
 				<table class="table">
 					<!-- head -->
 					<thead>
@@ -219,17 +233,14 @@
   </div>
 </div>
 
+{#if showAlert}
+  <div role="alert" class="alert alert-error modal-alert" in:fade={{ duration: 300 }} out:fade={{ duration: 300 }}>
+    <span>{alertMessage}</span>
+  </div>
+{/if}
 
 <style>
-    /* Add styling for the component */
 
-    /* .container {
-      display: grid;
-      grid-template-rows: auto 1fr;
-      grid-template-areas:
-        "PageHeading"
-        "content";
-    } */
 
     .content {
       display: grid;
@@ -244,34 +255,11 @@
         "listAll listAll listInstructor";
       height: 70%;
     }
-    .last-col {
-      display: grid;
-      grid-template-rows: auto 1fr;
-    }
 
-    h1 {
-      grid-area: "PageHeading";
-    }
 
-    .newCourseType {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 0.625rem; /* Add margin to separate multiple instances of the component */
-      padding: 1rem;
-      grid-area: "newCourseType";
-    }
 
-    .listInstructor {
-      grid-area: "listInstructor";
-      /* overflow-y: scroll; */
-      height: 70%;
-      margin-bottom: 0.625rem; /* Add margin to separate multiple instances of the component */
-      padding: 1rem;
-    }
 
-    .listAll {
-      grid-area: "listAll";
-    }
+
     
     label {
       margin-bottom: 0.3125rem; /* Add space between label and input */
@@ -280,5 +268,16 @@
     input, button {
       padding: 0.3125rem; /* Add padding to input and button */
       margin-bottom: 0.3125rem; /* Add space between input and button */
+    }
+
+    .modal-alert {
+        position: absolute; /* Position it absolutely to align it with the modal */
+        width: 50%; /* Make it as wide as the modal */
+        left: 50%; /* Center it horizontally */
+        transform: translateX(-50%); /* Adjust horizontal position */
+        bottom: 20%; /* Adjust vertical position to be below the modal */
+        z-index: 100; /* Ensure it's above the modal background */
+        box-sizing: border-box;
+        padding: 1rem;
     }
   </style>

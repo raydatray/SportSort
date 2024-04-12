@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { fade } from 'svelte/transition';
   import axios from 'axios';
   import {IconPencil, IconTrash} from '@tabler/icons-svelte';
 
@@ -63,9 +64,18 @@
   async function iconClicked (id, floorNum, roomNum, name, capacity) {
     let error;
     roomRowClicked = true;
-    // @TODO check if this has the desired effect
     selectedRoomID = id;
     return void 0;
+  }
+
+  let alertMessage = '';
+  let showAlert = false;
+  function displayAlert(message) {
+      alertMessage = message;
+      showAlert = true;
+      setTimeout(() => {
+          showAlert = false;
+      }, 2000);
   }
 
   async function updateClicked () {
@@ -75,13 +85,15 @@
       capacity: updatedCapacity
     }
     console.log(roomUpdateCO);
-    try {
-      await AXIOS.put("/rooms/update", roomUpdateCO, {
-        headers: {'userToken': userToken }
-      })
-    } catch (error) {
-      console.log(error);
-    }
+
+    await AXIOS.put("/rooms/update", roomUpdateCO, {
+      headers: {'userToken': userToken }
+    })
+        .catch(error => {
+            const message = error.response?.data || "An error occurred while proposing the course type.";
+            displayAlert(message);
+        });
+
 
     await refreshTables();
     roomRowClicked = false;
@@ -90,16 +102,18 @@
   }
 
   async function refreshTables() {
-      try {
-          const response = await AXIOS.get('/rooms/getAll', {
-              // Include the userToken in the request if necessary
-              headers: { 'userToken': userToken }
-          });
-          rooms = response.data; // Assuming response.data contains the rooms data
-          console.log(rooms);
-      } catch (error) {
-          console.log(error);
-      }
+    await AXIOS.get('/rooms/getAll', {
+        // Include the userToken in the request if necessary
+        headers: { 'userToken': userToken }
+    })
+        .then(response => {
+            rooms = response.data; // Assuming response.data contains the rooms data
+        })
+        .catch(error => {
+            const message = error.response?.data || "An error occurred while proposing the course type.";
+            displayAlert(message);
+        });
+    console.log(rooms);
   }
 
   /**
@@ -114,14 +128,15 @@
         id: id
     }
 
-    try {
-        await AXIOS.delete("/rooms/delete", {
-            headers: {'userToken': userToken},
-            params: delParam
-        })
-    } catch (error) {
-        console.log(error);
-    }
+    await AXIOS.delete("/rooms/delete", {
+        headers: {'userToken': userToken},
+        params: delParam
+    })
+        .catch(error => {
+            const message = error.response?.data || "An error occurred while proposing the course type.";
+            displayAlert(message);
+        });
+
 
     await refreshTables();
 
@@ -136,13 +151,15 @@
       capacity: newCapacity
     }
 
-    try {
-      await AXIOS.post("/rooms/create", roomCO, {
-        headers: {'usertoken': userToken}
-      });
-    } catch (error) {
-      console.log(error);
-    }
+
+    await AXIOS.post("/rooms/create", roomCO, {
+      headers: {'usertoken': userToken}
+    })
+        .catch(error => {
+            const message = error.response?.data || "An error occurred while proposing the course type.";
+            displayAlert(message);
+        });
+
 
     await refreshTables();
     newName = '';
@@ -266,7 +283,28 @@
       <div class="flex justify-end py-10">
         <button class="btn btn-success" on:click={createClicked}>Create Room</button>
       </div>
-
     {/if}
   </div>
 </div>
+
+{#if showAlert}
+  <div role="alert" class="alert alert-error modal-alert absolute w-1/2 left-1/2 -translate-x-1/2 bottom-1/4 p-4 z-50 box-border" in:fade={{ duration: 300 }} out:fade={{ duration: 300 }}>
+    <span>{alertMessage}</span>
+  </div>
+{/if}
+
+<style>
+    /*.modal-alert {*/
+    /*    position: absolute; !* Position it absolutely to align it with the modal *!*/
+    /*    width: 50%; !* Make it as wide as the modal *!*/
+    /*    left: 50%; !* Center it horizontally *!*/
+    /*    transform: translateX(-50%); !* Adjust horizontal position *!*/
+    /*    bottom: 20%; !* Adjust vertical position to be below the modal *!*/
+    /*    z-index: 100; !* Ensure it's above the modal background *!*/
+    /*    box-sizing: border-box;*/
+    /*    padding: 1rem;*/
+    /*}*/
+
+</style>
+
+
