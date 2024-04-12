@@ -1,6 +1,7 @@
 <script>
     import { onMount, afterUpdate } from 'svelte';
     import axios from 'axios';
+  import { userRole } from '../../stores/userStore';
     export let selectedCourseOffering;
     export let associatedCourseSessions;
 
@@ -46,7 +47,24 @@
         console.log(paymentOptions);
     }
 
+    let alertMessage = ''; // Holds the success or error message
+    let showAlert = false; // Controls the visibility of the alert
+
+    function displayAlert(message) {
+        alertMessage = message;
+        showAlert = true;
+        setTimeout(() => {
+            showAlert = false;
+        }, 2000);
+    }
+
     async function registerForCourseOffering() {
+        
+        if (!(sessionStorage.getRole === "OWNER" || sessionStorage.getRole === "CUSTOMER") || sessionStorage.getRole === "INSTRUCTOR"){
+            displayAlert("Please login and create an account to register for a course offering.");
+            return;
+        }
+
         console.log("u clickd this!!!");
         console.log(sessionStorage.getItem('token'))
         let selectedPaymentOption = paymentOptions.find((paymentOption) => paymentOption.checked);
@@ -81,6 +99,12 @@
     }
 
 </script>
+
+{#if showAlert}
+  <div role="alert" class="alert alert-error modal-alert" in:fade={{ duration: 300 }} out:fade={{ duration: 300 }}>
+    <span>{alertMessage}</span>
+  </div>
+{/if}
 
 <dialog bind:this={dialog} class="modal">
     <div class="flex-col w-11/12 max-w-5xl modal-box h-2/3 bg-base-100">
@@ -145,7 +169,7 @@
                 <form method="dialog">
                     <!-- if there is a button, it will close the modal -->
                     <button class="btn">Cancel</button>
-                    <button class="btn" on:click|preventDefault={registerForCourseOffering}>Register</button>
+                        <button class="btn" on:click|preventDefault={registerForCourseOffering}>Register</button>
                 </form>
             </div>
         </div>
