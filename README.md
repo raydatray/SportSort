@@ -23,7 +23,7 @@ This is the repository of Group 15 which consists of Leon Song, Raymond Liu, Hou
 
 - **Deliverable 1**: Requirements, Domain Model, and Database Design
 - **Deliverable 2**: Backend Services, Behaviour Modelling, and Testing
-- **Deliverable 3**: Web Frontend
+- **Deliverable 3**: Web Frontend **EXTREMELY DIFFICULT :tired_face:**
 
 ## Key Design Decisions and Meeting Minutes <a name="key-design-decisions"></a>
 For key design decisions and meeting minutes, please refer to our [Project Wiki](../../wiki). Navigate to the appropriate deliverable section for specific information.
