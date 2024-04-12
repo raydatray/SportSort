@@ -120,30 +120,63 @@
 
   // Function to handle account deletion
   // Function to handle account deletion
-  function deleteAccount() {
+function deleteAccount() {
     const userToken = sessionStorage.getItem('token');
     const userEmail = currentUser.email;
 
-    AXIOS.delete('/accounts/delete', {
-      headers: {
-        'userToken': userToken
-      },
-      params: {
-        email: userEmail
-      }
-    })
-    .then(response => {
-      sessionStorage.removeItem('role'); // Handle session clearance and redirection as needed
-      sessionStorage.removeItem('token');
-      const newURL = window.location.href.replace(window.location.pathname, '/');
-      history.replaceState({}, document.title, newURL);
-      window.location.reload();
+    // First, delete all payment information iteratively
+    deleteAllPaymentInfos(userToken)
+    .then(() => {
+        // Proceed with deleting the account if payment info deletion is successful
+        AXIOS.delete('/accounts/delete', {
+            headers: {
+                'userToken': userToken
+            },
+            params: {
+                email: userEmail
+            }
+        })
+        .then(response => {
+            sessionStorage.removeItem('role'); // Handle session clearance and redirection as needed
+            sessionStorage.removeItem('token');
+            const newURL = window.location.href.replace(window.location.pathname, '/');
+            history.replaceState({}, document.title, newURL);
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error deleting account:', error.response ? error.response.data : error.message);
+            displayAlert(error.response ? error.response.data : "Failed to delete account.");
+        });
     })
     .catch(error => {
-      console.error('Error deleting account:', error.response ? error.response.data : error.message);
-      // Optionally update the UI to show the error
+        console.error('Error deleting payment information:', error);
+        displayAlert("Failed to delete payment information, account deletion aborted.");
     });
-  } 
+}
+
+// Function to delete all payment information for a given user
+function deleteAllPaymentInfos(userToken) {
+    return new Promise((resolve, reject) => {
+        let deletePromises = paymentInfos.map(info => {
+            return AXIOS.delete(`/paymentInfo/delete?id=${info.id}`, {
+                headers: {
+                    'userToken': userToken
+                }
+            });
+        });
+
+        Promise.all(deletePromises)
+        .then(() => {
+            console.log('All payment info deleted successfully');
+            resolve();
+        })
+        .catch(error => {
+            console.error('Error deleting all payment infos:', error);
+            reject(error);
+        });
+    });
+}
+
 
   let paymentModalOpen = false;
   let cardNumber = '';
@@ -179,6 +212,11 @@
 
   function savePaymentInfo() {
     const userToken = sessionStorage.getItem('token');
+
+    if (cardNumber.length !== 16) {
+        displayAlert("Card number must be exactly 16 digits.");
+        return; // Stop the function if validation fails
+    }
     const paymentInfo = {
       paymentType: paymentType, // Assume a default or provide a way to select this
       cardNumber,
@@ -201,7 +239,8 @@
       closePaymentModal();
     })
     .catch(error => {
-      console.error('Error adding payment info:', error.response ? error.response.data : error.message);
+      const message = error.response?.data || "An error occured while creating the payment info"
+      displayAlert(message);
     });
   }
 
@@ -281,7 +320,8 @@ let updatePaymentModalOpen = false;
       closeUpdatePaymentModal();
     })
     .catch(error => {
-      console.error('Error updating payment info:', error.response ? error.response.data : error.message);
+      const message = error.response?.data || "An error occured while updating the payment info"
+      displayAlert(message);
     });
   }
 
@@ -393,6 +433,12 @@ let updatePaymentModalOpen = false;
   </div>
 {/if}
 
+{#if showAlert}
+  <div role="alert" class="alert alert-error modal-alert" in:fade={{ duration: 300 }} out:fade={{ duration: 300 }}>
+    <span>{alertMessage}</span>
+  </div>
+{/if}
+
 {#if paymentModalOpen}
 <dialog open class="modal">
   <div class="modal-box">
@@ -499,12 +545,6 @@ let updatePaymentModalOpen = false;
 </dialog>
 {/if}
 
-{#if showAlert}
-  <div role="alert" class="alert alert-error modal-alert" in:fade={{ duration: 300 }} out:fade={{ duration: 300 }}>
-    <span>{alertMessage}</span>
-  </div>
-{/if}
-
   <style>
     .page-container {
       max-width: 90vw; /* Percentage of the viewport's width */
@@ -588,7 +628,7 @@ let updatePaymentModalOpen = false;
     width: 50%; /* Make it as wide as the modal */
     left: 50%; /* Center it horizontally */
     transform: translateX(-50%); /* Adjust horizontal position */
-    bottom: 20%; /* Adjust vertical position to be below the modal */
+    bottom: 10%; /* Adjust vertical position to be below the modal */
     z-index: 100; /* Ensure it's above the modal background */
     box-sizing: border-box;
     padding: 1rem;
