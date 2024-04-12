@@ -10,26 +10,29 @@ This is the repository of Group 15 which consists of Leon Song, Raymond Liu, Hou
 
 ## Team Members <a name="team-members"></a>
 
-| Name              | Role            | Hours Spent (Deliverable 1) | Hours Spent (Deliverable 2) |
-|-------------------|-----------------|-----------------------------|-----------------------------|
-| Leon Song         | Frontend Dev    | 16                          | 22                          |
-| Houman Azari      | Backend Dev     | 17                          | 21                          |
-| Joseph Ciaravella | UI/UX Designer  | 16                          | 23                          |
-| Colin Xiong       | Fullstack Dev   | 16                          | 26                          |
-| Raymond Liu       | QA Engineer     | 18                          | 27                          |
-| Alexander Liu     | Project Manager | 20                          | 23                          |
+| Name              | Role            | Hours Spent (Deliverable 1) | Hours Spent (Deliverable 2) | Hours Spent (Deliverable 2) |
+|-------------------|-----------------|-----------------------------|-----------------------------|-----------------------------|
+| Leon Song         | Frontend Dev    | 16                          | 22                          | 27                          |
+| Houman Azari      | Backend Dev     | 17                          | 21                          | 28                          |
+| Joseph Ciaravella | UI/UX Designer  | 16                          | 23                          | 26                          |
+| Colin Xiong       | Fullstack Dev   | 16                          | 26                          | 29                          |
+| Raymond Liu       | QA Engineer     | 18                          | 27                          | 28                          |
+| Alexander Liu     | Project Manager | 20                          | 23                          | 27                          |
 
 ## Project Deliverables <a name="project-deliverables"></a>
 
 - **Deliverable 1**: Requirements, Domain Model, and Database Design
 - **Deliverable 2**: Backend Services, Behaviour Modelling, and Testing
-- **Deliverable 3**: To Come
+- **Deliverable 3**: Web Frontend
 
 ## Key Design Decisions and Meeting Minutes <a name="key-design-decisions"></a>
 For key design decisions and meeting minutes, please refer to our [Project Wiki](../../wiki). Navigate to the appropriate deliverable section for specific information.
 
 ## How To Run the Application
-Navigate to the **Sportsregistrationw24Application.java** file and run it.
+- Navigate to the **Sportsregistrationw24Application.java** file and run it. This "starts" the database to make sure it is connected to the frontend.
+- Navigate to the terminal, `cd Frontend` and enter `npm run dev` to start the local website.
+- <img width="304" alt="image" src="https://github.com/McGill-ECSE321-Winter2024/project-group-15/assets/78813640/6cce3a5b-029a-430e-a311-ab6184075f40"> Click on the link with "localhost" to run the application in your browser.
+
 
 ## Deployement Guide
 - Server Configuration
