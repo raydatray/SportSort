@@ -183,10 +183,10 @@
         <thead>
           <tr>
             <th></th>
-            <th>Room Name</th>
-            <th>Floor Number</th>
-            <th>Room Number</th>
-            <th>Capacity</th>
+            <th class="font-bold">Room Name</th>
+            <th class="font-bold">Floor Number</th>
+            <th class="font-bold">Room Number</th>
+            <th class="font-bold">Capacity</th>
             <th></th>
             <th></th>
           </tr>
@@ -196,10 +196,10 @@
           {#each rooms as room, index (room)}
           <tr class="hover">
             <th>{index+1}</th>
-            <th>{room.name}</th>
-            <th>{room.floorNumber}</th>
-            <th>{room.roomNumber}</th>
-            <th>{room.capacity}</th>
+            <th class="font-normal">{room.name}</th>
+            <th class="font-normal">{room.floorNumber}</th>
+            <th class="font-normal">{room.roomNumber}</th>
+            <th class="font-normal">{room.capacity}</th>
             <th><button on:click={() => iconClicked(room.id, room.floorNumber, room.roomNumber, room.name, room.capacity)}><IconPencil /></button></th>
             <th><button on:click={() => deleteClicked(room.id)}><IconTrash /></button></th>
           </tr>
