@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import axios from 'axios';
+    import {IconCheck, IconTrash, IconX} from "@tabler/icons-svelte";
     let userToken = sessionStorage.getItem("token");
 
     const backendUrl = 'http://127.0.0.1:8080/';
@@ -83,6 +84,43 @@
     }
 
     /**
+     * Gets the ID of the approved item.
+     * @param {string} type - The type of course clicked.
+     * @returns {number} - The ID of the clicked item.
+     */
+    function getApprovedID(type) {
+        const index = approvedTypes.indexOf(type);
+        console.log(approvedTypesID[index]);
+        return approvedTypesID[index];
+    }
+
+    /**
+     * Handles the check button click event.
+     * @param {string} type - The type of course to be approved.
+     */
+    function deleteApprovedCT(type) {
+        const id = getApprovedID(type);
+        console.log(id);
+        const headers = {
+            'userToken': userToken
+        };
+
+        AXIOS.delete(`/courseTypes/delete?id=${id}`, {
+            headers: headers
+        })
+
+        const index = approvedTypes.indexOf(type);
+        if (index !== -1) {
+            approvedTypes.splice(index, 1);
+            approvedTypesID.splice(index, 1);
+        }
+
+        // Update the UI lists
+        approvedTypes = [...approvedTypes];
+        approvedTypesID = [...approvedTypesID];
+
+    }
+    /**
      * Handles the check button click event.
      * @param {string} type - The type of course to be approved.
      */
@@ -162,6 +200,9 @@
                 {#each approvedTypes as approvedType}
                     <div class="bg-secondary-content/5 list-item-approved">
                         {approvedType}
+                        <div class="deleteButton">
+                            <button on:click={() => {deleteApprovedCT(approvedType)}}><IconTrash /></button>
+                        </div>
                     </div>
                 {/each}
             </div>
@@ -178,8 +219,8 @@
                     <div class="bg-secondary-content/5 list-item-type">
                         {type}
                         <div class="buttons-type">
-                            <button class="check-button-type" on:click={() => { handleCheck(type)}}>✓</button>
-                            <button class="delete-button-type" on:click={() => { handleX(type) }}>×</button>
+                            <button class="check-button-type" on:click={() => { handleCheck(type)}}><IconCheck /></button>
+                            <button class="delete-button-type" on:click={() => { handleX(type) }}><IconX /></button>
                         </div>
                     </div>
                 {/each}

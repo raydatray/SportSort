@@ -173,9 +173,9 @@
         <thead>
           <tr>
 <!--            <th></th>-->
-            <th>Proposed CourseType</th>
-            <th>Associated Instructor ID</th>
-            <th>Status</th>
+            <th class="font-bold">Proposed CourseType</th>
+            <th class="font-bold">Associated Instructor ID</th>
+            <th class="font-bold">Status</th>
           </tr>
         </thead>
         <tbody>
@@ -183,9 +183,9 @@
           {#each proposedCourseTypes as courseType}<!--{#each proposedCourseTypes as courseType, index (courseType)}-->
           <tr class="hover">
 <!--            <th>{index+1}</th>-->
-            <th>{courseType.courseName}</th>
-            <th>{courseType.staffAccountId}</th>
-            <th>{displayStatus(courseType.approvalStatus, courseType.rejectedStatus)}</th>
+            <th class="font-normal">{courseType.courseName}</th>
+            <th class="font-normal">{courseType.staffAccountId}</th>
+            <th class="font-normal">{displayStatus(courseType.approvalStatus, courseType.rejectedStatus)}</th>
           </tr>
           {/each}
         </tbody>
