@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte'
     import axios from 'axios';
+    import { IconTrash } from '@tabler/icons-svelte';
 
     /**
      * Array containing course offering objects.
@@ -85,11 +86,40 @@
             console.error('Failed to fetch registrations:', error);
         }
     });
+
+  function deleteRegistration(registration) {
+      const userToken = sessionStorage.getItem('token'); // Adjust this to your actual user token management
+      const courseOfferingId = registration.courseOfferingId;
+
+      AXIOS.delete('/registrations/delete', {
+          headers: {
+              'userToken': userToken,
+              'courseOfferingId': courseOfferingId
+          }
+      })
+          .then(response => {
+              // Update the instructors array to reflect the deletion
+              registrations = registrations.filter(registration => registration.courseOfferingId !== courseOfferingId);
+          })
+          .catch(error => {
+              console.error('Error deleting the account:', error);
+              // Update the UI or state to reflect any error here
+          });
+  }
+
+    function displayAlert(message) {
+        alertMessage = message;
+        showAlert = true;
+        setTimeout(() => {
+            showAlert = false;
+        }, 2000);
+    }
+
 </script>
 
-<h1 class="text-2xl font-bold p-2">Registrations</h1>
+<h1 class="p-2 text-2xl font-bold">Registrations</h1>
 <div class="content">
-    <div class="listAll p-2">
+    <div class="p-2 listAll">
         <div class="overflow-x-auto">
             <table class="table">
                 <thead>
@@ -111,6 +141,10 @@
                         <th class="font-normal">{registration.startDate}</th>
                         <th class="font-normal">{registration.endDate}</th>
                         <th class="font-normal">{registration.paymentInfo}</th>
+                        <button class="btn btn-action" on:click={deleteRegistration(registration)}>
+                            <IconTrash />
+                            <div class="progress-bar"></div>
+                        </button>
                     </tr>
                 {/each}
                 </tbody>

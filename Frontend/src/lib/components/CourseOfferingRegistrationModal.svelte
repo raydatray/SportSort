@@ -7,6 +7,14 @@
     let dialog;
 
     let paymentInfos = [];
+    const today = new Date();
+
+    // Format the date as "YYYY-MM-DD"
+    const todayString = today.toLocaleDateString('en-CA', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    });
 
     onMount(async () => {
         try{
@@ -42,18 +50,29 @@
         console.log("u clickd this!!!");
         console.log(sessionStorage.getItem('token'))
         let selectedPaymentOption = paymentOptions.find((paymentOption) => paymentOption.checked);
+        console.log(selectedCourseOffering.id);
+        console.log(selectedPaymentOption.value);
+        console.log(selectedCourseOffering.price);
+        console.log(todayString);
+
         if (selectedPaymentOption) {
             try {
+                // Ensure you have today's date in the required format "YYYY-MM-DD"
+                const today = new Date();
+                const todayString = today.toISOString().slice(0, 10);
+
+                // Post request to register for a course offering
                 const registerForCourseOffering = await axios.post('http://localhost:8080/registrations/create', {
-                    courseOfferingId: 2,
-                    paymentInfoId: 1,
-                    pricePaid: 69,
-                    registrationDate: "2024-01-01"
+                    courseOfferingId: parseInt(selectedCourseOffering.id),
+                    paymentInfoId: parseInt(selectedPaymentOption.value),
+                    pricePaid: parseInt(selectedCourseOffering.price),
+                    registrationDate: todayString
                 }, {
                     headers: {
-                        'userToken': sessionStorage.getItem('token')
+                        'userToken': sessionStorage.getItem('token') // Assume this retrieves the correct token
                     }
                 });
+
                 console.log(registerForCourseOffering.data);
             } catch (error) {
                 console.error(error);

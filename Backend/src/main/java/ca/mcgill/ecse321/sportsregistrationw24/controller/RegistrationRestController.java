@@ -86,13 +86,13 @@ public class RegistrationRestController {
     }
   }
 
-
-  public ResponseEntity<?> deleteRegistration(@RequestParam String userToken, @RequestParam Integer courseOfferingID) {
+  @DeleteMapping(value = {"/registrations/delete"})
+  public ResponseEntity<?> deleteRegistration(@RequestHeader String userToken, @RequestHeader Integer courseOfferingId) {
     try {
       UserAccount user = userService.getUserByToken(userToken);
       Integer userId = user.getId();
 
-      RegistrationId registrationId = new RegistrationId(userId, courseOfferingID);
+      RegistrationId registrationId = new RegistrationId(userId, courseOfferingId);
       service.deleteRegistration(registrationId);
       return ResponseEntity.ok().body("Registration has been successfully deleted!");
     } catch (Exception e) {

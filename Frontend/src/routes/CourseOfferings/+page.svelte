@@ -11,6 +11,8 @@
     import CourseOfferingFilter from "$lib/components/CourseOfferingFilter.svelte";
     import CourseOfferingRegistrationModal from "$lib/components/CourseOfferingRegistrationModal.svelte";
 
+    
+
     let courseOfferings = [];
     let courseSessions = new Map();
     let courseOfferingsAsResources = [];
@@ -30,18 +32,20 @@
 
     onMount(async () => {
         try {
-            const getOfferings = await axios.get('http://localhost:8080/courseOfferings/getAll');
+            const getOfferings = axios.get('http://localhost:8080/courseOfferings/getAll');
             const getApprovedCourseTypes = axios.get('http://localhost:8080/courseTypes/getAllApproved');
-
-            // Fetch both offerings and approved course types concurrently
             const [offeringsResponse, courseTypesResponse] = await Promise.all([getOfferings, getApprovedCourseTypes]);
 
-            courseOfferings = offeringsResponse.data;
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1); // Set date to tomorrow
+            const tomorrowString = tomorrow.toISOString().slice(0, 10); // Convert tomorrow's date to string
+
+            courseOfferings = offeringsResponse.data.filter(offering => offering.startDate > tomorrowString);
             courseTypes = courseTypesResponse.data;
 
             courseOfferingsAsResources = courseOfferings.map(offering => ({
                 id: offering.id,
-                title: offering.title // Assuming you replace 'abcd' with offering.title or another property
+                title: offering.title
             }));
 
             const courseSessionsPromises = courseOfferings.map(async (offering) => {
