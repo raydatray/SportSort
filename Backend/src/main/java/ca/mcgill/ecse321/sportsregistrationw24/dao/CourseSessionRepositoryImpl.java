@@ -3,19 +3,17 @@ package ca.mcgill.ecse321.sportsregistrationw24.dao;
 import ca.mcgill.ecse321.sportsregistrationw24.model.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 
 import java.sql.Date;
 import java.sql.Time;
 import java.time.DayOfWeek;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class CourseSessionRepositoryImpl implements CourseSessionRepositoryCustom{
+public class CourseSessionRepositoryImpl implements CourseSessionRepositoryCustom {
   @PersistenceContext
   private EntityManager entityManager;
 

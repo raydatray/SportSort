@@ -8,7 +8,8 @@ public class UserAccountDTO {
   private String name;
   private String token;
 
-  public UserAccountDTO() {}
+  public UserAccountDTO() {
+  }
 
   public UserAccountDTO(String type, String email, String name, String token) {
     this.type = type;
@@ -18,14 +19,22 @@ public class UserAccountDTO {
   }
 
   public UserAccountDTO(UserAccount userAccount) {
-    this (userAccount.getUserType(), userAccount.getEmail(), userAccount.getName(), userAccount.getToken());
+    this(userAccount.getUserType(), userAccount.getEmail(), userAccount.getName(), userAccount.getToken());
   }
 
-  public String getToken(){ return this.token;}
+  public String getToken() {
+    return this.token;
+  }
 
-  public String getType() { return this.type; }
+  public String getType() {
+    return this.type;
+  }
+
   public String getEmail() {
     return this.email;
   }
-  public String getName() { return this.name; }
+
+  public String getName() {
+    return this.name;
+  }
 }

@@ -15,9 +15,13 @@ public class CourseOffering {
   @Id
   @GeneratedValue
   private Integer id;
+  private String name;
+  public enum difficultyLevel {BEGINNER, INTERMEDIATE, ADVANCED}
+  private difficultyLevel difficulty;
+  private Integer price;
+  private Integer capacity;
   private Date startDate;
   private Date endDate;
-  private Integer price;
   @ElementCollection
   @Enumerated(EnumType.STRING)
   @Fetch(FetchMode.JOIN)
@@ -36,49 +40,49 @@ public class CourseOffering {
   private List<CourseSession> courseSessions;
 
   public CourseOffering() {}
-  public CourseOffering(Date aStartDate, Date aEndDate, Integer aPrice, ArrayList<DayOfWeek> someDaysOffered, Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount) {
+  public CourseOffering(String aName, difficultyLevel aDifficultyLevel, Integer aPrice, Integer aCapacity, Date aStartDate, Date aEndDate, ArrayList<DayOfWeek> someDaysOffered, Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount) {
+    this.name = aName;
+    this.difficulty = aDifficultyLevel;
+    this.price = aPrice;
+    this.capacity = aCapacity;
     this.startDate = aStartDate;
     this.endDate = aEndDate;
-    this.price = aPrice;
     this.daysOffered = someDaysOffered;
     this.room = aRoom;
     this.courseType = aCourseType;
     this.instructorAccount = aInstructorAccount;
   }
 
+  public void setName (String aName) { this.name = aName; }
+  public void setDifficulty(difficultyLevel aDifficulty) { this.difficulty = aDifficulty; }
+  public void setPrice(Integer aPrice) {
+    this.price = aPrice;
+  }
+  public void setCapacity(Integer aCapacity) { this.capacity = aCapacity; }
   public void setStartDate(Date aStartDate) { this.startDate = aStartDate; }
-  public void setEndDate(Date aEndDate) { this.endDate = aEndDate; }
-  public void setPrice(Integer aPrice) { this.price = aPrice; }
-  public void setDaysOffered(List<DayOfWeek> aDaysOffered) { this.daysOffered = aDaysOffered; }
-  public void setInstructorAccount(InstructorAccount instructor) { this.instructorAccount = instructor; }
-  public void setRoom(Room aNewRoom) { this.room = aNewRoom; }
-  public void setCourseType(CourseType aCourseType) { this.courseType = aCourseType; }
+  public void setEndDate(Date aEndDate) {
+    this.endDate = aEndDate;
+  }
+  public void setDaysOffered(List<DayOfWeek> aDaysOffered) {
+    this.daysOffered = aDaysOffered;
+  }
+  public void setRoom(Room aNewRoom) {
+    this.room = aNewRoom;
+  }
+  public void setCourseType(CourseType aCourseType) {this.courseType = aCourseType; }
+  public void setInstructorAccount(InstructorAccount instructor) {
+    this.instructorAccount = instructor;
+  }
 
-
-  public Integer getId()
-  {
-    return this.id;
-  }
-  public Date getStartDate()
-  {
-    return this.startDate;
-  }
-  public Date getEndDate()
-  {
-    return this.endDate;
-  }
+  public Integer getId() { return this.id; }
+  public String getName() { return this.name; }
+  public difficultyLevel getDifficulty() { return this.difficulty; }
   public Integer getPrice() { return this.price; }
-  public Room getRoom()
-  {
-    return this.room;
-  }
+  public Integer getCapacity() { return this.capacity; }
+  public Date getStartDate() { return this.startDate; }
+  public Date getEndDate() { return this.endDate; }
   public ArrayList<DayOfWeek> getDaysOffered() { return new ArrayList<>(this.daysOffered); }
-  public CourseType getCourseType()
-  {
-    return this.courseType;
-  }
-  public InstructorAccount getInstructorAccount()
-  {
-    return this.instructorAccount;
-  }
+  public Room getRoom() { return this.room; }
+  public CourseType getCourseType() { return this.courseType; }
+  public InstructorAccount getInstructorAccount() { return this.instructorAccount; }
 }

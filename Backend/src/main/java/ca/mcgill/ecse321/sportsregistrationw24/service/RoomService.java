@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.List;
+import java.util.Optional;
 
 import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.getUserFromToken;
 import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.iterableToArrayList;
@@ -27,7 +28,7 @@ public class RoomService {
   public void createRoom(String userToken, String aName, Integer aFloorNumber, Integer aRoomNumber, Integer aCapacity) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (!user.getUserType().equals("OWNER")){
+    if (!user.getUserType().equals("OWNER")) {
       throw new IllegalArgumentException("Only owners can create rooms!");
     }
 
@@ -62,7 +63,7 @@ public class RoomService {
   public void updateRoom(String userToken, Integer aId, String newName, Integer newCapacity) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (!user.getUserType().equals("OWNER")){
+    if (!user.getUserType().equals("OWNER")) {
       throw new IllegalArgumentException("Only owners can update rooms!");
     }
 
@@ -99,7 +100,7 @@ public class RoomService {
       }
     }
     Optional<Room> wrappedRoom = roomRepository.findRoomByFloorNumberAndRoomNumber(aFloorNumber, aRoomNumber);
-    if(wrappedRoom.isEmpty()) {
+    if (wrappedRoom.isEmpty()) {
       throw new IllegalArgumentException("No room with this floor and room number was found");
     }
     return wrappedRoom.orElseThrow(() -> new IllegalArgumentException("No room with this floor and room number was found"));
@@ -127,7 +128,7 @@ public class RoomService {
   public void deleteRoom(String userToken, Integer aId) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (!user.getUserType().equals("OWNER")){
+    if (!user.getUserType().equals("OWNER")) {
       throw new IllegalArgumentException("Only owners can delete rooms!");
     }
 

@@ -5,7 +5,8 @@ public class UserAccountCO {
   private String password;
   private String name;
 
-  public UserAccountCO() {}
+  public UserAccountCO() {
+  }
 
   public UserAccountCO(String email, String password, String name) {
     this.email = email;

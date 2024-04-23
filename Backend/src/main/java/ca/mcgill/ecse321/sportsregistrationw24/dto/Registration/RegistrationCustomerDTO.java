@@ -10,7 +10,8 @@ public class RegistrationCustomerDTO {
   private Integer courseOfferingId;
   private Integer paymentInfo;
 
-  public RegistrationCustomerDTO() {}
+  public RegistrationCustomerDTO() {
+  }
 
   public RegistrationCustomerDTO(Date registrationDate, Integer pricePaid, Integer courseOfferingId, Integer paymentInfo) {
     this.registrationDate = registrationDate;
@@ -23,9 +24,20 @@ public class RegistrationCustomerDTO {
     this(registration.getRegisteredDate(), registration.getPricePaid(), registration.getCourseOffering().getId(), registration.getPaymentInfo().getTrailingFourDigits());
   }
 
-  public Date getRegistrationDate() { return this.registrationDate; }
-  public Integer getPricePaid() { return this.pricePaid; }
-  public Integer getCourseOfferingId() { return this.courseOfferingId; }
-  public Integer getPaymentInfo() { return this.paymentInfo; }
+  public Date getRegistrationDate() {
+    return this.registrationDate;
+  }
+
+  public Integer getPricePaid() {
+    return this.pricePaid;
+  }
+
+  public Integer getCourseOfferingId() {
+    return this.courseOfferingId;
+  }
+
+  public Integer getPaymentInfo() {
+    return this.paymentInfo;
+  }
 
 }

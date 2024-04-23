@@ -5,7 +5,8 @@ public class RoomUpdateCO {
   private String name;
   private Integer capacity;
 
-  public RoomUpdateCO() {}
+  public RoomUpdateCO() {
+  }
 
   public RoomUpdateCO(Integer id, String name, Integer capacity) {
     this.id = id;
@@ -13,7 +14,15 @@ public class RoomUpdateCO {
     this.capacity = capacity;
   }
 
-  public Integer getId() { return this.id; }
-  public String getName() { return this.name; }
-  public Integer getCapacity() { return this.capacity; }
+  public Integer getId() {
+    return this.id;
+  }
+
+  public String getName() {
+    return this.name;
+  }
+
+  public Integer getCapacity() {
+    return this.capacity;
+  }
 }

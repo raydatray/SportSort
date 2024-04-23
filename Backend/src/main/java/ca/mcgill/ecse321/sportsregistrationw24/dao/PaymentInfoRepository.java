@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PaymentInfoRepository extends CrudRepository<PaymentInfo, Integer> {
-    Optional<List<PaymentInfo>> findByCustomerAccount(CustomerAccount customer);
-    void deleteByCardNumber(String cardNumber);
+  Optional<List<PaymentInfo>> findByCustomerAccount(CustomerAccount customer);
+
+  void deleteByCardNumber(String cardNumber);
 }

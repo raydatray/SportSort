@@ -5,15 +5,14 @@ import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseOffering.CourseOffering
 import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseOffering.CourseOfferingDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
 import ca.mcgill.ecse321.sportsregistrationw24.service.CourseOfferingService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.time.DayOfWeek;
 import java.util.List;
-import java.sql.Date;
 
 
 @CrossOrigin(origins = "*")
@@ -21,6 +20,7 @@ import java.sql.Date;
 public class CourseOfferingRestController {
   @Autowired
   private CourseOfferingService service;
+
   @PostMapping(value = {"/courseOfferings/create"})
   public ResponseEntity<?> createCourseOffering(@RequestHeader String userToken, @RequestBody CourseOfferingCO courseOfferingCO) {
     try {
@@ -39,14 +39,14 @@ public class CourseOfferingRestController {
   }
 
   /**
-  public ResponseEntity<?> getCourseOffering(@RequestParam Integer id, @RequestHeader String userToken) {
-    try {
-      CourseOffering courseOffering = service.getCourseOfferingById(id, userToken);
-      return ResponseEntity.ok().body(convertToDto(courseOffering));
-    } catch (Exception e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
-    }
-  }
+   * public ResponseEntity<?> getCourseOffering(@RequestParam Integer id, @RequestHeader String userToken) {
+   * try {
+   * CourseOffering courseOffering = service.getCourseOfferingById(id, userToken);
+   * return ResponseEntity.ok().body(convertToDto(courseOffering));
+   * } catch (Exception e) {
+   * return ResponseEntity.badRequest().body(e.getMessage());
+   * }
+   * }
    **/
 
   @GetMapping(value = {"courseOfferings/getByInstructor"})
@@ -69,7 +69,7 @@ public class CourseOfferingRestController {
                                                  @RequestParam(required = false) List<DayOfWeek> dO,
                                                  @RequestParam(required = false) List<Integer> cT,
                                                  @RequestParam(required = false) List<Integer> rId,
-                                                 @RequestParam(required = false) List<Integer> iI){
+                                                 @RequestParam(required = false) List<Integer> iI) {
     try {
       List<CourseOffering> courseOfferings = service.getAllCourseOfferings(lD, hD, hP, lT, hT, dO, cT, rId, iI);
       List<CourseOfferingDTO> courseOfferingDTOs = courseOfferings.stream().map(CourseOfferingDTO::new).toList();

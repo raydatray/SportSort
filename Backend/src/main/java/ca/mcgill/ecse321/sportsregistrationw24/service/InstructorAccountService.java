@@ -20,7 +20,7 @@ public class InstructorAccountService {
 
   @Transactional
   public InstructorAccount createInstructorAccount(String email, String password, String name) {
-    if (email == null || password == null || name == null){
+    if (email == null || password == null || name == null) {
       throw new IllegalArgumentException("Null value detected!");
     }
     Optional<InstructorAccount> existingInstructorAccount = instructorAccountRepository.findByEmail(email);
@@ -90,7 +90,7 @@ public class InstructorAccountService {
   @Transactional
   public List<InstructorAccount> getAllInstructorAccounts() {
     Utilities utilities = new Utilities();
-    return utilities.iterableToArrayList(instructorAccountRepository.findAll());
+    return Utilities.iterableToArrayList(instructorAccountRepository.findAll());
   }
 
 }

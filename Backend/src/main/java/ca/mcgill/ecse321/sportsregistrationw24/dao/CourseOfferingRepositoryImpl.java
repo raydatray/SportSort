@@ -1,12 +1,11 @@
 package ca.mcgill.ecse321.sportsregistrationw24.dao;
 
+import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseType;
 import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
-import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.EntityManager;
-
-import ca.mcgill.ecse321.sportsregistrationw24.model.CourseOffering;
+import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -19,14 +18,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class CourseOfferingRepositoryImpl implements CourseOfferingRepositoryCustom{
+public class CourseOfferingRepositoryImpl implements CourseOfferingRepositoryCustom {
   @PersistenceContext
   private EntityManager entityManager;
 
   @Override
   public Optional<List<CourseOffering>> findCourseOfferingsByFilters(Date startDate, Date endDate,
                                                                      Time startTime, Time endTime,
-                                                                      Integer highPrice,
+                                                                     Integer highPrice,
                                                                      List<CourseType> courseTypes,
                                                                      List<DayOfWeek> daysOffered,
                                                                      List<Room> rooms,

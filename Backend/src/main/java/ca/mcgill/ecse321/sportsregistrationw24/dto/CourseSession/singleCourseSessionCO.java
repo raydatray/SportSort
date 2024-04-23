@@ -9,7 +9,8 @@ public class singleCourseSessionCO {
   private Time endTime;
   private Integer courseOfferingId;
 
-  public singleCourseSessionCO() {}
+  public singleCourseSessionCO() {
+  }
 
   public singleCourseSessionCO(Date date, Time startTime, Time endTime, Integer courseOfferingId) {
     this.date = date;
@@ -18,8 +19,19 @@ public class singleCourseSessionCO {
     this.courseOfferingId = courseOfferingId;
   }
 
-  public Date getDate() { return this.date; }
-  public Time getStartTime() { return this.startTime; }
-  public Time getEndTime() { return this.endTime; }
-  public Integer getCourseOfferingId() { return this.courseOfferingId; }
+  public Date getDate() {
+    return this.date;
+  }
+
+  public Time getStartTime() {
+    return this.startTime;
+  }
+
+  public Time getEndTime() {
+    return this.endTime;
+  }
+
+  public Integer getCourseOfferingId() {
+    return this.courseOfferingId;
+  }
 }

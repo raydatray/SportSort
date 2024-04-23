@@ -1,20 +1,19 @@
 package ca.mcgill.ecse321.sportsregistrationw24.service;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
-
 import ca.mcgill.ecse321.sportsregistrationw24.dto.UserAccounts.UserAccountDTO;
-import ca.mcgill.ecse321.sportsregistrationw24.model.OwnerAccount;
-import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
-
-import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.*;
-
+import ca.mcgill.ecse321.sportsregistrationw24.model.OwnerAccount;
+import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+
+import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.getUserFromToken;
+import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.iterableToArrayList;
 
 
 @Service
@@ -24,15 +23,15 @@ public class UserAccountService {
 
   @Transactional
   public void createCustomerAccount(String aName, String aEmail, String aPassword) {
-    if (aName.trim().isEmpty()){
+    if (aName.trim().isEmpty()) {
       throw new IllegalArgumentException("Name cannot be empty!");
     }
 
-    if (aEmail.trim().isEmpty()){
+    if (aEmail.trim().isEmpty()) {
       throw new IllegalArgumentException("Email cannot be empty!");
     }
 
-    if (aPassword.trim().isEmpty()){
+    if (aPassword.trim().isEmpty()) {
       throw new IllegalArgumentException("Password cannot be empty!");
     }
 
@@ -59,15 +58,15 @@ public class UserAccountService {
       throw new IllegalArgumentException("Only owners can create instructor accounts!");
     }
 
-    if (aName.trim().isEmpty()){
+    if (aName.trim().isEmpty()) {
       throw new IllegalArgumentException("Name cannot be empty!");
     }
 
-    if (aEmail.trim().isEmpty()){
+    if (aEmail.trim().isEmpty()) {
       throw new IllegalArgumentException("Email cannot be empty!");
     }
 
-    if (aPassword.trim().isEmpty()){
+    if (aPassword.trim().isEmpty()) {
       throw new IllegalArgumentException("Password cannot be empty!");
     }
 
@@ -92,27 +91,27 @@ public class UserAccountService {
   public void updateAccount(String userToken, String newName, String newEmail, String newPassword) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (newName.trim().isEmpty()){
+    if (newName.trim().isEmpty()) {
       throw new IllegalArgumentException("Name cannot be empty!");
     }
 
-    if (newEmail.trim().isEmpty()){
+    if (newEmail.trim().isEmpty()) {
       throw new IllegalArgumentException("Email cannot be empty!");
     }
 
-    if (newPassword.trim().isEmpty()){
+    if (newPassword.trim().isEmpty()) {
       throw new IllegalArgumentException("Password cannot be empty!");
     }
 
     // Check if the new email is different from the current one and if it is already in use by another user
     if (newEmail.equals(user.getEmail())) { // Only check for email existence if it's been changed
-        UserAccount existingUserAccount = userAccountRepository.findUserByEmail(newEmail).orElse(null);
+      UserAccount existingUserAccount = userAccountRepository.findUserByEmail(newEmail).orElse(null);
 
-        String existingUserToken = existingUserAccount.getToken();
+      String existingUserToken = existingUserAccount.getToken();
 
-        if (existingUserToken == null || !existingUserToken.equals(userToken)) {
-            throw new IllegalArgumentException("Email is already in use!");
-        }
+      if (existingUserToken == null || !existingUserToken.equals(userToken)) {
+        throw new IllegalArgumentException("Email is already in use!");
+      }
     }
 
     user.setName(newName);
@@ -130,15 +129,15 @@ public class UserAccountService {
       throw new IllegalArgumentException("User could not be found with provided email!");
     }
 
-    if (newName.trim().isEmpty()){
+    if (newName.trim().isEmpty()) {
       throw new IllegalArgumentException("Name cannot be empty!");
     }
 
-    if (newEmail.trim().isEmpty()){
+    if (newEmail.trim().isEmpty()) {
       throw new IllegalArgumentException("Email cannot be empty!");
     }
 
-    if (newPassword == null || newPassword.trim().isEmpty()){
+    if (newPassword == null || newPassword.trim().isEmpty()) {
       newPassword = user.getPassword();
     }
 
@@ -179,7 +178,7 @@ public class UserAccountService {
   }
 
   @Transactional
-  public List<UserAccount> getAllUsers(String userToken, List<String> discriminators){
+  public List<UserAccount> getAllUsers(String userToken, List<String> discriminators) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     if (!user.getUserType().equals("OWNER")) {
@@ -200,7 +199,7 @@ public class UserAccountService {
   }
 
   @Transactional
-  public List<UserAccount> getAllInstructors(){
+  public List<UserAccount> getAllInstructors() {
     List<UserAccount> foundUsers = userAccountRepository.findByUserType(Collections.singletonList(InstructorAccount.class)).orElse(null);
 
     if (foundUsers == null) {

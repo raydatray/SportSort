@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.getUserFromToken;
 
@@ -24,15 +23,15 @@ public class CustomerAccountService {
 
   @Transactional
   public void createCustomerAccount(String aName, String aEmail, String aPassword) {
-    if (aName.trim().isEmpty()){
+    if (aName.trim().isEmpty()) {
       throw new IllegalArgumentException("Name cannot be empty!");
     }
 
-    if (aEmail.trim().isEmpty()){
+    if (aEmail.trim().isEmpty()) {
       throw new IllegalArgumentException("Email cannot be empty!");
     }
 
-    if (aPassword.trim().isEmpty()){
+    if (aPassword.trim().isEmpty()) {
       throw new IllegalArgumentException("Password cannot be empty!");
     }
 
@@ -115,7 +114,7 @@ public class CustomerAccountService {
   @Transactional
   public List<CustomerAccount> getAllCustomerAccounts() {
     Utilities utilities = new Utilities();
-    return utilities.iterableToArrayList(customerAccountRepository.findAll());
+    return Utilities.iterableToArrayList(customerAccountRepository.findAll());
   }
 
 }

@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -51,14 +50,14 @@ public class PaymentInfoRestController {
   }
 
   /**
-  public ResponseEntity<?> getPaymentInfo(@RequestHeader Integer id) {
-    try {
-      PaymentInfoDto paymentInfoDto = convertToDto(service.getPaymentInfo(id));
-      return ResponseEntity.ok().body(paymentInfoDto);
-    } catch (Exception e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
-    }
-  }
+   * public ResponseEntity<?> getPaymentInfo(@RequestHeader Integer id) {
+   * try {
+   * PaymentInfoDto paymentInfoDto = convertToDto(service.getPaymentInfo(id));
+   * return ResponseEntity.ok().body(paymentInfoDto);
+   * } catch (Exception e) {
+   * return ResponseEntity.badRequest().body(e.getMessage());
+   * }
+   * }
    **/
 
   @GetMapping(value = {"/paymentInfo/getAll"})

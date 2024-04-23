@@ -34,26 +34,38 @@ public class Registration {
     this.id = new RegistrationId(courseOffering.getId(), customerAccount.getId());
   }
 
-  public void setId(RegistrationId aId) { this.id = aId; }
-  public void setRegisteredDate(Date aRegisteredDate) { this.registeredDate = aRegisteredDate; }
-  public void setPricePaid(Integer aPricePaid) { this.pricePaid = aPricePaid; }
-  public void setCourseOffering (CourseOffering aNewCourseOffering) { this.courseOffering = aNewCourseOffering; }
-  public void setCustomerAccount (CustomerAccount aNewCustomerAccount) { this.customerAccount = aNewCustomerAccount; }
-  public void setPaymentInfo (PaymentInfo aNewPaymentInfo) { this.paymentInfo = aNewPaymentInfo; }
+  public void setRegisteredDate(Date aRegisteredDate) {
+    this.registeredDate = aRegisteredDate;
+  }
+  public void setPricePaid(Integer aPricePaid) {
+    this.pricePaid = aPricePaid;
+  }
+  public void setCourseOffering(CourseOffering aNewCourseOffering) {
+    this.courseOffering = aNewCourseOffering;
+  }
+  public void setCustomerAccount(CustomerAccount aNewCustomerAccount) {
+    this.customerAccount = aNewCustomerAccount;
+  }
+  public void setPaymentInfo(PaymentInfo aNewPaymentInfo) {
+    this.paymentInfo = aNewPaymentInfo;
+  }
 
-  public RegistrationId getId() { return this.id; }
-  public Date getRegisteredDate()
-  {
+  public RegistrationId getId() {
+    return this.id;
+  }
+  public Date getRegisteredDate() {
     return this.registeredDate;
   }
-  public Integer getPricePaid() { return this.pricePaid; }
-  public CourseOffering getCourseOffering()
-  {
+  public Integer getPricePaid() {
+    return this.pricePaid;
+  }
+  public CourseOffering getCourseOffering() {
     return this.courseOffering;
   }
-  public CustomerAccount getCustomerAccount()
-  {
+  public CustomerAccount getCustomerAccount() {
     return this.customerAccount;
   }
-  public PaymentInfo getPaymentInfo() { return this.paymentInfo; }
+  public PaymentInfo getPaymentInfo() {
+    return this.paymentInfo;
+  }
 }

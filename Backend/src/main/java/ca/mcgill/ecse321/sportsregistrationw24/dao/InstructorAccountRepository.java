@@ -6,8 +6,10 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface InstructorAccountRepository extends CrudRepository<InstructorAccount, Integer> {
-    Optional<InstructorAccount> findByEmail(String email);
-    Optional<InstructorAccount> findByToken(String token);
-    void deleteByEmail(String email);
+  Optional<InstructorAccount> findByEmail(String email);
+
+  Optional<InstructorAccount> findByToken(String token);
+
+  void deleteByEmail(String email);
 
 }

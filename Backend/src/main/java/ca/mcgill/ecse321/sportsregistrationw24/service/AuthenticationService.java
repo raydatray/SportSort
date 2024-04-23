@@ -4,7 +4,6 @@ import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.Authentication.AuthenticationDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.utilities.TokenProvider;
-
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

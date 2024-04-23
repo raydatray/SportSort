@@ -3,16 +3,13 @@ package ca.mcgill.ecse321.sportsregistrationw24.controller;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.Room.RoomCO;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.Room.RoomDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.Room.RoomUpdateCO;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.RoomDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
 import ca.mcgill.ecse321.sportsregistrationw24.service.RoomService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "*")
@@ -51,16 +48,16 @@ public class RoomRestController {
   }
 
   /**
-  public ResponseEntity<?> getRoom(@RequestParam Integer aFloorNumber, @RequestParam Integer aRoomNumber) {
-    try {
-      RoomDto roomDto = convertToDto(service.getRoom(aFloorNumber, aRoomNumber));
-
-      return ResponseEntity.ok().body(roomDto);
-    } catch (Exception e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
-    }
-  }
-  **/
+   * public ResponseEntity<?> getRoom(@RequestParam Integer aFloorNumber, @RequestParam Integer aRoomNumber) {
+   * try {
+   * RoomDto roomDto = convertToDto(service.getRoom(aFloorNumber, aRoomNumber));
+   * <p>
+   * return ResponseEntity.ok().body(roomDto);
+   * } catch (Exception e) {
+   * return ResponseEntity.badRequest().body(e.getMessage());
+   * }
+   * }
+   **/
 
   @GetMapping(value = {"/rooms/getAll"})
   public ResponseEntity<?> getRooms(@RequestParam(required = false) Integer floorNumber,

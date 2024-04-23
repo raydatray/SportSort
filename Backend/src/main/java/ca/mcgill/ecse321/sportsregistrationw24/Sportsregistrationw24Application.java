@@ -7,8 +7,8 @@ import java.util.TimeZone;
 
 @SpringBootApplication
 public class Sportsregistrationw24Application {
-	public static void main(String[] args) {
-		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-		SpringApplication.run(Sportsregistrationw24Application.class, args);
-	}
+  public static void main(String[] args) {
+    TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+    SpringApplication.run(Sportsregistrationw24Application.class, args);
+  }
 }

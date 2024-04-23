@@ -6,7 +6,8 @@ public class RoomCO {
   private Integer roomNumber;
   private Integer capacity;
 
-  public RoomCO() {}
+  public RoomCO() {
+  }
 
   public RoomCO(String name, Integer floorNumber, Integer roomNumber, Integer capacity) {
     this.name = name;
@@ -15,8 +16,19 @@ public class RoomCO {
     this.capacity = capacity;
   }
 
-  public Integer getCapacity() { return this.capacity; }
-  public Integer getFloorNumber() { return this.floorNumber; }
-  public Integer getRoomNumber() { return this.roomNumber; }
-  public String getName() { return this.name; }
+  public Integer getCapacity() {
+    return this.capacity;
+  }
+
+  public Integer getFloorNumber() {
+    return this.floorNumber;
+  }
+
+  public Integer getRoomNumber() {
+    return this.roomNumber;
+  }
+
+  public String getName() {
+    return this.name;
+  }
 }

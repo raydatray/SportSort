@@ -1,19 +1,19 @@
 package ca.mcgill.ecse321.sportsregistrationw24.service;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dao.*;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseOfferingRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.PaymentInfoRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.RegistrationRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.*;
 import ca.mcgill.ecse321.sportsregistrationw24.model.keys.RegistrationId;
-import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.aot.RegisteredBeanAotContribution;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.util.*;
+import java.util.List;
 
 import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.getUserFromToken;
-import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.iterableToArrayList;
 
 @Service
 public class RegistrationService {
@@ -34,7 +34,7 @@ public class RegistrationService {
       throw new IllegalArgumentException("Only customers can register for courses!");
     }
 
-    Registration duplicateRegistration = registrationRepository.findById(new RegistrationId(((CustomerAccount) user).getId(), courseOfferingId)).orElse(null);
+    Registration duplicateRegistration = registrationRepository.findById(new RegistrationId(user.getId(), courseOfferingId)).orElse(null);
 
     if (duplicateRegistration != null) {
       throw new IllegalArgumentException("You have already registered for this course offering!");
@@ -66,7 +66,7 @@ public class RegistrationService {
     registration.setRegisteredDate(registrationDate);
     registration.setPricePaid(pricePaid);
 
-    registration.setId(new RegistrationId(((CustomerAccount) user).getId(), courseOfferingId));
+    registration.setId(new RegistrationId(user.getId(), courseOfferingId));
 
     registrationRepository.save(registration);
   }

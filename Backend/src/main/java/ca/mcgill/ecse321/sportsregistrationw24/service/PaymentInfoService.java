@@ -6,17 +6,12 @@ import ca.mcgill.ecse321.sportsregistrationw24.dto.PaymentInfo.PaymentInfoDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.PaymentInfo;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
-import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.xml.SimpleTransformErrorListener;
 
 import java.time.YearMonth;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.getUserFromToken;
 
@@ -60,7 +55,7 @@ public class PaymentInfoService {
   }
 
   @Transactional
-  public PaymentInfoDTO updatePaymentInfo (String userToken, Integer aId, Integer newExpirationYear, Integer newExpirationMonth) {
+  public PaymentInfoDTO updatePaymentInfo(String userToken, Integer aId, Integer newExpirationYear, Integer newExpirationMonth) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     YearMonth currYearMonth = YearMonth.now();

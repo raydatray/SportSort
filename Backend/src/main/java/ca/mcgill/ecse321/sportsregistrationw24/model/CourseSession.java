@@ -26,29 +26,32 @@ public class CourseSession {
     this.courseOffering = aCourseOffering;
   }
 
-  public void setDate(Date aDate) { this.date = aDate; };
-  public void setStartTime(Time aStartTime) { this.startTime = aStartTime; }
-  public void setEndTime(Time aEndTime) { this.endTime = aEndTime; }
-  public void setCourseOffering(CourseOffering aCourseOffering) { this.courseOffering = aCourseOffering; }
+  public void setDate(Date aDate) {
+    this.date = aDate;
+  }
+  public void setStartTime(Time aStartTime) {
+    this.startTime = aStartTime;
+  }
+  public void setEndTime(Time aEndTime) {
+    this.endTime = aEndTime;
+  }
+  public void setCourseOffering(CourseOffering aCourseOffering) {
+    this.courseOffering = aCourseOffering;
+  }
 
-  public Integer getId()
-  {
+  public Integer getId() {
     return this.id;
   }
-  public Date getDate()
-  {
+  public Date getDate() {
     return this.date;
   }
-  public Time getStartTime()
-  {
+  public Time getStartTime() {
     return this.startTime;
   }
-  public Time getEndTime()
-  {
+  public Time getEndTime() {
     return this.endTime;
   }
-  public CourseOffering getCourseOffering()
-  {
+  public CourseOffering getCourseOffering() {
     return this.courseOffering;
   }
 }

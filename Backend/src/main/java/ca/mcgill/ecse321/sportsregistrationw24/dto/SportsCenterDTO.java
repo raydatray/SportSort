@@ -11,7 +11,8 @@ public class SportsCenterDTO {
   private Time openingHour;
   private Time closingHour;
 
-  public SportsCenterDTO() {}
+  public SportsCenterDTO() {
+  }
 
   public SportsCenterDTO(String aName, String anAddress, String aPhoneNumber, Time aOpeningHour, Time aClosingHour) {
     this.name = aName;
@@ -25,9 +26,23 @@ public class SportsCenterDTO {
     this(aSportsCenter.getName(), aSportsCenter.getAddress(), aSportsCenter.getPhoneNumber(), aSportsCenter.getOpeningHour(), aSportsCenter.getClosingHour());
   }
 
-  public String getName() { return this.name; }
-  public String getAddress() { return this.address; }
-  public String getPhoneNumber() { return this.phoneNumber; }
-  public Time getOpeningHour() { return this.openingHour; }
-  public Time getClosingHour() { return this.closingHour; }
+  public String getName() {
+    return this.name;
+  }
+
+  public String getAddress() {
+    return this.address;
+  }
+
+  public String getPhoneNumber() {
+    return this.phoneNumber;
+  }
+
+  public Time getOpeningHour() {
+    return this.openingHour;
+  }
+
+  public Time getClosingHour() {
+    return this.closingHour;
+  }
 }

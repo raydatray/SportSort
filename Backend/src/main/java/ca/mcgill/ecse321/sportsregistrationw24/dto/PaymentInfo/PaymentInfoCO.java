@@ -10,7 +10,9 @@ public class PaymentInfoCO {
   private Integer expirationYear;
   private Integer expirationMonth;
 
-  public PaymentInfoCO() {}
+  public PaymentInfoCO() {
+  }
+
   public PaymentInfoCO(Integer id, PaymentInfo.PaymentType paymentType, String cardNumber, Integer cvv, Integer expirationYear, Integer expirationMonth) {
     this.id = id;
     this.paymentType = paymentType;
@@ -20,10 +22,27 @@ public class PaymentInfoCO {
     this.expirationMonth = expirationMonth;
   }
 
-  public Integer getId() { return this.id; }
-  public PaymentInfo.PaymentType getPaymentType() { return this.paymentType; }
-  public String getCardNumber() { return this.cardNumber; }
-  public Integer getCvv() { return this.cvv; }
-  public Integer getExpirationYear() { return this.expirationYear; }
-  public Integer getExpirationMonth() { return this.expirationMonth; }
+  public Integer getId() {
+    return this.id;
+  }
+
+  public PaymentInfo.PaymentType getPaymentType() {
+    return this.paymentType;
+  }
+
+  public String getCardNumber() {
+    return this.cardNumber;
+  }
+
+  public Integer getCvv() {
+    return this.cvv;
+  }
+
+  public Integer getExpirationYear() {
+    return this.expirationYear;
+  }
+
+  public Integer getExpirationMonth() {
+    return this.expirationMonth;
+  }
 }

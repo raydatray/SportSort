@@ -1,8 +1,8 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
+import ca.mcgill.ecse321.sportsregistrationw24.dto.Registration.RegistrationCO;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.Registration.RegistrationCustomerDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.Registration.RegistrationStaffDTO;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.Registration.RegistrationCO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Registration;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.keys.RegistrationId;
@@ -35,16 +35,17 @@ public class RegistrationRestController {
   }
 
   /**
-  public ResponseEntity<?> getRegistration(@RequestParam Integer customerAccountID, @RequestParam Integer courseOfferingID) {
-    try {
-      RegistrationId registrationId = new RegistrationId(customerAccountID, courseOfferingID);
-      Registration registration = service.getRegistration(registrationId);
-
-      return ResponseEntity.ok().body(convertToDto(registration));
-    } catch (Exception e) {
-      return ResponseEntity.badRequest().body(e.getMessage());
-    }
-  }**/
+   * public ResponseEntity<?> getRegistration(@RequestParam Integer customerAccountID, @RequestParam Integer courseOfferingID) {
+   * try {
+   * RegistrationId registrationId = new RegistrationId(customerAccountID, courseOfferingID);
+   * Registration registration = service.getRegistration(registrationId);
+   * <p>
+   * return ResponseEntity.ok().body(convertToDto(registration));
+   * } catch (Exception e) {
+   * return ResponseEntity.badRequest().body(e.getMessage());
+   * }
+   * }
+   **/
 
   @GetMapping(value = {"registrations/getByCustomer"})
   public ResponseEntity<?> getRegistrationsByCustomer(@RequestHeader String userToken) {

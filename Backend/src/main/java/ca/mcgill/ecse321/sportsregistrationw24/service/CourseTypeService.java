@@ -3,18 +3,15 @@ package ca.mcgill.ecse321.sportsregistrationw24.service;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseTypeRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseType;
-import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.StaffAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.*;
+import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.getUserFromToken;
 
 @Service
 public class CourseTypeService {
@@ -24,14 +21,14 @@ public class CourseTypeService {
   private UserAccountRepository userAccountRepository;
 
   @Transactional
-  public void createCourseType (String userToken, String aCourseName){
+  public void createCourseType(String userToken, String aCourseName) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (!user.getUserType().equals("INSTRUCTOR")){
+    if (!user.getUserType().equals("INSTRUCTOR")) {
       throw new IllegalArgumentException("Only instructors can create course types!");
     }
 
-    if (aCourseName.trim().isEmpty()){
+    if (aCourseName.trim().isEmpty()) {
       throw new IllegalArgumentException("Course name cannot be empty!");
     }
 
@@ -53,7 +50,7 @@ public class CourseTypeService {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     // Customers cannot view course types
-    if (user.getUserType().equals("CUSTOMER")){
+    if (user.getUserType().equals("CUSTOMER")) {
       throw new IllegalArgumentException("Customers cannot view course types!");
     }
 
@@ -65,7 +62,7 @@ public class CourseTypeService {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     // Customers cannot view course types
-    if (user.getUserType().equals("CUSTOMER")){
+    if (user.getUserType().equals("CUSTOMER")) {
       throw new IllegalArgumentException("Customers cannot view course types!");
     }
 
@@ -103,7 +100,7 @@ public class CourseTypeService {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     // Customers cannot view course types
-    if (!user.getUserType().equals("INSTRUCTOR")){
+    if (!user.getUserType().equals("INSTRUCTOR")) {
       throw new IllegalArgumentException("Customers cannot view course types!");
     }
 
@@ -121,7 +118,7 @@ public class CourseTypeService {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     // only the owner can approve
-    if (!user.getUserType().equals("OWNER")){
+    if (!user.getUserType().equals("OWNER")) {
       throw new IllegalArgumentException("Only the owner can approve course types!");
     }
 
@@ -131,7 +128,7 @@ public class CourseTypeService {
       throw new IllegalArgumentException("Course Type does not exist!");
     }
 
-    if (courseType.getRejected()){
+    if (courseType.getRejected()) {
       throw new IllegalArgumentException("Course Type has been rejected!");
     }
 
@@ -144,7 +141,7 @@ public class CourseTypeService {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
     // only the owner can reject
-    if (!user.getUserType().equals("OWNER")){
+    if (!user.getUserType().equals("OWNER")) {
       throw new IllegalArgumentException("Only the owner can reject course types!");
     }
 
@@ -162,7 +159,7 @@ public class CourseTypeService {
   public void deleteCourseType(String userToken, Integer aId) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (!user.getUserType().equals("OWNER")){
+    if (!user.getUserType().equals("OWNER")) {
       throw new IllegalArgumentException("Only the owner can delete course types!");
     }
 

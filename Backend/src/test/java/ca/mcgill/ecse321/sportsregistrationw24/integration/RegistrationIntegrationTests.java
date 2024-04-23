@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.*;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.Registration.RegistrationCO;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.RegistrationDto;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.RegistrationIdDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

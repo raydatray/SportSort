@@ -1,12 +1,10 @@
 package ca.mcgill.ecse321.sportsregistrationw24.controller;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.CourseSessionDTO;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.multipleClassSessionsCO;
+import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.singleCourseSessionCO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseSession;
 import ca.mcgill.ecse321.sportsregistrationw24.service.CourseSessionService;
-
-import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.singleCourseSessionCO;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.CourseSession.multipleClassSessionsCO;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,18 +27,18 @@ public class CourseSessionRestController {
       service.createCourseSession(userToken, courseSessionCO.getDate(), courseSessionCO.getStartTime(), courseSessionCO.getEndTime(), courseSessionCO.getCourseOfferingId());
       return ResponseEntity.status(HttpStatus.CREATED).body("Course session created successfully");
     } catch (Exception e) {
-      return ResponseEntity. badRequest().body(e.getMessage());
+      return ResponseEntity.badRequest().body(e.getMessage());
     }
   }
 
   @PostMapping(value = {"courseSessions/createMultiple"})
   public ResponseEntity<?> createCourseSessions(@RequestHeader String userToken, @RequestBody multipleClassSessionsCO courseSessionsCO) {
-     try {
-       service.createCourseSessions(userToken, courseSessionsCO.getDayTimeMapping(), courseSessionsCO.getCourseOfferingId());
-       return ResponseEntity.status(HttpStatus.CREATED).body("Course sessions created successfully");
-     } catch (Exception e) {
-       return ResponseEntity.badRequest().body(e.getMessage());
-     }
+    try {
+      service.createCourseSessions(userToken, courseSessionsCO.getDayTimeMapping(), courseSessionsCO.getCourseOfferingId());
+      return ResponseEntity.status(HttpStatus.CREATED).body("Course sessions created successfully");
+    } catch (Exception e) {
+      return ResponseEntity.badRequest().body(e.getMessage());
+    }
   }
 
   @GetMapping(value = {"courseSessions/getAll"})
@@ -55,7 +53,7 @@ public class CourseSessionRestController {
                                           @RequestParam(required = false) Integer cOId,
                                           @RequestParam(required = false) Integer rId,
                                           @RequestParam(required = false) Integer iId
-                                          ){
+  ) {
     try {
       List<CourseSession> allCourseSessions = service.getAllCourseSessions(userToken, lD, uD, lT, uT, d, cTId, cOId, rId, iId);
       List<CourseSessionDTO> courseSessionDTOs = allCourseSessions.stream().map(CourseSessionDTO::new).toList();
@@ -67,14 +65,14 @@ public class CourseSessionRestController {
   }
 
   /**
-  public ResponseEntity<?> getSession(@RequestParam Integer courseSessionId) {
-    try {
-      CourseSession courseSession = service.getCourseSession(courseSessionId);
-      return ResponseEntity.ok().body(new CourseSessionDTO(courseSession));
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-    }
-  }
+   * public ResponseEntity<?> getSession(@RequestParam Integer courseSessionId) {
+   * try {
+   * CourseSession courseSession = service.getCourseSession(courseSessionId);
+   * return ResponseEntity.ok().body(new CourseSessionDTO(courseSession));
+   * } catch (Exception e) {
+   * return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+   * }
+   * }
    **/
 
   @GetMapping(value = {"courseSessions/getByOffering"})

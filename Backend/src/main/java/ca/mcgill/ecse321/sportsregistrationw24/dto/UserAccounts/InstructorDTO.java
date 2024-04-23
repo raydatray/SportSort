@@ -6,7 +6,8 @@ public class InstructorDTO {
   private Integer id;
   private String name;
 
-  public InstructorDTO() {}
+  public InstructorDTO() {
+  }
 
   public InstructorDTO(Integer id, String name) {
     this.id = id;
@@ -17,6 +18,11 @@ public class InstructorDTO {
     this(userAccount.getId(), userAccount.getName());
   }
 
-  public Integer getId() { return this.id; }
-  public String getName() { return this.name; }
+  public Integer getId() {
+    return this.id;
+  }
+
+  public String getName() {
+    return this.name;
+  }
 }

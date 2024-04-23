@@ -58,6 +58,6 @@ public class OwnerAccountService {
   @Transactional
   public List<UserAccount> getAllUserAccounts() {
     Utilities utilities = new Utilities();
-    return utilities.iterableToArrayList(userAccountRepository.findAll());
+    return Utilities.iterableToArrayList(userAccountRepository.findAll());
   }
 }

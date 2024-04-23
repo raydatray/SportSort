@@ -8,7 +8,7 @@ public class PaymentInfo {
   @Id
   @GeneratedValue
   private Integer id;
-  public enum PaymentType { Credit, Debit }
+  public enum PaymentType {CREDIT, DEBIT}
   private PaymentType paymentType;
   private String cardNumber;
   private Integer cvv;
@@ -28,16 +28,32 @@ public class PaymentInfo {
     this.customerAccount = aCustomerAccount;
   }
 
-  public void setPaymentType(PaymentType aPaymentType) { this.paymentType = aPaymentType; }
-  public void setCardNumber(String aCardNumber) { this.cardNumber = aCardNumber; }
-  public void setCvv(Integer aCvv) { this.cvv = aCvv; }
-  public void setExpirationYear(Integer aExpirationYear) { this.expirationYear = aExpirationYear; }
-  public void setExpirationMonth(Integer aExpirationMonth) { this.expirationMonth = aExpirationMonth; }
-  public void setCustomerAccount(CustomerAccount aCustomerAccount) { this.customerAccount = aCustomerAccount; }
+  public void setPaymentType(PaymentType aPaymentType) {
+    this.paymentType = aPaymentType;
+  }
+  public void setCardNumber(String aCardNumber) {
+    this.cardNumber = aCardNumber;
+  }
+  public void setCvv(Integer aCvv) {
+    this.cvv = aCvv;
+  }
+  public void setExpirationYear(Integer aExpirationYear) {
+    this.expirationYear = aExpirationYear;
+  }
+  public void setExpirationMonth(Integer aExpirationMonth) {
+    this.expirationMonth = aExpirationMonth;
+  }
+  public void setCustomerAccount(CustomerAccount aCustomerAccount) {
+    this.customerAccount = aCustomerAccount;
+  }
 
-  public Integer getId() { return this.id; }
-  public PaymentType getPaymentType() { return this.paymentType; }
-  public String getCardNumber() { return this.cardNumber; }
+  public Integer getId() {
+    return this.id;
+  }
+  public PaymentType getPaymentType() {
+    return this.paymentType;
+  }
+  public String getCardNumber() { return this.cardNumber;}
   public Integer getTrailingFourDigits() { return Integer.parseInt(this.cardNumber.substring(this.cardNumber.length() - 4)); }
   public Integer getCvv() { return this.cvv; }
   public Integer getExpirationYear() { return this.expirationYear; }

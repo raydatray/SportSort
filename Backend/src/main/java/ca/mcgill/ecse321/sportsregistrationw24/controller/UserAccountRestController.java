@@ -37,7 +37,7 @@ public class UserAccountRestController {
       String name = userAccountCO.getName();
       String email = userAccountCO.getEmail();
       String password = userAccountCO.getPassword();
-      UserAccountDTO newUser = service.createInstructorAccount(userToken, name, email,password);
+      UserAccountDTO newUser = service.createInstructorAccount(userToken, name, email, password);
       return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());
@@ -74,8 +74,8 @@ public class UserAccountRestController {
   }
 
   @GetMapping(value = {"accounts/getAccount"})
-  public ResponseEntity<?> getAccount(@RequestHeader String userToken){
-    try{
+  public ResponseEntity<?> getAccount(@RequestHeader String userToken) {
+    try {
       UserAccount userAccount = service.getUserByToken(userToken);
       String userEmail = userAccount.getEmail();
       String userName = userAccount.getName();
@@ -89,7 +89,7 @@ public class UserAccountRestController {
   }
 
   @GetMapping(value = {"/accounts/getAll"})
-  public ResponseEntity<?> getAllAccounts(@RequestHeader String userToken, @RequestParam(required = false) List<String> userTypes)   {
+  public ResponseEntity<?> getAllAccounts(@RequestHeader String userToken, @RequestParam(required = false) List<String> userTypes) {
     try {
       List<UserAccount> userAccounts = service.getAllUsers(userToken, userTypes);
       List<UserAccountDTO> userAccountDTOs = userAccounts.stream().map(UserAccountDTO::new).toList(); //wtf?
@@ -102,8 +102,8 @@ public class UserAccountRestController {
 
 
   @GetMapping(value = {"/accounts/getInstructors"})
-  public ResponseEntity<?> getInstructors(){
-    try{
+  public ResponseEntity<?> getInstructors() {
+    try {
       List<UserAccount> userAccounts = service.getAllInstructors();
       List<InstructorDTO> instructorDTOs = userAccounts.stream().map(InstructorDTO::new).toList();
 

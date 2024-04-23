@@ -13,20 +13,22 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RegistrationRepository extends CrudRepository<Registration, RegistrationId> {
-    Optional<List<Registration>> findByCustomerAccount(CustomerAccount customerAccount);
-    Optional<List<Registration>> findByCourseOffering(CourseOffering courseOffering);
-    Optional<List<Registration>> findByRegisteredDate(Date date);
+  Optional<List<Registration>> findByCustomerAccount(CustomerAccount customerAccount);
 
-    @Query("SELECT r FROM Registration r WHERE " +
-            "(:courseOfferings is null or r.courseOffering IN :courseOfferings) and " +
-            "(:customerAccount is null or r.customerAccount = :customerAccount) and " +
-            "(:dateLow is null or r.registeredDate >= :dateLow) and " +
-            "(:dateHigh is null or r.registeredDate <= :dateHigh)")
-    Optional<List<Registration>> findByFilters(
-      @Param("courseOfferings") List<CourseOffering> courseOfferings,
-      @Param("customerAccount") CustomerAccount customerAccount,
-      @Param("dateLow") Date dateLow,
-      @Param("dateHigh") Date dateHigh
-    );
+  Optional<List<Registration>> findByCourseOffering(CourseOffering courseOffering);
+
+  Optional<List<Registration>> findByRegisteredDate(Date date);
+
+  @Query("SELECT r FROM Registration r WHERE " +
+    "(:courseOfferings is null or r.courseOffering IN :courseOfferings) and " +
+    "(:customerAccount is null or r.customerAccount = :customerAccount) and " +
+    "(:dateLow is null or r.registeredDate >= :dateLow) and " +
+    "(:dateHigh is null or r.registeredDate <= :dateHigh)")
+  Optional<List<Registration>> findByFilters(
+    @Param("courseOfferings") List<CourseOffering> courseOfferings,
+    @Param("customerAccount") CustomerAccount customerAccount,
+    @Param("dateLow") Date dateLow,
+    @Param("dateHigh") Date dateHigh
+  );
 
 }

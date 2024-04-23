@@ -6,7 +6,8 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Optional;
 
 public interface OwnerAccountRepository extends CrudRepository<OwnerAccount, Integer> {
-    Optional<OwnerAccount> findByEmail(String email);
-    Optional<OwnerAccount> findByToken(String token);
+  Optional<OwnerAccount> findByEmail(String email);
+
+  Optional<OwnerAccount> findByToken(String token);
 
 }

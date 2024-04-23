@@ -9,8 +9,7 @@ public class CustomerAccount extends UserAccount {
   public CustomerAccount() {
     super();
   }
-  public CustomerAccount(String aName, String aEmail, String aPassword)
-  {
+  public CustomerAccount(String aName, String aEmail, String aPassword) {
     super(aName, aEmail, aPassword);
   }
 }

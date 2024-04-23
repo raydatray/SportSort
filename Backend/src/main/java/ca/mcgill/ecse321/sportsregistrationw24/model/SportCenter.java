@@ -1,10 +1,12 @@
 package ca.mcgill.ecse321.sportsregistrationw24.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.sql.Time;
+import java.time.DayOfWeek;
+import java.util.HashMap;
 
 @Entity
 @Table(name = "sportcenter")
@@ -13,27 +15,38 @@ public class SportCenter {
   private String name;
   private String address;
   private String phoneNumber;
-  private Time openingHour;
-  private Time closingHour;
+  @ElementCollection
+  @Enumerated(EnumType.STRING)
+  @Fetch(FetchMode.JOIN)
+  private HashMap<DayOfWeek, Time> operatingHours;
 
   public SportCenter() {}
-  public SportCenter(String aName, String anAddress, String aPhoneNumber, Time aOpeningHour, Time aClosingHour) {
+  public SportCenter(String aName, String anAddress, String aPhoneNumber, HashMap<DayOfWeek, Time> someOperatingHours) {
     this.name = aName;
     this.address = anAddress;
     this.phoneNumber = aPhoneNumber;
-    this.openingHour = aOpeningHour;
-    this.closingHour = aClosingHour;
+    this.operatingHours = someOperatingHours;
   }
 
-  public void setName(String aName) { this.name = aName; }
-  public void setAddress(String anAddress) { this.address = anAddress; }
-  public void setPhoneNumber(String aPhoneNumber) { this.phoneNumber = aPhoneNumber; }
-  public void setOpeningHour(Time aOpeningHour) { this.openingHour = aOpeningHour; }
-  public void setClosingHour(Time aClosingHour) { this.closingHour = aClosingHour; }
+  public void setName(String aName) {
+    this.name = aName;
+  }
+  public void setAddress(String anAddress) {
+    this.address = anAddress;
+  }
+  public void setPhoneNumber(String aPhoneNumber) {
+    this.phoneNumber = aPhoneNumber;
+  }
+  public void setOperatingHours(HashMap<DayOfWeek, Time> someOperatingHours) { this.operatingHours = someOperatingHours; }
 
-  public String getName() { return this.name; }
-  public String getAddress() { return this.address; }
-  public String getPhoneNumber() { return this.phoneNumber; }
-  public Time getOpeningHour() { return this.openingHour; }
-  public Time getClosingHour() { return this.closingHour; }
+  public String getName() {
+    return this.name;
+  }
+  public String getAddress() {
+    return this.address;
+  }
+  public String getPhoneNumber() {
+    return this.phoneNumber;
+  }
+  public HashMap<DayOfWeek, Time> getOperatingHours() { return this.operatingHours; }
 }

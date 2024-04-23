@@ -9,6 +9,7 @@ public abstract class StaffAccount extends UserAccount {
   public StaffAccount() {
     super();
   }
+
   public StaffAccount(String aName, String aEmail, String aPassword) {
     super(aName, aEmail, aPassword);
   }

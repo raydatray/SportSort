@@ -7,6 +7,6 @@ import org.springframework.stereotype.Service;
 @Deprecated
 @Service
 public class StaffAccountService {
-    @Autowired
-    private StaffAccountRepository staffAccountRepository;
+  @Autowired
+  private StaffAccountRepository staffAccountRepository;
 }

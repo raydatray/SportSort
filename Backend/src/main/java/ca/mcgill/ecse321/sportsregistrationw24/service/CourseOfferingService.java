@@ -1,19 +1,21 @@
 package ca.mcgill.ecse321.sportsregistrationw24.service;
 
-import ca.mcgill.ecse321.sportsregistrationw24.dao.*;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseOfferingRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseTypeRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.RoomRepository;
+import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.*;
-import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.*;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
-
 import java.sql.Time;
 import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.List;
+
+import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.getUserFromToken;
 
 @Service
 public class CourseOfferingService {
@@ -27,10 +29,10 @@ public class CourseOfferingService {
   private RoomRepository roomRepository;
 
   @Transactional
-  public void createCourseOffering(String userToken, Date aStartDate, Date aEndDate, Integer aPrice, List<DayOfWeek> aDaysOffered, Integer aRoomId, Integer aCourseTypeId){
+  public void createCourseOffering(String userToken, Date aStartDate, Date aEndDate, Integer aPrice, List<DayOfWeek> aDaysOffered, Integer aRoomId, Integer aCourseTypeId) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (!user.getUserType().equals("INSTRUCTOR")){
+    if (!user.getUserType().equals("INSTRUCTOR")) {
       throw new IllegalArgumentException("Only instructors can create course offerings!");
     }
 
@@ -44,13 +46,13 @@ public class CourseOfferingService {
 
     Room foundRoom = roomRepository.findById(aRoomId).orElse(null);
 
-    if(foundRoom == null){
+    if (foundRoom == null) {
       throw new IllegalArgumentException("Room not found!");
     }
 
     CourseType foundCourseType = courseTypeRepository.findById(aCourseTypeId).orElse(null);
 
-    if(foundCourseType == null){
+    if (foundCourseType == null) {
       throw new IllegalArgumentException("Course Type not found!");
     }
 
@@ -73,7 +75,7 @@ public class CourseOfferingService {
   public CourseOffering getCourseOfferingById(String userToken, Integer aId) {
     CourseOffering foundCourseOffering = courseOfferingRepository.findById(aId).orElse(null);
 
-    if(foundCourseOffering == null){
+    if (foundCourseOffering == null) {
       throw new IllegalArgumentException("Course Offering not found!");
     }
 
@@ -104,7 +106,7 @@ public class CourseOfferingService {
                                                     List<DayOfWeek> daysOffered,
                                                     List<Integer> courseTypeIds,
                                                     List<Integer> roomIds,
-                                                    List<Integer> instructorIds){
+                                                    List<Integer> instructorIds) {
 
     List<CourseType> foundTypes = new ArrayList<>();
     if (courseTypeIds != null) {
@@ -153,7 +155,7 @@ public class CourseOfferingService {
   public void deleteCourseOffering(String userToken, Integer aId) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (user.getUserType().equals("CUSTOMER")){
+    if (user.getUserType().equals("CUSTOMER")) {
       throw new IllegalArgumentException("Customers cannot delete course offerings!");
     }
 
