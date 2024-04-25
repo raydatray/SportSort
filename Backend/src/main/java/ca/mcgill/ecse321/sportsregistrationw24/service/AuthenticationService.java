@@ -4,27 +4,30 @@ import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dto.Authentication.AuthenticationDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.utilities.TokenProvider;
+import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.getUserFromToken;
+
 @Service
 public class AuthenticationService {
+  private final UserAccountRepository userAccountRepository;
+  private final TokenProvider tokenProvider;
+
   @Autowired
-  private UserAccountRepository userAccountRepository;
-  @Autowired
-  private TokenProvider tokenProvider;
+  public AuthenticationService(UserAccountRepository userAccountRepository, TokenProvider tokenProvider) {
+    this.userAccountRepository = userAccountRepository;
+    this.tokenProvider = tokenProvider;
+  }
 
   @Transactional
   public AuthenticationDTO login(String email, String password) {
     UserAccount foundUser = userAccountRepository.findUserByEmail(email).orElse(null);
 
-    if (foundUser == null) {
-      throw new IllegalArgumentException("User not found");
-    }
-
-    if (!foundUser.getPassword().equals(password)) {
-      throw new IllegalArgumentException("Invalid password");
+    if (foundUser == null || !foundUser.getPassword().equals(password)) {
+      throw new IllegalArgumentException("No account found for provided credentials");
     }
 
     String generatedToken = tokenProvider.generateToken(email);
@@ -35,14 +38,9 @@ public class AuthenticationService {
   }
 
   @Transactional
-  public void logout(String token) {
-    UserAccount foundUser = userAccountRepository.findUserByToken(token).orElse(null);
-
-    if (foundUser == null) {
-      throw new IllegalArgumentException("User not found");
-    }
-
-    foundUser.setToken(null);
-    userAccountRepository.save(foundUser);
+  public void logout(String userToken) {
+    UserAccount user = getUserFromToken(userAccountRepository, userToken);
+    user.setToken(null);
+    userAccountRepository.save(user);
   }
 }

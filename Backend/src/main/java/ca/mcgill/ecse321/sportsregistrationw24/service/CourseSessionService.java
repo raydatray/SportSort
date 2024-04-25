@@ -3,9 +3,12 @@ package ca.mcgill.ecse321.sportsregistrationw24.service;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.*;
 import ca.mcgill.ecse321.sportsregistrationw24.model.*;
 import ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities;
+
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import org.apache.commons.lang3.Validate;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -19,63 +22,45 @@ import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.getUse
 
 @Service
 public class CourseSessionService {
+  private final CourseTypeRepository courseTypeRepository;
+  private final CourseSessionRepository courseSessionRepository;
+  private final CourseOfferingRepository courseOfferingRepository;
+  private final UserAccountRepository userAccountRepository;
+  private final RoomRepository roomRepository;
+
   @Autowired
-  private CourseTypeRepository courseTypeRepository;
-  @Autowired
-  private CourseSessionRepository courseSessionRepository;
-  @Autowired
-  private CourseOfferingRepository courseOfferingRepository;
-  @Autowired
-  private UserAccountRepository userAccountRepository;
-  @Autowired
-  private RoomRepository roomRepository;
+  public CourseSessionService(CourseTypeRepository courseTypeRepository, CourseSessionRepository courseSessionRepository, CourseOfferingRepository courseOfferingRepository, UserAccountRepository userAccountRepository, RoomRepository roomRepository) {
+    this.courseTypeRepository = courseTypeRepository;
+    this.courseSessionRepository = courseSessionRepository;
+    this.courseOfferingRepository = courseOfferingRepository;
+    this.userAccountRepository = userAccountRepository;
+    this.roomRepository = roomRepository;
+  }
 
   @Transactional
-  //Use when you are creating a singular courseSession (Course Offerings where you know for a fact will only have one associated session)
-  public void createCourseSession(String userToken, Date aDate, Time aStartTime, Time aEndTime, Integer aCourseOfferingId) {
+  public void createCourseSession(String userToken, Date aDate, Time aStartTime, Time aEndTime, Integer aRoomId, Integer aCourseOfferingId) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (!user.getUserType().equals("INSTRUCTOR")) {
-      throw new IllegalArgumentException("Only instructors can create course sessions");
-    }
+    Validate.isTrue(user.getUserType().equals("INSTRUCTOR"), "Only instructors can create course sessions");
 
     CourseOffering courseOffering = courseOfferingRepository.findById(aCourseOfferingId).orElse(null);
+    Room room = roomRepository.findById(aRoomId).orElse(null);
 
-    if (courseOffering == null) {
-      throw new IllegalArgumentException("Course Offering not found");
-    }
-
-    if (!courseOffering.getInstructorAccount().getId().equals(user.getId())) {
-      throw new IllegalArgumentException("Instructor does not have permission to create course session for this course offering");
-    }
-
-    // NULL POINTER CHECKS
-    if (aDate == null) {
-      throw new IllegalArgumentException("Date field cannot be null");
-    } else if (aStartTime == null) {
-      throw new IllegalArgumentException("Start time field cannot be null");
-    } else if (aEndTime == null) {
-      throw new IllegalArgumentException("End time field cannot be null");
-    }
-    // START AND END TIME CHECKS
-    if (aStartTime.compareTo(aEndTime) == 0) {
-      throw new IllegalArgumentException("Session start time cannot be equal to end time");
-    } else if (aStartTime.compareTo(aEndTime) > 0) {
-      throw new IllegalArgumentException("Session start time cannot be after session end time");
-    }
-
-    // DATE CHECKS
-    if (aDate.toLocalDate().isBefore(courseOffering.getStartDate().toLocalDate())) {
-      throw new IllegalArgumentException("Date of course session cannot be before start date of course offering");
-    } else if (aDate.toLocalDate().isAfter(courseOffering.getEndDate().toLocalDate())) {
-      throw new IllegalArgumentException("Date of course session cannot be after end date of course offering");
-    }
+    Validate.notNull(courseOffering, "Course Offering not found");
+    Validate.notNull(room, "Room not found");
+    Validate.isTrue(courseOffering.getInstructorAccount().getId().equals(user.getId()), "Instructors can only create sessions for their own course offerings");
+    Validate.notNull(aDate, "Date field cannot be null");
+    Validate.inclusiveBetween(courseOffering.getStartDate().getTime(), courseOffering.getEndDate().getTime(), aDate.getTime(), "Date of course session cannot be before start date of course offering or after end date of course offering");
+    Validate.notNull(aStartTime, "Start time field cannot be null");
+    Validate.notNull(aEndTime, "End time field cannot be null");
+    Validate.isTrue(aStartTime.before(aEndTime), "Session start time cannot be equal to end time");
 
     CourseSession newCourseSession = new CourseSession();
 
     newCourseSession.setDate(aDate);
     newCourseSession.setStartTime(aStartTime);
     newCourseSession.setEndTime(aEndTime);
+    newCourseSession.setRoom(room);
     newCourseSession.setCourseOffering(courseOffering);
 
     courseSessionRepository.save(newCourseSession);

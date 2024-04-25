@@ -5,6 +5,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface SportCenterRepository extends CrudRepository<SportCenter, String> {
+public interface SportCenterRepository extends CrudRepository<SportCenter, Integer> {
   Optional<SportCenter> findByName(String name);
 }

@@ -108,8 +108,4 @@ public class PaymentInfoService {
 
     paymentInfoRepository.delete(foundPaymentInfo);
   }
-
-  public PaymentInfoDTO convertToDto(PaymentInfo paymentInfo) {
-    return new PaymentInfoDTO(paymentInfo);
-  }
 }

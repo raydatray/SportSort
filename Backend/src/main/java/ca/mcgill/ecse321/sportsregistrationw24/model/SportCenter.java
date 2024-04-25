@@ -6,22 +6,25 @@ import org.hibernate.annotations.FetchMode;
 
 import java.sql.Time;
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Entity
 @Table(name = "sportcenter")
 public class SportCenter {
   @Id
+  @GeneratedValue
+  private Integer id;
   private String name;
   private String address;
   private String phoneNumber;
   @ElementCollection
   @Enumerated(EnumType.STRING)
   @Fetch(FetchMode.JOIN)
-  private HashMap<DayOfWeek, Time> operatingHours;
+  private HashMap<DayOfWeek, ArrayList<Time>> operatingHours;
 
   public SportCenter() {}
-  public SportCenter(String aName, String anAddress, String aPhoneNumber, HashMap<DayOfWeek, Time> someOperatingHours) {
+  public SportCenter(String aName, String anAddress, String aPhoneNumber, HashMap<DayOfWeek, ArrayList<Time>> someOperatingHours) {
     this.name = aName;
     this.address = anAddress;
     this.phoneNumber = aPhoneNumber;
@@ -37,8 +40,9 @@ public class SportCenter {
   public void setPhoneNumber(String aPhoneNumber) {
     this.phoneNumber = aPhoneNumber;
   }
-  public void setOperatingHours(HashMap<DayOfWeek, Time> someOperatingHours) { this.operatingHours = someOperatingHours; }
+  public void setOperatingHours(HashMap<DayOfWeek, ArrayList<Time>> someOperatingHours) { this.operatingHours = someOperatingHours; }
 
+  public Integer getId() { return this.id; }
   public String getName() {
     return this.name;
   }
@@ -48,5 +52,5 @@ public class SportCenter {
   public String getPhoneNumber() {
     return this.phoneNumber;
   }
-  public HashMap<DayOfWeek, Time> getOperatingHours() { return this.operatingHours; }
+  public HashMap<DayOfWeek, ArrayList<Time>> getOperatingHours() { return this.operatingHours; }
 }

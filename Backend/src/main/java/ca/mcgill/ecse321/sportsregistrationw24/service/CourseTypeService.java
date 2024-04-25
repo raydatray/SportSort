@@ -5,9 +5,12 @@ import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CourseType;
 import ca.mcgill.ecse321.sportsregistrationw24.model.StaffAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.apache.commons.lang3.Validate;
 
 import java.util.List;
 
@@ -15,27 +18,24 @@ import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.getUse
 
 @Service
 public class CourseTypeService {
+  private final CourseTypeRepository courseTypeRepository;
+  private final UserAccountRepository userAccountRepository;
+
   @Autowired
-  private CourseTypeRepository courseTypeRepository;
-  @Autowired
-  private UserAccountRepository userAccountRepository;
+  public CourseTypeService(CourseTypeRepository courseTypeRepository, UserAccountRepository userAccountRepository) {
+    this.courseTypeRepository = courseTypeRepository;
+    this.userAccountRepository = userAccountRepository;
+  }
 
   @Transactional
   public void createCourseType(String userToken, String aCourseName) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (!user.getUserType().equals("INSTRUCTOR")) {
-      throw new IllegalArgumentException("Only instructors can create course types!");
-    }
-
-    if (aCourseName.trim().isEmpty()) {
-      throw new IllegalArgumentException("Course name cannot be empty!");
-    }
+    Validate.isTrue(user.getUserType().equals("INSTRUCTOR"), "Only instructors can create course types");
+    Validate.notBlank(aCourseName, "Course type name cannot be empty");
 
     for (CourseType courseType : courseTypeRepository.findAll()) {
-      if (courseType.getCourseName().equals(aCourseName)) {
-        throw new IllegalArgumentException("A course type with this name already exists!");
-      }
+      Validate.isTrue(!courseType.getCourseName().equals(aCourseName), "Course type already exists");
     }
 
     CourseType courseType = new CourseType();
@@ -44,32 +44,16 @@ public class CourseTypeService {
     courseTypeRepository.save(courseType);
   }
 
-  //Do we even need this?
   @Transactional
-  public CourseType getCourseType(String userToken, Integer aId) {
+  public List<CourseType> getAllCourseTypes(String userToken, Boolean approved, Boolean rejected, Integer aStaffId) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    // Customers cannot view course types
-    if (user.getUserType().equals("CUSTOMER")) {
-      throw new IllegalArgumentException("Customers cannot view course types!");
-    }
-
-    return courseTypeRepository.findById(aId).orElse(null);
-  }
-
-  @Transactional
-  public List<CourseType> getAllCourseTypes(String userToken, Boolean approved, Boolean rejected, Integer staffId) {
-    UserAccount user = getUserFromToken(userAccountRepository, userToken);
-
-    // Customers cannot view course types
-    if (user.getUserType().equals("CUSTOMER")) {
-      throw new IllegalArgumentException("Customers cannot view course types!");
-    }
+    Validate.isTrue(!user.getUserType().equals("CUSTOMER"), "Customers cannot view all course types");
 
     UserAccount staff = null;
 
-    if (staffId != null) {
-      staff = userAccountRepository.findById(staffId).orElse(null);
+    if (aStaffId != null) {
+      staff = userAccountRepository.findById(aStaffId).orElse(null);
 
       if (staff == null) {
         throw new IllegalArgumentException("Staff does not exist!");
@@ -114,60 +98,40 @@ public class CourseTypeService {
   }
 
   @Transactional
-  public void updateCourseTypeApproval(String userToken, Integer aId) {
+  public void updateCourseTypeApproval(String userToken, Integer aStaffId) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
+    Validate.isTrue(user.getUserType().equals("OWNER"), "Only the owner can approve course types");
 
-    // only the owner can approve
-    if (!user.getUserType().equals("OWNER")) {
-      throw new IllegalArgumentException("Only the owner can approve course types!");
-    }
+    CourseType courseType = courseTypeRepository.findById(aStaffId).orElse(null);
 
-    CourseType courseType = courseTypeRepository.findById(aId).orElse(null);
-
-    if (courseType == null) {
-      throw new IllegalArgumentException("Course Type does not exist!");
-    }
-
-    if (courseType.getRejected()) {
-      throw new IllegalArgumentException("Course Type has been rejected!");
-    }
+    Validate.notNull(courseType, "Course Type does not exist");
+    Validate.isTrue(!courseType.getRejected(), "Course Type has already been rejected");
 
     courseType.setApproved(!courseType.getApproved());
     courseTypeRepository.save(courseType);
   }
 
   @Transactional
-  public void updateCourseTypeRejection(String userToken, Integer aId) {
+  public void updateCourseTypeRejection(String userToken, Integer aStaffId) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
+    Validate.isTrue(user.getUserType().equals("OWNER"), "Only the owner can reject course types");
 
-    // only the owner can reject
-    if (!user.getUserType().equals("OWNER")) {
-      throw new IllegalArgumentException("Only the owner can reject course types!");
-    }
+    CourseType courseType = courseTypeRepository.findById(aStaffId).orElse(null);
 
-    CourseType courseType = courseTypeRepository.findById(aId).orElse(null);
-
-    if (courseType == null) {
-      throw new IllegalArgumentException("Course Type does not exist!");
-    }
+    Validate.notNull(courseType, "Course Type does not exist");
+    Validate.isTrue(courseType.getApproved(), "Course Type has already been approved");
 
     courseType.setRejected(!courseType.getRejected());
     courseTypeRepository.save(courseType);
   }
 
   @Transactional
-  public void deleteCourseType(String userToken, Integer aId) {
+  public void deleteCourseType(String userToken, Integer aStaffId) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
+    Validate.isTrue(user.getUserType().equals("OWNER"), "Only the owner can delete course types");
 
-    if (!user.getUserType().equals("OWNER")) {
-      throw new IllegalArgumentException("Only the owner can delete course types!");
-    }
-
-    CourseType courseType = courseTypeRepository.findById(aId).orElse(null);
-
-    if (courseType == null) {
-      throw new IllegalArgumentException("Course Type does not exist!");
-    }
+    CourseType courseType = courseTypeRepository.findById(aStaffId).orElse(null);
+    Validate.notNull(courseType, "Course Type does not exist");
 
     courseTypeRepository.delete(courseType);
   }

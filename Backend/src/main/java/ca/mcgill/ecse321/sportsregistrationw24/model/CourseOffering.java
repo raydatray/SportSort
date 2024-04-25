@@ -27,20 +27,14 @@ public class CourseOffering {
   @Fetch(FetchMode.JOIN)
   private List<DayOfWeek> daysOffered;
   @ManyToOne
-  private Room room;
-  @ManyToOne
   private CourseType courseType;
   @ManyToOne
   private InstructorAccount instructorAccount;
-  @OneToMany(
-    mappedBy = "courseOffering",
-    cascade = CascadeType.ALL,
-    fetch = FetchType.LAZY
-  )
+  @OneToMany(mappedBy = "courseOffering", fetch = FetchType.LAZY)
   private List<CourseSession> courseSessions;
 
   public CourseOffering() {}
-  public CourseOffering(String aName, difficultyLevel aDifficultyLevel, Integer aPrice, Integer aCapacity, Date aStartDate, Date aEndDate, ArrayList<DayOfWeek> someDaysOffered, Room aRoom, CourseType aCourseType, InstructorAccount aInstructorAccount) {
+  public CourseOffering(String aName, difficultyLevel aDifficultyLevel, Integer aPrice, Integer aCapacity, Date aStartDate, Date aEndDate, ArrayList<DayOfWeek> someDaysOffered, CourseType aCourseType, InstructorAccount aInstructorAccount) {
     this.name = aName;
     this.difficulty = aDifficultyLevel;
     this.price = aPrice;
@@ -48,7 +42,6 @@ public class CourseOffering {
     this.startDate = aStartDate;
     this.endDate = aEndDate;
     this.daysOffered = someDaysOffered;
-    this.room = aRoom;
     this.courseType = aCourseType;
     this.instructorAccount = aInstructorAccount;
   }
@@ -66,9 +59,6 @@ public class CourseOffering {
   public void setDaysOffered(List<DayOfWeek> aDaysOffered) {
     this.daysOffered = aDaysOffered;
   }
-  public void setRoom(Room aNewRoom) {
-    this.room = aNewRoom;
-  }
   public void setCourseType(CourseType aCourseType) {this.courseType = aCourseType; }
   public void setInstructorAccount(InstructorAccount instructor) {
     this.instructorAccount = instructor;
@@ -82,7 +72,6 @@ public class CourseOffering {
   public Date getStartDate() { return this.startDate; }
   public Date getEndDate() { return this.endDate; }
   public ArrayList<DayOfWeek> getDaysOffered() { return new ArrayList<>(this.daysOffered); }
-  public Room getRoom() { return this.room; }
   public CourseType getCourseType() { return this.courseType; }
   public InstructorAccount getInstructorAccount() { return this.instructorAccount; }
 }

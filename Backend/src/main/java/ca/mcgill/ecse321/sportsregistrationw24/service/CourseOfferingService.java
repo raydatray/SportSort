@@ -5,9 +5,12 @@ import ca.mcgill.ecse321.sportsregistrationw24.dao.CourseTypeRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.RoomRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import org.apache.commons.lang3.Validate;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -19,81 +22,60 @@ import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.getUse
 
 @Service
 public class CourseOfferingService {
+  private final CourseOfferingRepository courseOfferingRepository;
+  private final CourseTypeRepository courseTypeRepository;
+  private final UserAccountRepository userAccountRepository;
+  private final RoomRepository roomRepository;
+
   @Autowired
-  private CourseOfferingRepository courseOfferingRepository;
-  @Autowired
-  private CourseTypeRepository courseTypeRepository;
-  @Autowired
-  private UserAccountRepository userAccountRepository;
-  @Autowired
-  private RoomRepository roomRepository;
+  public CourseOfferingService(CourseOfferingRepository courseOfferingRepository, CourseTypeRepository courseTypeRepository, UserAccountRepository userAccountRepository, RoomRepository roomRepository) {
+    this.courseOfferingRepository = courseOfferingRepository;
+    this.courseTypeRepository = courseTypeRepository;
+    this.userAccountRepository = userAccountRepository;
+    this.roomRepository = roomRepository;
+  }
 
   @Transactional
-  public void createCourseOffering(String userToken, Date aStartDate, Date aEndDate, Integer aPrice, List<DayOfWeek> aDaysOffered, Integer aRoomId, Integer aCourseTypeId) {
+  public void createCourseOffering(String userToken, String aName, CourseOffering.difficultyLevel aDifficultyLevel, Integer aPrice, Integer aCapacity, Date aStartDate, Date aEndDate, List<DayOfWeek> aDaysOffered, Integer aCourseTypeId) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (!user.getUserType().equals("INSTRUCTOR")) {
-      throw new IllegalArgumentException("Only instructors can create course offerings!");
-    }
-
-    if (aEndDate.before(aStartDate)) {
-      throw new IllegalArgumentException("End date must be after start date!");
-    }
-
-    if (aDaysOffered.isEmpty()) {
-      throw new IllegalArgumentException("Course must be offered at least one day a week!");
-    }
-
-    Room foundRoom = roomRepository.findById(aRoomId).orElse(null);
-
-    if (foundRoom == null) {
-      throw new IllegalArgumentException("Room not found!");
-    }
+    Validate.isTrue(user.getUserType().equals("INSTRUCTOR"), "Only instructors can create course offerings");
+    Validate.notBlank(aName, "Course offering name cannot be empty");
+    Validate.notNull(aDifficultyLevel, "Difficulty level cannot be null");
+    Validate.isTrue(aPrice > 0, "Price must be above 0");
+    Validate.isTrue(aCapacity > 0, "Capacity must be above 0");
+    Validate.isTrue(aEndDate.after(aStartDate), "End date must be after start date");
+    Validate.notEmpty(aDaysOffered, "Course must be offered at least one day a week");
 
     CourseType foundCourseType = courseTypeRepository.findById(aCourseTypeId).orElse(null);
 
-    if (foundCourseType == null) {
-      throw new IllegalArgumentException("Course Type not found!");
-    }
+    Validate.notNull(foundCourseType, "Course type not found");
 
     CourseOffering courseOffering = new CourseOffering();
 
+    courseOffering.setName(aName);
+    courseOffering.setDifficulty(aDifficultyLevel);
+    courseOffering.setPrice(aPrice);
+    courseOffering.setCapacity(aCapacity);
     courseOffering.setStartDate(aStartDate);
     courseOffering.setEndDate(aEndDate);
     courseOffering.setPrice(aPrice);
     courseOffering.setDaysOffered(aDaysOffered);
     courseOffering.setInstructorAccount((InstructorAccount) user);
-    courseOffering.setRoom(foundRoom);
     courseOffering.setCourseType(foundCourseType);
 
     courseOfferingRepository.save(courseOffering);
   }
 
-  //Do we need this?
-  @Deprecated
-  @Transactional
-  public CourseOffering getCourseOfferingById(String userToken, Integer aId) {
-    CourseOffering foundCourseOffering = courseOfferingRepository.findById(aId).orElse(null);
-
-    if (foundCourseOffering == null) {
-      throw new IllegalArgumentException("Course Offering not found!");
-    }
-
-    return foundCourseOffering;
-  }
-
   @Transactional
   public List<CourseOffering> getCourseOfferingsByInstructor(String userToken) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
-
-    if (!user.getUserType().equals("INSTRUCTOR")) {
-      throw new IllegalArgumentException("Only instructors can view their course offerings!");
-    }
+    Validate.isTrue(user.getUserType().equals("INSTRUCTOR"), "Only instructors can view their course offerings");
 
     List<CourseOffering> foundOfferings = courseOfferingRepository.findByInstructorAccount((InstructorAccount) user).orElse(null);
 
     if (foundOfferings == null) {
-      throw new IllegalArgumentException("No course offerings found for this instructor!");
+      throw new IllegalArgumentException("No course offerings found for this instructor");
     }
 
     return foundOfferings;
@@ -154,16 +136,10 @@ public class CourseOfferingService {
   @Transactional
   public void deleteCourseOffering(String userToken, Integer aId) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
-
-    if (user.getUserType().equals("CUSTOMER")) {
-      throw new IllegalArgumentException("Customers cannot delete course offerings!");
-    }
+    Validate.isTrue(!user.getUserType().equals("CUSTOMER"), "Customers cannot delete course offerings!");
 
     CourseOffering courseOffering = courseOfferingRepository.findById(aId).orElse(null);
-
-    if (courseOffering == null) {
-      throw new IllegalArgumentException("Course Offering does not exist!");
-    }
+    Validate.notNull(courseOffering, "Course Offering not found!");
 
     courseOfferingRepository.delete(courseOffering);
   }

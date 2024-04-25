@@ -14,15 +14,18 @@ public class CourseSession {
   private Date date;
   private Time startTime;
   private Time endTime;
+  @ManyToOne
+  private Room room;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "course_offering_id")
   private CourseOffering courseOffering;
 
   public CourseSession() {}
-  public CourseSession(Date aDate, Time aStartTime, Time aEndTime, CourseOffering aCourseOffering) {
+  public CourseSession(Date aDate, Time aStartTime, Time aEndTime, Room aRoom, CourseOffering aCourseOffering) {
     this.date = aDate;
     this.startTime = aStartTime;
     this.endTime = aEndTime;
+    this.room = aRoom;
     this.courseOffering = aCourseOffering;
   }
 
@@ -35,6 +38,7 @@ public class CourseSession {
   public void setEndTime(Time aEndTime) {
     this.endTime = aEndTime;
   }
+  public void setRoom(Room aRoom) { this.room = aRoom; }
   public void setCourseOffering(CourseOffering aCourseOffering) {
     this.courseOffering = aCourseOffering;
   }
@@ -51,6 +55,7 @@ public class CourseSession {
   public Time getEndTime() {
     return this.endTime;
   }
+  public Room getRoom() { return this.room; }
   public CourseOffering getCourseOffering() {
     return this.courseOffering;
   }

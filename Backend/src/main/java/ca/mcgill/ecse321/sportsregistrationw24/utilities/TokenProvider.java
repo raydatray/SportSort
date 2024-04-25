@@ -21,12 +21,12 @@ public class TokenProvider {
     secretKey = Keys.hmacShaKeyFor(salt.getBytes(StandardCharsets.UTF_8));
   }
 
-  public String generateToken(String username) {
+  public String generateToken(String email) {
     Date now = new Date();
     Date expiry = new Date(now.getTime() + (3600000 * 12));
 
     return Jwts.builder()
-      .subject(username)
+      .subject(email)
       .issuedAt(now)
       .expiration(expiry)
       .signWith(secretKey) //??

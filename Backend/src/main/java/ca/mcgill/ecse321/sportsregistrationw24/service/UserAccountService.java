@@ -1,11 +1,11 @@
 package ca.mcgill.ecse321.sportsregistrationw24.service;
 
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
-import ca.mcgill.ecse321.sportsregistrationw24.dto.UserAccounts.UserAccountDTO;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.InstructorAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.OwnerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
+import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,28 +18,21 @@ import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.iterab
 
 @Service
 public class UserAccountService {
+  private final UserAccountRepository userAccountRepository;
   @Autowired
-  private UserAccountRepository userAccountRepository;
+  public UserAccountService(UserAccountRepository userAccountRepository) {
+    this.userAccountRepository = userAccountRepository;
+  }
 
   @Transactional
   public void createCustomerAccount(String aName, String aEmail, String aPassword) {
-    if (aName.trim().isEmpty()) {
-      throw new IllegalArgumentException("Name cannot be empty!");
-    }
-
-    if (aEmail.trim().isEmpty()) {
-      throw new IllegalArgumentException("Email cannot be empty!");
-    }
-
-    if (aPassword.trim().isEmpty()) {
-      throw new IllegalArgumentException("Password cannot be empty!");
-    }
+    Validate.notBlank(aName, "Name cannot be empty");
+    Validate.notBlank(aEmail, "Email cannot be empty");
+    Validate.notBlank(aPassword, "Password cannot be empty");
 
     UserAccount existingUserAccount = userAccountRepository.findUserByEmail(aEmail).orElse(null);
 
-    if (existingUserAccount != null) {
-      throw new IllegalArgumentException("Email is already in use!");
-    }
+    Validate.notNull(existingUserAccount , "Email: " + aEmail + " is already in use!");
 
     CustomerAccount customerAccount = new CustomerAccount();
 
@@ -51,30 +44,17 @@ public class UserAccountService {
   }
 
   @Transactional
-  public UserAccountDTO createInstructorAccount(String userToken, String aName, String aEmail, String aPassword) {
+  public void createInstructorAccount(String userToken, String aName, String aEmail, String aPassword) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
+    Validate.isTrue(user.getUserType().equals("OWNER"), "Only owners can create instructor accounts");
 
-    if (!user.getUserType().equals("OWNER")) {
-      throw new IllegalArgumentException("Only owners can create instructor accounts!");
-    }
-
-    if (aName.trim().isEmpty()) {
-      throw new IllegalArgumentException("Name cannot be empty!");
-    }
-
-    if (aEmail.trim().isEmpty()) {
-      throw new IllegalArgumentException("Email cannot be empty!");
-    }
-
-    if (aPassword.trim().isEmpty()) {
-      throw new IllegalArgumentException("Password cannot be empty!");
-    }
+    Validate.notBlank(aName, "Name cannot be empty");
+    Validate.notBlank(aEmail, "Email cannot be empty");
+    Validate.notBlank(aPassword, "Password cannot be empty");
 
     UserAccount existingUserAccount = userAccountRepository.findUserByEmail(aEmail).orElse(null);
 
-    if (existingUserAccount != null) {
-      throw new IllegalArgumentException("Email is already in use!");
-    }
+    Validate.notNull(existingUserAccount , "Email: " + aEmail + " is already in use!");
 
     InstructorAccount instructorAccount = new InstructorAccount();
 
@@ -83,90 +63,62 @@ public class UserAccountService {
     instructorAccount.setPassword(aPassword);
 
     userAccountRepository.save(instructorAccount);
-
-    return convertToDto(instructorAccount);
   }
 
   @Transactional
-  public void updateAccount(String userToken, String newName, String newEmail, String newPassword) {
+  public void updateUserAccountSelf(String userToken, String newName, String newEmail, String newPassword) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (newName.trim().isEmpty()) {
-      throw new IllegalArgumentException("Name cannot be empty!");
+    if (newName != null) {
+      Validate.notBlank(newName, "Name cannot be empty");
+      user.setName(newName);
     }
 
-    if (newEmail.trim().isEmpty()) {
-      throw new IllegalArgumentException("Email cannot be empty!");
-    }
-
-    if (newPassword.trim().isEmpty()) {
-      throw new IllegalArgumentException("Password cannot be empty!");
-    }
-
-    // Check if the new email is different from the current one and if it is already in use by another user
-    if (newEmail.equals(user.getEmail())) { // Only check for email existence if it's been changed
+    if (newEmail != null) {
+      Validate.notBlank(newEmail, "Email cannot be empty");
       UserAccount existingUserAccount = userAccountRepository.findUserByEmail(newEmail).orElse(null);
-
-      String existingUserToken = existingUserAccount.getToken();
-
-      if (existingUserToken == null || !existingUserToken.equals(userToken)) {
-        throw new IllegalArgumentException("Email is already in use!");
-      }
+      Validate.notNull(existingUserAccount, "Email: " + newEmail + " is already in use");
+      user.setEmail(newEmail);
     }
 
-    user.setName(newName);
-    user.setEmail(newEmail);
-    user.setPassword(newPassword);
-
+    if (newPassword != null) {
+      Validate.notBlank(newPassword, "Password cannot be empty");
+      user.setPassword(newPassword);
+    }
     userAccountRepository.save(user);
   }
 
   @Transactional
-  public UserAccountDTO updateUserAccount(String userToken, String currEmail, String newName, String newEmail, String newPassword) {
-    UserAccount user = getUserByEmail(userToken, currEmail);
+  public void updateUserAccountEmail(String userToken, String currEmail, String newName, String newEmail, String newPassword) {
+    UserAccount user = getUserFromToken(userAccountRepository, userToken);
+    Validate.isTrue(user.getUserType().equals("OWNER"), "Only owners can update user accounts by email");
 
-    if (user == null) {
-      throw new IllegalArgumentException("User could not be found with provided email!");
+    UserAccount userToUpdate = userAccountRepository.findUserByEmail(currEmail).orElse(null);
+    Validate.notNull(userToUpdate, "No user found with email: " + currEmail);
+
+    if (newName != null) {
+      Validate.notBlank(newName, "Name cannot be empty");
+      userToUpdate.setName(newName);
     }
 
-    if (newName.trim().isEmpty()) {
-      throw new IllegalArgumentException("Name cannot be empty!");
+    if (newEmail != null) {
+      Validate.notBlank(newEmail, "Email cannot be empty");
+      UserAccount existingUserAccount = userAccountRepository.findUserByEmail(newEmail).orElse(null);
+      Validate.notNull(existingUserAccount, "Email: " + newEmail + " is already in use");
+      userToUpdate.setEmail(newEmail);
     }
 
-    if (newEmail.trim().isEmpty()) {
-      throw new IllegalArgumentException("Email cannot be empty!");
+    if (newPassword != null) {
+      Validate.notBlank(newPassword, "Password cannot be empty");
+      userToUpdate.setPassword(newPassword);
     }
-
-    if (newPassword == null || newPassword.trim().isEmpty()) {
-      newPassword = user.getPassword();
-    }
-
-    UserAccount existingUserAccount = userAccountRepository.findUserByEmail(newEmail).orElse(null);
-
-    if (existingUserAccount != null && existingUserAccount != user) {
-      throw new IllegalArgumentException("Email is already in use!");
-    }
-
-    user.setName(newName);
-    user.setEmail(newEmail);
-    user.setPassword(newPassword);
-
-    userAccountRepository.save(user);
-    return convertToDto(user);
-  }
-
-  @Transactional
-  public UserAccount getUserByToken(String userToken) {
-    return getUserFromToken(userAccountRepository, userToken);
+    userAccountRepository.save(userToUpdate);
   }
 
   @Transactional
   public UserAccount getUserByEmail(String userToken, String aEmail) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
-
-    if (!user.getUserType().equals("OWNER")) {
-      throw new IllegalArgumentException("Only owners can view user accounts!");
-    }
+    Validate.isTrue(user.getUserType().equals("OWNER"), "Only owners can search user accounts by email");
 
     UserAccount foundUser = userAccountRepository.findUserByEmail(aEmail).orElse(null);
 
@@ -180,10 +132,7 @@ public class UserAccountService {
   @Transactional
   public List<UserAccount> getAllUsers(String userToken, List<String> discriminators) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
-
-    if (!user.getUserType().equals("OWNER")) {
-      throw new IllegalArgumentException("Only owners can view all users!");
-    }
+    Validate.isTrue(user.getUserType().equals("OWNER"), "Only owners can view all users");
 
     if (discriminators == null) {
       return iterableToArrayList(userAccountRepository.findAll());
@@ -201,27 +150,25 @@ public class UserAccountService {
   @Transactional
   public List<UserAccount> getAllInstructors() {
     List<UserAccount> foundUsers = userAccountRepository.findByUserType(Collections.singletonList(InstructorAccount.class)).orElse(null);
-
-    if (foundUsers == null) {
-      throw new IllegalArgumentException("No instructors found!");
-    }
+    Validate.notNull(foundUsers, "No instructors found");
 
     return foundUsers;
   }
 
   @Transactional
-  public void deleteUserAccount(String userToken, String aEmail) {
+  public void deleteUserAccountSelf(String userToken) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
 
-    if (!user.getUserType().equals("OWNER") && !user.getEmail().equals(aEmail)) {
-      throw new IllegalArgumentException("Only owner or yourself can delete this account!");
-    }
+    userAccountRepository.delete(user);
+  }
+
+  @Transactional
+  public void deleteUserAccountByEmail(String userToken, String aEmail) {
+    UserAccount user = getUserFromToken(userAccountRepository, userToken);
+    Validate.isTrue(user.getUserType().equals("OWNER"), "Only owners can delete user accounts by email");
 
     UserAccount existingUserAccount = userAccountRepository.findUserByEmail(aEmail).orElse(null);
-
-    if (existingUserAccount == null) {
-      throw new IllegalArgumentException("No user found with email: " + aEmail);
-    }
+    Validate.notNull(existingUserAccount, "No user found with email: " + aEmail);
 
     userAccountRepository.delete(existingUserAccount);
   }
@@ -241,12 +188,5 @@ public class UserAccountService {
     }
 
     return classes;
-  }
-
-  private UserAccountDTO convertToDto(UserAccount userAccount) {
-    if (userAccount == null) {
-      throw new IllegalArgumentException("There is no such user account!");
-    }
-    return new UserAccountDTO(userAccount.getUserType(), userAccount.getEmail(), userAccount.getName(), userAccount.getToken());
   }
 }

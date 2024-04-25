@@ -34,6 +34,7 @@ public class Registration {
     this.id = new RegistrationId(courseOffering.getId(), customerAccount.getId());
   }
 
+  public void setId(RegistrationId aId) { this.id = aId; }
   public void setRegisteredDate(Date aRegisteredDate) {
     this.registeredDate = aRegisteredDate;
   }

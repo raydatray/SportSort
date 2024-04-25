@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "*")
 @RestController
 public class AuthenticationRestController {
+  private final AuthenticationService service;
   @Autowired
-  private AuthenticationService service;
+  public AuthenticationRestController(AuthenticationService service) {
+    this.service = service;
+  }
 
   @PostMapping(value = {"/login"})
   public ResponseEntity<?> login(@RequestBody AuthenticationCO authenticationCO) {
@@ -24,9 +27,9 @@ public class AuthenticationRestController {
   }
 
   @PostMapping(value = {"/logout"})
-  public ResponseEntity<?> logout(@RequestHeader String token) {
+  public ResponseEntity<?> logout(@RequestHeader String userToken) {
     try {
-      service.logout(token);
+      service.logout(userToken);
       return ResponseEntity.accepted().body("Logout successful");
     } catch (Exception e) {
       return ResponseEntity.badRequest().body(e.getMessage());

@@ -5,7 +5,6 @@ import ca.mcgill.ecse321.sportsregistrationw24.dto.PaymentInfo.PaymentInfoDto;
 import ca.mcgill.ecse321.sportsregistrationw24.model.CustomerAccount;
 import ca.mcgill.ecse321.sportsregistrationw24.model.PaymentInfo;
 import ca.mcgill.ecse321.sportsregistrationw24.service.AuthenticationService;
-import ca.mcgill.ecse321.sportsregistrationw24.service.CustomerAccountService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

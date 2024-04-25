@@ -5,6 +5,7 @@ import ca.mcgill.ecse321.sportsregistrationw24.dao.RoomRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.dao.UserAccountRepository;
 import ca.mcgill.ecse321.sportsregistrationw24.model.Room;
 import ca.mcgill.ecse321.sportsregistrationw24.model.UserAccount;
+import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,38 +18,26 @@ import static ca.mcgill.ecse321.sportsregistrationw24.utilities.Utilities.iterab
 
 @Service
 public class RoomService {
-  @Autowired
-  private RoomRepository roomRepository;
-  @Autowired
-  private CourseOfferingRepository courseOfferingRepository;
-  @Autowired
-  private UserAccountRepository userAccountRepository;
+  private final RoomRepository roomRepository;
+  private final UserAccountRepository userAccountRepository;
 
+  @Autowired
+  public RoomService(RoomRepository roomRepository, UserAccountRepository userAccountRepository) {
+    this.roomRepository = roomRepository;
+    this.userAccountRepository = userAccountRepository;
+  }
   @Transactional
   public void createRoom(String userToken, String aName, Integer aFloorNumber, Integer aRoomNumber, Integer aCapacity) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
+    Validate.isTrue(user.getUserType().equals("OWNER"), "Only owners can create rooms");
 
-    if (!user.getUserType().equals("OWNER")) {
-      throw new IllegalArgumentException("Only owners can create rooms!");
-    }
+    Validate.notBlank(aName, "Name cannot be empty");
+    Validate.isTrue(aCapacity > 0, "Capacity must be greater than 0");
+    Validate.isTrue(aRoomNumber > 0, "Room number must be greater than 0");
 
-    if (aName.trim().isEmpty()) {
-      throw new IllegalArgumentException("Cannot create a room with no name specified");
-    }
-
-    if (aCapacity <= 0) {
-      throw new IllegalArgumentException("A room with this capacity cannot exist");
-    }
-
-    if (aRoomNumber <= 0) {
-      throw new IllegalArgumentException("Room number cannot be negative");
-    }
 
     Room duplicateRoom = roomRepository.findRoomByFloorNumberAndRoomNumber(aFloorNumber, aRoomNumber).orElse(null);
-
-    if (duplicateRoom != null) {
-      throw new IllegalArgumentException("A room with this floor and room number already exists");
-    }
+    Validate.notNull(duplicateRoom, "Room with this floor and room number already exists");
 
     Room room = new Room();
     room.setName(aName);
@@ -60,50 +49,24 @@ public class RoomService {
   }
 
   @Transactional
-  public void updateRoom(String userToken, Integer aId, String newName, Integer newCapacity) {
+  public void updateRoom(String userToken, Integer aId, String aNewName, Integer aNewCapacity) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
-
-    if (!user.getUserType().equals("OWNER")) {
-      throw new IllegalArgumentException("Only owners can update rooms!");
-    }
+    Validate.isTrue(user.getUserType().equals("OWNER"), "Only owners can update rooms");
 
     Room foundRoom = roomRepository.findById(aId).orElse(null);
+    Validate.notNull(foundRoom, "Room does not exist");
 
-    if (foundRoom == null) {
-      throw new IllegalArgumentException("Room does not exist!");
+    if (aNewName != null){
+      Validate.notBlank(aNewName, "Name cannot be empty");
+      foundRoom.setName(aNewName);
     }
 
-    if (newName.trim().isEmpty()) {
-      throw new IllegalArgumentException("Cannot create a room with no name specified");
+    if (aNewCapacity != null) {
+      Validate.isTrue(aNewCapacity > 0, "Capacity must be greater than 0");
+      foundRoom.setCapacity(aNewCapacity);
     }
-
-    if (newCapacity <= 0) {
-      throw new IllegalArgumentException("A room with this capacity cannot exist");
-    }
-
-    foundRoom.setName(newName);
-    foundRoom.setCapacity(newCapacity);
 
     roomRepository.save(foundRoom);
-  }
-
-  //Do we even need this?
-  @Transactional
-  public Room getRoom(Integer aFloorNumber, Integer aRoomNumber) {
-    if (aFloorNumber.equals(-1) || aRoomNumber.equals(-1)) {
-      if (aFloorNumber.equals(-1) && aRoomNumber.equals(-1)) {
-        throw new IllegalArgumentException("Cannot get a specific room with no floor and no room number specified");
-      } else if (aFloorNumber.equals(-1) && aRoomNumber > -1) {
-        throw new IllegalArgumentException("Cannot get a specific room with no floor number specified");
-      } else {
-        throw new IllegalArgumentException("Cannot get a specific room with no room number specified");
-      }
-    }
-    Optional<Room> wrappedRoom = roomRepository.findRoomByFloorNumberAndRoomNumber(aFloorNumber, aRoomNumber);
-    if (wrappedRoom.isEmpty()) {
-      throw new IllegalArgumentException("No room with this floor and room number was found");
-    }
-    return wrappedRoom.orElseThrow(() -> new IllegalArgumentException("No room with this floor and room number was found"));
   }
 
   @Transactional
@@ -127,19 +90,11 @@ public class RoomService {
   @Transactional
   public void deleteRoom(String userToken, Integer aId) {
     UserAccount user = getUserFromToken(userAccountRepository, userToken);
-
-    if (!user.getUserType().equals("OWNER")) {
-      throw new IllegalArgumentException("Only owners can delete rooms!");
-    }
+    Validate.isTrue(user.getUserType().equals("OWNER"), "Only owners can delete rooms");
 
     Room room = roomRepository.findById(aId).orElse(null);
-
-    if (room == null) {
-      throw new IllegalArgumentException("Room does not exist!");
-    }
+    Validate.notNull(room, "Room does not exist");
 
     roomRepository.delete(room);
   }
-
-
 }
