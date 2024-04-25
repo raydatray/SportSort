@@ -1,47 +1,16 @@
-# Table of Contents
+# Introduction <a name="introduction"></a>
+SportSort is a fullstack application built for McGill's ECSE 321 in Winter 2024. Done in teams of 6, we were given tasked with creating a web app given the following prompt <br>
 
-- [Introduction](#introduction)
-- [Team Members](#team-members)
-- [Project Deliverables](#project-deliverables)
-- [Key Design Decisions](#key-design-decisions)
+>The owner of a local sport center contacts you to design a web app to help them run their business. The app should enable the owner and instructors to manage different types of classes and to organize the schedule of the sport center. It should also enable customers to consult available classes and to register to these classes.
+>The sport center proposes three different classes: cardio, stretching and strength training. Any instructor can propose to supervise a session of one of these classes and update the schedule accordingly. Instructors can create new types of classes (e.g., goat yoga) which need to be approved by the owner before appearing on the web app. The owner has its own account from which they can edit information related to the sport center (proposed classes, instructors, opening hours), change the schedule, manage the instructors and approve new classes. Anyone can consult the schedule on the website, along with information regarding the instructors and the classes. Customers have their own account with which they can register to a session and manage the sessions to which they already registered. 
+>The above description is intentionally poorly defined. In teams of six students, you will gather requirements, design a multi-tier software solution to satisfy those requirements, implement the system, validate that the system is satisfying the requirements, and develop a release pipeline to automate the software delivery process.
 
-## Introduction <a name="introduction"></a>
-This is the repository of Group 15 which consists of Leon Song, Raymond Liu, Houman Azari, Alexander Liu, Joseph Ciaravella and Colin Xiong. The main scope of this web app project is to create an application that supports every required scenario for **every** stakeholder for a sports center activity registration system. All functionality of the system is  accessible via the web frontend for respective stakeholders, without employing external systems or services.
+Powered by Spring Boot, Postgres and Hibernate in the backend, and Svelte in the frontend, SportSort is a fully fledged web app that is deployment ready. 
 
-## Team Members <a name="team-members"></a>
+Since its completion, I have taken the time to finish some of the original targetted functionality and extend parts of the app. See the changes in the changelog here: 
 
-| Name              | Role            | Hours Spent (Deliverable 1) | Hours Spent (Deliverable 2) | Hours Spent (Deliverable 2) |
-|-------------------|-----------------|-----------------------------|-----------------------------|-----------------------------|
-| Leon Song         | Frontend Dev    | 16                          | 22                          | 27                          |
-| Houman Azari      | Backend Dev     | 17                          | 21                          | 28                          |
-| Joseph Ciaravella | UI/UX Designer  | 16                          | 23                          | 26                          |
-| Colin Xiong       | Fullstack Dev   | 16                          | 26                          | 29                          |
-| Raymond Liu       | QA Engineer     | 18                          | 27                          | 28                          |
-| Alexander Liu     | Project Manager | 20                          | 23                          | 27                          |
+See the app in its original state here: 
 
-## Project Deliverables <a name="project-deliverables"></a>
 
-- **Deliverable 1**: Requirements, Domain Model, and Database Design **(FAIR :smiley:)**
-- **Deliverable 2**: Backend Services, Behaviour Modelling, and Testing **(FAIR :smiley:)**
-- **Deliverable 3**: Web Frontend **(EXTREMELY DIFFICULT) :tired_face:**
 
-## Key Design Decisions and Meeting Minutes <a name="key-design-decisions"></a>
-For key design decisions and meeting minutes, please refer to our [Project Wiki](../../wiki). Navigate to the appropriate deliverable section for specific information.
 
-## How To Run the Application
-- Navigate to the **Sportsregistrationw24Application.java** file and run it. This "starts" the database to make sure it is connected to the frontend.
-- Navigate to the terminal, `cd Frontend`, enter `npm install` to install all the application dependencies, and enter `npm run dev` to start the locally hosted website.
--  <img width="290" alt="image" src="https://github.com/McGill-ECSE321-Winter2024/project-group-15/assets/78813640/299eacd5-6060-4863-a6d6-e41811c8798a"> Click on the link with "localhost" to access the application in your browser.
-
-## Deployement Guide
-- Server Configuration
-    - Ensure that you have a server running a compatible operating system.
-    - Install Java Development Kit (JDK) version 17.
-    - Install PostgreSQL server using package manager or official PostgreSQL repositories.  
-- Database Setup
-    - Log in to PostgresSQL using the psql command-line tool in your terminal
-    - Create a database for the application
-- IDE Application Configuration
-    - Using an IDE such as Intellij will allow you to view and modify your local database after connecting it to the IDE. Information on how to connect a Postgres databse to Intellij is available at [Intellij Documentation](https://www.jetbrains.com/help/idea/postgresql.html)
-- Frontend Package Configuration
-    - Run `npm install` to install all necessary Node.js packages on your computer.
