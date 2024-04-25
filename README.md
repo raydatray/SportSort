@@ -9,7 +9,7 @@ Powered by Spring Boot, Postgres and Hibernate in the backend, and Svelte in the
 
 Since its completion, I have taken the time to finish some of the original targetted functionality and extend parts of the app. See the changes in the changelog here: 
 
-See the app in its original state here: 
+See the app in its submitted state here: https://github.com/raydatray/SportSort/tree/6a15287fcddea1f784522a960745cada8be602c6
 
 
 
